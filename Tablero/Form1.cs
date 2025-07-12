@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace Tablero
 {
-    public partial class Form1 : MaterialForm
+    public partial class Form_principal : MaterialForm
     {
-        public Form1()
+        public Form_principal()
         {
             InitializeComponent();
             // Initialize MaterialSkinManager and set the theme and color scheme
