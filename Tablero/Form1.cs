@@ -17,11 +17,14 @@ namespace Tablero
         public Form_principal()
         {
             InitializeComponent();
-            // Initialize MaterialSkinManager and set the theme and color scheme
+            // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Orange700, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
+            // Forzar el color después de inicializar MaterialSkin  
+            pnl_principal.BackColor = Color.FromArgb(192, 255, 192);
+            pnl_Metahora.BackColor = Color.FromArgb(192, 255, 192);
         }
     }
 }
