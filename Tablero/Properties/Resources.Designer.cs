@@ -63,9 +63,49 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _5172986_home_house_internet_network_security_icon {
+        internal static System.Drawing.Bitmap _8666542_save_icon {
             get {
-                object obj = ResourceManager.GetObject("5172986_home_house_internet_network_security_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("8666542_save_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8666597_trash_2_icon {
+            get {
+                object obj = ResourceManager.GetObject("8666597_trash_2_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8666681_edit_icon {
+            get {
+                object obj = ResourceManager.GetObject("8666681_edit_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8666693_search_icon {
+            get {
+                object obj = ResourceManager.GetObject("8666693_search_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8666740_slash_icon {
+            get {
+                object obj = ResourceManager.GetObject("8666740_slash_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -32,14 +32,48 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
+            this.txt_TM_calidad = new MaterialSkin.Controls.MaterialTextBox();
+            this.card_dgv_calidad = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_calidad = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_TM_operativo = new MaterialSkin.Controls.MaterialTextBox();
+            this.card_dgv_operativo = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_operativo = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_TM_almacen = new MaterialSkin.Controls.MaterialTextBox();
+            this.card_dgv_almacen = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_almacen = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lbl_min_comida = new MaterialSkin.Controls.MaterialLabel();
+            this.txt_TM_mecanico = new MaterialSkin.Controls.MaterialTextBox();
+            this.card_dgv_mecanico = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_mecanico = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_Tiempo_comida = new MaterialSkin.Controls.MaterialTextBox();
             this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            this.card_datos = new MaterialSkin.Controls.MaterialCard();
+            this.Txt_Personal_Op = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_Produccion = new MaterialSkin.Controls.MaterialTextBox();
+            this.Txt_Merma = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
+            this.pnl_ftt = new System.Windows.Forms.Panel();
+            this.txt_ftt = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_Up_time = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_kg_F_Espec = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_kg_ok = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_perdida = new MaterialSkin.Controls.MaterialTextBox();
+            this.Card_hrs = new MaterialSkin.Controls.MaterialCard();
             this.pnl_principal = new System.Windows.Forms.Panel();
             this.txt_hr_Disp_TM = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_meta_p = new MaterialSkin.Controls.MaterialTextBox();
             this.Mask_txt_hr1 = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.Mask_txt_hr2 = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.txt_hr_disponible = new MaterialSkin.Controls.MaterialTextBox();
-            this.Card_hrs = new MaterialSkin.Controls.MaterialCard();
             this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
             this.pnl_Metahora = new System.Windows.Forms.Panel();
             this.lbl_meta2 = new MaterialSkin.Controls.MaterialLabel();
@@ -56,63 +90,93 @@
             this.lbl_user_no_emp = new MaterialSkin.Controls.MaterialLabel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.materialCard8 = new MaterialSkin.Controls.MaterialCard();
+            this.tabControl_usuarios = new System.Windows.Forms.TabControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.cmb_niel_user = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_no_emp = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_usuario = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_cancel = new MaterialSkin.Controls.MaterialButton();
+            this.txt_contra = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_delete = new MaterialSkin.Controls.MaterialButton();
+            this.btn_save = new MaterialSkin.Controls.MaterialButton();
+            this.btn_edit = new MaterialSkin.Controls.MaterialButton();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btn_search_edit = new MaterialSkin.Controls.MaterialButton();
+            this.cmb_serch_nivel = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_search_no_emp = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_search_nom_emp = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_search_cancel = new MaterialSkin.Controls.MaterialButton();
+            this.btn_search_save = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_users = new System.Windows.Forms.DataGridView();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
-            this.card_datos = new MaterialSkin.Controls.MaterialCard();
-            this.txt_perdida = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_ftt = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_kg_ok = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_kg_F_Espec = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_Up_time = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_Produccion = new MaterialSkin.Controls.MaterialTextBox();
-            this.Txt_Merma = new MaterialSkin.Controls.MaterialTextBox();
-            this.Txt_Personal_Op = new MaterialSkin.Controls.MaterialTextBox();
-            this.pnl_ftt = new System.Windows.Forms.Panel();
-            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
-            this.txt_Tiempo_comida = new MaterialSkin.Controls.MaterialTextBox();
-            this.dgv_mecanico = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.card_dgv_mecanico = new MaterialSkin.Controls.MaterialCard();
-            this.txt_TM_mecanico = new MaterialSkin.Controls.MaterialTextBox();
-            this.lbl_min_comida = new MaterialSkin.Controls.MaterialLabel();
-            this.card_dgv_almacen = new MaterialSkin.Controls.MaterialCard();
-            this.dgv_almacen = new System.Windows.Forms.DataGridView();
-            this.txt_TM_almacen = new MaterialSkin.Controls.MaterialTextBox();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txt_TM_operativo = new MaterialSkin.Controls.MaterialTextBox();
-            this.card_dgv_operativo = new MaterialSkin.Controls.MaterialCard();
-            this.dgv_operativo = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txt_TM_calidad = new MaterialSkin.Controls.MaterialTextBox();
-            this.card_dgv_calidad = new MaterialSkin.Controls.MaterialCard();
-            this.dgv_calidad = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.materialCard9 = new MaterialSkin.Controls.MaterialCard();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.cmb_area = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_op = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_metaxhr = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
+            this.txt_relacion_FS = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton4 = new MaterialSkin.Controls.MaterialButton();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.materialButton5 = new MaterialSkin.Controls.MaterialButton();
+            this.materialComboBox2 = new MaterialSkin.Controls.MaterialComboBox();
+            this.materialTextBox4 = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialTextBox5 = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialButton6 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard10 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_metas = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.materialCard6.SuspendLayout();
+            this.card_dgv_calidad.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).BeginInit();
+            this.card_dgv_operativo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_operativo)).BeginInit();
+            this.card_dgv_almacen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).BeginInit();
+            this.card_dgv_mecanico.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).BeginInit();
             this.materialCard3.SuspendLayout();
-            this.pnl_principal.SuspendLayout();
+            this.card_datos.SuspendLayout();
+            this.materialCard5.SuspendLayout();
+            this.pnl_ftt.SuspendLayout();
             this.Card_hrs.SuspendLayout();
+            this.pnl_principal.SuspendLayout();
             this.materialCard4.SuspendLayout();
             this.pnl_Metahora.SuspendLayout();
             this.materialCard2.SuspendLayout();
             this.materialCard1.SuspendLayout();
-            this.materialCard5.SuspendLayout();
-            this.card_datos.SuspendLayout();
-            this.pnl_ftt.SuspendLayout();
-            this.materialCard6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).BeginInit();
-            this.card_dgv_mecanico.SuspendLayout();
-            this.card_dgv_almacen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).BeginInit();
-            this.card_dgv_operativo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_operativo)).BeginInit();
-            this.card_dgv_calidad.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            this.materialCard8.SuspendLayout();
+            this.tabControl_usuarios.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.materialCard7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            this.materialCard9.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.materialCard10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -146,6 +210,284 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
+            // materialCard6
+            // 
+            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard6.Controls.Add(this.txt_TM_calidad);
+            this.materialCard6.Controls.Add(this.card_dgv_calidad);
+            this.materialCard6.Controls.Add(this.txt_TM_operativo);
+            this.materialCard6.Controls.Add(this.card_dgv_operativo);
+            this.materialCard6.Controls.Add(this.txt_TM_almacen);
+            this.materialCard6.Controls.Add(this.card_dgv_almacen);
+            this.materialCard6.Controls.Add(this.lbl_min_comida);
+            this.materialCard6.Controls.Add(this.txt_TM_mecanico);
+            this.materialCard6.Controls.Add(this.card_dgv_mecanico);
+            this.materialCard6.Controls.Add(this.txt_Tiempo_comida);
+            this.materialCard6.Depth = 0;
+            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard6.Location = new System.Drawing.Point(797, 123);
+            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard6.Name = "materialCard6";
+            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard6.Size = new System.Drawing.Size(874, 719);
+            this.materialCard6.TabIndex = 4;
+            // 
+            // txt_TM_calidad
+            // 
+            this.txt_TM_calidad.AnimateReadOnly = false;
+            this.txt_TM_calidad.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_TM_calidad.Depth = 0;
+            this.txt_TM_calidad.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_TM_calidad.Hint = "Minutos Totales";
+            this.txt_TM_calidad.LeadingIcon = null;
+            this.txt_TM_calidad.Location = new System.Drawing.Point(431, 617);
+            this.txt_TM_calidad.MaxLength = 50;
+            this.txt_TM_calidad.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_TM_calidad.Multiline = false;
+            this.txt_TM_calidad.Name = "txt_TM_calidad";
+            this.txt_TM_calidad.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_calidad.TabIndex = 10;
+            this.txt_TM_calidad.Text = "";
+            this.txt_TM_calidad.TrailingIcon = null;
+            // 
+            // card_dgv_calidad
+            // 
+            this.card_dgv_calidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_dgv_calidad.Controls.Add(this.dgv_calidad);
+            this.card_dgv_calidad.Depth = 0;
+            this.card_dgv_calidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_dgv_calidad.Location = new System.Drawing.Point(431, 422);
+            this.card_dgv_calidad.Margin = new System.Windows.Forms.Padding(14);
+            this.card_dgv_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_dgv_calidad.Name = "card_dgv_calidad";
+            this.card_dgv_calidad.Padding = new System.Windows.Forms.Padding(14);
+            this.card_dgv_calidad.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_calidad.TabIndex = 9;
+            // 
+            // dgv_calidad
+            // 
+            this.dgv_calidad.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_calidad.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6});
+            this.dgv_calidad.Location = new System.Drawing.Point(0, 0);
+            this.dgv_calidad.Name = "dgv_calidad";
+            this.dgv_calidad.Size = new System.Drawing.Size(386, 189);
+            this.dgv_calidad.TabIndex = 1;
+            this.dgv_calidad.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_calidad_EditingControlShowing);
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn5.HeaderText = "Minutos Detenidos";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn6.HeaderText = "Motivos Calidad";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
+            // txt_TM_operativo
+            // 
+            this.txt_TM_operativo.AnimateReadOnly = false;
+            this.txt_TM_operativo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_TM_operativo.Depth = 0;
+            this.txt_TM_operativo.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_TM_operativo.Hint = "Minutos Totales";
+            this.txt_TM_operativo.LeadingIcon = null;
+            this.txt_TM_operativo.Location = new System.Drawing.Point(17, 617);
+            this.txt_TM_operativo.MaxLength = 50;
+            this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_TM_operativo.Multiline = false;
+            this.txt_TM_operativo.Name = "txt_TM_operativo";
+            this.txt_TM_operativo.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_operativo.TabIndex = 8;
+            this.txt_TM_operativo.Text = "";
+            this.txt_TM_operativo.TrailingIcon = null;
+            // 
+            // card_dgv_operativo
+            // 
+            this.card_dgv_operativo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_dgv_operativo.Controls.Add(this.dgv_operativo);
+            this.card_dgv_operativo.Depth = 0;
+            this.card_dgv_operativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_dgv_operativo.Location = new System.Drawing.Point(17, 422);
+            this.card_dgv_operativo.Margin = new System.Windows.Forms.Padding(14);
+            this.card_dgv_operativo.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_dgv_operativo.Name = "card_dgv_operativo";
+            this.card_dgv_operativo.Padding = new System.Windows.Forms.Padding(14);
+            this.card_dgv_operativo.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_operativo.TabIndex = 7;
+            // 
+            // dgv_operativo
+            // 
+            this.dgv_operativo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_operativo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4});
+            this.dgv_operativo.Location = new System.Drawing.Point(0, 0);
+            this.dgv_operativo.Name = "dgv_operativo";
+            this.dgv_operativo.Size = new System.Drawing.Size(386, 189);
+            this.dgv_operativo.TabIndex = 1;
+            this.dgv_operativo.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_operativo_EditingControlShowing);
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Minutos Detenidos";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Motivos Operativos";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // txt_TM_almacen
+            // 
+            this.txt_TM_almacen.AnimateReadOnly = false;
+            this.txt_TM_almacen.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_TM_almacen.Depth = 0;
+            this.txt_TM_almacen.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_TM_almacen.Hint = "Minutos Totales";
+            this.txt_TM_almacen.LeadingIcon = null;
+            this.txt_TM_almacen.Location = new System.Drawing.Point(431, 324);
+            this.txt_TM_almacen.MaxLength = 50;
+            this.txt_TM_almacen.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_TM_almacen.Multiline = false;
+            this.txt_TM_almacen.Name = "txt_TM_almacen";
+            this.txt_TM_almacen.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_almacen.TabIndex = 6;
+            this.txt_TM_almacen.Text = "";
+            this.txt_TM_almacen.TrailingIcon = null;
+            // 
+            // card_dgv_almacen
+            // 
+            this.card_dgv_almacen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_dgv_almacen.Controls.Add(this.dgv_almacen);
+            this.card_dgv_almacen.Depth = 0;
+            this.card_dgv_almacen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_dgv_almacen.Location = new System.Drawing.Point(431, 129);
+            this.card_dgv_almacen.Margin = new System.Windows.Forms.Padding(14);
+            this.card_dgv_almacen.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_dgv_almacen.Name = "card_dgv_almacen";
+            this.card_dgv_almacen.Padding = new System.Windows.Forms.Padding(14);
+            this.card_dgv_almacen.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_almacen.TabIndex = 5;
+            // 
+            // dgv_almacen
+            // 
+            this.dgv_almacen.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_almacen.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.dgv_almacen.Location = new System.Drawing.Point(0, 0);
+            this.dgv_almacen.Name = "dgv_almacen";
+            this.dgv_almacen.Size = new System.Drawing.Size(386, 189);
+            this.dgv_almacen.TabIndex = 1;
+            this.dgv_almacen.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_almacen_EditingControlShowing);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Minutos Detenidos";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Motivos Almacen";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // lbl_min_comida
+            // 
+            this.lbl_min_comida.AutoSize = true;
+            this.lbl_min_comida.Depth = 0;
+            this.lbl_min_comida.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lbl_min_comida.Location = new System.Drawing.Point(249, 65);
+            this.lbl_min_comida.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lbl_min_comida.Name = "lbl_min_comida";
+            this.lbl_min_comida.Size = new System.Drawing.Size(59, 19);
+            this.lbl_min_comida.TabIndex = 4;
+            this.lbl_min_comida.Text = "Minutos";
+            // 
+            // txt_TM_mecanico
+            // 
+            this.txt_TM_mecanico.AnimateReadOnly = false;
+            this.txt_TM_mecanico.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_TM_mecanico.Depth = 0;
+            this.txt_TM_mecanico.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_TM_mecanico.Hint = "Minutos Totales";
+            this.txt_TM_mecanico.LeadingIcon = null;
+            this.txt_TM_mecanico.Location = new System.Drawing.Point(17, 324);
+            this.txt_TM_mecanico.MaxLength = 50;
+            this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_TM_mecanico.Multiline = false;
+            this.txt_TM_mecanico.Name = "txt_TM_mecanico";
+            this.txt_TM_mecanico.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_mecanico.TabIndex = 3;
+            this.txt_TM_mecanico.Text = "";
+            this.txt_TM_mecanico.TrailingIcon = null;
+            // 
+            // card_dgv_mecanico
+            // 
+            this.card_dgv_mecanico.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_dgv_mecanico.Controls.Add(this.dgv_mecanico);
+            this.card_dgv_mecanico.Depth = 0;
+            this.card_dgv_mecanico.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_dgv_mecanico.Location = new System.Drawing.Point(17, 129);
+            this.card_dgv_mecanico.Margin = new System.Windows.Forms.Padding(14);
+            this.card_dgv_mecanico.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_dgv_mecanico.Name = "card_dgv_mecanico";
+            this.card_dgv_mecanico.Padding = new System.Windows.Forms.Padding(14);
+            this.card_dgv_mecanico.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_mecanico.TabIndex = 2;
+            // 
+            // dgv_mecanico
+            // 
+            this.dgv_mecanico.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_mecanico.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2});
+            this.dgv_mecanico.Location = new System.Drawing.Point(0, 0);
+            this.dgv_mecanico.Name = "dgv_mecanico";
+            this.dgv_mecanico.Size = new System.Drawing.Size(386, 189);
+            this.dgv_mecanico.TabIndex = 1;
+            this.dgv_mecanico.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_mecanico_EditingControlShowing);
+            // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column1.HeaderText = "Minutos Detenidos";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "Motivos Mecánicos";
+            this.Column2.Name = "Column2";
+            // 
+            // txt_Tiempo_comida
+            // 
+            this.txt_Tiempo_comida.AnimateReadOnly = false;
+            this.txt_Tiempo_comida.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_Tiempo_comida.Depth = 0;
+            this.txt_Tiempo_comida.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_Tiempo_comida.Hint = "Tiempo muerto por comida";
+            this.txt_Tiempo_comida.LeadingIcon = null;
+            this.txt_Tiempo_comida.Location = new System.Drawing.Point(17, 46);
+            this.txt_Tiempo_comida.MaxLength = 50;
+            this.txt_Tiempo_comida.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_Tiempo_comida.Multiline = false;
+            this.txt_Tiempo_comida.Name = "txt_Tiempo_comida";
+            this.txt_Tiempo_comida.Size = new System.Drawing.Size(226, 50);
+            this.txt_Tiempo_comida.TabIndex = 0;
+            this.txt_Tiempo_comida.Text = "";
+            this.txt_Tiempo_comida.TrailingIcon = null;
+            this.txt_Tiempo_comida.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_comida_KeyPress);
+            // 
             // materialCard3
             // 
             this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -164,6 +506,208 @@
             this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard3.Size = new System.Drawing.Size(755, 559);
             this.materialCard3.TabIndex = 3;
+            // 
+            // card_datos
+            // 
+            this.card_datos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_datos.Controls.Add(this.Txt_Personal_Op);
+            this.card_datos.Controls.Add(this.txt_Produccion);
+            this.card_datos.Controls.Add(this.Txt_Merma);
+            this.card_datos.Depth = 0;
+            this.card_datos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_datos.Location = new System.Drawing.Point(18, 74);
+            this.card_datos.Margin = new System.Windows.Forms.Padding(14);
+            this.card_datos.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_datos.Name = "card_datos";
+            this.card_datos.Padding = new System.Windows.Forms.Padding(14);
+            this.card_datos.Size = new System.Drawing.Size(321, 191);
+            this.card_datos.TabIndex = 9;
+            // 
+            // Txt_Personal_Op
+            // 
+            this.Txt_Personal_Op.AnimateReadOnly = false;
+            this.Txt_Personal_Op.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Txt_Personal_Op.Depth = 0;
+            this.Txt_Personal_Op.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_Personal_Op.Hint = "Personal Operativo";
+            this.Txt_Personal_Op.LeadingIcon = null;
+            this.Txt_Personal_Op.Location = new System.Drawing.Point(17, 121);
+            this.Txt_Personal_Op.MaxLength = 50;
+            this.Txt_Personal_Op.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Personal_Op.Multiline = false;
+            this.Txt_Personal_Op.Name = "Txt_Personal_Op";
+            this.Txt_Personal_Op.Size = new System.Drawing.Size(250, 50);
+            this.Txt_Personal_Op.TabIndex = 10;
+            this.Txt_Personal_Op.Text = "";
+            this.Txt_Personal_Op.TrailingIcon = null;
+            // 
+            // txt_Produccion
+            // 
+            this.txt_Produccion.AnimateReadOnly = false;
+            this.txt_Produccion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_Produccion.Depth = 0;
+            this.txt_Produccion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_Produccion.Hint = "Resultado Producción";
+            this.txt_Produccion.LeadingIcon = null;
+            this.txt_Produccion.Location = new System.Drawing.Point(17, 9);
+            this.txt_Produccion.MaxLength = 50;
+            this.txt_Produccion.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_Produccion.Multiline = false;
+            this.txt_Produccion.Name = "txt_Produccion";
+            this.txt_Produccion.Size = new System.Drawing.Size(250, 50);
+            this.txt_Produccion.TabIndex = 8;
+            this.txt_Produccion.Text = "";
+            this.txt_Produccion.TrailingIcon = null;
+            // 
+            // Txt_Merma
+            // 
+            this.Txt_Merma.AnimateReadOnly = false;
+            this.Txt_Merma.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Txt_Merma.Depth = 0;
+            this.Txt_Merma.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_Merma.Hint = "Merma";
+            this.Txt_Merma.LeadingIcon = null;
+            this.Txt_Merma.Location = new System.Drawing.Point(17, 65);
+            this.Txt_Merma.MaxLength = 50;
+            this.Txt_Merma.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Merma.Multiline = false;
+            this.Txt_Merma.Name = "Txt_Merma";
+            this.Txt_Merma.Size = new System.Drawing.Size(250, 50);
+            this.Txt_Merma.TabIndex = 9;
+            this.Txt_Merma.Text = "";
+            this.Txt_Merma.TrailingIcon = null;
+            // 
+            // materialCard5
+            // 
+            this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard5.Controls.Add(this.pnl_ftt);
+            this.materialCard5.Controls.Add(this.txt_Up_time);
+            this.materialCard5.Controls.Add(this.txt_kg_F_Espec);
+            this.materialCard5.Controls.Add(this.txt_kg_ok);
+            this.materialCard5.Controls.Add(this.txt_perdida);
+            this.materialCard5.Depth = 0;
+            this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard5.Location = new System.Drawing.Point(18, 282);
+            this.materialCard5.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard5.Name = "materialCard5";
+            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard5.Size = new System.Drawing.Size(718, 200);
+            this.materialCard5.TabIndex = 8;
+            // 
+            // pnl_ftt
+            // 
+            this.pnl_ftt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pnl_ftt.Controls.Add(this.txt_ftt);
+            this.pnl_ftt.Location = new System.Drawing.Point(17, 17);
+            this.pnl_ftt.Name = "pnl_ftt";
+            this.pnl_ftt.Size = new System.Drawing.Size(234, 50);
+            this.pnl_ftt.TabIndex = 5;
+            // 
+            // txt_ftt
+            // 
+            this.txt_ftt.AnimateReadOnly = false;
+            this.txt_ftt.BackColor = System.Drawing.SystemColors.Info;
+            this.txt_ftt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_ftt.Depth = 0;
+            this.txt_ftt.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_ftt.Hint = "FTT";
+            this.txt_ftt.LeadingIcon = null;
+            this.txt_ftt.Location = new System.Drawing.Point(0, 2);
+            this.txt_ftt.MaxLength = 50;
+            this.txt_ftt.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_ftt.Multiline = false;
+            this.txt_ftt.Name = "txt_ftt";
+            this.txt_ftt.Size = new System.Drawing.Size(234, 50);
+            this.txt_ftt.TabIndex = 1;
+            this.txt_ftt.Text = "";
+            this.txt_ftt.TrailingIcon = null;
+            // 
+            // txt_Up_time
+            // 
+            this.txt_Up_time.AnimateReadOnly = false;
+            this.txt_Up_time.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_Up_time.Depth = 0;
+            this.txt_Up_time.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_Up_time.Hint = "Up Time";
+            this.txt_Up_time.LeadingIcon = null;
+            this.txt_Up_time.Location = new System.Drawing.Point(17, 129);
+            this.txt_Up_time.MaxLength = 50;
+            this.txt_Up_time.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_Up_time.Multiline = false;
+            this.txt_Up_time.Name = "txt_Up_time";
+            this.txt_Up_time.Size = new System.Drawing.Size(234, 50);
+            this.txt_Up_time.TabIndex = 4;
+            this.txt_Up_time.Text = "";
+            this.txt_Up_time.TrailingIcon = null;
+            // 
+            // txt_kg_F_Espec
+            // 
+            this.txt_kg_F_Espec.AnimateReadOnly = false;
+            this.txt_kg_F_Espec.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_kg_F_Espec.Depth = 0;
+            this.txt_kg_F_Espec.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_kg_F_Espec.Hint = "Kg Fuera de Especificación";
+            this.txt_kg_F_Espec.LeadingIcon = null;
+            this.txt_kg_F_Espec.Location = new System.Drawing.Point(366, 73);
+            this.txt_kg_F_Espec.MaxLength = 50;
+            this.txt_kg_F_Espec.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_kg_F_Espec.Multiline = false;
+            this.txt_kg_F_Espec.Name = "txt_kg_F_Espec";
+            this.txt_kg_F_Espec.Size = new System.Drawing.Size(234, 50);
+            this.txt_kg_F_Espec.TabIndex = 3;
+            this.txt_kg_F_Espec.Text = "";
+            this.txt_kg_F_Espec.TrailingIcon = null;
+            // 
+            // txt_kg_ok
+            // 
+            this.txt_kg_ok.AnimateReadOnly = false;
+            this.txt_kg_ok.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_kg_ok.Depth = 0;
+            this.txt_kg_ok.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_kg_ok.Hint = "Kilogramos Ok";
+            this.txt_kg_ok.LeadingIcon = null;
+            this.txt_kg_ok.Location = new System.Drawing.Point(366, 17);
+            this.txt_kg_ok.MaxLength = 50;
+            this.txt_kg_ok.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_kg_ok.Multiline = false;
+            this.txt_kg_ok.Name = "txt_kg_ok";
+            this.txt_kg_ok.Size = new System.Drawing.Size(234, 50);
+            this.txt_kg_ok.TabIndex = 2;
+            this.txt_kg_ok.Text = "";
+            this.txt_kg_ok.TrailingIcon = null;
+            // 
+            // txt_perdida
+            // 
+            this.txt_perdida.AnimateReadOnly = false;
+            this.txt_perdida.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_perdida.Depth = 0;
+            this.txt_perdida.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_perdida.Hint = "Perdida";
+            this.txt_perdida.LeadingIcon = null;
+            this.txt_perdida.Location = new System.Drawing.Point(17, 73);
+            this.txt_perdida.MaxLength = 50;
+            this.txt_perdida.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_perdida.Multiline = false;
+            this.txt_perdida.Name = "txt_perdida";
+            this.txt_perdida.Size = new System.Drawing.Size(234, 50);
+            this.txt_perdida.TabIndex = 0;
+            this.txt_perdida.Text = "";
+            this.txt_perdida.TrailingIcon = null;
+            // 
+            // Card_hrs
+            // 
+            this.Card_hrs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_hrs.Controls.Add(this.pnl_principal);
+            this.Card_hrs.Depth = 0;
+            this.Card_hrs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.Card_hrs.Location = new System.Drawing.Point(367, 74);
+            this.Card_hrs.Margin = new System.Windows.Forms.Padding(14);
+            this.Card_hrs.MouseState = MaterialSkin.MouseState.HOVER;
+            this.Card_hrs.Name = "Card_hrs";
+            this.Card_hrs.Padding = new System.Windows.Forms.Padding(14);
+            this.Card_hrs.Size = new System.Drawing.Size(369, 191);
+            this.Card_hrs.TabIndex = 4;
             // 
             // pnl_principal
             // 
@@ -317,20 +861,6 @@
             this.txt_hr_disponible.TabIndex = 2;
             this.txt_hr_disponible.Text = "";
             this.txt_hr_disponible.TrailingIcon = null;
-            // 
-            // Card_hrs
-            // 
-            this.Card_hrs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.Card_hrs.Controls.Add(this.pnl_principal);
-            this.Card_hrs.Depth = 0;
-            this.Card_hrs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.Card_hrs.Location = new System.Drawing.Point(367, 74);
-            this.Card_hrs.Margin = new System.Windows.Forms.Padding(14);
-            this.Card_hrs.MouseState = MaterialSkin.MouseState.HOVER;
-            this.Card_hrs.Name = "Card_hrs";
-            this.Card_hrs.Padding = new System.Windows.Forms.Padding(14);
-            this.Card_hrs.Size = new System.Drawing.Size(369, 191);
-            this.Card_hrs.TabIndex = 4;
             // 
             // materialCard4
             // 
@@ -558,29 +1088,421 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1255, 896);
+            this.tabPage2.Size = new System.Drawing.Size(1705, 983);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.materialCard8);
+            this.tabPage3.Controls.Add(this.materialCard7);
             this.tabPage3.ImageKey = "group_users_people";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1255, 896);
+            this.tabPage3.Size = new System.Drawing.Size(1705, 983);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Usuarios";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // materialCard8
+            // 
+            this.materialCard8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard8.Controls.Add(this.tabControl_usuarios);
+            this.materialCard8.Depth = 0;
+            this.materialCard8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard8.Location = new System.Drawing.Point(14, 14);
+            this.materialCard8.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard8.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard8.Name = "materialCard8";
+            this.materialCard8.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard8.Size = new System.Drawing.Size(437, 278);
+            this.materialCard8.TabIndex = 1;
+            // 
+            // tabControl_usuarios
+            // 
+            this.tabControl_usuarios.Controls.Add(this.tabPage5);
+            this.tabControl_usuarios.Controls.Add(this.tabPage6);
+            this.tabControl_usuarios.Location = new System.Drawing.Point(0, 0);
+            this.tabControl_usuarios.Name = "tabControl_usuarios";
+            this.tabControl_usuarios.SelectedIndex = 0;
+            this.tabControl_usuarios.Size = new System.Drawing.Size(437, 278);
+            this.tabControl_usuarios.TabIndex = 7;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.cmb_niel_user);
+            this.tabPage5.Controls.Add(this.txt_no_emp);
+            this.tabPage5.Controls.Add(this.txt_usuario);
+            this.tabPage5.Controls.Add(this.btn_cancel);
+            this.tabPage5.Controls.Add(this.txt_contra);
+            this.tabPage5.Controls.Add(this.btn_delete);
+            this.tabPage5.Controls.Add(this.btn_save);
+            this.tabPage5.Controls.Add(this.btn_edit);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(429, 252);
+            this.tabPage5.TabIndex = 0;
+            this.tabPage5.Text = "Usuarios";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // cmb_niel_user
+            // 
+            this.cmb_niel_user.AutoResize = false;
+            this.cmb_niel_user.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_niel_user.Depth = 0;
+            this.cmb_niel_user.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_niel_user.DropDownHeight = 174;
+            this.cmb_niel_user.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_niel_user.DropDownWidth = 121;
+            this.cmb_niel_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_niel_user.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_niel_user.FormattingEnabled = true;
+            this.cmb_niel_user.Hint = "Nivel del usuario";
+            this.cmb_niel_user.IntegralHeight = false;
+            this.cmb_niel_user.ItemHeight = 43;
+            this.cmb_niel_user.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.cmb_niel_user.Location = new System.Drawing.Point(13, 183);
+            this.cmb_niel_user.MaxDropDownItems = 4;
+            this.cmb_niel_user.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_niel_user.Name = "cmb_niel_user";
+            this.cmb_niel_user.Size = new System.Drawing.Size(228, 49);
+            this.cmb_niel_user.StartIndex = -1;
+            this.cmb_niel_user.TabIndex = 8;
+            // 
+            // txt_no_emp
+            // 
+            this.txt_no_emp.AnimateReadOnly = false;
+            this.txt_no_emp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_no_emp.Depth = 0;
+            this.txt_no_emp.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_no_emp.Hint = "Numero de Empleado";
+            this.txt_no_emp.LeadingIcon = null;
+            this.txt_no_emp.Location = new System.Drawing.Point(13, 15);
+            this.txt_no_emp.MaxLength = 50;
+            this.txt_no_emp.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_no_emp.Multiline = false;
+            this.txt_no_emp.Name = "txt_no_emp";
+            this.txt_no_emp.Size = new System.Drawing.Size(228, 50);
+            this.txt_no_emp.TabIndex = 0;
+            this.txt_no_emp.Text = "";
+            this.txt_no_emp.TrailingIcon = null;
+            // 
+            // txt_usuario
+            // 
+            this.txt_usuario.AnimateReadOnly = false;
+            this.txt_usuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_usuario.Depth = 0;
+            this.txt_usuario.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_usuario.Hint = "Nombre del usuario";
+            this.txt_usuario.LeadingIcon = null;
+            this.txt_usuario.Location = new System.Drawing.Point(13, 71);
+            this.txt_usuario.MaxLength = 50;
+            this.txt_usuario.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_usuario.Multiline = false;
+            this.txt_usuario.Name = "txt_usuario";
+            this.txt_usuario.Size = new System.Drawing.Size(228, 50);
+            this.txt_usuario.TabIndex = 1;
+            this.txt_usuario.Text = "";
+            this.txt_usuario.TrailingIcon = null;
+            // 
+            // btn_cancel
+            // 
+            this.btn_cancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_cancel.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_cancel.Depth = 0;
+            this.btn_cancel.HighEmphasis = true;
+            this.btn_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.btn_cancel.Location = new System.Drawing.Point(297, 177);
+            this.btn_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_cancel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_cancel.Name = "btn_cancel";
+            this.btn_cancel.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_cancel.Size = new System.Drawing.Size(124, 36);
+            this.btn_cancel.TabIndex = 6;
+            this.btn_cancel.Text = "Cancelar";
+            this.btn_cancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_cancel.UseAccentColor = false;
+            this.btn_cancel.UseVisualStyleBackColor = true;
+            // 
+            // txt_contra
+            // 
+            this.txt_contra.AnimateReadOnly = false;
+            this.txt_contra.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_contra.Depth = 0;
+            this.txt_contra.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_contra.Hint = "Contraseña";
+            this.txt_contra.LeadingIcon = null;
+            this.txt_contra.Location = new System.Drawing.Point(13, 127);
+            this.txt_contra.MaxLength = 50;
+            this.txt_contra.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_contra.Multiline = false;
+            this.txt_contra.Name = "txt_contra";
+            this.txt_contra.Size = new System.Drawing.Size(228, 50);
+            this.txt_contra.TabIndex = 2;
+            this.txt_contra.Text = "";
+            this.txt_contra.TrailingIcon = null;
+            // 
+            // btn_delete
+            // 
+            this.btn_delete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_delete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_delete.Depth = 0;
+            this.btn_delete.HighEmphasis = true;
+            this.btn_delete.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
+            this.btn_delete.Location = new System.Drawing.Point(297, 129);
+            this.btn_delete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_delete.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_delete.Name = "btn_delete";
+            this.btn_delete.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_delete.Size = new System.Drawing.Size(106, 36);
+            this.btn_delete.TabIndex = 5;
+            this.btn_delete.Text = "Borrar";
+            this.btn_delete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_delete.UseAccentColor = false;
+            this.btn_delete.UseVisualStyleBackColor = true;
+            // 
+            // btn_save
+            // 
+            this.btn_save.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save.Depth = 0;
+            this.btn_save.HighEmphasis = true;
+            this.btn_save.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save.ImageKey = "save_icon";
+            this.btn_save.Location = new System.Drawing.Point(297, 15);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save.Name = "btn_save";
+            this.btn_save.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save.Size = new System.Drawing.Size(116, 36);
+            this.btn_save.TabIndex = 3;
+            this.btn_save.Text = "Guardar";
+            this.btn_save.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save.UseAccentColor = false;
+            this.btn_save.UseVisualStyleBackColor = true;
+            // 
+            // btn_edit
+            // 
+            this.btn_edit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_edit.Depth = 0;
+            this.btn_edit.HighEmphasis = true;
+            this.btn_edit.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.btn_edit.Location = new System.Drawing.Point(297, 71);
+            this.btn_edit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_edit.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_edit.Name = "btn_edit";
+            this.btn_edit.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_edit.Size = new System.Drawing.Size(99, 36);
+            this.btn_edit.TabIndex = 4;
+            this.btn_edit.Text = "Editar";
+            this.btn_edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_edit.UseAccentColor = false;
+            this.btn_edit.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.btn_search_edit);
+            this.tabPage6.Controls.Add(this.cmb_serch_nivel);
+            this.tabPage6.Controls.Add(this.txt_search_no_emp);
+            this.tabPage6.Controls.Add(this.txt_search_nom_emp);
+            this.tabPage6.Controls.Add(this.btn_search_cancel);
+            this.tabPage6.Controls.Add(this.btn_search_save);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(655, 252);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "Buscar";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // btn_search_edit
+            // 
+            this.btn_search_edit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_search_edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_search_edit.Depth = 0;
+            this.btn_search_edit.HighEmphasis = true;
+            this.btn_search_edit.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.btn_search_edit.Location = new System.Drawing.Point(297, 65);
+            this.btn_search_edit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_search_edit.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_search_edit.Name = "btn_search_edit";
+            this.btn_search_edit.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_search_edit.Size = new System.Drawing.Size(99, 36);
+            this.btn_search_edit.TabIndex = 14;
+            this.btn_search_edit.Text = "Editar";
+            this.btn_search_edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_search_edit.UseAccentColor = false;
+            this.btn_search_edit.UseVisualStyleBackColor = true;
+            // 
+            // cmb_serch_nivel
+            // 
+            this.cmb_serch_nivel.AutoResize = false;
+            this.cmb_serch_nivel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_serch_nivel.Depth = 0;
+            this.cmb_serch_nivel.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_serch_nivel.DropDownHeight = 174;
+            this.cmb_serch_nivel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_serch_nivel.DropDownWidth = 121;
+            this.cmb_serch_nivel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_serch_nivel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_serch_nivel.FormattingEnabled = true;
+            this.cmb_serch_nivel.Hint = "Nivel del usuario";
+            this.cmb_serch_nivel.IntegralHeight = false;
+            this.cmb_serch_nivel.ItemHeight = 43;
+            this.cmb_serch_nivel.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.cmb_serch_nivel.Location = new System.Drawing.Point(13, 128);
+            this.cmb_serch_nivel.MaxDropDownItems = 4;
+            this.cmb_serch_nivel.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_serch_nivel.Name = "cmb_serch_nivel";
+            this.cmb_serch_nivel.Size = new System.Drawing.Size(228, 49);
+            this.cmb_serch_nivel.StartIndex = -1;
+            this.cmb_serch_nivel.TabIndex = 13;
+            // 
+            // txt_search_no_emp
+            // 
+            this.txt_search_no_emp.AnimateReadOnly = false;
+            this.txt_search_no_emp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_search_no_emp.Depth = 0;
+            this.txt_search_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_search_no_emp.Hint = "Numero de Empleado";
+            this.txt_search_no_emp.LeadingIcon = null;
+            this.txt_search_no_emp.Location = new System.Drawing.Point(13, 16);
+            this.txt_search_no_emp.MaxLength = 50;
+            this.txt_search_no_emp.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_search_no_emp.Multiline = false;
+            this.txt_search_no_emp.Name = "txt_search_no_emp";
+            this.txt_search_no_emp.Size = new System.Drawing.Size(228, 50);
+            this.txt_search_no_emp.TabIndex = 9;
+            this.txt_search_no_emp.Text = "";
+            this.txt_search_no_emp.TrailingIcon = null;
+            // 
+            // txt_search_nom_emp
+            // 
+            this.txt_search_nom_emp.AnimateReadOnly = false;
+            this.txt_search_nom_emp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_search_nom_emp.Depth = 0;
+            this.txt_search_nom_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_search_nom_emp.Hint = "Nombre del usuario";
+            this.txt_search_nom_emp.LeadingIcon = null;
+            this.txt_search_nom_emp.Location = new System.Drawing.Point(13, 72);
+            this.txt_search_nom_emp.MaxLength = 50;
+            this.txt_search_nom_emp.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_search_nom_emp.Multiline = false;
+            this.txt_search_nom_emp.Name = "txt_search_nom_emp";
+            this.txt_search_nom_emp.Size = new System.Drawing.Size(228, 50);
+            this.txt_search_nom_emp.TabIndex = 10;
+            this.txt_search_nom_emp.Text = "";
+            this.txt_search_nom_emp.TrailingIcon = null;
+            // 
+            // btn_search_cancel
+            // 
+            this.btn_search_cancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_search_cancel.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_search_cancel.Depth = 0;
+            this.btn_search_cancel.HighEmphasis = true;
+            this.btn_search_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.btn_search_cancel.Location = new System.Drawing.Point(297, 113);
+            this.btn_search_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_search_cancel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_search_cancel.Name = "btn_search_cancel";
+            this.btn_search_cancel.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_search_cancel.Size = new System.Drawing.Size(124, 36);
+            this.btn_search_cancel.TabIndex = 12;
+            this.btn_search_cancel.Text = "Cancelar";
+            this.btn_search_cancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_search_cancel.UseAccentColor = false;
+            this.btn_search_cancel.UseVisualStyleBackColor = true;
+            // 
+            // btn_search_save
+            // 
+            this.btn_search_save.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_search_save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_search_save.Depth = 0;
+            this.btn_search_save.HighEmphasis = true;
+            this.btn_search_save.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.btn_search_save.Location = new System.Drawing.Point(297, 16);
+            this.btn_search_save.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_search_save.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_search_save.Name = "btn_search_save";
+            this.btn_search_save.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_search_save.Size = new System.Drawing.Size(105, 36);
+            this.btn_search_save.TabIndex = 11;
+            this.btn_search_save.Text = "Buscar";
+            this.btn_search_save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_search_save.UseAccentColor = false;
+            this.btn_search_save.UseVisualStyleBackColor = true;
+            // 
+            // materialCard7
+            // 
+            this.materialCard7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard7.Controls.Add(this.dgv_users);
+            this.materialCard7.Depth = 0;
+            this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard7.Location = new System.Drawing.Point(14, 320);
+            this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard7.Name = "materialCard7";
+            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard7.Size = new System.Drawing.Size(1174, 498);
+            this.materialCard7.TabIndex = 0;
+            // 
+            // dgv_users
+            // 
+            this.dgv_users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_users.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column3,
+            this.Column5,
+            this.Column4,
+            this.Column6});
+            this.dgv_users.Location = new System.Drawing.Point(0, 0);
+            this.dgv_users.Name = "dgv_users";
+            this.dgv_users.Size = new System.Drawing.Size(1174, 498);
+            this.dgv_users.TabIndex = 0;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Id_usuario";
+            this.Column3.Name = "Column3";
+            this.Column3.Visible = false;
+            // 
+            // Column5
+            // 
+            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Column5.HeaderText = "Numero de Empleado";
+            this.Column5.Name = "Column5";
+            this.Column5.Width = 123;
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column4.HeaderText = "Usuario";
+            this.Column4.Name = "Column4";
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column6.HeaderText = "Contraseña";
+            this.Column6.Name = "Column6";
+            // 
             // tabPage4
             // 
-            this.tabPage4.ImageKey = "gear_fill";
+            this.tabPage4.Controls.Add(this.materialCard9);
+            this.tabPage4.Controls.Add(this.materialCard10);
+            this.tabPage4.ImageKey = "flag_icon";
             this.tabPage4.Location = new System.Drawing.Point(4, 39);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1255, 896);
+            this.tabPage4.Size = new System.Drawing.Size(1705, 983);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Configuración";
+            this.tabPage4.Text = "Metas";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // imageList1
@@ -591,472 +1513,410 @@
             this.imageList1.Images.SetKeyName(1, "group_users_people");
             this.imageList1.Images.SetKeyName(2, "chart_graph_statistics_bar");
             this.imageList1.Images.SetKeyName(3, "home_house");
-            // 
-            // materialCard5
-            // 
-            this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard5.Controls.Add(this.pnl_ftt);
-            this.materialCard5.Controls.Add(this.txt_Up_time);
-            this.materialCard5.Controls.Add(this.txt_kg_F_Espec);
-            this.materialCard5.Controls.Add(this.txt_kg_ok);
-            this.materialCard5.Controls.Add(this.txt_perdida);
-            this.materialCard5.Depth = 0;
-            this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard5.Location = new System.Drawing.Point(18, 282);
-            this.materialCard5.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard5.Name = "materialCard5";
-            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard5.Size = new System.Drawing.Size(718, 200);
-            this.materialCard5.TabIndex = 8;
-            // 
-            // card_datos
-            // 
-            this.card_datos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.card_datos.Controls.Add(this.Txt_Personal_Op);
-            this.card_datos.Controls.Add(this.txt_Produccion);
-            this.card_datos.Controls.Add(this.Txt_Merma);
-            this.card_datos.Depth = 0;
-            this.card_datos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_datos.Location = new System.Drawing.Point(18, 74);
-            this.card_datos.Margin = new System.Windows.Forms.Padding(14);
-            this.card_datos.MouseState = MaterialSkin.MouseState.HOVER;
-            this.card_datos.Name = "card_datos";
-            this.card_datos.Padding = new System.Windows.Forms.Padding(14);
-            this.card_datos.Size = new System.Drawing.Size(321, 191);
-            this.card_datos.TabIndex = 9;
-            // 
-            // txt_perdida
-            // 
-            this.txt_perdida.AnimateReadOnly = false;
-            this.txt_perdida.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_perdida.Depth = 0;
-            this.txt_perdida.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_perdida.Hint = "Perdida";
-            this.txt_perdida.LeadingIcon = null;
-            this.txt_perdida.Location = new System.Drawing.Point(17, 73);
-            this.txt_perdida.MaxLength = 50;
-            this.txt_perdida.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_perdida.Multiline = false;
-            this.txt_perdida.Name = "txt_perdida";
-            this.txt_perdida.Size = new System.Drawing.Size(234, 50);
-            this.txt_perdida.TabIndex = 0;
-            this.txt_perdida.Text = "";
-            this.txt_perdida.TrailingIcon = null;
-            // 
-            // txt_ftt
-            // 
-            this.txt_ftt.AnimateReadOnly = false;
-            this.txt_ftt.BackColor = System.Drawing.SystemColors.Info;
-            this.txt_ftt.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_ftt.Depth = 0;
-            this.txt_ftt.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_ftt.Hint = "FTT";
-            this.txt_ftt.LeadingIcon = null;
-            this.txt_ftt.Location = new System.Drawing.Point(0, 2);
-            this.txt_ftt.MaxLength = 50;
-            this.txt_ftt.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_ftt.Multiline = false;
-            this.txt_ftt.Name = "txt_ftt";
-            this.txt_ftt.Size = new System.Drawing.Size(234, 50);
-            this.txt_ftt.TabIndex = 1;
-            this.txt_ftt.Text = "";
-            this.txt_ftt.TrailingIcon = null;
-            // 
-            // txt_kg_ok
-            // 
-            this.txt_kg_ok.AnimateReadOnly = false;
-            this.txt_kg_ok.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_kg_ok.Depth = 0;
-            this.txt_kg_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_kg_ok.Hint = "Kilogramos Ok";
-            this.txt_kg_ok.LeadingIcon = null;
-            this.txt_kg_ok.Location = new System.Drawing.Point(366, 17);
-            this.txt_kg_ok.MaxLength = 50;
-            this.txt_kg_ok.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_kg_ok.Multiline = false;
-            this.txt_kg_ok.Name = "txt_kg_ok";
-            this.txt_kg_ok.Size = new System.Drawing.Size(234, 50);
-            this.txt_kg_ok.TabIndex = 2;
-            this.txt_kg_ok.Text = "";
-            this.txt_kg_ok.TrailingIcon = null;
-            // 
-            // txt_kg_F_Espec
-            // 
-            this.txt_kg_F_Espec.AnimateReadOnly = false;
-            this.txt_kg_F_Espec.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_kg_F_Espec.Depth = 0;
-            this.txt_kg_F_Espec.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_kg_F_Espec.Hint = "Kg Fuera de Especificación";
-            this.txt_kg_F_Espec.LeadingIcon = null;
-            this.txt_kg_F_Espec.Location = new System.Drawing.Point(366, 73);
-            this.txt_kg_F_Espec.MaxLength = 50;
-            this.txt_kg_F_Espec.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_kg_F_Espec.Multiline = false;
-            this.txt_kg_F_Espec.Name = "txt_kg_F_Espec";
-            this.txt_kg_F_Espec.Size = new System.Drawing.Size(234, 50);
-            this.txt_kg_F_Espec.TabIndex = 3;
-            this.txt_kg_F_Espec.Text = "";
-            this.txt_kg_F_Espec.TrailingIcon = null;
-            // 
-            // txt_Up_time
-            // 
-            this.txt_Up_time.AnimateReadOnly = false;
-            this.txt_Up_time.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_Up_time.Depth = 0;
-            this.txt_Up_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_Up_time.Hint = "Up Time";
-            this.txt_Up_time.LeadingIcon = null;
-            this.txt_Up_time.Location = new System.Drawing.Point(17, 129);
-            this.txt_Up_time.MaxLength = 50;
-            this.txt_Up_time.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_Up_time.Multiline = false;
-            this.txt_Up_time.Name = "txt_Up_time";
-            this.txt_Up_time.Size = new System.Drawing.Size(234, 50);
-            this.txt_Up_time.TabIndex = 4;
-            this.txt_Up_time.Text = "";
-            this.txt_Up_time.TrailingIcon = null;
-            // 
-            // txt_Produccion
-            // 
-            this.txt_Produccion.AnimateReadOnly = false;
-            this.txt_Produccion.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_Produccion.Depth = 0;
-            this.txt_Produccion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_Produccion.Hint = "Resultado Producción";
-            this.txt_Produccion.LeadingIcon = null;
-            this.txt_Produccion.Location = new System.Drawing.Point(17, 9);
-            this.txt_Produccion.MaxLength = 50;
-            this.txt_Produccion.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_Produccion.Multiline = false;
-            this.txt_Produccion.Name = "txt_Produccion";
-            this.txt_Produccion.Size = new System.Drawing.Size(250, 50);
-            this.txt_Produccion.TabIndex = 8;
-            this.txt_Produccion.Text = "";
-            this.txt_Produccion.TrailingIcon = null;
-            // 
-            // Txt_Merma
-            // 
-            this.Txt_Merma.AnimateReadOnly = false;
-            this.Txt_Merma.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Txt_Merma.Depth = 0;
-            this.Txt_Merma.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.Txt_Merma.Hint = "Merma";
-            this.Txt_Merma.LeadingIcon = null;
-            this.Txt_Merma.Location = new System.Drawing.Point(17, 65);
-            this.Txt_Merma.MaxLength = 50;
-            this.Txt_Merma.MouseState = MaterialSkin.MouseState.OUT;
-            this.Txt_Merma.Multiline = false;
-            this.Txt_Merma.Name = "Txt_Merma";
-            this.Txt_Merma.Size = new System.Drawing.Size(250, 50);
-            this.Txt_Merma.TabIndex = 9;
-            this.Txt_Merma.Text = "";
-            this.Txt_Merma.TrailingIcon = null;
-            // 
-            // Txt_Personal_Op
-            // 
-            this.Txt_Personal_Op.AnimateReadOnly = false;
-            this.Txt_Personal_Op.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Txt_Personal_Op.Depth = 0;
-            this.Txt_Personal_Op.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.Txt_Personal_Op.Hint = "Personal Operativo";
-            this.Txt_Personal_Op.LeadingIcon = null;
-            this.Txt_Personal_Op.Location = new System.Drawing.Point(17, 121);
-            this.Txt_Personal_Op.MaxLength = 50;
-            this.Txt_Personal_Op.MouseState = MaterialSkin.MouseState.OUT;
-            this.Txt_Personal_Op.Multiline = false;
-            this.Txt_Personal_Op.Name = "Txt_Personal_Op";
-            this.Txt_Personal_Op.Size = new System.Drawing.Size(250, 50);
-            this.Txt_Personal_Op.TabIndex = 10;
-            this.Txt_Personal_Op.Text = "";
-            this.Txt_Personal_Op.TrailingIcon = null;
-            // 
-            // pnl_ftt
-            // 
-            this.pnl_ftt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pnl_ftt.Controls.Add(this.txt_ftt);
-            this.pnl_ftt.Location = new System.Drawing.Point(17, 17);
-            this.pnl_ftt.Name = "pnl_ftt";
-            this.pnl_ftt.Size = new System.Drawing.Size(234, 50);
-            this.pnl_ftt.TabIndex = 5;
-            // 
-            // materialCard6
-            // 
-            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard6.Controls.Add(this.txt_TM_calidad);
-            this.materialCard6.Controls.Add(this.card_dgv_calidad);
-            this.materialCard6.Controls.Add(this.txt_TM_operativo);
-            this.materialCard6.Controls.Add(this.card_dgv_operativo);
-            this.materialCard6.Controls.Add(this.txt_TM_almacen);
-            this.materialCard6.Controls.Add(this.card_dgv_almacen);
-            this.materialCard6.Controls.Add(this.lbl_min_comida);
-            this.materialCard6.Controls.Add(this.txt_TM_mecanico);
-            this.materialCard6.Controls.Add(this.card_dgv_mecanico);
-            this.materialCard6.Controls.Add(this.txt_Tiempo_comida);
-            this.materialCard6.Depth = 0;
-            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard6.Location = new System.Drawing.Point(797, 123);
-            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard6.Name = "materialCard6";
-            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard6.Size = new System.Drawing.Size(874, 719);
-            this.materialCard6.TabIndex = 4;
-            // 
-            // txt_Tiempo_comida
-            // 
-            this.txt_Tiempo_comida.AnimateReadOnly = false;
-            this.txt_Tiempo_comida.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_Tiempo_comida.Depth = 0;
-            this.txt_Tiempo_comida.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_Tiempo_comida.Hint = "Tiempo muerto por comida";
-            this.txt_Tiempo_comida.LeadingIcon = null;
-            this.txt_Tiempo_comida.Location = new System.Drawing.Point(17, 46);
-            this.txt_Tiempo_comida.MaxLength = 50;
-            this.txt_Tiempo_comida.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_Tiempo_comida.Multiline = false;
-            this.txt_Tiempo_comida.Name = "txt_Tiempo_comida";
-            this.txt_Tiempo_comida.Size = new System.Drawing.Size(226, 50);
-            this.txt_Tiempo_comida.TabIndex = 0;
-            this.txt_Tiempo_comida.Text = "";
-            this.txt_Tiempo_comida.TrailingIcon = null;
-            this.txt_Tiempo_comida.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_comida_KeyPress);
-            // 
-            // dgv_mecanico
-            // 
-            this.dgv_mecanico.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_mecanico.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
-            this.dgv_mecanico.Location = new System.Drawing.Point(0, 0);
-            this.dgv_mecanico.Name = "dgv_mecanico";
-            this.dgv_mecanico.Size = new System.Drawing.Size(386, 189);
-            this.dgv_mecanico.TabIndex = 1;
-            this.dgv_mecanico.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_mecanico_EditingControlShowing);
-            // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Minutos Detenidos";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "Motivos Mecánicos";
-            this.Column2.Name = "Column2";
-            // 
-            // card_dgv_mecanico
-            // 
-            this.card_dgv_mecanico.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.card_dgv_mecanico.Controls.Add(this.dgv_mecanico);
-            this.card_dgv_mecanico.Depth = 0;
-            this.card_dgv_mecanico.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_mecanico.Location = new System.Drawing.Point(17, 129);
-            this.card_dgv_mecanico.Margin = new System.Windows.Forms.Padding(14);
-            this.card_dgv_mecanico.MouseState = MaterialSkin.MouseState.HOVER;
-            this.card_dgv_mecanico.Name = "card_dgv_mecanico";
-            this.card_dgv_mecanico.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_mecanico.Size = new System.Drawing.Size(386, 189);
-            this.card_dgv_mecanico.TabIndex = 2;
-            // 
-            // txt_TM_mecanico
-            // 
-            this.txt_TM_mecanico.AnimateReadOnly = false;
-            this.txt_TM_mecanico.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_TM_mecanico.Depth = 0;
-            this.txt_TM_mecanico.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_TM_mecanico.Hint = "Minutos Totales";
-            this.txt_TM_mecanico.LeadingIcon = null;
-            this.txt_TM_mecanico.Location = new System.Drawing.Point(17, 324);
-            this.txt_TM_mecanico.MaxLength = 50;
-            this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_TM_mecanico.Multiline = false;
-            this.txt_TM_mecanico.Name = "txt_TM_mecanico";
-            this.txt_TM_mecanico.Size = new System.Drawing.Size(386, 50);
-            this.txt_TM_mecanico.TabIndex = 3;
-            this.txt_TM_mecanico.Text = "";
-            this.txt_TM_mecanico.TrailingIcon = null;
-            // 
-            // lbl_min_comida
-            // 
-            this.lbl_min_comida.AutoSize = true;
-            this.lbl_min_comida.Depth = 0;
-            this.lbl_min_comida.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lbl_min_comida.Location = new System.Drawing.Point(249, 65);
-            this.lbl_min_comida.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lbl_min_comida.Name = "lbl_min_comida";
-            this.lbl_min_comida.Size = new System.Drawing.Size(59, 19);
-            this.lbl_min_comida.TabIndex = 4;
-            this.lbl_min_comida.Text = "Minutos";
-            // 
-            // card_dgv_almacen
-            // 
-            this.card_dgv_almacen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.card_dgv_almacen.Controls.Add(this.dgv_almacen);
-            this.card_dgv_almacen.Depth = 0;
-            this.card_dgv_almacen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_almacen.Location = new System.Drawing.Point(431, 129);
-            this.card_dgv_almacen.Margin = new System.Windows.Forms.Padding(14);
-            this.card_dgv_almacen.MouseState = MaterialSkin.MouseState.HOVER;
-            this.card_dgv_almacen.Name = "card_dgv_almacen";
-            this.card_dgv_almacen.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_almacen.Size = new System.Drawing.Size(386, 189);
-            this.card_dgv_almacen.TabIndex = 5;
-            // 
-            // dgv_almacen
-            // 
-            this.dgv_almacen.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_almacen.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
-            this.dgv_almacen.Location = new System.Drawing.Point(0, 0);
-            this.dgv_almacen.Name = "dgv_almacen";
-            this.dgv_almacen.Size = new System.Drawing.Size(386, 189);
-            this.dgv_almacen.TabIndex = 1;
-            this.dgv_almacen.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_almacen_EditingControlShowing);
-            // 
-            // txt_TM_almacen
-            // 
-            this.txt_TM_almacen.AnimateReadOnly = false;
-            this.txt_TM_almacen.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_TM_almacen.Depth = 0;
-            this.txt_TM_almacen.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_TM_almacen.Hint = "Minutos Totales";
-            this.txt_TM_almacen.LeadingIcon = null;
-            this.txt_TM_almacen.Location = new System.Drawing.Point(431, 324);
-            this.txt_TM_almacen.MaxLength = 50;
-            this.txt_TM_almacen.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_TM_almacen.Multiline = false;
-            this.txt_TM_almacen.Name = "txt_TM_almacen";
-            this.txt_TM_almacen.Size = new System.Drawing.Size(386, 50);
-            this.txt_TM_almacen.TabIndex = 6;
-            this.txt_TM_almacen.Text = "";
-            this.txt_TM_almacen.TrailingIcon = null;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Minutos Detenidos";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Motivos Almacen";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            // 
-            // txt_TM_operativo
-            // 
-            this.txt_TM_operativo.AnimateReadOnly = false;
-            this.txt_TM_operativo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_TM_operativo.Depth = 0;
-            this.txt_TM_operativo.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_TM_operativo.Hint = "Minutos Totales";
-            this.txt_TM_operativo.LeadingIcon = null;
-            this.txt_TM_operativo.Location = new System.Drawing.Point(17, 617);
-            this.txt_TM_operativo.MaxLength = 50;
-            this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_TM_operativo.Multiline = false;
-            this.txt_TM_operativo.Name = "txt_TM_operativo";
-            this.txt_TM_operativo.Size = new System.Drawing.Size(386, 50);
-            this.txt_TM_operativo.TabIndex = 8;
-            this.txt_TM_operativo.Text = "";
-            this.txt_TM_operativo.TrailingIcon = null;
-            // 
-            // card_dgv_operativo
-            // 
-            this.card_dgv_operativo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.card_dgv_operativo.Controls.Add(this.dgv_operativo);
-            this.card_dgv_operativo.Depth = 0;
-            this.card_dgv_operativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_operativo.Location = new System.Drawing.Point(17, 422);
-            this.card_dgv_operativo.Margin = new System.Windows.Forms.Padding(14);
-            this.card_dgv_operativo.MouseState = MaterialSkin.MouseState.HOVER;
-            this.card_dgv_operativo.Name = "card_dgv_operativo";
-            this.card_dgv_operativo.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_operativo.Size = new System.Drawing.Size(386, 189);
-            this.card_dgv_operativo.TabIndex = 7;
-            // 
-            // dgv_operativo
-            // 
-            this.dgv_operativo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_operativo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
-            this.dgv_operativo.Location = new System.Drawing.Point(0, 0);
-            this.dgv_operativo.Name = "dgv_operativo";
-            this.dgv_operativo.Size = new System.Drawing.Size(386, 189);
-            this.dgv_operativo.TabIndex = 1;
-            this.dgv_operativo.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_operativo_EditingControlShowing);
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Minutos Detenidos";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Motivos Operativos";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            // 
-            // txt_TM_calidad
-            // 
-            this.txt_TM_calidad.AnimateReadOnly = false;
-            this.txt_TM_calidad.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_TM_calidad.Depth = 0;
-            this.txt_TM_calidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_TM_calidad.Hint = "Minutos Totales";
-            this.txt_TM_calidad.LeadingIcon = null;
-            this.txt_TM_calidad.Location = new System.Drawing.Point(431, 617);
-            this.txt_TM_calidad.MaxLength = 50;
-            this.txt_TM_calidad.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_TM_calidad.Multiline = false;
-            this.txt_TM_calidad.Name = "txt_TM_calidad";
-            this.txt_TM_calidad.Size = new System.Drawing.Size(386, 50);
-            this.txt_TM_calidad.TabIndex = 10;
-            this.txt_TM_calidad.Text = "";
-            this.txt_TM_calidad.TrailingIcon = null;
-            // 
-            // card_dgv_calidad
-            // 
-            this.card_dgv_calidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.card_dgv_calidad.Controls.Add(this.dgv_calidad);
-            this.card_dgv_calidad.Depth = 0;
-            this.card_dgv_calidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_calidad.Location = new System.Drawing.Point(431, 422);
-            this.card_dgv_calidad.Margin = new System.Windows.Forms.Padding(14);
-            this.card_dgv_calidad.MouseState = MaterialSkin.MouseState.HOVER;
-            this.card_dgv_calidad.Name = "card_dgv_calidad";
-            this.card_dgv_calidad.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_calidad.Size = new System.Drawing.Size(386, 189);
-            this.card_dgv_calidad.TabIndex = 9;
-            // 
-            // dgv_calidad
-            // 
-            this.dgv_calidad.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_calidad.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6});
-            this.dgv_calidad.Location = new System.Drawing.Point(0, 0);
-            this.dgv_calidad.Name = "dgv_calidad";
-            this.dgv_calidad.Size = new System.Drawing.Size(386, 189);
-            this.dgv_calidad.TabIndex = 1;
-            this.dgv_calidad.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_calidad_EditingControlShowing);
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn5.HeaderText = "Minutos Detenidos";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn6.HeaderText = "Motivos Calidad";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.imageList1.Images.SetKeyName(4, "flag_icon");
+            // 
+            // materialCard9
+            // 
+            this.materialCard9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard9.Controls.Add(this.tabControl1);
+            this.materialCard9.Depth = 0;
+            this.materialCard9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard9.Location = new System.Drawing.Point(14, 14);
+            this.materialCard9.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard9.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard9.Name = "materialCard9";
+            this.materialCard9.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard9.Size = new System.Drawing.Size(437, 278);
+            this.materialCard9.TabIndex = 3;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage8);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(437, 278);
+            this.tabControl1.TabIndex = 7;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.cmb_area);
+            this.tabPage7.Controls.Add(this.txt_op);
+            this.tabPage7.Controls.Add(this.txt_metaxhr);
+            this.tabPage7.Controls.Add(this.materialButton1);
+            this.tabPage7.Controls.Add(this.txt_relacion_FS);
+            this.tabPage7.Controls.Add(this.materialButton2);
+            this.tabPage7.Controls.Add(this.materialButton3);
+            this.tabPage7.Controls.Add(this.materialButton4);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(429, 252);
+            this.tabPage7.TabIndex = 0;
+            this.tabPage7.Text = "Usuarios";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // cmb_area
+            // 
+            this.cmb_area.AutoResize = false;
+            this.cmb_area.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_area.Depth = 0;
+            this.cmb_area.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_area.DropDownHeight = 174;
+            this.cmb_area.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_area.DropDownWidth = 121;
+            this.cmb_area.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_area.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_area.FormattingEnabled = true;
+            this.cmb_area.Hint = "Aréa";
+            this.cmb_area.IntegralHeight = false;
+            this.cmb_area.ItemHeight = 43;
+            this.cmb_area.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.cmb_area.Location = new System.Drawing.Point(13, 183);
+            this.cmb_area.MaxDropDownItems = 4;
+            this.cmb_area.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_area.Name = "cmb_area";
+            this.cmb_area.Size = new System.Drawing.Size(228, 49);
+            this.cmb_area.StartIndex = -1;
+            this.cmb_area.TabIndex = 8;
+            // 
+            // txt_op
+            // 
+            this.txt_op.AnimateReadOnly = false;
+            this.txt_op.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_op.Depth = 0;
+            this.txt_op.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_op.Hint = "OP";
+            this.txt_op.LeadingIcon = null;
+            this.txt_op.Location = new System.Drawing.Point(13, 15);
+            this.txt_op.MaxLength = 50;
+            this.txt_op.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_op.Multiline = false;
+            this.txt_op.Name = "txt_op";
+            this.txt_op.Size = new System.Drawing.Size(228, 50);
+            this.txt_op.TabIndex = 0;
+            this.txt_op.Text = "";
+            this.txt_op.TrailingIcon = null;
+            // 
+            // txt_metaxhr
+            // 
+            this.txt_metaxhr.AnimateReadOnly = false;
+            this.txt_metaxhr.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_metaxhr.Depth = 0;
+            this.txt_metaxhr.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_metaxhr.Hint = "Meta por hora";
+            this.txt_metaxhr.LeadingIcon = null;
+            this.txt_metaxhr.Location = new System.Drawing.Point(13, 71);
+            this.txt_metaxhr.MaxLength = 50;
+            this.txt_metaxhr.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_metaxhr.Multiline = false;
+            this.txt_metaxhr.Name = "txt_metaxhr";
+            this.txt_metaxhr.Size = new System.Drawing.Size(228, 50);
+            this.txt_metaxhr.TabIndex = 1;
+            this.txt_metaxhr.Text = "";
+            this.txt_metaxhr.TrailingIcon = null;
+            // 
+            // materialButton1
+            // 
+            this.materialButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton1.Depth = 0;
+            this.materialButton1.HighEmphasis = true;
+            this.materialButton1.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.materialButton1.Location = new System.Drawing.Point(297, 177);
+            this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton1.Name = "materialButton1";
+            this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton1.Size = new System.Drawing.Size(124, 36);
+            this.materialButton1.TabIndex = 6;
+            this.materialButton1.Text = "Cancelar";
+            this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton1.UseAccentColor = false;
+            this.materialButton1.UseVisualStyleBackColor = true;
+            // 
+            // txt_relacion_FS
+            // 
+            this.txt_relacion_FS.AnimateReadOnly = false;
+            this.txt_relacion_FS.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_relacion_FS.Depth = 0;
+            this.txt_relacion_FS.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_relacion_FS.Hint = "Relacion fresco seco";
+            this.txt_relacion_FS.LeadingIcon = null;
+            this.txt_relacion_FS.Location = new System.Drawing.Point(13, 127);
+            this.txt_relacion_FS.MaxLength = 50;
+            this.txt_relacion_FS.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_relacion_FS.Multiline = false;
+            this.txt_relacion_FS.Name = "txt_relacion_FS";
+            this.txt_relacion_FS.Size = new System.Drawing.Size(228, 50);
+            this.txt_relacion_FS.TabIndex = 2;
+            this.txt_relacion_FS.Text = "";
+            this.txt_relacion_FS.TrailingIcon = null;
+            // 
+            // materialButton2
+            // 
+            this.materialButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton2.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton2.Depth = 0;
+            this.materialButton2.HighEmphasis = true;
+            this.materialButton2.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
+            this.materialButton2.Location = new System.Drawing.Point(297, 129);
+            this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton2.Name = "materialButton2";
+            this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton2.Size = new System.Drawing.Size(106, 36);
+            this.materialButton2.TabIndex = 5;
+            this.materialButton2.Text = "Borrar";
+            this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton2.UseAccentColor = false;
+            this.materialButton2.UseVisualStyleBackColor = true;
+            // 
+            // materialButton3
+            // 
+            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton3.Depth = 0;
+            this.materialButton3.HighEmphasis = true;
+            this.materialButton3.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.materialButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.materialButton3.ImageKey = "save_icon";
+            this.materialButton3.Location = new System.Drawing.Point(297, 15);
+            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton3.Name = "materialButton3";
+            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton3.Size = new System.Drawing.Size(116, 36);
+            this.materialButton3.TabIndex = 3;
+            this.materialButton3.Text = "Guardar";
+            this.materialButton3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton3.UseAccentColor = false;
+            this.materialButton3.UseVisualStyleBackColor = true;
+            // 
+            // materialButton4
+            // 
+            this.materialButton4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton4.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton4.Depth = 0;
+            this.materialButton4.HighEmphasis = true;
+            this.materialButton4.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.materialButton4.Location = new System.Drawing.Point(297, 71);
+            this.materialButton4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton4.Name = "materialButton4";
+            this.materialButton4.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton4.Size = new System.Drawing.Size(99, 36);
+            this.materialButton4.TabIndex = 4;
+            this.materialButton4.Text = "Editar";
+            this.materialButton4.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton4.UseAccentColor = false;
+            this.materialButton4.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.materialButton5);
+            this.tabPage8.Controls.Add(this.materialComboBox2);
+            this.tabPage8.Controls.Add(this.materialTextBox4);
+            this.tabPage8.Controls.Add(this.materialTextBox5);
+            this.tabPage8.Controls.Add(this.materialButton6);
+            this.tabPage8.Controls.Add(this.materialButton7);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(429, 235);
+            this.tabPage8.TabIndex = 1;
+            this.tabPage8.Text = "Buscar";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // materialButton5
+            // 
+            this.materialButton5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton5.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton5.Depth = 0;
+            this.materialButton5.HighEmphasis = true;
+            this.materialButton5.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.materialButton5.Location = new System.Drawing.Point(297, 65);
+            this.materialButton5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton5.Name = "materialButton5";
+            this.materialButton5.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton5.Size = new System.Drawing.Size(99, 36);
+            this.materialButton5.TabIndex = 14;
+            this.materialButton5.Text = "Editar";
+            this.materialButton5.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton5.UseAccentColor = false;
+            this.materialButton5.UseVisualStyleBackColor = true;
+            // 
+            // materialComboBox2
+            // 
+            this.materialComboBox2.AutoResize = false;
+            this.materialComboBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialComboBox2.Depth = 0;
+            this.materialComboBox2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.materialComboBox2.DropDownHeight = 174;
+            this.materialComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.materialComboBox2.DropDownWidth = 121;
+            this.materialComboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.materialComboBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialComboBox2.FormattingEnabled = true;
+            this.materialComboBox2.Hint = "Nivel del usuario";
+            this.materialComboBox2.IntegralHeight = false;
+            this.materialComboBox2.ItemHeight = 43;
+            this.materialComboBox2.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.materialComboBox2.Location = new System.Drawing.Point(13, 128);
+            this.materialComboBox2.MaxDropDownItems = 4;
+            this.materialComboBox2.MouseState = MaterialSkin.MouseState.OUT;
+            this.materialComboBox2.Name = "materialComboBox2";
+            this.materialComboBox2.Size = new System.Drawing.Size(228, 49);
+            this.materialComboBox2.StartIndex = -1;
+            this.materialComboBox2.TabIndex = 13;
+            // 
+            // materialTextBox4
+            // 
+            this.materialTextBox4.AnimateReadOnly = false;
+            this.materialTextBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.materialTextBox4.Depth = 0;
+            this.materialTextBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTextBox4.Hint = "Numero de Empleado";
+            this.materialTextBox4.LeadingIcon = null;
+            this.materialTextBox4.Location = new System.Drawing.Point(13, 16);
+            this.materialTextBox4.MaxLength = 50;
+            this.materialTextBox4.MouseState = MaterialSkin.MouseState.OUT;
+            this.materialTextBox4.Multiline = false;
+            this.materialTextBox4.Name = "materialTextBox4";
+            this.materialTextBox4.Size = new System.Drawing.Size(228, 50);
+            this.materialTextBox4.TabIndex = 9;
+            this.materialTextBox4.Text = "";
+            this.materialTextBox4.TrailingIcon = null;
+            // 
+            // materialTextBox5
+            // 
+            this.materialTextBox5.AnimateReadOnly = false;
+            this.materialTextBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.materialTextBox5.Depth = 0;
+            this.materialTextBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTextBox5.Hint = "Nombre del usuario";
+            this.materialTextBox5.LeadingIcon = null;
+            this.materialTextBox5.Location = new System.Drawing.Point(13, 72);
+            this.materialTextBox5.MaxLength = 50;
+            this.materialTextBox5.MouseState = MaterialSkin.MouseState.OUT;
+            this.materialTextBox5.Multiline = false;
+            this.materialTextBox5.Name = "materialTextBox5";
+            this.materialTextBox5.Size = new System.Drawing.Size(228, 50);
+            this.materialTextBox5.TabIndex = 10;
+            this.materialTextBox5.Text = "";
+            this.materialTextBox5.TrailingIcon = null;
+            // 
+            // materialButton6
+            // 
+            this.materialButton6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton6.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton6.Depth = 0;
+            this.materialButton6.HighEmphasis = true;
+            this.materialButton6.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.materialButton6.Location = new System.Drawing.Point(297, 113);
+            this.materialButton6.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton6.Name = "materialButton6";
+            this.materialButton6.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton6.Size = new System.Drawing.Size(124, 36);
+            this.materialButton6.TabIndex = 12;
+            this.materialButton6.Text = "Cancelar";
+            this.materialButton6.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton6.UseAccentColor = false;
+            this.materialButton6.UseVisualStyleBackColor = true;
+            // 
+            // materialButton7
+            // 
+            this.materialButton7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton7.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton7.Depth = 0;
+            this.materialButton7.HighEmphasis = true;
+            this.materialButton7.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.materialButton7.Location = new System.Drawing.Point(297, 16);
+            this.materialButton7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton7.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton7.Name = "materialButton7";
+            this.materialButton7.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton7.Size = new System.Drawing.Size(105, 36);
+            this.materialButton7.TabIndex = 11;
+            this.materialButton7.Text = "Buscar";
+            this.materialButton7.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton7.UseAccentColor = false;
+            this.materialButton7.UseVisualStyleBackColor = true;
+            // 
+            // materialCard10
+            // 
+            this.materialCard10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard10.Controls.Add(this.dgv_metas);
+            this.materialCard10.Depth = 0;
+            this.materialCard10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard10.Location = new System.Drawing.Point(14, 320);
+            this.materialCard10.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard10.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard10.Name = "materialCard10";
+            this.materialCard10.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard10.Size = new System.Drawing.Size(1174, 498);
+            this.materialCard10.TabIndex = 2;
+            // 
+            // dgv_metas
+            // 
+            this.dgv_metas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn7,
+            this.dataGridViewTextBoxColumn8,
+            this.dataGridViewTextBoxColumn9,
+            this.dataGridViewTextBoxColumn10,
+            this.Column7,
+            this.Column8});
+            this.dgv_metas.Location = new System.Drawing.Point(0, 0);
+            this.dgv_metas.Name = "dgv_metas";
+            this.dgv_metas.Size = new System.Drawing.Size(1174, 498);
+            this.dgv_metas.TabIndex = 0;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.HeaderText = "Id_meta";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.Visible = false;
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            this.dataGridViewTextBoxColumn8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.dataGridViewTextBoxColumn8.HeaderText = "OP";
+            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            this.dataGridViewTextBoxColumn8.Width = 47;
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.dataGridViewTextBoxColumn9.HeaderText = "Meta por hora";
+            this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
+            this.dataGridViewTextBoxColumn9.Width = 98;
+            // 
+            // dataGridViewTextBoxColumn10
+            // 
+            this.dataGridViewTextBoxColumn10.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.dataGridViewTextBoxColumn10.HeaderText = "Relación fresco seco";
+            this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
+            // 
+            // Column7
+            // 
+            this.Column7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column7.HeaderText = "Area";
+            this.Column7.Name = "Column7";
+            // 
+            // Column8
+            // 
+            this.Column8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column8.HeaderText = "Proceso";
+            this.Column8.Name = "Column8";
             // 
             // Form_principal
             // 
@@ -1073,29 +1933,47 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.materialCard6.ResumeLayout(false);
+            this.materialCard6.PerformLayout();
+            this.card_dgv_calidad.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).EndInit();
+            this.card_dgv_operativo.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_operativo)).EndInit();
+            this.card_dgv_almacen.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).EndInit();
+            this.card_dgv_mecanico.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).EndInit();
             this.materialCard3.ResumeLayout(false);
             this.materialCard3.PerformLayout();
-            this.pnl_principal.ResumeLayout(false);
+            this.card_datos.ResumeLayout(false);
+            this.materialCard5.ResumeLayout(false);
+            this.pnl_ftt.ResumeLayout(false);
             this.Card_hrs.ResumeLayout(false);
+            this.pnl_principal.ResumeLayout(false);
             this.materialCard4.ResumeLayout(false);
             this.pnl_Metahora.ResumeLayout(false);
             this.pnl_Metahora.PerformLayout();
             this.materialCard2.ResumeLayout(false);
             this.materialCard1.ResumeLayout(false);
             this.materialCard1.PerformLayout();
-            this.materialCard5.ResumeLayout(false);
-            this.card_datos.ResumeLayout(false);
-            this.pnl_ftt.ResumeLayout(false);
-            this.materialCard6.ResumeLayout(false);
-            this.materialCard6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).EndInit();
-            this.card_dgv_mecanico.ResumeLayout(false);
-            this.card_dgv_almacen.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).EndInit();
-            this.card_dgv_operativo.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_operativo)).EndInit();
-            this.card_dgv_calidad.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.materialCard8.ResumeLayout(false);
+            this.tabControl_usuarios.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.materialCard7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.materialCard9.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage8.PerformLayout();
+            this.materialCard10.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1164,6 +2042,56 @@
         private System.Windows.Forms.DataGridView dgv_calidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private MaterialSkin.Controls.MaterialCard materialCard7;
+        private System.Windows.Forms.DataGridView dgv_users;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private MaterialSkin.Controls.MaterialCard materialCard8;
+        private MaterialSkin.Controls.MaterialTextBox txt_no_emp;
+        private MaterialSkin.Controls.MaterialTextBox txt_contra;
+        private MaterialSkin.Controls.MaterialTextBox txt_usuario;
+        private MaterialSkin.Controls.MaterialButton btn_delete;
+        private MaterialSkin.Controls.MaterialButton btn_edit;
+        private MaterialSkin.Controls.MaterialButton btn_save;
+        private MaterialSkin.Controls.MaterialButton btn_cancel;
+        private System.Windows.Forms.TabControl tabControl_usuarios;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
+        private MaterialSkin.Controls.MaterialComboBox cmb_niel_user;
+        private MaterialSkin.Controls.MaterialButton btn_search_edit;
+        private MaterialSkin.Controls.MaterialComboBox cmb_serch_nivel;
+        private MaterialSkin.Controls.MaterialTextBox txt_search_no_emp;
+        private MaterialSkin.Controls.MaterialTextBox txt_search_nom_emp;
+        private MaterialSkin.Controls.MaterialButton btn_search_cancel;
+        private MaterialSkin.Controls.MaterialButton btn_search_save;
+        private MaterialSkin.Controls.MaterialCard materialCard9;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage7;
+        private MaterialSkin.Controls.MaterialComboBox cmb_area;
+        private MaterialSkin.Controls.MaterialTextBox txt_op;
+        private MaterialSkin.Controls.MaterialTextBox txt_metaxhr;
+        private MaterialSkin.Controls.MaterialButton materialButton1;
+        private MaterialSkin.Controls.MaterialTextBox txt_relacion_FS;
+        private MaterialSkin.Controls.MaterialButton materialButton2;
+        private MaterialSkin.Controls.MaterialButton materialButton3;
+        private MaterialSkin.Controls.MaterialButton materialButton4;
+        private System.Windows.Forms.TabPage tabPage8;
+        private MaterialSkin.Controls.MaterialButton materialButton5;
+        private MaterialSkin.Controls.MaterialComboBox materialComboBox2;
+        private MaterialSkin.Controls.MaterialTextBox materialTextBox4;
+        private MaterialSkin.Controls.MaterialTextBox materialTextBox5;
+        private MaterialSkin.Controls.MaterialButton materialButton6;
+        private MaterialSkin.Controls.MaterialButton materialButton7;
+        private MaterialSkin.Controls.MaterialCard materialCard10;
+        private System.Windows.Forms.DataGridView dgv_metas;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
     }
 }
 
