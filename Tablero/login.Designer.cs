@@ -38,6 +38,9 @@
             this.btn_iniciar = new System.Windows.Forms.Button();
             this.lbl_limpiar = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txt_user_name = new System.Windows.Forms.TextBox();
+            this.txt_password = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -47,7 +50,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Tablero.Properties.Resources._5ecf0bf1fd9cb2672c1cbdc8_icon256_fw;
-            this.pictureBox1.Location = new System.Drawing.Point(114, 65);
+            this.pictureBox1.Location = new System.Drawing.Point(130, 64);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(107, 114);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -59,7 +62,7 @@
             this.lbl_login.AutoSize = true;
             this.lbl_login.Font = new System.Drawing.Font("Bauhaus 93", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_login.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.lbl_login.Location = new System.Drawing.Point(71, 193);
+            this.lbl_login.Location = new System.Drawing.Point(79, 193);
             this.lbl_login.Name = "lbl_login";
             this.lbl_login.Size = new System.Drawing.Size(217, 36);
             this.lbl_login.TabIndex = 1;
@@ -68,9 +71,9 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::Tablero.Properties.Resources.user;
-            this.pictureBox2.Location = new System.Drawing.Point(59, 259);
+            this.pictureBox2.Location = new System.Drawing.Point(67, 281);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox2.Size = new System.Drawing.Size(32, 32);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
@@ -78,7 +81,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.panel1.Location = new System.Drawing.Point(59, 315);
+            this.panel1.Location = new System.Drawing.Point(67, 315);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(250, 1);
             this.panel1.TabIndex = 3;
@@ -86,7 +89,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.panel2.Location = new System.Drawing.Point(59, 399);
+            this.panel2.Location = new System.Drawing.Point(67, 399);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(250, 1);
             this.panel2.TabIndex = 5;
@@ -94,9 +97,9 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::Tablero.Properties.Resources._5172991_internet_lock_locked_padlock_password_icon;
-            this.pictureBox3.Location = new System.Drawing.Point(43, 336);
+            this.pictureBox3.Location = new System.Drawing.Point(67, 365);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(66, 61);
+            this.pictureBox3.Size = new System.Drawing.Size(32, 32);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 4;
             this.pictureBox3.TabStop = false;
@@ -108,7 +111,7 @@
             this.btn_iniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_iniciar.Font = new System.Drawing.Font("Bahnschrift", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_iniciar.ForeColor = System.Drawing.Color.White;
-            this.btn_iniciar.Location = new System.Drawing.Point(59, 451);
+            this.btn_iniciar.Location = new System.Drawing.Point(67, 450);
             this.btn_iniciar.Name = "btn_iniciar";
             this.btn_iniciar.Size = new System.Drawing.Size(250, 31);
             this.btn_iniciar.TabIndex = 6;
@@ -121,16 +124,17 @@
             this.lbl_limpiar.AutoSize = true;
             this.lbl_limpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_limpiar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.lbl_limpiar.Location = new System.Drawing.Point(190, 419);
+            this.lbl_limpiar.Location = new System.Drawing.Point(198, 419);
             this.lbl_limpiar.Name = "lbl_limpiar";
             this.lbl_limpiar.Size = new System.Drawing.Size(119, 16);
             this.lbl_limpiar.TabIndex = 7;
             this.lbl_limpiar.Text = "Limpiar Campos";
+            this.lbl_limpiar.Click += new System.EventHandler(this.lbl_limpiar_Click);
             // 
             // pictureBox4
             // 
             this.pictureBox4.Image = global::Tablero.Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon;
-            this.pictureBox4.Location = new System.Drawing.Point(318, 360);
+            this.pictureBox4.Location = new System.Drawing.Point(326, 360);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(42, 37);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -140,12 +144,48 @@
             this.pictureBox4.MouseEnter += new System.EventHandler(this.pictureBox4_MouseEnter);
             this.pictureBox4.MouseLeave += new System.EventHandler(this.pictureBox4_MouseLeave);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.label1.Location = new System.Drawing.Point(173, 495);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 16);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Salir";
+            // 
+            // txt_user_name
+            // 
+            this.txt_user_name.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_user_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_user_name.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.txt_user_name.Location = new System.Drawing.Point(105, 285);
+            this.txt_user_name.Multiline = true;
+            this.txt_user_name.Name = "txt_user_name";
+            this.txt_user_name.Size = new System.Drawing.Size(212, 24);
+            this.txt_user_name.TabIndex = 10;
+            // 
+            // txt_password
+            // 
+            this.txt_password.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_password.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_password.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.txt_password.Location = new System.Drawing.Point(105, 369);
+            this.txt_password.Multiline = true;
+            this.txt_password.Name = "txt_password";
+            this.txt_password.Size = new System.Drawing.Size(212, 24);
+            this.txt_password.TabIndex = 11;
+            // 
             // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(390, 544);
+            this.Controls.Add(this.txt_password);
+            this.Controls.Add(this.txt_user_name);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.lbl_limpiar);
             this.Controls.Add(this.btn_iniciar);
@@ -179,5 +219,8 @@
         private System.Windows.Forms.Button btn_iniciar;
         private System.Windows.Forms.Label lbl_limpiar;
         private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txt_user_name;
+        private System.Windows.Forms.TextBox txt_password;
     }
 }

@@ -154,5 +154,11 @@ namespace Tablero
                 pictureBox4.Image = image1;
             }
         }
+
+        private void lbl_limpiar_Click(object sender, EventArgs e)
+        {
+            txt_user_name.Clear();
+            txt_password.Clear();
+        }
     }
 }
