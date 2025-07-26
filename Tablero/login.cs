@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,15 +22,49 @@ namespace Tablero
         private const float TransitionSpeed = 0.1f;
         private bool isHovering = false;
         private bool showingImage3 = false;
+
+        // seccion para activar el drag en el formulario
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
         public login()
         {
             InitializeComponent();
             InitializeAnimation();
 
+            // Configuración para lbl_limpiar
+            LabelAnimator.SetupLabel(
+                lbl_limpiar,
+                normalColor: Color.FromArgb(25, 118, 210),
+                hoverColor: Color.FromArgb(129, 212, 250),
+                clickColor: Color.FromArgb(33, 150, 243),
+                originalSize: 9.75f,
+                clickedSize: 8.75f);
+            // Configuración para lbl_salir (mismos parámetros)
+            LabelAnimator.SetupLabel(
+                lbl_salir,
+                normalColor: Color.FromArgb(25, 118, 210),
+                hoverColor: Color.FromArgb(129, 212, 250),
+                clickColor: Color.FromArgb(33, 150, 243),
+                originalSize: 9.75f,
+                clickedSize: 8.75f);
+
             // Asegúrate de cargar tus imágenes desde los recursos
             image1 = Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon; // Reemplaza con tus imágenes reales
             image2 = Properties.Resources._5173015_eye_focus_internet_scan_security_icon;
             image3 = Properties.Resources._5172950_business_eye_focus_internet_security_icon;
+
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.MouseDown += (sender, e) => {
+                if (e.Button == MouseButtons.Left)
+                {
+                    ReleaseCapture();
+                    SendMessage(this.Handle, 0x112, 0xf012, 0);
+                }
+            };
         }
 
         private void InitializeAnimation()
@@ -159,6 +194,11 @@ namespace Tablero
         {
             txt_user_name.Clear();
             txt_password.Clear();
+        }
+
+        private void lbl_salir_Click(object sender, EventArgs e)
+        {
+            Application.Exit(); // Cierra la aplicación
         }
     }
 }

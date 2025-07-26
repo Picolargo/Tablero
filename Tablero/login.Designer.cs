@@ -38,7 +38,7 @@
             this.btn_iniciar = new System.Windows.Forms.Button();
             this.lbl_limpiar = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbl_salir = new System.Windows.Forms.Label();
             this.txt_user_name = new System.Windows.Forms.TextBox();
             this.txt_password = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -122,6 +122,7 @@
             // lbl_limpiar
             // 
             this.lbl_limpiar.AutoSize = true;
+            this.lbl_limpiar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbl_limpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_limpiar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.lbl_limpiar.Location = new System.Drawing.Point(198, 419);
@@ -144,16 +145,18 @@
             this.pictureBox4.MouseEnter += new System.EventHandler(this.pictureBox4_MouseEnter);
             this.pictureBox4.MouseLeave += new System.EventHandler(this.pictureBox4_MouseLeave);
             // 
-            // label1
+            // lbl_salir
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.label1.Location = new System.Drawing.Point(173, 495);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 16);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Salir";
+            this.lbl_salir.AutoSize = true;
+            this.lbl_salir.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbl_salir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_salir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lbl_salir.Location = new System.Drawing.Point(173, 495);
+            this.lbl_salir.Name = "lbl_salir";
+            this.lbl_salir.Size = new System.Drawing.Size(39, 16);
+            this.lbl_salir.TabIndex = 9;
+            this.lbl_salir.Text = "Salir";
+            this.lbl_salir.Click += new System.EventHandler(this.lbl_salir_Click);
             // 
             // txt_user_name
             // 
@@ -185,7 +188,7 @@
             this.ClientSize = new System.Drawing.Size(390, 544);
             this.Controls.Add(this.txt_password);
             this.Controls.Add(this.txt_user_name);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbl_salir);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.lbl_limpiar);
             this.Controls.Add(this.btn_iniciar);
@@ -198,6 +201,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "login";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "login";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -219,7 +223,7 @@
         private System.Windows.Forms.Button btn_iniciar;
         private System.Windows.Forms.Label lbl_limpiar;
         private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbl_salir;
         private System.Windows.Forms.TextBox txt_user_name;
         private System.Windows.Forms.TextBox txt_password;
     }
