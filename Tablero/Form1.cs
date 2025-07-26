@@ -146,13 +146,13 @@ namespace Tablero
 
             dgv_users.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_users.RowHeadersVisible = false;
-            dgv_users.AllowUserToAddRows = true;
-            dgv_users.AllowUserToDeleteRows = true;
-            dgv_users.AllowUserToResizeRows = false;
-            dgv_users.ReadOnly = false;
-            dgv_users.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_users.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_users.MultiSelect = false;
+            //dgv_users.AllowUserToAddRows = true;
+            //dgv_users.AllowUserToDeleteRows = true;
+            //dgv_users.AllowUserToResizeRows = false;
+           // dgv_users.ReadOnly = false;
+           // dgv_users.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            //dgv_users.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //dgv_users.MultiSelect = false;
             dgv_users.BorderStyle = BorderStyle.None;
 
             // Personalización de dgv_metas
@@ -170,13 +170,13 @@ namespace Tablero
 
             dgv_metas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_metas.RowHeadersVisible = false;
-            dgv_metas.AllowUserToAddRows = true;
-            dgv_metas.AllowUserToDeleteRows = true;
-            dgv_metas.AllowUserToResizeRows = false;
-            dgv_metas.ReadOnly = false;
-            dgv_metas.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_metas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_metas.MultiSelect = false;
+            //dgv_metas.AllowUserToAddRows = true;
+            //dgv_metas.AllowUserToDeleteRows = true;
+            //dgv_metas.AllowUserToResizeRows = false;
+            //dgv_metas.ReadOnly = false;
+            //dgv_metas.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            //dgv_metas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //dgv_metas.MultiSelect = false;
             dgv_metas.BorderStyle = BorderStyle.None;
         }
 

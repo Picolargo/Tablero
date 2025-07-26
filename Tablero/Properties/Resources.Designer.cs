@@ -63,6 +63,66 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _5172950_business_eye_focus_internet_security_icon {
+            get {
+                object obj = ResourceManager.GetObject("5172950_business_eye_focus_internet_security_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5172968_disable_eye_hidden_hide_internet_icon {
+            get {
+                object obj = ResourceManager.GetObject("5172968_disable_eye_hidden_hide_internet_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5172988_door_internet_key_lock_password_icon {
+            get {
+                object obj = ResourceManager.GetObject("5172988_door_internet_key_lock_password_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5172991_internet_lock_locked_padlock_password_icon {
+            get {
+                object obj = ResourceManager.GetObject("5172991_internet_lock_locked_padlock_password_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5173015_eye_focus_internet_scan_security_icon {
+            get {
+                object obj = ResourceManager.GetObject("5173015_eye_focus_internet_scan_security_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5ecf0bf1fd9cb2672c1cbdc8_icon256_fw {
+            get {
+                object obj = ResourceManager.GetObject("5ecf0bf1fd9cb2672c1cbdc8_icon256.fw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _8666542_save_icon {
             get {
                 object obj = ResourceManager.GetObject("8666542_save_icon", resourceCulture);
@@ -106,6 +166,16 @@ namespace Tablero.Properties {
         internal static System.Drawing.Bitmap _8666740_slash_icon {
             get {
                 object obj = ResourceManager.GetObject("8666740_slash_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap user {
+            get {
+                object obj = ResourceManager.GetObject("user", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

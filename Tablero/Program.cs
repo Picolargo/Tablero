@@ -16,7 +16,7 @@ namespace Tablero
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_principal());
+            Application.Run(new login());
         }
     }
 }
