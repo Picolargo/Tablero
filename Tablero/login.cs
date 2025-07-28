@@ -196,6 +196,12 @@ namespace Tablero
                     // Guardar en sesión o usar esta información
                 }
             }
+            else
+            {
+                // Credenciales incorrectas
+                MetroFramework.MetroMessageBox.Show(this, "El usuario y/o la contraseña son incorrectos. Por favor, verifique sus datos e intente nuevamente.\r\n\r\n", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                limpiarCampos(); // Limpia los campos de texto
+            }
 
 
         }
@@ -227,8 +233,13 @@ namespace Tablero
 
         private void lbl_limpiar_Click(object sender, EventArgs e)
         {
+            limpiarCampos(); // Llama al método para limpiar los campos de texto
+        }
+        private void limpiarCampos()
+        {
             txt_user_name.Clear();
             txt_password.Clear();
+            txt_user_name.Focus(); // Enfoca el campo de usuario
         }
 
         private void lbl_salir_Click(object sender, EventArgs e)
