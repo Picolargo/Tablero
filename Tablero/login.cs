@@ -14,6 +14,7 @@ namespace Tablero
 {
     public partial class login : Form
     {
+        // Variables para la animación de imágenes
         private Image image1;
         private Image image2;
         private Image image3;
@@ -22,6 +23,9 @@ namespace Tablero
         private const float TransitionSpeed = 0.1f;
         private bool isHovering = false;
         private bool showingImage3 = false;
+        //variable para la conexión a la base de datos
+        string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
+        
 
         // seccion para activar el drag en el formulario
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -30,10 +34,12 @@ namespace Tablero
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
+        private bool mostrarPassword = false;
+
         public login()
         {
             InitializeComponent();
-            InitializeAnimation();
+            InitializeAnimation();// Inicializa el temporizador de animación
 
             // Configuración para lbl_limpiar
             LabelAnimator.SetupLabel(
@@ -168,7 +174,30 @@ namespace Tablero
 
         private void btn_iniciar_Click(object sender, EventArgs e)
         {
-            
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            bool isValid = dbHelper.ValidateUser(txt_user_name.Text, txt_password.Text);
+
+            if (isValid)
+            {
+                // Obtener información adicional del usuario
+                DataRow userInfo = dbHelper.GetUserInfo(txt_user_name.Text);
+
+                if (userInfo != null)
+                {
+                    int idUser = Convert.ToInt32(userInfo["ID_User"]);
+                    string nivel = userInfo["Nivel"].ToString();
+                    string noEmpleado = userInfo["No_Empleado"].ToString();
+
+                    // Usuario válido
+                    this.Visible = false;
+                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text);
+                    principal.Show(); // Muestra el formulario principal
+                    // Guardar en sesión o usar esta información
+                }
+            }
+
+
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -180,13 +209,19 @@ namespace Tablero
             transitionProgress = 0f;
 
             // Forzar una actualización inmediata
-            if (showingImage3)
+            if (showingImage3 ||!(mostrarPassword))
             {
                 pictureBox4.Image = image3;
+                // Mostrar contraseña
+                txt_password.PasswordChar = '\0'; // Esto quita el carácter de ocultamiento
+                mostrarPassword = true;
             }
             else
             {
                 pictureBox4.Image = image1;
+                // Ocultar contraseña
+                txt_password.PasswordChar = '*';
+                mostrarPassword = false;
             }
         }
 

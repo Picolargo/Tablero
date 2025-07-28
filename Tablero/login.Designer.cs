@@ -97,9 +97,9 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::Tablero.Properties.Resources._5172991_internet_lock_locked_padlock_password_icon;
-            this.pictureBox3.Location = new System.Drawing.Point(67, 365);
+            this.pictureBox3.Location = new System.Drawing.Point(63, 361);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox3.Size = new System.Drawing.Size(42, 42);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 4;
             this.pictureBox3.TabStop = false;
@@ -164,9 +164,8 @@
             this.txt_user_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_user_name.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.txt_user_name.Location = new System.Drawing.Point(105, 285);
-            this.txt_user_name.Multiline = true;
             this.txt_user_name.Name = "txt_user_name";
-            this.txt_user_name.Size = new System.Drawing.Size(212, 24);
+            this.txt_user_name.Size = new System.Drawing.Size(212, 17);
             this.txt_user_name.TabIndex = 10;
             // 
             // txt_password
@@ -175,9 +174,9 @@
             this.txt_password.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_password.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.txt_password.Location = new System.Drawing.Point(105, 369);
-            this.txt_password.Multiline = true;
             this.txt_password.Name = "txt_password";
-            this.txt_password.Size = new System.Drawing.Size(212, 24);
+            this.txt_password.PasswordChar = '*';
+            this.txt_password.Size = new System.Drawing.Size(212, 17);
             this.txt_password.TabIndex = 11;
             // 
             // login

@@ -80,9 +80,9 @@
             this.lbl_meta = new MaterialSkin.Controls.MaterialLabel();
             this.cb_OP = new MaterialSkin.Controls.MaterialComboBox();
             this.materialCard2 = new MaterialSkin.Controls.MaterialCard();
+            this.dtp1 = new MetroFramework.Controls.MetroDateTime();
             this.cb_Turno = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_Area = new MaterialSkin.Controls.MaterialComboBox();
-            this.dtp1 = new System.Windows.Forms.DateTimePicker();
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
             this.lbl_nom2 = new MaterialSkin.Controls.MaterialLabel();
             this.lbl_no_emp2 = new MaterialSkin.Controls.MaterialLabel();
@@ -118,15 +118,17 @@
             this.materialCard_tab_meta = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_meta = new System.Windows.Forms.TabControl();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.cmb_proceso = new MaterialSkin.Controls.MaterialComboBox();
             this.cmb_area = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_relacion_FS = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_op = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_metaxhr = new MaterialSkin.Controls.MaterialTextBox();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
-            this.txt_relacion_FS = new MaterialSkin.Controls.MaterialTextBox();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton4 = new MaterialSkin.Controls.MaterialButton();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.cmb_proceso_search = new MaterialSkin.Controls.MaterialComboBox();
             this.materialButton5 = new MaterialSkin.Controls.MaterialButton();
             this.cmb_area_search = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_OP_Search = new MaterialSkin.Controls.MaterialTextBox();
@@ -141,8 +143,6 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.cmb_proceso = new MaterialSkin.Controls.MaterialComboBox();
-            this.cmb_proceso_search = new MaterialSkin.Controls.MaterialComboBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.materialCard6.SuspendLayout();
@@ -937,9 +937,9 @@
             // materialCard2
             // 
             this.materialCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard2.Controls.Add(this.dtp1);
             this.materialCard2.Controls.Add(this.cb_Turno);
             this.materialCard2.Controls.Add(this.cb_Area);
-            this.materialCard2.Controls.Add(this.dtp1);
             this.materialCard2.Depth = 0;
             this.materialCard2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard2.Location = new System.Drawing.Point(14, 123);
@@ -949,6 +949,17 @@
             this.materialCard2.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard2.Size = new System.Drawing.Size(755, 132);
             this.materialCard2.TabIndex = 2;
+            // 
+            // dtp1
+            // 
+            this.dtp1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtp1.FontSize = MetroFramework.MetroDateTimeSize.Tall;
+            this.dtp1.FontWeight = MetroFramework.MetroDateTimeWeight.Bold;
+            this.dtp1.Location = new System.Drawing.Point(384, 11);
+            this.dtp1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp1.Name = "dtp1";
+            this.dtp1.Size = new System.Drawing.Size(259, 35);
+            this.dtp1.TabIndex = 7;
             // 
             // cb_Turno
             // 
@@ -1010,13 +1021,6 @@
             this.cb_Area.StartIndex = -1;
             this.cb_Area.TabIndex = 3;
             // 
-            // dtp1
-            // 
-            this.dtp1.Location = new System.Drawing.Point(384, 17);
-            this.dtp1.Name = "dtp1";
-            this.dtp1.Size = new System.Drawing.Size(335, 20);
-            this.dtp1.TabIndex = 1;
-            // 
             // materialCard1
             // 
             this.materialCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -1064,7 +1068,7 @@
             // 
             this.lbl_Nom.AutoSize = true;
             this.lbl_Nom.Depth = 0;
-            this.lbl_Nom.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Nom.Location = new System.Drawing.Point(12, 47);
             this.lbl_Nom.MouseState = MaterialSkin.MouseState.HOVER;
             this.lbl_Nom.Name = "lbl_Nom";
@@ -1076,7 +1080,7 @@
             // 
             this.lbl_user_no_emp.AutoSize = true;
             this.lbl_user_no_emp.Depth = 0;
-            this.lbl_user_no_emp.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_user_no_emp.Location = new System.Drawing.Point(12, 14);
             this.lbl_user_no_emp.MouseState = MaterialSkin.MouseState.HOVER;
             this.lbl_user_no_emp.Name = "lbl_user_no_emp";
@@ -1557,6 +1561,32 @@
             this.tabPage7.Text = "Usuarios";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // cmb_proceso
+            // 
+            this.cmb_proceso.AutoResize = false;
+            this.cmb_proceso.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_proceso.Depth = 0;
+            this.cmb_proceso.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_proceso.DropDownHeight = 174;
+            this.cmb_proceso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_proceso.DropDownWidth = 121;
+            this.cmb_proceso.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_proceso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_proceso.FormattingEnabled = true;
+            this.cmb_proceso.Hint = "Proceso";
+            this.cmb_proceso.IntegralHeight = false;
+            this.cmb_proceso.ItemHeight = 43;
+            this.cmb_proceso.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.cmb_proceso.Location = new System.Drawing.Point(13, 183);
+            this.cmb_proceso.MaxDropDownItems = 4;
+            this.cmb_proceso.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_proceso.Name = "cmb_proceso";
+            this.cmb_proceso.Size = new System.Drawing.Size(228, 49);
+            this.cmb_proceso.StartIndex = -1;
+            this.cmb_proceso.TabIndex = 9;
+            // 
             // cmb_area
             // 
             this.cmb_area.AutoResize = false;
@@ -1582,6 +1612,24 @@
             this.cmb_area.Size = new System.Drawing.Size(228, 49);
             this.cmb_area.StartIndex = -1;
             this.cmb_area.TabIndex = 8;
+            // 
+            // txt_relacion_FS
+            // 
+            this.txt_relacion_FS.AnimateReadOnly = false;
+            this.txt_relacion_FS.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_relacion_FS.Depth = 0;
+            this.txt_relacion_FS.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_relacion_FS.Hint = "Relacion fresco seco";
+            this.txt_relacion_FS.LeadingIcon = null;
+            this.txt_relacion_FS.Location = new System.Drawing.Point(13, 238);
+            this.txt_relacion_FS.MaxLength = 50;
+            this.txt_relacion_FS.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_relacion_FS.Multiline = false;
+            this.txt_relacion_FS.Name = "txt_relacion_FS";
+            this.txt_relacion_FS.Size = new System.Drawing.Size(228, 50);
+            this.txt_relacion_FS.TabIndex = 2;
+            this.txt_relacion_FS.Text = "";
+            this.txt_relacion_FS.TrailingIcon = null;
             // 
             // txt_op
             // 
@@ -1637,24 +1685,6 @@
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton1.UseAccentColor = false;
             this.materialButton1.UseVisualStyleBackColor = true;
-            // 
-            // txt_relacion_FS
-            // 
-            this.txt_relacion_FS.AnimateReadOnly = false;
-            this.txt_relacion_FS.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_relacion_FS.Depth = 0;
-            this.txt_relacion_FS.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_relacion_FS.Hint = "Relacion fresco seco";
-            this.txt_relacion_FS.LeadingIcon = null;
-            this.txt_relacion_FS.Location = new System.Drawing.Point(13, 238);
-            this.txt_relacion_FS.MaxLength = 50;
-            this.txt_relacion_FS.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_relacion_FS.Multiline = false;
-            this.txt_relacion_FS.Name = "txt_relacion_FS";
-            this.txt_relacion_FS.Size = new System.Drawing.Size(228, 50);
-            this.txt_relacion_FS.TabIndex = 2;
-            this.txt_relacion_FS.Text = "";
-            this.txt_relacion_FS.TrailingIcon = null;
             // 
             // materialButton2
             // 
@@ -1731,6 +1761,32 @@
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "Buscar";
             this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // cmb_proceso_search
+            // 
+            this.cmb_proceso_search.AutoResize = false;
+            this.cmb_proceso_search.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_proceso_search.Depth = 0;
+            this.cmb_proceso_search.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_proceso_search.DropDownHeight = 174;
+            this.cmb_proceso_search.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_proceso_search.DropDownWidth = 121;
+            this.cmb_proceso_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_proceso_search.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_proceso_search.FormattingEnabled = true;
+            this.cmb_proceso_search.Hint = "Proceso";
+            this.cmb_proceso_search.IntegralHeight = false;
+            this.cmb_proceso_search.ItemHeight = 43;
+            this.cmb_proceso_search.Items.AddRange(new object[] {
+            "Administrador",
+            "Usuario"});
+            this.cmb_proceso_search.Location = new System.Drawing.Point(13, 127);
+            this.cmb_proceso_search.MaxDropDownItems = 4;
+            this.cmb_proceso_search.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_proceso_search.Name = "cmb_proceso_search";
+            this.cmb_proceso_search.Size = new System.Drawing.Size(228, 49);
+            this.cmb_proceso_search.StartIndex = -1;
+            this.cmb_proceso_search.TabIndex = 15;
             // 
             // materialButton5
             // 
@@ -1912,58 +1968,6 @@
             this.imageList1.Images.SetKeyName(3, "home_house");
             this.imageList1.Images.SetKeyName(4, "flag_icon");
             // 
-            // cmb_proceso
-            // 
-            this.cmb_proceso.AutoResize = false;
-            this.cmb_proceso.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmb_proceso.Depth = 0;
-            this.cmb_proceso.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmb_proceso.DropDownHeight = 174;
-            this.cmb_proceso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmb_proceso.DropDownWidth = 121;
-            this.cmb_proceso.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmb_proceso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmb_proceso.FormattingEnabled = true;
-            this.cmb_proceso.Hint = "Proceso";
-            this.cmb_proceso.IntegralHeight = false;
-            this.cmb_proceso.ItemHeight = 43;
-            this.cmb_proceso.Items.AddRange(new object[] {
-            "Administrador",
-            "Usuario"});
-            this.cmb_proceso.Location = new System.Drawing.Point(13, 183);
-            this.cmb_proceso.MaxDropDownItems = 4;
-            this.cmb_proceso.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmb_proceso.Name = "cmb_proceso";
-            this.cmb_proceso.Size = new System.Drawing.Size(228, 49);
-            this.cmb_proceso.StartIndex = -1;
-            this.cmb_proceso.TabIndex = 9;
-            // 
-            // cmb_proceso_search
-            // 
-            this.cmb_proceso_search.AutoResize = false;
-            this.cmb_proceso_search.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmb_proceso_search.Depth = 0;
-            this.cmb_proceso_search.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmb_proceso_search.DropDownHeight = 174;
-            this.cmb_proceso_search.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmb_proceso_search.DropDownWidth = 121;
-            this.cmb_proceso_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmb_proceso_search.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmb_proceso_search.FormattingEnabled = true;
-            this.cmb_proceso_search.Hint = "Proceso";
-            this.cmb_proceso_search.IntegralHeight = false;
-            this.cmb_proceso_search.ItemHeight = 43;
-            this.cmb_proceso_search.Items.AddRange(new object[] {
-            "Administrador",
-            "Usuario"});
-            this.cmb_proceso_search.Location = new System.Drawing.Point(13, 127);
-            this.cmb_proceso_search.MaxDropDownItems = 4;
-            this.cmb_proceso_search.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmb_proceso_search.Name = "cmb_proceso_search";
-            this.cmb_proceso_search.Size = new System.Drawing.Size(228, 49);
-            this.cmb_proceso_search.StartIndex = -1;
-            this.cmb_proceso_search.TabIndex = 15;
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2033,7 +2037,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private MaterialSkin.Controls.MaterialCard materialCard1;
-        private System.Windows.Forms.DateTimePicker dtp1;
         private MaterialSkin.Controls.MaterialLabel lbl_no_emp2;
         private MaterialSkin.Controls.MaterialLabel lbl_Nom;
         private MaterialSkin.Controls.MaterialLabel lbl_user_no_emp;
@@ -2139,6 +2142,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private MaterialSkin.Controls.MaterialComboBox cmb_proceso;
         private MaterialSkin.Controls.MaterialComboBox cmb_proceso_search;
+        private MetroFramework.Controls.MetroDateTime dtp1;
     }
 }
 
