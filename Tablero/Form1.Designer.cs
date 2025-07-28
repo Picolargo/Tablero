@@ -86,8 +86,6 @@
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
             this.lbl_nom2 = new MaterialSkin.Controls.MaterialLabel();
             this.lbl_no_emp2 = new MaterialSkin.Controls.MaterialLabel();
-            this.lbl_Nom = new MaterialSkin.Controls.MaterialLabel();
-            this.lbl_user_no_emp = new MaterialSkin.Controls.MaterialLabel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
@@ -143,6 +141,8 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.lbl_user_no_emp = new System.Windows.Forms.Label();
+            this.lbl_Nom = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.materialCard6.SuspendLayout();
@@ -1024,10 +1024,10 @@
             // materialCard1
             // 
             this.materialCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard1.Controls.Add(this.lbl_nom2);
-            this.materialCard1.Controls.Add(this.lbl_no_emp2);
             this.materialCard1.Controls.Add(this.lbl_Nom);
             this.materialCard1.Controls.Add(this.lbl_user_no_emp);
+            this.materialCard1.Controls.Add(this.lbl_nom2);
+            this.materialCard1.Controls.Add(this.lbl_no_emp2);
             this.materialCard1.Depth = 0;
             this.materialCard1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard1.Location = new System.Drawing.Point(17, 17);
@@ -1044,7 +1044,7 @@
             this.lbl_nom2.BackColor = System.Drawing.Color.Transparent;
             this.lbl_nom2.Depth = 0;
             this.lbl_nom2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lbl_nom2.Location = new System.Drawing.Point(179, 47);
+            this.lbl_nom2.Location = new System.Drawing.Point(208, 44);
             this.lbl_nom2.MouseState = MaterialSkin.MouseState.HOVER;
             this.lbl_nom2.Name = "lbl_nom2";
             this.lbl_nom2.Size = new System.Drawing.Size(25, 19);
@@ -1057,36 +1057,12 @@
             this.lbl_no_emp2.BackColor = System.Drawing.Color.Transparent;
             this.lbl_no_emp2.Depth = 0;
             this.lbl_no_emp2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lbl_no_emp2.Location = new System.Drawing.Point(114, 14);
+            this.lbl_no_emp2.Location = new System.Drawing.Point(134, 20);
             this.lbl_no_emp2.MouseState = MaterialSkin.MouseState.HOVER;
             this.lbl_no_emp2.Name = "lbl_no_emp2";
             this.lbl_no_emp2.Size = new System.Drawing.Size(25, 19);
             this.lbl_no_emp2.TabIndex = 6;
             this.lbl_no_emp2.Text = "      ";
-            // 
-            // lbl_Nom
-            // 
-            this.lbl_Nom.AutoSize = true;
-            this.lbl_Nom.Depth = 0;
-            this.lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Nom.Location = new System.Drawing.Point(12, 47);
-            this.lbl_Nom.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lbl_Nom.Name = "lbl_Nom";
-            this.lbl_Nom.Size = new System.Drawing.Size(161, 19);
-            this.lbl_Nom.TabIndex = 3;
-            this.lbl_Nom.Text = "Nombre del Supervisor";
-            // 
-            // lbl_user_no_emp
-            // 
-            this.lbl_user_no_emp.AutoSize = true;
-            this.lbl_user_no_emp.Depth = 0;
-            this.lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_user_no_emp.Location = new System.Drawing.Point(12, 14);
-            this.lbl_user_no_emp.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lbl_user_no_emp.Name = "lbl_user_no_emp";
-            this.lbl_user_no_emp.Size = new System.Drawing.Size(96, 19);
-            this.lbl_user_no_emp.TabIndex = 2;
-            this.lbl_user_no_emp.Text = "No Empleado";
             // 
             // tabPage2
             // 
@@ -1968,6 +1944,26 @@
             this.imageList1.Images.SetKeyName(3, "home_house");
             this.imageList1.Images.SetKeyName(4, "flag_icon");
             // 
+            // lbl_user_no_emp
+            // 
+            this.lbl_user_no_emp.AutoSize = true;
+            this.lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_user_no_emp.Location = new System.Drawing.Point(12, 20);
+            this.lbl_user_no_emp.Name = "lbl_user_no_emp";
+            this.lbl_user_no_emp.Size = new System.Drawing.Size(116, 20);
+            this.lbl_user_no_emp.TabIndex = 8;
+            this.lbl_user_no_emp.Text = "No Empleado";
+            // 
+            // lbl_Nom
+            // 
+            this.lbl_Nom.AutoSize = true;
+            this.lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Nom.Location = new System.Drawing.Point(12, 44);
+            this.lbl_Nom.Name = "lbl_Nom";
+            this.lbl_Nom.Size = new System.Drawing.Size(190, 20);
+            this.lbl_Nom.TabIndex = 9;
+            this.lbl_Nom.Text = "Nombre del Supervisor";
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1981,6 +1977,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tablero";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.materialCard6.ResumeLayout(false);
@@ -2038,8 +2035,6 @@
         private System.Windows.Forms.TabPage tabPage4;
         private MaterialSkin.Controls.MaterialCard materialCard1;
         private MaterialSkin.Controls.MaterialLabel lbl_no_emp2;
-        private MaterialSkin.Controls.MaterialLabel lbl_Nom;
-        private MaterialSkin.Controls.MaterialLabel lbl_user_no_emp;
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private MaterialSkin.Controls.MaterialLabel lbl_nom2;
         private MaterialSkin.Controls.MaterialComboBox cb_Area;
@@ -2143,6 +2138,8 @@
         private MaterialSkin.Controls.MaterialComboBox cmb_proceso;
         private MaterialSkin.Controls.MaterialComboBox cmb_proceso_search;
         private MetroFramework.Controls.MetroDateTime dtp1;
+        private System.Windows.Forms.Label lbl_user_no_emp;
+        private System.Windows.Forms.Label lbl_Nom;
     }
 }
 

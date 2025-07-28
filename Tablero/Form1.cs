@@ -269,5 +269,11 @@ namespace Tablero
                 e.Handled = true;
             }
         }
+
+        private void Form_principal_Load(object sender, EventArgs e)
+        {
+            lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+        }
     }
 }
