@@ -32,9 +32,9 @@ namespace Tablero
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
 
             // Forzar el color después de inicializar MaterialSkin  
-            pnl_principal.BackColor = Color.FromArgb(192, 255, 192);
+            pnl_hr_inicio.BackColor = Color.FromArgb(192, 255, 192);
             pnl_Metahora.BackColor = Color.FromArgb(192, 255, 192);
-            pnl_ftt.BackColor = Color.FromArgb(255, 255, 128);
+
 
             // Personalización de dgv_mecanico
             dgv_mecanico.EnableHeadersVisualStyles = false;
@@ -165,7 +165,6 @@ namespace Tablero
             dgv_metas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_metas.RowHeadersVisible = false;
             dgv_metas.BorderStyle = BorderStyle.None;
-            
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)

@@ -192,6 +192,7 @@ namespace Tablero
                     // Usuario válido
                     this.Visible = false;
                     Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text);
+                    principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
                     principal.Show(); // Muestra el formulario principal
                     // Guardar en sesión o usar esta información
                 }
@@ -245,6 +246,15 @@ namespace Tablero
         private void lbl_salir_Click(object sender, EventArgs e)
         {
             Application.Exit(); // Cierra la aplicación
+        }
+
+        private void txt_password_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btn_iniciar_Click(btn_iniciar, EventArgs.Empty);
+                e.SuppressKeyPress = true; // evita el beep
+            }
         }
     }
 }

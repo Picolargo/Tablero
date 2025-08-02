@@ -65,7 +65,7 @@
             this.lbl_login.Location = new System.Drawing.Point(79, 193);
             this.lbl_login.Name = "lbl_login";
             this.lbl_login.Size = new System.Drawing.Size(217, 36);
-            this.lbl_login.TabIndex = 1;
+            this.lbl_login.TabIndex = 100;
             this.lbl_login.Text = "Iniciar Sesión";
             // 
             // pictureBox2
@@ -84,7 +84,7 @@
             this.panel1.Location = new System.Drawing.Point(67, 315);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(250, 1);
-            this.panel1.TabIndex = 3;
+            this.panel1.TabIndex = 101;
             // 
             // panel2
             // 
@@ -92,7 +92,7 @@
             this.panel2.Location = new System.Drawing.Point(67, 399);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(250, 1);
-            this.panel2.TabIndex = 5;
+            this.panel2.TabIndex = 102;
             // 
             // pictureBox3
             // 
@@ -114,7 +114,7 @@
             this.btn_iniciar.Location = new System.Drawing.Point(67, 450);
             this.btn_iniciar.Name = "btn_iniciar";
             this.btn_iniciar.Size = new System.Drawing.Size(250, 31);
-            this.btn_iniciar.TabIndex = 6;
+            this.btn_iniciar.TabIndex = 3;
             this.btn_iniciar.Text = "Iniciar Sesión";
             this.btn_iniciar.UseVisualStyleBackColor = false;
             this.btn_iniciar.Click += new System.EventHandler(this.btn_iniciar_Click);
@@ -128,7 +128,7 @@
             this.lbl_limpiar.Location = new System.Drawing.Point(198, 419);
             this.lbl_limpiar.Name = "lbl_limpiar";
             this.lbl_limpiar.Size = new System.Drawing.Size(119, 16);
-            this.lbl_limpiar.TabIndex = 7;
+            this.lbl_limpiar.TabIndex = 5;
             this.lbl_limpiar.Text = "Limpiar Campos";
             this.lbl_limpiar.Click += new System.EventHandler(this.lbl_limpiar_Click);
             // 
@@ -154,7 +154,7 @@
             this.lbl_salir.Location = new System.Drawing.Point(173, 495);
             this.lbl_salir.Name = "lbl_salir";
             this.lbl_salir.Size = new System.Drawing.Size(39, 16);
-            this.lbl_salir.TabIndex = 9;
+            this.lbl_salir.TabIndex = 4;
             this.lbl_salir.Text = "Salir";
             this.lbl_salir.Click += new System.EventHandler(this.lbl_salir_Click);
             // 
@@ -166,7 +166,7 @@
             this.txt_user_name.Location = new System.Drawing.Point(105, 285);
             this.txt_user_name.Name = "txt_user_name";
             this.txt_user_name.Size = new System.Drawing.Size(212, 17);
-            this.txt_user_name.TabIndex = 10;
+            this.txt_user_name.TabIndex = 1;
             // 
             // txt_password
             // 
@@ -177,7 +177,8 @@
             this.txt_password.Name = "txt_password";
             this.txt_password.PasswordChar = '*';
             this.txt_password.Size = new System.Drawing.Size(212, 17);
-            this.txt_password.TabIndex = 11;
+            this.txt_password.TabIndex = 2;
+            this.txt_password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_password_KeyDown);
             // 
             // login
             // 
