@@ -143,6 +143,12 @@
             this.txt_kg_h = new Telerik.WinControls.UI.RadTextBox();
             this.txt_up_time = new Telerik.WinControls.UI.RadTextBox();
             this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
+            this.txt_resul_prod = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_kg_entrada_sum = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_kg_tunel = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_despegue = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_operativo = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_kg_repelado = new Telerik.WinControls.UI.RadTextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.materialCard6.SuspendLayout();
@@ -186,6 +192,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FS1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_kg_h)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_up_time)).BeginInit();
+            this.materialCard5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_resul_prod)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_entrada_sum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_tunel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_despegue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_repelado)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1821,7 +1834,7 @@
             this.txt_meta_m_TM.EmbeddedLabelText = "Meta menos tiempo muerto";
             this.txt_meta_m_TM.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_meta_m_TM.ForeColor = System.Drawing.Color.Black;
-            this.txt_meta_m_TM.Location = new System.Drawing.Point(17, 237);
+            this.txt_meta_m_TM.Location = new System.Drawing.Point(16, 237);
             this.txt_meta_m_TM.Name = "txt_meta_m_TM";
             this.txt_meta_m_TM.ShowEmbeddedLabel = true;
             this.txt_meta_m_TM.Size = new System.Drawing.Size(170, 43);
@@ -1902,6 +1915,12 @@
             // materialCard5
             // 
             this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard5.Controls.Add(this.txt_kg_repelado);
+            this.materialCard5.Controls.Add(this.txt_operativo);
+            this.materialCard5.Controls.Add(this.txt_despegue);
+            this.materialCard5.Controls.Add(this.txt_kg_tunel);
+            this.materialCard5.Controls.Add(this.txt_kg_entrada_sum);
+            this.materialCard5.Controls.Add(this.txt_resul_prod);
             this.materialCard5.Depth = 0;
             this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard5.Location = new System.Drawing.Point(19, 380);
@@ -1909,8 +1928,80 @@
             this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard5.Name = "materialCard5";
             this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard5.Size = new System.Drawing.Size(717, 226);
+            this.materialCard5.Size = new System.Drawing.Size(717, 135);
             this.materialCard5.TabIndex = 5;
+            // 
+            // txt_resul_prod
+            // 
+            this.txt_resul_prod.BackColor = System.Drawing.Color.White;
+            this.txt_resul_prod.EmbeddedLabelText = "Resultado producción";
+            this.txt_resul_prod.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_resul_prod.ForeColor = System.Drawing.Color.Black;
+            this.txt_resul_prod.Location = new System.Drawing.Point(15, 17);
+            this.txt_resul_prod.Name = "txt_resul_prod";
+            this.txt_resul_prod.ShowEmbeddedLabel = true;
+            this.txt_resul_prod.Size = new System.Drawing.Size(170, 43);
+            this.txt_resul_prod.TabIndex = 11;
+            // 
+            // txt_kg_entrada_sum
+            // 
+            this.txt_kg_entrada_sum.BackColor = System.Drawing.Color.White;
+            this.txt_kg_entrada_sum.EmbeddedLabelText = "Kg entrada a sumergidor";
+            this.txt_kg_entrada_sum.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_kg_entrada_sum.ForeColor = System.Drawing.Color.Black;
+            this.txt_kg_entrada_sum.Location = new System.Drawing.Point(15, 66);
+            this.txt_kg_entrada_sum.Name = "txt_kg_entrada_sum";
+            this.txt_kg_entrada_sum.ShowEmbeddedLabel = true;
+            this.txt_kg_entrada_sum.Size = new System.Drawing.Size(170, 43);
+            this.txt_kg_entrada_sum.TabIndex = 12;
+            // 
+            // txt_kg_tunel
+            // 
+            this.txt_kg_tunel.BackColor = System.Drawing.Color.White;
+            this.txt_kg_tunel.EmbeddedLabelText = "Kg a Túnel";
+            this.txt_kg_tunel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_kg_tunel.ForeColor = System.Drawing.Color.Black;
+            this.txt_kg_tunel.Location = new System.Drawing.Point(209, 17);
+            this.txt_kg_tunel.Name = "txt_kg_tunel";
+            this.txt_kg_tunel.ShowEmbeddedLabel = true;
+            this.txt_kg_tunel.Size = new System.Drawing.Size(170, 43);
+            this.txt_kg_tunel.TabIndex = 13;
+            // 
+            // txt_despegue
+            // 
+            this.txt_despegue.BackColor = System.Drawing.Color.White;
+            this.txt_despegue.EmbeddedLabelText = "Kg en despegue";
+            this.txt_despegue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_despegue.ForeColor = System.Drawing.Color.Black;
+            this.txt_despegue.Location = new System.Drawing.Point(209, 66);
+            this.txt_despegue.Name = "txt_despegue";
+            this.txt_despegue.ShowEmbeddedLabel = true;
+            this.txt_despegue.Size = new System.Drawing.Size(170, 43);
+            this.txt_despegue.TabIndex = 14;
+            // 
+            // txt_operativo
+            // 
+            this.txt_operativo.BackColor = System.Drawing.Color.White;
+            this.txt_operativo.EmbeddedLabelText = "Personal operativo";
+            this.txt_operativo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_operativo.ForeColor = System.Drawing.Color.Black;
+            this.txt_operativo.Location = new System.Drawing.Point(405, 17);
+            this.txt_operativo.Name = "txt_operativo";
+            this.txt_operativo.ShowEmbeddedLabel = true;
+            this.txt_operativo.Size = new System.Drawing.Size(170, 43);
+            this.txt_operativo.TabIndex = 15;
+            // 
+            // txt_kg_repelado
+            // 
+            this.txt_kg_repelado.BackColor = System.Drawing.Color.White;
+            this.txt_kg_repelado.EmbeddedLabelText = "Kg de repelado";
+            this.txt_kg_repelado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_kg_repelado.ForeColor = System.Drawing.Color.Black;
+            this.txt_kg_repelado.Location = new System.Drawing.Point(405, 66);
+            this.txt_kg_repelado.Name = "txt_kg_repelado";
+            this.txt_kg_repelado.ShowEmbeddedLabel = true;
+            this.txt_kg_repelado.Size = new System.Drawing.Size(170, 43);
+            this.txt_kg_repelado.TabIndex = 16;
             // 
             // Form_principal
             // 
@@ -1978,6 +2069,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FS1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_kg_h)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_up_time)).EndInit();
+            this.materialCard5.ResumeLayout(false);
+            this.materialCard5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_resul_prod)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_entrada_sum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_tunel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_despegue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_repelado)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2097,6 +2196,12 @@
         private Telerik.WinControls.UI.RadTextBox txt_up_time;
         private Telerik.WinControls.UI.RadTextBox txt_kg_h;
         private MaterialSkin.Controls.MaterialCard materialCard5;
+        private Telerik.WinControls.UI.RadTextBox txt_resul_prod;
+        private Telerik.WinControls.UI.RadTextBox txt_kg_tunel;
+        private Telerik.WinControls.UI.RadTextBox txt_kg_entrada_sum;
+        private Telerik.WinControls.UI.RadTextBox txt_kg_repelado;
+        private Telerik.WinControls.UI.RadTextBox txt_operativo;
+        private Telerik.WinControls.UI.RadTextBox txt_despegue;
     }
 }
 
