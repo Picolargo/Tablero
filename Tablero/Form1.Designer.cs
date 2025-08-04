@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
+            this.card_TM = new MaterialSkin.Controls.MaterialCard();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialTextBox1 = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_TM_calidad = new MaterialSkin.Controls.MaterialTextBox();
@@ -57,22 +57,23 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txt_Tiempo_comida = new MaterialSkin.Controls.MaterialTextBox();
-            this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
-            this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
-            this.btn_save_ficha = new MaterialSkin.Controls.MaterialButton();
+            this.card_datos = new MaterialSkin.Controls.MaterialCard();
+            this.card_botones = new MaterialSkin.Controls.MaterialCard();
+            this.btn_cancelar_ficha = new MaterialSkin.Controls.MaterialButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
-            this.txt_kg_repelado = new Telerik.WinControls.UI.RadTextBox();
+            this.btn_save_ficha = new MaterialSkin.Controls.MaterialButton();
+            this.card_datos_captura = new MaterialSkin.Controls.MaterialCard();
+            this.txt_7 = new Telerik.WinControls.UI.RadTextBox();
             this.txt_operativo = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_despegue = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_kg_tunel = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_kg_entrada_sum = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_6 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_4 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_5 = new Telerik.WinControls.UI.RadTextBox();
             this.txt_resul_prod = new Telerik.WinControls.UI.RadTextBox();
-            this.Card_hrs = new MaterialSkin.Controls.MaterialCard();
+            this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
             this.txt_up_time = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_kg_h = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_relacion_FS1 = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_relacion_FSM = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_3 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_2 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_1 = new Telerik.WinControls.UI.RadTextBox();
             this.txt_ftt = new Telerik.WinControls.UI.RadTextBox();
             this.txt_perdida = new Telerik.WinControls.UI.RadTextBox();
             this.txt_meta_m_TM = new Telerik.WinControls.UI.RadTextBox();
@@ -83,7 +84,7 @@
             this.txt_hr_disp = new Telerik.WinControls.UI.RadTextBox();
             this.pnl_hr_inicio = new System.Windows.Forms.Panel();
             this.Mask_txt_hr111 = new MaterialSkin.Controls.MaterialMaskedTextBox();
-            this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            this.card_meta = new MaterialSkin.Controls.MaterialCard();
             this.pnl_Metahora = new System.Windows.Forms.Panel();
             this.lbl_meta2 = new MaterialSkin.Controls.MaterialLabel();
             this.lbl_meta = new MaterialSkin.Controls.MaterialLabel();
@@ -152,10 +153,11 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
-            this.btn_cancelar_ficha = new MaterialSkin.Controls.MaterialButton();
+            this.txt_8 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_9 = new Telerik.WinControls.UI.RadTextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.materialCard6.SuspendLayout();
+            this.card_TM.SuspendLayout();
             this.card_dgv_calidad.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).BeginInit();
             this.card_dgv_operativo.SuspendLayout();
@@ -164,20 +166,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).BeginInit();
             this.card_dgv_mecanico.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).BeginInit();
-            this.materialCard3.SuspendLayout();
-            this.materialCard7.SuspendLayout();
-            this.materialCard5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_repelado)).BeginInit();
+            this.card_datos.SuspendLayout();
+            this.card_botones.SuspendLayout();
+            this.card_datos_captura.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_despegue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_tunel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_entrada_sum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_resul_prod)).BeginInit();
-            this.Card_hrs.SuspendLayout();
+            this.Card_only_read.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_up_time)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_h)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FS1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FSM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_ftt)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_perdida)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_meta_m_TM)).BeginInit();
@@ -186,7 +188,7 @@
             this.pnl_hr_final.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_hr_disp)).BeginInit();
             this.pnl_hr_inicio.SuspendLayout();
-            this.materialCard4.SuspendLayout();
+            this.card_meta.SuspendLayout();
             this.pnl_Metahora.SuspendLayout();
             this.materialCard2.SuspendLayout();
             this.materialCard1.SuspendLayout();
@@ -204,6 +206,8 @@
             this.tabPage8.SuspendLayout();
             this.materialCard_meta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -226,8 +230,8 @@
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
-            this.tabPage1.Controls.Add(this.materialCard6);
-            this.tabPage1.Controls.Add(this.materialCard3);
+            this.tabPage1.Controls.Add(this.card_TM);
+            this.tabPage1.Controls.Add(this.card_datos);
             this.tabPage1.Controls.Add(this.materialCard2);
             this.tabPage1.Controls.Add(this.materialCard1);
             this.tabPage1.ImageKey = "home_house";
@@ -238,30 +242,31 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
-            // materialCard6
+            // card_TM
             // 
-            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard6.Controls.Add(this.materialLabel1);
-            this.materialCard6.Controls.Add(this.materialTextBox1);
-            this.materialCard6.Controls.Add(this.txt_TM_calidad);
-            this.materialCard6.Controls.Add(this.card_dgv_calidad);
-            this.materialCard6.Controls.Add(this.txt_TM_operativo);
-            this.materialCard6.Controls.Add(this.card_dgv_operativo);
-            this.materialCard6.Controls.Add(this.txt_TM_almacen);
-            this.materialCard6.Controls.Add(this.card_dgv_almacen);
-            this.materialCard6.Controls.Add(this.lbl_min_comida);
-            this.materialCard6.Controls.Add(this.txt_TM_mecanico);
-            this.materialCard6.Controls.Add(this.card_dgv_mecanico);
-            this.materialCard6.Controls.Add(this.txt_Tiempo_comida);
-            this.materialCard6.Depth = 0;
-            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard6.Location = new System.Drawing.Point(797, 123);
-            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard6.Name = "materialCard6";
-            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard6.Size = new System.Drawing.Size(874, 810);
-            this.materialCard6.TabIndex = 4;
+            this.card_TM.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_TM.Controls.Add(this.materialLabel1);
+            this.card_TM.Controls.Add(this.materialTextBox1);
+            this.card_TM.Controls.Add(this.txt_TM_calidad);
+            this.card_TM.Controls.Add(this.card_dgv_calidad);
+            this.card_TM.Controls.Add(this.txt_TM_operativo);
+            this.card_TM.Controls.Add(this.card_dgv_operativo);
+            this.card_TM.Controls.Add(this.txt_TM_almacen);
+            this.card_TM.Controls.Add(this.card_dgv_almacen);
+            this.card_TM.Controls.Add(this.lbl_min_comida);
+            this.card_TM.Controls.Add(this.txt_TM_mecanico);
+            this.card_TM.Controls.Add(this.card_dgv_mecanico);
+            this.card_TM.Controls.Add(this.txt_Tiempo_comida);
+            this.card_TM.Depth = 0;
+            this.card_TM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_TM.Location = new System.Drawing.Point(797, 123);
+            this.card_TM.Margin = new System.Windows.Forms.Padding(14);
+            this.card_TM.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_TM.Name = "card_TM";
+            this.card_TM.Padding = new System.Windows.Forms.Padding(14);
+            this.card_TM.Size = new System.Drawing.Size(874, 810);
+            this.card_TM.TabIndex = 4;
+            this.card_TM.Visible = false;
             // 
             // materialLabel1
             // 
@@ -548,60 +553,61 @@
             this.txt_Tiempo_comida.TrailingIcon = null;
             this.txt_Tiempo_comida.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_comida_KeyPress);
             // 
-            // materialCard3
+            // card_datos
             // 
-            this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard3.Controls.Add(this.materialCard7);
-            this.materialCard3.Controls.Add(this.materialCard5);
-            this.materialCard3.Controls.Add(this.Card_hrs);
-            this.materialCard3.Controls.Add(this.materialCard4);
-            this.materialCard3.Controls.Add(this.lbl_meta);
-            this.materialCard3.Controls.Add(this.cb_OP);
-            this.materialCard3.Depth = 0;
-            this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard3.Location = new System.Drawing.Point(14, 283);
-            this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard3.Name = "materialCard3";
-            this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(755, 650);
-            this.materialCard3.TabIndex = 3;
+            this.card_datos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_datos.Controls.Add(this.card_botones);
+            this.card_datos.Controls.Add(this.card_datos_captura);
+            this.card_datos.Controls.Add(this.Card_only_read);
+            this.card_datos.Controls.Add(this.card_meta);
+            this.card_datos.Controls.Add(this.lbl_meta);
+            this.card_datos.Depth = 0;
+            this.card_datos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_datos.Location = new System.Drawing.Point(14, 283);
+            this.card_datos.Margin = new System.Windows.Forms.Padding(14);
+            this.card_datos.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_datos.Name = "card_datos";
+            this.card_datos.Padding = new System.Windows.Forms.Padding(14);
+            this.card_datos.Size = new System.Drawing.Size(755, 650);
+            this.card_datos.TabIndex = 3;
+            this.card_datos.Visible = false;
             // 
-            // materialCard7
+            // card_botones
             // 
-            this.materialCard7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard7.Controls.Add(this.btn_cancelar_ficha);
-            this.materialCard7.Controls.Add(this.btn_save_ficha);
-            this.materialCard7.Depth = 0;
-            this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard7.Location = new System.Drawing.Point(18, 528);
-            this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard7.Name = "materialCard7";
-            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(718, 94);
-            this.materialCard7.TabIndex = 6;
+            this.card_botones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_botones.Controls.Add(this.btn_cancelar_ficha);
+            this.card_botones.Controls.Add(this.btn_save_ficha);
+            this.card_botones.Depth = 0;
+            this.card_botones.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_botones.Location = new System.Drawing.Point(18, 566);
+            this.card_botones.Margin = new System.Windows.Forms.Padding(14);
+            this.card_botones.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_botones.Name = "card_botones";
+            this.card_botones.Padding = new System.Windows.Forms.Padding(14);
+            this.card_botones.Size = new System.Drawing.Size(718, 70);
+            this.card_botones.TabIndex = 6;
             // 
-            // btn_save_ficha
+            // btn_cancelar_ficha
             // 
-            this.btn_save_ficha.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_save_ficha.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_save_ficha.Depth = 0;
-            this.btn_save_ficha.HighEmphasis = true;
-            this.btn_save_ficha.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
-            this.btn_save_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_ficha.Location = new System.Drawing.Point(219, 29);
-            this.btn_save_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_save_ficha.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_save_ficha.Name = "btn_save_ficha";
-            this.btn_save_ficha.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_save_ficha.Size = new System.Drawing.Size(116, 36);
-            this.btn_save_ficha.TabIndex = 2;
-            this.btn_save_ficha.Text = "Guardar";
-            this.btn_save_ficha.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_save_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_save_ficha.UseAccentColor = false;
-            this.btn_save_ficha.UseVisualStyleBackColor = true;
+            this.btn_cancelar_ficha.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_cancelar_ficha.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_cancelar_ficha.Depth = 0;
+            this.btn_cancelar_ficha.HighEmphasis = true;
+            this.btn_cancelar_ficha.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.btn_cancelar_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_cancelar_ficha.ImageList = this.imageList1;
+            this.btn_cancelar_ficha.Location = new System.Drawing.Point(375, 19);
+            this.btn_cancelar_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_cancelar_ficha.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_cancelar_ficha.Name = "btn_cancelar_ficha";
+            this.btn_cancelar_ficha.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_cancelar_ficha.Size = new System.Drawing.Size(124, 36);
+            this.btn_cancelar_ficha.TabIndex = 3;
+            this.btn_cancelar_ficha.Text = "Cancelar";
+            this.btn_cancelar_ficha.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_cancelar_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_cancelar_ficha.UseAccentColor = false;
+            this.btn_cancelar_ficha.UseVisualStyleBackColor = true;
             // 
             // imageList1
             // 
@@ -615,36 +621,59 @@
             this.imageList1.Images.SetKeyName(5, "save_icon");
             this.imageList1.Images.SetKeyName(6, "slash_icon");
             // 
-            // materialCard5
+            // btn_save_ficha
             // 
-            this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard5.Controls.Add(this.txt_kg_repelado);
-            this.materialCard5.Controls.Add(this.txt_operativo);
-            this.materialCard5.Controls.Add(this.txt_despegue);
-            this.materialCard5.Controls.Add(this.txt_kg_tunel);
-            this.materialCard5.Controls.Add(this.txt_kg_entrada_sum);
-            this.materialCard5.Controls.Add(this.txt_resul_prod);
-            this.materialCard5.Depth = 0;
-            this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard5.Location = new System.Drawing.Point(19, 380);
-            this.materialCard5.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard5.Name = "materialCard5";
-            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard5.Size = new System.Drawing.Size(717, 135);
-            this.materialCard5.TabIndex = 5;
+            this.btn_save_ficha.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save_ficha.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save_ficha.Depth = 0;
+            this.btn_save_ficha.HighEmphasis = true;
+            this.btn_save_ficha.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save_ficha.Location = new System.Drawing.Point(219, 19);
+            this.btn_save_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save_ficha.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save_ficha.Name = "btn_save_ficha";
+            this.btn_save_ficha.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save_ficha.Size = new System.Drawing.Size(116, 36);
+            this.btn_save_ficha.TabIndex = 2;
+            this.btn_save_ficha.Text = "Guardar";
+            this.btn_save_ficha.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save_ficha.UseAccentColor = false;
+            this.btn_save_ficha.UseVisualStyleBackColor = true;
             // 
-            // txt_kg_repelado
+            // card_datos_captura
             // 
-            this.txt_kg_repelado.BackColor = System.Drawing.Color.White;
-            this.txt_kg_repelado.EmbeddedLabelText = "Kg de repelado";
-            this.txt_kg_repelado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_kg_repelado.ForeColor = System.Drawing.Color.Black;
-            this.txt_kg_repelado.Location = new System.Drawing.Point(405, 66);
-            this.txt_kg_repelado.Name = "txt_kg_repelado";
-            this.txt_kg_repelado.ShowEmbeddedLabel = true;
-            this.txt_kg_repelado.Size = new System.Drawing.Size(170, 43);
-            this.txt_kg_repelado.TabIndex = 16;
+            this.card_datos_captura.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_datos_captura.Controls.Add(this.txt_9);
+            this.card_datos_captura.Controls.Add(this.txt_8);
+            this.card_datos_captura.Controls.Add(this.txt_7);
+            this.card_datos_captura.Controls.Add(this.txt_operativo);
+            this.card_datos_captura.Controls.Add(this.txt_6);
+            this.card_datos_captura.Controls.Add(this.txt_4);
+            this.card_datos_captura.Controls.Add(this.txt_5);
+            this.card_datos_captura.Controls.Add(this.txt_resul_prod);
+            this.card_datos_captura.Depth = 0;
+            this.card_datos_captura.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_datos_captura.Location = new System.Drawing.Point(19, 380);
+            this.card_datos_captura.Margin = new System.Windows.Forms.Padding(14);
+            this.card_datos_captura.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_datos_captura.Name = "card_datos_captura";
+            this.card_datos_captura.Padding = new System.Windows.Forms.Padding(14);
+            this.card_datos_captura.Size = new System.Drawing.Size(717, 172);
+            this.card_datos_captura.TabIndex = 5;
+            // 
+            // txt_7
+            // 
+            this.txt_7.BackColor = System.Drawing.Color.White;
+            this.txt_7.EmbeddedLabelText = "txt_7";
+            this.txt_7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_7.ForeColor = System.Drawing.Color.Black;
+            this.txt_7.Location = new System.Drawing.Point(405, 66);
+            this.txt_7.Name = "txt_7";
+            this.txt_7.ShowEmbeddedLabel = true;
+            this.txt_7.Size = new System.Drawing.Size(170, 43);
+            this.txt_7.TabIndex = 16;
             // 
             // txt_operativo
             // 
@@ -652,47 +681,47 @@
             this.txt_operativo.EmbeddedLabelText = "Personal operativo";
             this.txt_operativo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_operativo.ForeColor = System.Drawing.Color.Black;
-            this.txt_operativo.Location = new System.Drawing.Point(405, 17);
+            this.txt_operativo.Location = new System.Drawing.Point(209, 17);
             this.txt_operativo.Name = "txt_operativo";
             this.txt_operativo.ShowEmbeddedLabel = true;
             this.txt_operativo.Size = new System.Drawing.Size(170, 43);
             this.txt_operativo.TabIndex = 15;
             // 
-            // txt_despegue
+            // txt_6
             // 
-            this.txt_despegue.BackColor = System.Drawing.Color.White;
-            this.txt_despegue.EmbeddedLabelText = "Kg en despegue";
-            this.txt_despegue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_despegue.ForeColor = System.Drawing.Color.Black;
-            this.txt_despegue.Location = new System.Drawing.Point(209, 66);
-            this.txt_despegue.Name = "txt_despegue";
-            this.txt_despegue.ShowEmbeddedLabel = true;
-            this.txt_despegue.Size = new System.Drawing.Size(170, 43);
-            this.txt_despegue.TabIndex = 14;
+            this.txt_6.BackColor = System.Drawing.Color.White;
+            this.txt_6.EmbeddedLabelText = "txt_6";
+            this.txt_6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_6.ForeColor = System.Drawing.Color.Black;
+            this.txt_6.Location = new System.Drawing.Point(209, 66);
+            this.txt_6.Name = "txt_6";
+            this.txt_6.ShowEmbeddedLabel = true;
+            this.txt_6.Size = new System.Drawing.Size(170, 43);
+            this.txt_6.TabIndex = 14;
             // 
-            // txt_kg_tunel
+            // txt_4
             // 
-            this.txt_kg_tunel.BackColor = System.Drawing.Color.White;
-            this.txt_kg_tunel.EmbeddedLabelText = "Kg a Túnel";
-            this.txt_kg_tunel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_kg_tunel.ForeColor = System.Drawing.Color.Black;
-            this.txt_kg_tunel.Location = new System.Drawing.Point(209, 17);
-            this.txt_kg_tunel.Name = "txt_kg_tunel";
-            this.txt_kg_tunel.ShowEmbeddedLabel = true;
-            this.txt_kg_tunel.Size = new System.Drawing.Size(170, 43);
-            this.txt_kg_tunel.TabIndex = 13;
+            this.txt_4.BackColor = System.Drawing.Color.White;
+            this.txt_4.EmbeddedLabelText = "txt_4";
+            this.txt_4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_4.ForeColor = System.Drawing.Color.Black;
+            this.txt_4.Location = new System.Drawing.Point(406, 17);
+            this.txt_4.Name = "txt_4";
+            this.txt_4.ShowEmbeddedLabel = true;
+            this.txt_4.Size = new System.Drawing.Size(170, 43);
+            this.txt_4.TabIndex = 13;
             // 
-            // txt_kg_entrada_sum
+            // txt_5
             // 
-            this.txt_kg_entrada_sum.BackColor = System.Drawing.Color.White;
-            this.txt_kg_entrada_sum.EmbeddedLabelText = "Kg entrada a sumergidor";
-            this.txt_kg_entrada_sum.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_kg_entrada_sum.ForeColor = System.Drawing.Color.Black;
-            this.txt_kg_entrada_sum.Location = new System.Drawing.Point(15, 66);
-            this.txt_kg_entrada_sum.Name = "txt_kg_entrada_sum";
-            this.txt_kg_entrada_sum.ShowEmbeddedLabel = true;
-            this.txt_kg_entrada_sum.Size = new System.Drawing.Size(170, 43);
-            this.txt_kg_entrada_sum.TabIndex = 12;
+            this.txt_5.BackColor = System.Drawing.Color.White;
+            this.txt_5.EmbeddedLabelText = "txt_5";
+            this.txt_5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_5.ForeColor = System.Drawing.Color.Black;
+            this.txt_5.Location = new System.Drawing.Point(15, 66);
+            this.txt_5.Name = "txt_5";
+            this.txt_5.ShowEmbeddedLabel = true;
+            this.txt_5.Size = new System.Drawing.Size(170, 43);
+            this.txt_5.TabIndex = 12;
             // 
             // txt_resul_prod
             // 
@@ -706,30 +735,30 @@
             this.txt_resul_prod.Size = new System.Drawing.Size(170, 43);
             this.txt_resul_prod.TabIndex = 11;
             // 
-            // Card_hrs
+            // Card_only_read
             // 
-            this.Card_hrs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.Card_hrs.Controls.Add(this.txt_up_time);
-            this.Card_hrs.Controls.Add(this.txt_kg_h);
-            this.Card_hrs.Controls.Add(this.txt_relacion_FS1);
-            this.Card_hrs.Controls.Add(this.txt_relacion_FSM);
-            this.Card_hrs.Controls.Add(this.txt_ftt);
-            this.Card_hrs.Controls.Add(this.txt_perdida);
-            this.Card_hrs.Controls.Add(this.txt_meta_m_TM);
-            this.Card_hrs.Controls.Add(this.txt_hr_Disp_TM);
-            this.Card_hrs.Controls.Add(this.txt_meta_p);
-            this.Card_hrs.Controls.Add(this.pnl_hr_final);
-            this.Card_hrs.Controls.Add(this.txt_hr_disp);
-            this.Card_hrs.Controls.Add(this.pnl_hr_inicio);
-            this.Card_hrs.Depth = 0;
-            this.Card_hrs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.Card_hrs.Location = new System.Drawing.Point(18, 74);
-            this.Card_hrs.Margin = new System.Windows.Forms.Padding(14);
-            this.Card_hrs.MouseState = MaterialSkin.MouseState.HOVER;
-            this.Card_hrs.Name = "Card_hrs";
-            this.Card_hrs.Padding = new System.Windows.Forms.Padding(14);
-            this.Card_hrs.Size = new System.Drawing.Size(718, 294);
-            this.Card_hrs.TabIndex = 4;
+            this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.txt_up_time);
+            this.Card_only_read.Controls.Add(this.txt_3);
+            this.Card_only_read.Controls.Add(this.txt_2);
+            this.Card_only_read.Controls.Add(this.txt_1);
+            this.Card_only_read.Controls.Add(this.txt_ftt);
+            this.Card_only_read.Controls.Add(this.txt_perdida);
+            this.Card_only_read.Controls.Add(this.txt_meta_m_TM);
+            this.Card_only_read.Controls.Add(this.txt_hr_Disp_TM);
+            this.Card_only_read.Controls.Add(this.txt_meta_p);
+            this.Card_only_read.Controls.Add(this.pnl_hr_final);
+            this.Card_only_read.Controls.Add(this.txt_hr_disp);
+            this.Card_only_read.Controls.Add(this.pnl_hr_inicio);
+            this.Card_only_read.Depth = 0;
+            this.Card_only_read.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.Card_only_read.Location = new System.Drawing.Point(18, 74);
+            this.Card_only_read.Margin = new System.Windows.Forms.Padding(14);
+            this.Card_only_read.MouseState = MaterialSkin.MouseState.HOVER;
+            this.Card_only_read.Name = "Card_only_read";
+            this.Card_only_read.Padding = new System.Windows.Forms.Padding(14);
+            this.Card_only_read.Size = new System.Drawing.Size(718, 294);
+            this.Card_only_read.TabIndex = 4;
             // 
             // txt_up_time
             // 
@@ -737,47 +766,47 @@
             this.txt_up_time.EmbeddedLabelText = "Up time";
             this.txt_up_time.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_up_time.ForeColor = System.Drawing.Color.Black;
-            this.txt_up_time.Location = new System.Drawing.Point(406, 139);
+            this.txt_up_time.Location = new System.Drawing.Point(18, 188);
             this.txt_up_time.Name = "txt_up_time";
             this.txt_up_time.ShowEmbeddedLabel = true;
             this.txt_up_time.Size = new System.Drawing.Size(170, 43);
             this.txt_up_time.TabIndex = 15;
             // 
-            // txt_kg_h
+            // txt_3
             // 
-            this.txt_kg_h.BackColor = System.Drawing.Color.White;
-            this.txt_kg_h.EmbeddedLabelText = "Kilogramos por hora hombre";
-            this.txt_kg_h.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_kg_h.ForeColor = System.Drawing.Color.Black;
-            this.txt_kg_h.Location = new System.Drawing.Point(210, 237);
-            this.txt_kg_h.Name = "txt_kg_h";
-            this.txt_kg_h.ShowEmbeddedLabel = true;
-            this.txt_kg_h.Size = new System.Drawing.Size(170, 43);
-            this.txt_kg_h.TabIndex = 15;
+            this.txt_3.BackColor = System.Drawing.Color.White;
+            this.txt_3.EmbeddedLabelText = "txt_3";
+            this.txt_3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_3.ForeColor = System.Drawing.Color.Black;
+            this.txt_3.Location = new System.Drawing.Point(18, 237);
+            this.txt_3.Name = "txt_3";
+            this.txt_3.ShowEmbeddedLabel = true;
+            this.txt_3.Size = new System.Drawing.Size(170, 43);
+            this.txt_3.TabIndex = 15;
             // 
-            // txt_relacion_FS1
+            // txt_2
             // 
-            this.txt_relacion_FS1.BackColor = System.Drawing.Color.White;
-            this.txt_relacion_FS1.EmbeddedLabelText = "Relacion fresco seco";
-            this.txt_relacion_FS1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_relacion_FS1.ForeColor = System.Drawing.Color.Black;
-            this.txt_relacion_FS1.Location = new System.Drawing.Point(210, 188);
-            this.txt_relacion_FS1.Name = "txt_relacion_FS1";
-            this.txt_relacion_FS1.ShowEmbeddedLabel = true;
-            this.txt_relacion_FS1.Size = new System.Drawing.Size(170, 43);
-            this.txt_relacion_FS1.TabIndex = 14;
+            this.txt_2.BackColor = System.Drawing.Color.White;
+            this.txt_2.EmbeddedLabelText = "txt_2";
+            this.txt_2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_2.ForeColor = System.Drawing.Color.Black;
+            this.txt_2.Location = new System.Drawing.Point(407, 188);
+            this.txt_2.Name = "txt_2";
+            this.txt_2.ShowEmbeddedLabel = true;
+            this.txt_2.Size = new System.Drawing.Size(170, 43);
+            this.txt_2.TabIndex = 14;
             // 
-            // txt_relacion_FSM
+            // txt_1
             // 
-            this.txt_relacion_FSM.BackColor = System.Drawing.Color.White;
-            this.txt_relacion_FSM.EmbeddedLabelText = "Relacion fresco seco meta";
-            this.txt_relacion_FSM.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_relacion_FSM.ForeColor = System.Drawing.Color.Black;
-            this.txt_relacion_FSM.Location = new System.Drawing.Point(210, 139);
-            this.txt_relacion_FSM.Name = "txt_relacion_FSM";
-            this.txt_relacion_FSM.ShowEmbeddedLabel = true;
-            this.txt_relacion_FSM.Size = new System.Drawing.Size(170, 43);
-            this.txt_relacion_FSM.TabIndex = 13;
+            this.txt_1.BackColor = System.Drawing.Color.White;
+            this.txt_1.EmbeddedLabelText = "txt_1";
+            this.txt_1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_1.ForeColor = System.Drawing.Color.Black;
+            this.txt_1.Location = new System.Drawing.Point(210, 188);
+            this.txt_1.Name = "txt_1";
+            this.txt_1.ShowEmbeddedLabel = true;
+            this.txt_1.Size = new System.Drawing.Size(170, 43);
+            this.txt_1.TabIndex = 13;
             // 
             // txt_ftt
             // 
@@ -785,7 +814,7 @@
             this.txt_ftt.EmbeddedLabelText = "FTT";
             this.txt_ftt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_ftt.ForeColor = System.Drawing.Color.Black;
-            this.txt_ftt.Location = new System.Drawing.Point(210, 90);
+            this.txt_ftt.Location = new System.Drawing.Point(406, 139);
             this.txt_ftt.Name = "txt_ftt";
             this.txt_ftt.ShowEmbeddedLabel = true;
             this.txt_ftt.Size = new System.Drawing.Size(170, 43);
@@ -797,7 +826,7 @@
             this.txt_perdida.EmbeddedLabelText = "Perdida";
             this.txt_perdida.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_perdida.ForeColor = System.Drawing.Color.Black;
-            this.txt_perdida.Location = new System.Drawing.Point(406, 90);
+            this.txt_perdida.Location = new System.Drawing.Point(210, 139);
             this.txt_perdida.Name = "txt_perdida";
             this.txt_perdida.ShowEmbeddedLabel = true;
             this.txt_perdida.Size = new System.Drawing.Size(170, 43);
@@ -809,7 +838,7 @@
             this.txt_meta_m_TM.EmbeddedLabelText = "Meta menos tiempo muerto";
             this.txt_meta_m_TM.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_meta_m_TM.ForeColor = System.Drawing.Color.Black;
-            this.txt_meta_m_TM.Location = new System.Drawing.Point(16, 237);
+            this.txt_meta_m_TM.Location = new System.Drawing.Point(17, 139);
             this.txt_meta_m_TM.Name = "txt_meta_m_TM";
             this.txt_meta_m_TM.ShowEmbeddedLabel = true;
             this.txt_meta_m_TM.Size = new System.Drawing.Size(170, 43);
@@ -821,7 +850,7 @@
             this.txt_hr_Disp_TM.EmbeddedLabelText = "Hrs. disp. menos tiempo muerto";
             this.txt_hr_Disp_TM.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_hr_Disp_TM.ForeColor = System.Drawing.Color.Black;
-            this.txt_hr_Disp_TM.Location = new System.Drawing.Point(16, 188);
+            this.txt_hr_Disp_TM.Location = new System.Drawing.Point(406, 90);
             this.txt_hr_Disp_TM.Name = "txt_hr_Disp_TM";
             this.txt_hr_Disp_TM.ShowEmbeddedLabel = true;
             this.txt_hr_Disp_TM.Size = new System.Drawing.Size(171, 43);
@@ -829,11 +858,11 @@
             // 
             // txt_meta_p
             // 
-            this.txt_meta_p.BackColor = System.Drawing.Color.White;
+            this.txt_meta_p.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.txt_meta_p.EmbeddedLabelText = "Meta programada";
             this.txt_meta_p.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_meta_p.ForeColor = System.Drawing.Color.Black;
-            this.txt_meta_p.Location = new System.Drawing.Point(17, 139);
+            this.txt_meta_p.Location = new System.Drawing.Point(210, 90);
             this.txt_meta_p.Name = "txt_meta_p";
             this.txt_meta_p.ShowEmbeddedLabel = true;
             this.txt_meta_p.Size = new System.Drawing.Size(170, 43);
@@ -843,7 +872,7 @@
             // 
             this.pnl_hr_final.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pnl_hr_final.Controls.Add(this.Mask_txt_hr2);
-            this.pnl_hr_final.Location = new System.Drawing.Point(338, 17);
+            this.pnl_hr_final.Location = new System.Drawing.Point(375, 16);
             this.pnl_hr_final.Name = "pnl_hr_final";
             this.pnl_hr_final.Size = new System.Drawing.Size(170, 49);
             this.pnl_hr_final.TabIndex = 7;
@@ -908,7 +937,7 @@
             // 
             this.pnl_hr_inicio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pnl_hr_inicio.Controls.Add(this.Mask_txt_hr111);
-            this.pnl_hr_inicio.Location = new System.Drawing.Point(144, 17);
+            this.pnl_hr_inicio.Location = new System.Drawing.Point(164, 16);
             this.pnl_hr_inicio.Name = "pnl_hr_inicio";
             this.pnl_hr_inicio.Size = new System.Drawing.Size(171, 49);
             this.pnl_hr_inicio.TabIndex = 5;
@@ -957,19 +986,19 @@
             this.Mask_txt_hr111.UseSystemPasswordChar = false;
             this.Mask_txt_hr111.ValidatingType = null;
             // 
-            // materialCard4
+            // card_meta
             // 
-            this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard4.Controls.Add(this.pnl_Metahora);
-            this.materialCard4.Depth = 0;
-            this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard4.Location = new System.Drawing.Point(631, 11);
-            this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard4.Name = "materialCard4";
-            this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(105, 46);
-            this.materialCard4.TabIndex = 3;
+            this.card_meta.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_meta.Controls.Add(this.pnl_Metahora);
+            this.card_meta.Depth = 0;
+            this.card_meta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_meta.Location = new System.Drawing.Point(631, 11);
+            this.card_meta.Margin = new System.Windows.Forms.Padding(14);
+            this.card_meta.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_meta.Name = "card_meta";
+            this.card_meta.Padding = new System.Windows.Forms.Padding(14);
+            this.card_meta.Size = new System.Drawing.Size(105, 46);
+            this.card_meta.TabIndex = 3;
             // 
             // pnl_Metahora
             // 
@@ -1013,13 +1042,14 @@
             this.cb_OP.DropDownHeight = 174;
             this.cb_OP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_OP.DropDownWidth = 121;
+            this.cb_OP.Enabled = false;
             this.cb_OP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.cb_OP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cb_OP.FormattingEnabled = true;
             this.cb_OP.Hint = "OP";
             this.cb_OP.IntegralHeight = false;
             this.cb_OP.ItemHeight = 43;
-            this.cb_OP.Location = new System.Drawing.Point(35, 11);
+            this.cb_OP.Location = new System.Drawing.Point(393, 11);
             this.cb_OP.MaxDropDownItems = 4;
             this.cb_OP.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_OP.Name = "cb_OP";
@@ -1033,6 +1063,7 @@
             this.materialCard2.Controls.Add(this.dtp1);
             this.materialCard2.Controls.Add(this.cb_Turno);
             this.materialCard2.Controls.Add(this.cb_Area);
+            this.materialCard2.Controls.Add(this.cb_OP);
             this.materialCard2.Depth = 0;
             this.materialCard2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard2.Location = new System.Drawing.Point(14, 123);
@@ -1046,12 +1077,13 @@
             // dtp1
             // 
             this.dtp1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtp1.Enabled = false;
             this.dtp1.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp1.FontWeight = MetroFramework.MetroDateTimeWeight.Bold;
-            this.dtp1.Location = new System.Drawing.Point(384, 11);
+            this.dtp1.Location = new System.Drawing.Point(393, 80);
             this.dtp1.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp1.Name = "dtp1";
-            this.dtp1.Size = new System.Drawing.Size(300, 35);
+            this.dtp1.Size = new System.Drawing.Size(250, 35);
             this.dtp1.TabIndex = 7;
             // 
             // cb_Turno
@@ -1063,6 +1095,7 @@
             this.cb_Turno.DropDownHeight = 174;
             this.cb_Turno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_Turno.DropDownWidth = 121;
+            this.cb_Turno.Enabled = false;
             this.cb_Turno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.cb_Turno.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cb_Turno.FormattingEnabled = true;
@@ -1113,6 +1146,7 @@
             this.cb_Area.Size = new System.Drawing.Size(259, 49);
             this.cb_Area.StartIndex = -1;
             this.cb_Area.TabIndex = 3;
+            this.cb_Area.SelectedIndexChanged += new System.EventHandler(this.cb_Area_SelectedIndexChanged);
             // 
             // materialCard1
             // 
@@ -2051,27 +2085,29 @@
             // 
             this.radTaskbarButton1.OwnerForm = this;
             // 
-            // btn_cancelar_ficha
+            // txt_8
             // 
-            this.btn_cancelar_ficha.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_cancelar_ficha.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_cancelar_ficha.Depth = 0;
-            this.btn_cancelar_ficha.HighEmphasis = true;
-            this.btn_cancelar_ficha.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
-            this.btn_cancelar_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_cancelar_ficha.ImageList = this.imageList1;
-            this.btn_cancelar_ficha.Location = new System.Drawing.Point(375, 29);
-            this.btn_cancelar_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_cancelar_ficha.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_cancelar_ficha.Name = "btn_cancelar_ficha";
-            this.btn_cancelar_ficha.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_cancelar_ficha.Size = new System.Drawing.Size(124, 36);
-            this.btn_cancelar_ficha.TabIndex = 3;
-            this.btn_cancelar_ficha.Text = "Cancelar";
-            this.btn_cancelar_ficha.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_cancelar_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_cancelar_ficha.UseAccentColor = false;
-            this.btn_cancelar_ficha.UseVisualStyleBackColor = true;
+            this.txt_8.BackColor = System.Drawing.Color.White;
+            this.txt_8.EmbeddedLabelText = "txt_8";
+            this.txt_8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_8.ForeColor = System.Drawing.Color.Black;
+            this.txt_8.Location = new System.Drawing.Point(17, 115);
+            this.txt_8.Name = "txt_8";
+            this.txt_8.ShowEmbeddedLabel = true;
+            this.txt_8.Size = new System.Drawing.Size(170, 43);
+            this.txt_8.TabIndex = 17;
+            // 
+            // txt_9
+            // 
+            this.txt_9.BackColor = System.Drawing.Color.White;
+            this.txt_9.EmbeddedLabelText = "txt_9";
+            this.txt_9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_9.ForeColor = System.Drawing.Color.Black;
+            this.txt_9.Location = new System.Drawing.Point(209, 115);
+            this.txt_9.Name = "txt_9";
+            this.txt_9.ShowEmbeddedLabel = true;
+            this.txt_9.Size = new System.Drawing.Size(170, 43);
+            this.txt_9.TabIndex = 18;
             // 
             // Form_principal
             // 
@@ -2089,8 +2125,8 @@
             this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.materialCard6.ResumeLayout(false);
-            this.materialCard6.PerformLayout();
+            this.card_TM.ResumeLayout(false);
+            this.card_TM.PerformLayout();
             this.card_dgv_calidad.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_calidad)).EndInit();
             this.card_dgv_operativo.ResumeLayout(false);
@@ -2099,24 +2135,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_almacen)).EndInit();
             this.card_dgv_mecanico.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_mecanico)).EndInit();
-            this.materialCard3.ResumeLayout(false);
-            this.materialCard3.PerformLayout();
-            this.materialCard7.ResumeLayout(false);
-            this.materialCard7.PerformLayout();
-            this.materialCard5.ResumeLayout(false);
-            this.materialCard5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_repelado)).EndInit();
+            this.card_datos.ResumeLayout(false);
+            this.card_datos.PerformLayout();
+            this.card_botones.ResumeLayout(false);
+            this.card_botones.PerformLayout();
+            this.card_datos_captura.ResumeLayout(false);
+            this.card_datos_captura.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_despegue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_tunel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_entrada_sum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_resul_prod)).EndInit();
-            this.Card_hrs.ResumeLayout(false);
-            this.Card_hrs.PerformLayout();
+            this.Card_only_read.ResumeLayout(false);
+            this.Card_only_read.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_up_time)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_kg_h)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FS1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_relacion_FSM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_ftt)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_perdida)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_meta_m_TM)).EndInit();
@@ -2125,7 +2161,7 @@
             this.pnl_hr_final.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txt_hr_disp)).EndInit();
             this.pnl_hr_inicio.ResumeLayout(false);
-            this.materialCard4.ResumeLayout(false);
+            this.card_meta.ResumeLayout(false);
             this.pnl_Metahora.ResumeLayout(false);
             this.pnl_Metahora.PerformLayout();
             this.materialCard2.ResumeLayout(false);
@@ -2149,6 +2185,8 @@
             this.tabPage8.PerformLayout();
             this.materialCard_meta.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2167,17 +2205,17 @@
         private MaterialSkin.Controls.MaterialLabel lbl_nom2;
         private MaterialSkin.Controls.MaterialComboBox cb_Area;
         private MaterialSkin.Controls.MaterialComboBox cb_Turno;
-        private MaterialSkin.Controls.MaterialCard materialCard3;
+        private MaterialSkin.Controls.MaterialCard card_datos;
         private MaterialSkin.Controls.MaterialLabel lbl_meta;
         private MaterialSkin.Controls.MaterialComboBox cb_OP;
-        private MaterialSkin.Controls.MaterialCard materialCard4;
+        private MaterialSkin.Controls.MaterialCard card_meta;
         private MaterialSkin.Controls.MaterialLabel lbl_meta2;
         private MaterialSkin.Controls.MaterialMaskedTextBox Mask_txt_hr111;
         private MaterialSkin.Controls.MaterialMaskedTextBox Mask_txt_hr2;
-        private MaterialSkin.Controls.MaterialCard Card_hrs;
+        private MaterialSkin.Controls.MaterialCard Card_only_read;
         private System.Windows.Forms.Panel pnl_hr_inicio;
         private System.Windows.Forms.Panel pnl_Metahora;
-        private MaterialSkin.Controls.MaterialCard materialCard6;
+        private MaterialSkin.Controls.MaterialCard card_TM;
         private MaterialSkin.Controls.MaterialTextBox txt_Tiempo_comida;
         private System.Windows.Forms.DataGridView dgv_mecanico;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
@@ -2263,21 +2301,23 @@
         private Telerik.WinControls.UI.RadTextBox txt_perdida;
         private Telerik.WinControls.UI.RadTextBox txt_meta_m_TM;
         private Telerik.WinControls.UI.RadTextBox txt_ftt;
-        private Telerik.WinControls.UI.RadTextBox txt_relacion_FSM;
-        private Telerik.WinControls.UI.RadTextBox txt_relacion_FS1;
+        private Telerik.WinControls.UI.RadTextBox txt_1;
+        private Telerik.WinControls.UI.RadTextBox txt_2;
         private Telerik.WinControls.UI.RadTextBox txt_up_time;
-        private Telerik.WinControls.UI.RadTextBox txt_kg_h;
-        private MaterialSkin.Controls.MaterialCard materialCard5;
+        private Telerik.WinControls.UI.RadTextBox txt_3;
+        private MaterialSkin.Controls.MaterialCard card_datos_captura;
         private Telerik.WinControls.UI.RadTextBox txt_resul_prod;
-        private Telerik.WinControls.UI.RadTextBox txt_kg_tunel;
-        private Telerik.WinControls.UI.RadTextBox txt_kg_entrada_sum;
-        private Telerik.WinControls.UI.RadTextBox txt_kg_repelado;
+        private Telerik.WinControls.UI.RadTextBox txt_4;
+        private Telerik.WinControls.UI.RadTextBox txt_5;
+        private Telerik.WinControls.UI.RadTextBox txt_7;
         private Telerik.WinControls.UI.RadTextBox txt_operativo;
-        private Telerik.WinControls.UI.RadTextBox txt_despegue;
-        private MaterialSkin.Controls.MaterialCard materialCard7;
+        private Telerik.WinControls.UI.RadTextBox txt_6;
+        private MaterialSkin.Controls.MaterialCard card_botones;
         private Telerik.WinControls.UI.RadTaskbarButton radTaskbarButton1;
         private MaterialSkin.Controls.MaterialButton btn_save_ficha;
         private MaterialSkin.Controls.MaterialButton btn_cancelar_ficha;
+        private Telerik.WinControls.UI.RadTextBox txt_8;
+        private Telerik.WinControls.UI.RadTextBox txt_9;
     }
 }
 
