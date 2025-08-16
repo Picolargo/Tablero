@@ -1,5 +1,6 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,9 +17,10 @@ namespace Tablero
     {
         private string var_no_empledo = string.Empty;
         private string var_nom_empledo = string.Empty;
+        private string id_global_users = string.Empty; // Variable para almacenar el ID del usuario seleccionado en el DataGridView
         //variable para la conexión a la base de datos
         string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
-        
+
         public Form_principal(string var_no_empledo, string var_nom_empledo)
         {
             InitializeComponent();
@@ -278,6 +280,12 @@ namespace Tablero
             lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
 
+            actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
+
+        }
+
+        private void actualiza_grid_users()
+        {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             // string querySimple = "SELECT * FROM public.\"Usuarios\"";
             string querySimple = "SELECT \"ID_User\" as \"ID\", \"No_Empleado\" as \"No Empleado\", \"Usuario\" as \"Nombre de usuario\", \"Password\" as \"Contraseña\", \"Nivel\" FROM public.\"Usuarios\";";
@@ -286,12 +294,11 @@ namespace Tablero
             // Configurar el DataGridView
             dgv_users.Columns[0].Visible = false;
             dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;// Ajustar automáticamente el ancho de la columna "No Empleado"
-
         }
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cb_Area.SelectedIndex == 0)
+            if (cb_Area.SelectedIndex == 0)
             {
                 reiniciar_textboxes();// reiniciar los textbox
                 txt_1.EmbeddedLabelText = "Relacion fresco seco meta";
@@ -421,6 +428,83 @@ namespace Tablero
             txt_9.Visible = false;
             card_datos.Visible = false;
             card_TM.Visible = false;
+        }
+
+        private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Obtener el valor de la primera columna del renglón clicado
+                id_global_users = dgv_users.Rows[e.RowIndex].Cells[0].Value.ToString();
+                // MetroFramework.MetroMessageBox.Show(this, "Usuario id", "id es: "+ id_global_users, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Cargar los datos del usuario seleccionado en los campos de texto
+                txt_no_emp.Text = dgv_users.Rows[e.RowIndex].Cells[1].Value.ToString(); // No Empleado
+                txt_usuario.Text = dgv_users.Rows[e.RowIndex].Cells[2].Value.ToString(); // Nombre de usuario
+                txt_contra.Text = dgv_users.Rows[e.RowIndex].Cells[3].Value.ToString(); // Contraseña
+                cmb_nivel_user.SelectedItem = dgv_users.Rows[e.RowIndex].Cells[4].Value.ToString(); // Nivel
+                cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+            }
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            if (txt_no_emp.Text == string.Empty || txt_usuario.Text == string.Empty || txt_contra.Text == string.Empty || cmb_nivel_user.SelectedIndex == -1)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                // Verificar si el usuario ya existe
+                string queryCheckUser = "SELECT COUNT(*) FROM public.\"Usuarios\" WHERE \"Usuario\"  ILIKE @Usuario or \"No_Empleado\" ILIKE @no_emp;";
+                NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@Usuario", txt_usuario.Text),
+                    new NpgsqlParameter("@no_emp", txt_no_emp.Text)
+                };
+                DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
+                if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // Insertar o actualizar el usuario
+                string queryInsertUpdate = id_global_users == string.Empty ?
+                    "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel);" :
+                    "UPDATE public.\"Usuarios\" SET \"No_Empleado\" = @No_Empleado, \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel WHERE \"ID_User\" = @ID_User;";
+                NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
+                    new NpgsqlParameter("@Usuario", txt_usuario.Text),
+                    new NpgsqlParameter("@Password", txt_contra.Text),
+                    new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString())
+                };
+                if (id_global_users != string.Empty)
+                {
+                    Array.Resize(ref parametersInsertUpdate, parametersInsertUpdate.Length + 1);
+                    parametersInsertUpdate[parametersInsertUpdate.Length - 1] = new NpgsqlParameter("@ID_User", id_global_users);
+                }
+                int result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                if (result > 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Usuario guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    actualiza_grid_users(); // Actualizar el DataGridView de usuarios
+                    limpiarCampos(); // Limpiar los campos de texto
+                }
+            }
+        }
+
+        private void limpiarCampos()
+        {
+            txt_no_emp.Text = string.Empty;
+            txt_usuario.Text = string.Empty;
+            txt_contra.Text = string.Empty;
+            cmb_nivel_user.SelectedIndex = -1;
+            id_global_users = string.Empty; // Limpiar la variable global
+            cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
+            cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+            txt_no_emp.Focus(); // Enfocar el campo de No Empleado
         }
     }
 }

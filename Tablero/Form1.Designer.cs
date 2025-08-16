@@ -105,7 +105,7 @@
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_usuarios = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.cmb_niel_user = new MaterialSkin.Controls.MaterialComboBox();
+            this.cmb_nivel_user = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_no_emp = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_usuario = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_cancel = new MaterialSkin.Controls.MaterialButton();
@@ -114,7 +114,6 @@
             this.btn_save = new MaterialSkin.Controls.MaterialButton();
             this.btn_edit = new MaterialSkin.Controls.MaterialButton();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.btn_search_edit = new MaterialSkin.Controls.MaterialButton();
             this.cmb_serch_nivel = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_search_no_emp = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_search_nom_emp = new MaterialSkin.Controls.MaterialTextBox();
@@ -1283,7 +1282,7 @@
             // 
             // tabPage5
             // 
-            this.tabPage5.Controls.Add(this.cmb_niel_user);
+            this.tabPage5.Controls.Add(this.cmb_nivel_user);
             this.tabPage5.Controls.Add(this.txt_no_emp);
             this.tabPage5.Controls.Add(this.txt_usuario);
             this.tabPage5.Controls.Add(this.btn_cancel);
@@ -1299,31 +1298,31 @@
             this.tabPage5.Text = "Usuarios";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // cmb_niel_user
+            // cmb_nivel_user
             // 
-            this.cmb_niel_user.AutoResize = false;
-            this.cmb_niel_user.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmb_niel_user.Depth = 0;
-            this.cmb_niel_user.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmb_niel_user.DropDownHeight = 174;
-            this.cmb_niel_user.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmb_niel_user.DropDownWidth = 121;
-            this.cmb_niel_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmb_niel_user.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmb_niel_user.FormattingEnabled = true;
-            this.cmb_niel_user.Hint = "Nivel del usuario";
-            this.cmb_niel_user.IntegralHeight = false;
-            this.cmb_niel_user.ItemHeight = 43;
-            this.cmb_niel_user.Items.AddRange(new object[] {
+            this.cmb_nivel_user.AutoResize = false;
+            this.cmb_nivel_user.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_nivel_user.Depth = 0;
+            this.cmb_nivel_user.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_nivel_user.DropDownHeight = 174;
+            this.cmb_nivel_user.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_nivel_user.DropDownWidth = 121;
+            this.cmb_nivel_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_nivel_user.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_nivel_user.FormattingEnabled = true;
+            this.cmb_nivel_user.Hint = "Nivel del usuario";
+            this.cmb_nivel_user.IntegralHeight = false;
+            this.cmb_nivel_user.ItemHeight = 43;
+            this.cmb_nivel_user.Items.AddRange(new object[] {
             "Administrador",
             "Usuario"});
-            this.cmb_niel_user.Location = new System.Drawing.Point(13, 183);
-            this.cmb_niel_user.MaxDropDownItems = 4;
-            this.cmb_niel_user.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmb_niel_user.Name = "cmb_niel_user";
-            this.cmb_niel_user.Size = new System.Drawing.Size(228, 49);
-            this.cmb_niel_user.StartIndex = -1;
-            this.cmb_niel_user.TabIndex = 8;
+            this.cmb_nivel_user.Location = new System.Drawing.Point(13, 183);
+            this.cmb_nivel_user.MaxDropDownItems = 4;
+            this.cmb_nivel_user.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_nivel_user.Name = "cmb_nivel_user";
+            this.cmb_nivel_user.Size = new System.Drawing.Size(228, 49);
+            this.cmb_nivel_user.StartIndex = -1;
+            this.cmb_nivel_user.TabIndex = 8;
             // 
             // txt_no_emp
             // 
@@ -1438,6 +1437,7 @@
             this.btn_save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_save.UseAccentColor = false;
             this.btn_save.UseVisualStyleBackColor = true;
+            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
             // btn_edit
             // 
@@ -1460,7 +1460,6 @@
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.btn_search_edit);
             this.tabPage6.Controls.Add(this.cmb_serch_nivel);
             this.tabPage6.Controls.Add(this.txt_search_no_emp);
             this.tabPage6.Controls.Add(this.txt_search_nom_emp);
@@ -1473,25 +1472,6 @@
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "Buscar";
             this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // btn_search_edit
-            // 
-            this.btn_search_edit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_search_edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_search_edit.Depth = 0;
-            this.btn_search_edit.HighEmphasis = true;
-            this.btn_search_edit.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
-            this.btn_search_edit.Location = new System.Drawing.Point(317, 63);
-            this.btn_search_edit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_search_edit.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_search_edit.Name = "btn_search_edit";
-            this.btn_search_edit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_search_edit.Size = new System.Drawing.Size(99, 36);
-            this.btn_search_edit.TabIndex = 14;
-            this.btn_search_edit.Text = "Editar";
-            this.btn_search_edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_search_edit.UseAccentColor = false;
-            this.btn_search_edit.UseVisualStyleBackColor = true;
             // 
             // cmb_serch_nivel
             // 
@@ -1562,7 +1542,7 @@
             this.btn_search_cancel.Depth = 0;
             this.btn_search_cancel.HighEmphasis = true;
             this.btn_search_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
-            this.btn_search_cancel.Location = new System.Drawing.Point(317, 111);
+            this.btn_search_cancel.Location = new System.Drawing.Point(317, 63);
             this.btn_search_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_search_cancel.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_search_cancel.Name = "btn_search_cancel";
@@ -1617,6 +1597,7 @@
             this.dgv_users.Name = "dgv_users";
             this.dgv_users.Size = new System.Drawing.Size(1681, 543);
             this.dgv_users.TabIndex = 0;
+            this.dgv_users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_users_CellClick);
             // 
             // tabPage4
             // 
@@ -2218,8 +2199,7 @@
         private System.Windows.Forms.TabControl tabControl_usuarios;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
-        private MaterialSkin.Controls.MaterialComboBox cmb_niel_user;
-        private MaterialSkin.Controls.MaterialButton btn_search_edit;
+        private MaterialSkin.Controls.MaterialComboBox cmb_nivel_user;
         private MaterialSkin.Controls.MaterialComboBox cmb_serch_nivel;
         private MaterialSkin.Controls.MaterialTextBox txt_search_no_emp;
         private MaterialSkin.Controls.MaterialTextBox txt_search_nom_emp;
