@@ -16,6 +16,9 @@ namespace Tablero
     {
         private string var_no_empledo = string.Empty;
         private string var_nom_empledo = string.Empty;
+        //variable para la conexión a la base de datos
+        string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
+        
         public Form_principal(string var_no_empledo, string var_nom_empledo)
         {
             InitializeComponent();
@@ -274,7 +277,16 @@ namespace Tablero
         {
             lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // string querySimple = "SELECT * FROM public.\"Usuarios\"";
+            string querySimple = "SELECT \"ID_User\" as \"ID\", \"No_Empleado\" as \"No Empleado\", \"Usuario\" as \"Nombre de usuario\", \"Password\" as \"Contraseña\", \"Nivel\" FROM public.\"Usuarios\";";
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
+            // Configurar el DataGridView
+            dgv_users.Columns[0].Visible = false;
+            dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;// Ajustar automáticamente el ancho de la columna "No Empleado"
+
         }
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)

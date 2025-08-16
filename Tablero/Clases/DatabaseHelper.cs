@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Data;
-using Npgsql;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Tablero

@@ -63,6 +63,8 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_save_ficha = new MaterialSkin.Controls.MaterialButton();
             this.card_datos_captura = new MaterialSkin.Controls.MaterialCard();
+            this.txt_9 = new Telerik.WinControls.UI.RadTextBox();
+            this.txt_8 = new Telerik.WinControls.UI.RadTextBox();
             this.txt_7 = new Telerik.WinControls.UI.RadTextBox();
             this.txt_operativo = new Telerik.WinControls.UI.RadTextBox();
             this.txt_6 = new Telerik.WinControls.UI.RadTextBox();
@@ -88,11 +90,11 @@
             this.pnl_Metahora = new System.Windows.Forms.Panel();
             this.lbl_meta2 = new MaterialSkin.Controls.MaterialLabel();
             this.lbl_meta = new MaterialSkin.Controls.MaterialLabel();
-            this.cb_OP = new MaterialSkin.Controls.MaterialComboBox();
             this.materialCard2 = new MaterialSkin.Controls.MaterialCard();
             this.dtp1 = new MetroFramework.Controls.MetroDateTime();
             this.cb_Turno = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_Area = new MaterialSkin.Controls.MaterialComboBox();
+            this.cb_OP = new MaterialSkin.Controls.MaterialComboBox();
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
             this.lbl_Nom = new System.Windows.Forms.Label();
             this.lbl_user_no_emp = new System.Windows.Forms.Label();
@@ -120,10 +122,6 @@
             this.btn_search_save = new MaterialSkin.Controls.MaterialButton();
             this.materialCard_users = new MaterialSkin.Controls.MaterialCard();
             this.dgv_users = new System.Windows.Forms.DataGridView();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.materialCard_tab_meta = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_meta = new System.Windows.Forms.TabControl();
@@ -153,8 +151,6 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
-            this.txt_8 = new Telerik.WinControls.UI.RadTextBox();
-            this.txt_9 = new Telerik.WinControls.UI.RadTextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_TM.SuspendLayout();
@@ -169,6 +165,8 @@
             this.card_datos.SuspendLayout();
             this.card_botones.SuspendLayout();
             this.card_datos_captura.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_6)).BeginInit();
@@ -206,8 +204,6 @@
             this.tabPage8.SuspendLayout();
             this.materialCard_meta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -663,6 +659,30 @@
             this.card_datos_captura.Size = new System.Drawing.Size(717, 172);
             this.card_datos_captura.TabIndex = 5;
             // 
+            // txt_9
+            // 
+            this.txt_9.BackColor = System.Drawing.Color.White;
+            this.txt_9.EmbeddedLabelText = "txt_9";
+            this.txt_9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_9.ForeColor = System.Drawing.Color.Black;
+            this.txt_9.Location = new System.Drawing.Point(209, 115);
+            this.txt_9.Name = "txt_9";
+            this.txt_9.ShowEmbeddedLabel = true;
+            this.txt_9.Size = new System.Drawing.Size(170, 43);
+            this.txt_9.TabIndex = 18;
+            // 
+            // txt_8
+            // 
+            this.txt_8.BackColor = System.Drawing.Color.White;
+            this.txt_8.EmbeddedLabelText = "txt_8";
+            this.txt_8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_8.ForeColor = System.Drawing.Color.Black;
+            this.txt_8.Location = new System.Drawing.Point(17, 115);
+            this.txt_8.Name = "txt_8";
+            this.txt_8.ShowEmbeddedLabel = true;
+            this.txt_8.Size = new System.Drawing.Size(170, 43);
+            this.txt_8.TabIndex = 17;
+            // 
             // txt_7
             // 
             this.txt_7.BackColor = System.Drawing.Color.White;
@@ -1033,30 +1053,6 @@
             this.lbl_meta.TabIndex = 2;
             this.lbl_meta.Text = "Meta por hora";
             // 
-            // cb_OP
-            // 
-            this.cb_OP.AutoResize = false;
-            this.cb_OP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_OP.Depth = 0;
-            this.cb_OP.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_OP.DropDownHeight = 174;
-            this.cb_OP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_OP.DropDownWidth = 121;
-            this.cb_OP.Enabled = false;
-            this.cb_OP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_OP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_OP.FormattingEnabled = true;
-            this.cb_OP.Hint = "OP";
-            this.cb_OP.IntegralHeight = false;
-            this.cb_OP.ItemHeight = 43;
-            this.cb_OP.Location = new System.Drawing.Point(393, 11);
-            this.cb_OP.MaxDropDownItems = 4;
-            this.cb_OP.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_OP.Name = "cb_OP";
-            this.cb_OP.Size = new System.Drawing.Size(250, 49);
-            this.cb_OP.StartIndex = 0;
-            this.cb_OP.TabIndex = 1;
-            // 
             // materialCard2
             // 
             this.materialCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -1147,6 +1143,30 @@
             this.cb_Area.StartIndex = -1;
             this.cb_Area.TabIndex = 3;
             this.cb_Area.SelectedIndexChanged += new System.EventHandler(this.cb_Area_SelectedIndexChanged);
+            // 
+            // cb_OP
+            // 
+            this.cb_OP.AutoResize = false;
+            this.cb_OP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_OP.Depth = 0;
+            this.cb_OP.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_OP.DropDownHeight = 174;
+            this.cb_OP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_OP.DropDownWidth = 121;
+            this.cb_OP.Enabled = false;
+            this.cb_OP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_OP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_OP.FormattingEnabled = true;
+            this.cb_OP.Hint = "OP";
+            this.cb_OP.IntegralHeight = false;
+            this.cb_OP.ItemHeight = 43;
+            this.cb_OP.Location = new System.Drawing.Point(393, 11);
+            this.cb_OP.MaxDropDownItems = 4;
+            this.cb_OP.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_OP.Name = "cb_OP";
+            this.cb_OP.Size = new System.Drawing.Size(250, 49);
+            this.cb_OP.StartIndex = 0;
+            this.cb_OP.TabIndex = 1;
             // 
             // materialCard1
             // 
@@ -1591,41 +1611,12 @@
             // 
             this.dgv_users.AllowUserToAddRows = false;
             this.dgv_users.AllowUserToDeleteRows = false;
+            this.dgv_users.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_users.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column3,
-            this.Column5,
-            this.Column4,
-            this.Column6});
             this.dgv_users.Location = new System.Drawing.Point(0, 0);
             this.dgv_users.Name = "dgv_users";
             this.dgv_users.Size = new System.Drawing.Size(1681, 543);
             this.dgv_users.TabIndex = 0;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Id_usuario";
-            this.Column3.Name = "Column3";
-            this.Column3.Visible = false;
-            // 
-            // Column5
-            // 
-            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.Column5.HeaderText = "Numero de Empleado";
-            this.Column5.Name = "Column5";
-            this.Column5.Width = 123;
-            // 
-            // Column4
-            // 
-            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column4.HeaderText = "Usuario";
-            this.Column4.Name = "Column4";
-            // 
-            // Column6
-            // 
-            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column6.HeaderText = "Contraseña";
-            this.Column6.Name = "Column6";
             // 
             // tabPage4
             // 
@@ -2085,30 +2076,6 @@
             // 
             this.radTaskbarButton1.OwnerForm = this;
             // 
-            // txt_8
-            // 
-            this.txt_8.BackColor = System.Drawing.Color.White;
-            this.txt_8.EmbeddedLabelText = "txt_8";
-            this.txt_8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_8.ForeColor = System.Drawing.Color.Black;
-            this.txt_8.Location = new System.Drawing.Point(17, 115);
-            this.txt_8.Name = "txt_8";
-            this.txt_8.ShowEmbeddedLabel = true;
-            this.txt_8.Size = new System.Drawing.Size(170, 43);
-            this.txt_8.TabIndex = 17;
-            // 
-            // txt_9
-            // 
-            this.txt_9.BackColor = System.Drawing.Color.White;
-            this.txt_9.EmbeddedLabelText = "txt_9";
-            this.txt_9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_9.ForeColor = System.Drawing.Color.Black;
-            this.txt_9.Location = new System.Drawing.Point(209, 115);
-            this.txt_9.Name = "txt_9";
-            this.txt_9.ShowEmbeddedLabel = true;
-            this.txt_9.Size = new System.Drawing.Size(170, 43);
-            this.txt_9.TabIndex = 18;
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2141,6 +2108,8 @@
             this.card_botones.PerformLayout();
             this.card_datos_captura.ResumeLayout(false);
             this.card_datos_captura.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_operativo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_6)).EndInit();
@@ -2185,8 +2154,6 @@
             this.tabPage8.PerformLayout();
             this.materialCard_meta.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2240,10 +2207,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private MaterialSkin.Controls.MaterialCard materialCard_users;
         private System.Windows.Forms.DataGridView dgv_users;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private MaterialSkin.Controls.MaterialCard materialCardtab_users;
         private MaterialSkin.Controls.MaterialTextBox txt_no_emp;
         private MaterialSkin.Controls.MaterialTextBox txt_contra;
