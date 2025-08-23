@@ -284,16 +284,37 @@ namespace Tablero
 
         }
 
+        //private void actualiza_grid_users()
+        //{
+        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+        //    // string querySimple = "SELECT * FROM public.\"Usuarios\"";
+        //    string querySimple = "SELECT \"ID_User\" as \"ID\", \"No_Empleado\" as \"No Empleado\", \"Usuario\" as \"Nombre de usuario\", \"Password\" as \"Contraseña\", \"Nivel\" FROM public.\"Usuarios\" ORDER BY \"\"No_Empleado\"\" ASC;";
+        //    // Cargar los datos de la tabla Usuarios en el DataGridView
+        //    dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
+        //    // Configurar el DataGridView
+        //    dgv_users.Columns[0].Visible = false;
+        //    dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;// Ajustar automáticamente el ancho de la columna "No Empleado"
+        //}
         private void actualiza_grid_users()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            // string querySimple = "SELECT * FROM public.\"Usuarios\"";
-            string querySimple = "SELECT \"ID_User\" as \"ID\", \"No_Empleado\" as \"No Empleado\", \"Usuario\" as \"Nombre de usuario\", \"Password\" as \"Contraseña\", \"Nivel\" FROM public.\"Usuarios\";";
+
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT 
+                            ""ID_User"" as ""ID"", 
+                            ""No_Empleado"" as ""No Empleado"", 
+                            ""Usuario"" as ""Nombre de usuario"", 
+                            ""Password"" as ""Contraseña"", 
+                            ""Nivel"" 
+                          FROM public.""Usuarios""
+                          ORDER BY ""No_Empleado"" ASC;";  // ← ASC para orden ascendente
+
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
+
             // Configurar el DataGridView
             dgv_users.Columns[0].Visible = false;
-            dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;// Ajustar automáticamente el ancho de la columna "No Empleado"
+            dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
         }
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
@@ -442,7 +463,11 @@ namespace Tablero
                 txt_usuario.Text = dgv_users.Rows[e.RowIndex].Cells[2].Value.ToString(); // Nombre de usuario
                 txt_contra.Text = dgv_users.Rows[e.RowIndex].Cells[3].Value.ToString(); // Contraseña
                 cmb_nivel_user.SelectedItem = dgv_users.Rows[e.RowIndex].Cells[4].Value.ToString(); // Nivel
+
+                btn_edit.Enabled = true;
+                cmb_nivel_user.Enabled = true;
                 cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+                cmb_nivel_user.Enabled = false;
             }
         }
 
@@ -456,36 +481,66 @@ namespace Tablero
             else
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                // Verificar si el usuario ya existe
-                string queryCheckUser = "SELECT COUNT(*) FROM public.\"Usuarios\" WHERE \"Usuario\"  ILIKE @Usuario or \"No_Empleado\" ILIKE @no_emp;";
-                NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                string queryInsertUpdate = string.Empty;
+                int result;
+                if (!string.IsNullOrEmpty(id_global_users))
                 {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idUsuario = Convert.ToInt32(id_global_users);
+
+                    queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel WHERE \"ID_User\" = @ID_usuario;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Usuario", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_usuario.Text
+                        },
+                        new NpgsqlParameter("@Password", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_contra.Text
+                        },
+                        new NpgsqlParameter("@Nivel", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = cmb_nivel_user.SelectedItem?.ToString() ?? ""
+                        },
+                        new NpgsqlParameter("@ID_usuario", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idUsuario  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+                    
+                    // Verificar si el usuario ya existe
+                    string queryCheckUser = "SELECT COUNT(*) FROM public.\"Usuarios\" WHERE \"Usuario\"  ILIKE @Usuario or \"No_Empleado\" ILIKE @no_emp;";
+                    NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                    {
                     new NpgsqlParameter("@Usuario", txt_usuario.Text),
                     new NpgsqlParameter("@no_emp", txt_no_emp.Text)
-                };
-                DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
-                if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                // Insertar o actualizar el usuario
-                string queryInsertUpdate = id_global_users == string.Empty ?
-                    "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel);" :
-                    "UPDATE public.\"Usuarios\" SET \"No_Empleado\" = @No_Empleado, \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel WHERE \"ID_User\" = @ID_User;";
-                NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
-                {
+                    };
+                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
                     new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
                     new NpgsqlParameter("@Usuario", txt_usuario.Text),
                     new NpgsqlParameter("@Password", txt_contra.Text),
                     new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString())
-                };
-                if (id_global_users != string.Empty)
-                {
-                    Array.Resize(ref parametersInsertUpdate, parametersInsertUpdate.Length + 1);
-                    parametersInsertUpdate[parametersInsertUpdate.Length - 1] = new NpgsqlParameter("@ID_User", id_global_users);
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
-                int result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                
                 if (result > 0)
                 {
                     MetroFramework.MetroMessageBox.Show(this, "Usuario guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -505,6 +560,45 @@ namespace Tablero
             cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
             cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
             txt_no_emp.Focus(); // Enfocar el campo de No Empleado
+        }
+
+        private void btn_new_user_Click(object sender, EventArgs e)
+        {
+            btn_save.Enabled = true;
+            btn_cancel.Enabled = true;
+            btn_edit.Enabled = false;
+            limpiarCampos();
+            txt_no_emp.Enabled = true;
+            txt_usuario.Enabled = true;
+            txt_contra.Enabled = true;
+            cmb_nivel_user.Enabled = true;
+        }
+
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            btn_save.Enabled = false;
+            btn_cancel.Enabled = false;
+            limpiarCampos();
+            txt_no_emp.Enabled = false;
+            txt_usuario.Enabled = false;
+            txt_contra.Enabled = false;
+            btn_edit.Enabled = false;
+            id_global_users = string.Empty;
+
+            cmb_nivel_user.Enabled = true;
+            cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+            cmb_nivel_user.Enabled = false;
+        }
+
+        private void btn_edit_Click(object sender, EventArgs e)
+        {
+            btn_save.Enabled = true; 
+            btn_cancel.Enabled = true;
+            txt_usuario.Enabled = true;
+            txt_contra.Enabled = true;
+            cmb_nivel_user.Enabled = true;
+            cmb_nivel_user.Focus();
+            txt_usuario.Focus();
         }
     }
 }

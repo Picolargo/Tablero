@@ -105,6 +105,7 @@
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_usuarios = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.btn_new_user = new MaterialSkin.Controls.MaterialButton();
             this.cmb_nivel_user = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_no_emp = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_usuario = new MaterialSkin.Controls.MaterialTextBox();
@@ -1282,6 +1283,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.btn_new_user);
             this.tabPage5.Controls.Add(this.cmb_nivel_user);
             this.tabPage5.Controls.Add(this.txt_no_emp);
             this.tabPage5.Controls.Add(this.txt_usuario);
@@ -1298,6 +1300,29 @@
             this.tabPage5.Text = "Usuarios";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // btn_new_user
+            // 
+            this.btn_new_user.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_user.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_user.Depth = 0;
+            this.btn_new_user.HighEmphasis = true;
+            this.btn_new_user.Icon = global::Tablero.Properties.Resources.add_group_users_business_human;
+            this.btn_new_user.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_user.ImageKey = "save_icon";
+            this.btn_new_user.Location = new System.Drawing.Point(317, 15);
+            this.btn_new_user.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_user.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_user.Name = "btn_new_user";
+            this.btn_new_user.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_user.Size = new System.Drawing.Size(162, 36);
+            this.btn_new_user.TabIndex = 9;
+            this.btn_new_user.Text = "Nuevo usuario";
+            this.btn_new_user.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_user.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_user.UseAccentColor = false;
+            this.btn_new_user.UseVisualStyleBackColor = true;
+            this.btn_new_user.Click += new System.EventHandler(this.btn_new_user_Click);
+            // 
             // cmb_nivel_user
             // 
             this.cmb_nivel_user.AutoResize = false;
@@ -1307,6 +1332,7 @@
             this.cmb_nivel_user.DropDownHeight = 174;
             this.cmb_nivel_user.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_nivel_user.DropDownWidth = 121;
+            this.cmb_nivel_user.Enabled = false;
             this.cmb_nivel_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.cmb_nivel_user.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cmb_nivel_user.FormattingEnabled = true;
@@ -1329,6 +1355,7 @@
             this.txt_no_emp.AnimateReadOnly = false;
             this.txt_no_emp.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_no_emp.Depth = 0;
+            this.txt_no_emp.Enabled = false;
             this.txt_no_emp.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_no_emp.Hint = "Numero de Empleado";
             this.txt_no_emp.LeadingIcon = null;
@@ -1347,6 +1374,7 @@
             this.txt_usuario.AnimateReadOnly = false;
             this.txt_usuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_usuario.Depth = 0;
+            this.txt_usuario.Enabled = false;
             this.txt_usuario.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_usuario.Hint = "Nombre del usuario";
             this.txt_usuario.LeadingIcon = null;
@@ -1365,9 +1393,10 @@
             this.btn_cancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btn_cancel.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btn_cancel.Depth = 0;
+            this.btn_cancel.Enabled = false;
             this.btn_cancel.HighEmphasis = true;
             this.btn_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
-            this.btn_cancel.Location = new System.Drawing.Point(317, 159);
+            this.btn_cancel.Location = new System.Drawing.Point(317, 207);
             this.btn_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_cancel.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_cancel.Name = "btn_cancel";
@@ -1378,12 +1407,14 @@
             this.btn_cancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_cancel.UseAccentColor = false;
             this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // txt_contra
             // 
             this.txt_contra.AnimateReadOnly = false;
             this.txt_contra.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_contra.Depth = 0;
+            this.txt_contra.Enabled = false;
             this.txt_contra.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_contra.Hint = "Contraseña";
             this.txt_contra.LeadingIcon = null;
@@ -1402,9 +1433,10 @@
             this.btn_delete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btn_delete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btn_delete.Depth = 0;
+            this.btn_delete.Enabled = false;
             this.btn_delete.HighEmphasis = true;
-            this.btn_delete.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
-            this.btn_delete.Location = new System.Drawing.Point(317, 111);
+            this.btn_delete.Icon = global::Tablero.Properties.Resources.remove_user_users;
+            this.btn_delete.Location = new System.Drawing.Point(317, 159);
             this.btn_delete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_delete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_delete.Name = "btn_delete";
@@ -1421,11 +1453,12 @@
             this.btn_save.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btn_save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btn_save.Depth = 0;
+            this.btn_save.Enabled = false;
             this.btn_save.HighEmphasis = true;
             this.btn_save.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
             this.btn_save.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_save.ImageKey = "save_icon";
-            this.btn_save.Location = new System.Drawing.Point(317, 15);
+            this.btn_save.Location = new System.Drawing.Point(317, 63);
             this.btn_save.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_save.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_save.Name = "btn_save";
@@ -1444,9 +1477,10 @@
             this.btn_edit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btn_edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btn_edit.Depth = 0;
+            this.btn_edit.Enabled = false;
             this.btn_edit.HighEmphasis = true;
             this.btn_edit.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
-            this.btn_edit.Location = new System.Drawing.Point(317, 63);
+            this.btn_edit.Location = new System.Drawing.Point(317, 111);
             this.btn_edit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_edit.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_edit.Name = "btn_edit";
@@ -1457,6 +1491,7 @@
             this.btn_edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_edit.UseAccentColor = false;
             this.btn_edit.UseVisualStyleBackColor = true;
+            this.btn_edit.Click += new System.EventHandler(this.btn_edit_Click);
             // 
             // tabPage6
             // 
@@ -1593,8 +1628,10 @@
             this.dgv_users.AllowUserToDeleteRows = false;
             this.dgv_users.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_users.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgv_users.Location = new System.Drawing.Point(0, 0);
             this.dgv_users.Name = "dgv_users";
+            this.dgv_users.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_users.Size = new System.Drawing.Size(1681, 543);
             this.dgv_users.TabIndex = 0;
             this.dgv_users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_users_CellClick);
@@ -2261,6 +2298,7 @@
         private MaterialSkin.Controls.MaterialButton btn_cancelar_ficha;
         private Telerik.WinControls.UI.RadTextBox txt_8;
         private Telerik.WinControls.UI.RadTextBox txt_9;
+        private MaterialSkin.Controls.MaterialButton btn_new_user;
     }
 }
 

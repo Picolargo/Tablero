@@ -118,23 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="5ecf0bf1fd9cb2672c1cbdc8_icon256.fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\5ecf0bf1fd9cb2672c1cbdc8_icon256.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="5172968_disable_eye_hidden_hide_internet_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\5172968_disable_eye_hidden_hide_internet_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="8666681_edit_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\8666681_edit_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="5172991_internet_lock_locked_padlock_password_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172991_internet_lock_locked_padlock_password_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="8666542_save_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8666542_save_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="8666597_trash_2_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\8666597_trash_2_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="8666693_search_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8666693_search_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,16 +130,34 @@
   <data name="5172988_door_internet_key_lock_password_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172988_door_internet_key_lock_password_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="8666740_slash_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\8666740_slash_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="5ecf0bf1fd9cb2672c1cbdc8_icon256.fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5ecf0bf1fd9cb2672c1cbdc8_icon256.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="5173015_eye_focus_internet_scan_security_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5173015_eye_focus_internet_scan_security_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="8666597_trash_2_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\8666597_trash_2_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="5172950_business_eye_focus_internet_security_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172950_business_eye_focus_internet_security_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="8666681_edit_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\8666681_edit_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_group_users_business_human" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_group_users_business_human.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="5172968_disable_eye_hidden_hide_internet_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5172968_disable_eye_hidden_hide_internet_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="8666740_slash_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\8666740_slash_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remove_user_users" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\remove_user_users.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -109,7 +109,7 @@ namespace Tablero
         {
             // Consulta corregida con comillas para nombres de columnas con mayúsculas
             string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-                           WHERE ""Usuario"" = @usuario AND ""Password"" = @password";
+                           WHERE ""Usuario"" ILIKE @usuario AND ""Password"" = @password";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
@@ -137,7 +137,7 @@ namespace Tablero
         public DataRow GetUserInfo(string usuario)
         {
             string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" 
-                           FROM public.""Usuarios"" WHERE ""Usuario"" = @usuario";
+                           FROM public.""Usuarios"" WHERE ""Usuario"" ILIKE @usuario";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
