@@ -455,6 +455,7 @@ namespace Tablero
                 cmb_nivel_user.SelectedItem = dgv_users.Rows[e.RowIndex].Cells[4].Value.ToString(); // Nivel
 
                 btn_edit.Enabled = true;
+                btn_delete_user.Enabled = true;
                 cmb_nivel_user.Enabled = true;
                 cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
                 cmb_nivel_user.Enabled = false;
@@ -582,7 +583,8 @@ namespace Tablero
             btn_save.Enabled = true;
             btn_cancel.Enabled = true;
             btn_edit.Enabled = false;
-            
+            btn_delete_user.Enabled = false;
+
             txt_no_emp.Enabled = true;
             txt_usuario.Enabled = true;
             txt_contra.Enabled = true;
@@ -602,6 +604,7 @@ namespace Tablero
         {
             btn_save.Enabled = false;
             btn_cancel.Enabled = false;
+            btn_delete_user.Enabled = true;
             limpiarCampos();
             txt_no_emp.Enabled = false;
             txt_usuario.Enabled = false;
@@ -618,6 +621,7 @@ namespace Tablero
         {
             btn_save.Enabled = true; 
             btn_cancel.Enabled = true;
+            btn_delete_user.Enabled = false;
             txt_usuario.Enabled = true;
             txt_contra.Enabled = true;
             cmb_nivel_user.Enabled = true;

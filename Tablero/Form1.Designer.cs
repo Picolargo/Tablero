@@ -111,7 +111,7 @@
             this.txt_usuario = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_cancel = new MaterialSkin.Controls.MaterialButton();
             this.txt_contra = new MaterialSkin.Controls.MaterialTextBox();
-            this.btn_delete = new MaterialSkin.Controls.MaterialButton();
+            this.btn_delete_user = new MaterialSkin.Controls.MaterialButton();
             this.btn_save = new MaterialSkin.Controls.MaterialButton();
             this.btn_edit = new MaterialSkin.Controls.MaterialButton();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -1289,7 +1289,7 @@
             this.tabPage5.Controls.Add(this.txt_usuario);
             this.tabPage5.Controls.Add(this.btn_cancel);
             this.tabPage5.Controls.Add(this.txt_contra);
-            this.tabPage5.Controls.Add(this.btn_delete);
+            this.tabPage5.Controls.Add(this.btn_delete_user);
             this.tabPage5.Controls.Add(this.btn_save);
             this.tabPage5.Controls.Add(this.btn_edit);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
@@ -1429,25 +1429,25 @@
             this.txt_contra.Text = "";
             this.txt_contra.TrailingIcon = null;
             // 
-            // btn_delete
+            // btn_delete_user
             // 
-            this.btn_delete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_delete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_delete.Depth = 0;
-            this.btn_delete.Enabled = false;
-            this.btn_delete.HighEmphasis = true;
-            this.btn_delete.Icon = global::Tablero.Properties.Resources.remove_user_users;
-            this.btn_delete.Location = new System.Drawing.Point(317, 159);
-            this.btn_delete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_delete.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_delete.Name = "btn_delete";
-            this.btn_delete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_delete.Size = new System.Drawing.Size(106, 36);
-            this.btn_delete.TabIndex = 5;
-            this.btn_delete.Text = "Borrar";
-            this.btn_delete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_delete.UseAccentColor = false;
-            this.btn_delete.UseVisualStyleBackColor = true;
+            this.btn_delete_user.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_delete_user.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_delete_user.Depth = 0;
+            this.btn_delete_user.Enabled = false;
+            this.btn_delete_user.HighEmphasis = true;
+            this.btn_delete_user.Icon = global::Tablero.Properties.Resources.remove_user_users;
+            this.btn_delete_user.Location = new System.Drawing.Point(317, 159);
+            this.btn_delete_user.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_delete_user.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_delete_user.Name = "btn_delete_user";
+            this.btn_delete_user.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_delete_user.Size = new System.Drawing.Size(106, 36);
+            this.btn_delete_user.TabIndex = 5;
+            this.btn_delete_user.Text = "Borrar";
+            this.btn_delete_user.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_delete_user.UseAccentColor = false;
+            this.btn_delete_user.UseVisualStyleBackColor = true;
             // 
             // btn_save
             // 
@@ -2233,7 +2233,7 @@
         private MaterialSkin.Controls.MaterialTextBox txt_no_emp;
         private MaterialSkin.Controls.MaterialTextBox txt_contra;
         private MaterialSkin.Controls.MaterialTextBox txt_usuario;
-        private MaterialSkin.Controls.MaterialButton btn_delete;
+        private MaterialSkin.Controls.MaterialButton btn_delete_user;
         private MaterialSkin.Controls.MaterialButton btn_edit;
         private MaterialSkin.Controls.MaterialButton btn_save;
         private MaterialSkin.Controls.MaterialButton btn_cancel;
