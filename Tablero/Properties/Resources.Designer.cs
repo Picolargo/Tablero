@@ -183,6 +183,16 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap filter_remove {
+            get {
+                object obj = ResourceManager.GetObject("filter_remove", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap remove_user_users {
             get {
                 object obj = ResourceManager.GetObject("remove_user_users", resourceCulture);

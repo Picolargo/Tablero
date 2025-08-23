@@ -18,6 +18,8 @@ namespace Tablero
         private string var_no_empledo = string.Empty;
         private string var_nom_empledo = string.Empty;
         private string id_global_users = string.Empty; // Variable para almacenar el ID del usuario seleccionado en el DataGridView
+                                                       // Variable de estado para saber si el filtro está activo
+        private bool filtroUsuariosActivo = false;
         //variable para la conexión a la base de datos
         string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
 
@@ -283,18 +285,6 @@ namespace Tablero
             actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
 
         }
-
-        //private void actualiza_grid_users()
-        //{
-        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-        //    // string querySimple = "SELECT * FROM public.\"Usuarios\"";
-        //    string querySimple = "SELECT \"ID_User\" as \"ID\", \"No_Empleado\" as \"No Empleado\", \"Usuario\" as \"Nombre de usuario\", \"Password\" as \"Contraseña\", \"Nivel\" FROM public.\"Usuarios\" ORDER BY \"\"No_Empleado\"\" ASC;";
-        //    // Cargar los datos de la tabla Usuarios en el DataGridView
-        //    dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
-        //    // Configurar el DataGridView
-        //    dgv_users.Columns[0].Visible = false;
-        //    dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;// Ajustar automáticamente el ancho de la columna "No Empleado"
-        //}
         private void actualiza_grid_users()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -543,9 +533,20 @@ namespace Tablero
                 
                 if (result > 0)
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "Usuario guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MetroFramework.MetroMessageBox.Show(this, "Usuario guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     actualiza_grid_users(); // Actualizar el DataGridView de usuarios
                     limpiarCampos(); // Limpiar los campos de texto
+                    btn_save.Enabled = false;
+                    btn_cancel.Enabled = false;
+                    txt_no_emp.Enabled = false;
+                    txt_usuario.Enabled = false;
+                    txt_contra.Enabled = false;
+                    btn_edit.Enabled = false;
+                    id_global_users = string.Empty;
+
+                    cmb_nivel_user.Enabled = true;
+                    cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+                    cmb_nivel_user.Enabled = false;
                 }
             }
         }
@@ -564,14 +565,37 @@ namespace Tablero
 
         private void btn_new_user_Click(object sender, EventArgs e)
         {
+            // Obtener el valor máximo de la columna "No Empleado" (índice 1)
+            int maxNoEmp = 0;
+            foreach (DataGridViewRow row in dgv_users.Rows)
+            {
+                if (row.IsNewRow) continue; // Ignorar la fila para agregar nuevo
+                int value;
+                if (int.TryParse(row.Cells[1].Value?.ToString(), out value))
+                {
+                    if (value > maxNoEmp)
+                        maxNoEmp = value;
+                }
+            }
+            txt_no_emp.Text = (maxNoEmp + 1).ToString();
+
             btn_save.Enabled = true;
             btn_cancel.Enabled = true;
             btn_edit.Enabled = false;
-            limpiarCampos();
+            
             txt_no_emp.Enabled = true;
             txt_usuario.Enabled = true;
             txt_contra.Enabled = true;
             cmb_nivel_user.Enabled = true;
+
+            
+            txt_usuario.Text = string.Empty;
+            txt_contra.Text = string.Empty;
+            cmb_nivel_user.SelectedIndex = -1;
+            id_global_users = string.Empty; // Limpiar la variable global
+            cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
+            cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+            txt_usuario.Focus(); // Enfocar el campo de No Empleado
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
@@ -599,6 +623,107 @@ namespace Tablero
             cmb_nivel_user.Enabled = true;
             cmb_nivel_user.Focus();
             txt_usuario.Focus();
+        }
+
+        private void txt_no_emp_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void btn_search_user_Click(object sender, EventArgs e)
+        {
+            
+            // Si el filtro está activo, limpiar filtro y campos de búsqueda
+            if (filtroUsuariosActivo)
+            {
+                // Mostrar todas las filas del DataGridView
+                foreach (DataGridViewRow row in dgv_users.Rows)
+                {
+                    row.Visible = true;
+                }
+
+                // Restablecer el estado del filtro
+                filtroUsuariosActivo = false;
+            }
+
+            string noEmp = txt_search_no_emp.Text.Trim();
+            string nomEmp = txt_search_nom_emp.Text.Trim();
+            string nivel = cmb_serch_nivel.Text.Trim();
+
+            // Validar que al menos un campo esté lleno
+            if (string.IsNullOrEmpty(noEmp) && string.IsNullOrEmpty(nomEmp) && string.IsNullOrEmpty(nivel))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Favor de llenar uno o más campos para realizar la búsqueda.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Deseleccionar cualquier celda y fila antes de filtrar
+            dgv_users.ClearSelection();
+            dgv_users.CurrentCell = null;
+
+            // Mover el CurrencyManager a una posición válida
+            CurrencyManager cm = (CurrencyManager)BindingContext[dgv_users.DataSource];
+            if (cm != null && cm.Count > 0)
+                cm.Position = -1;
+
+            bool hayFiltro = false;
+            foreach (DataGridViewRow row in dgv_users.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                bool match = true;
+
+                if (!string.IsNullOrEmpty(noEmp))
+                {
+                    match &= row.Cells[1].Value != null && row.Cells[1].Value.ToString().Equals(noEmp, StringComparison.OrdinalIgnoreCase);
+                }
+                if (!string.IsNullOrEmpty(nomEmp))
+                {
+                    match &= row.Cells[2].Value != null && row.Cells[2].Value.ToString().IndexOf(nomEmp, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+                if (!string.IsNullOrEmpty(nivel))
+                {
+                    match &= row.Cells[4].Value != null && row.Cells[4].Value.ToString().Equals(nivel, StringComparison.OrdinalIgnoreCase);
+                }
+
+                row.Visible = match;
+                if (match) hayFiltro = true;
+            }
+
+            filtroUsuariosActivo = hayFiltro;
+        }
+
+        private void btn_search_limpiar_Click(object sender, EventArgs e)
+        {
+            limpiar_filtros();
+        }
+
+        private void limpiar_filtros()
+        {
+            // Mostrar todas las filas del DataGridView
+            foreach (DataGridViewRow row in dgv_users.Rows)
+            {
+                row.Visible = true;
+            }
+
+            // Limpiar los campos de búsqueda
+            txt_search_no_emp.Text = string.Empty;
+            txt_search_nom_emp.Text = string.Empty;
+            cmb_serch_nivel.SelectedIndex = -1;
+
+            // Restablecer el estado del filtro
+            filtroUsuariosActivo = false;
+        }
+
+        private void txt_search_no_emp_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

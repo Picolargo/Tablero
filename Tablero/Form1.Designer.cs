@@ -118,8 +118,8 @@
             this.cmb_serch_nivel = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_search_no_emp = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_search_nom_emp = new MaterialSkin.Controls.MaterialTextBox();
-            this.btn_search_cancel = new MaterialSkin.Controls.MaterialButton();
-            this.btn_search_save = new MaterialSkin.Controls.MaterialButton();
+            this.btn_search_limpiar = new MaterialSkin.Controls.MaterialButton();
+            this.btn_search_user = new MaterialSkin.Controls.MaterialButton();
             this.materialCard_users = new MaterialSkin.Controls.MaterialCard();
             this.dgv_users = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -1368,6 +1368,7 @@
             this.txt_no_emp.TabIndex = 0;
             this.txt_no_emp.Text = "";
             this.txt_no_emp.TrailingIcon = null;
+            this.txt_no_emp.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_no_emp_KeyPress);
             // 
             // txt_usuario
             // 
@@ -1498,8 +1499,8 @@
             this.tabPage6.Controls.Add(this.cmb_serch_nivel);
             this.tabPage6.Controls.Add(this.txt_search_no_emp);
             this.tabPage6.Controls.Add(this.txt_search_nom_emp);
-            this.tabPage6.Controls.Add(this.btn_search_cancel);
-            this.tabPage6.Controls.Add(this.btn_search_save);
+            this.tabPage6.Controls.Add(this.btn_search_limpiar);
+            this.tabPage6.Controls.Add(this.btn_search_user);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
@@ -1551,6 +1552,7 @@
             this.txt_search_no_emp.TabIndex = 9;
             this.txt_search_no_emp.Text = "";
             this.txt_search_no_emp.TrailingIcon = null;
+            this.txt_search_no_emp.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_search_no_emp_KeyPress);
             // 
             // txt_search_nom_emp
             // 
@@ -1570,43 +1572,45 @@
             this.txt_search_nom_emp.Text = "";
             this.txt_search_nom_emp.TrailingIcon = null;
             // 
-            // btn_search_cancel
+            // btn_search_limpiar
             // 
-            this.btn_search_cancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_search_cancel.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_search_cancel.Depth = 0;
-            this.btn_search_cancel.HighEmphasis = true;
-            this.btn_search_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
-            this.btn_search_cancel.Location = new System.Drawing.Point(317, 63);
-            this.btn_search_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_search_cancel.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_search_cancel.Name = "btn_search_cancel";
-            this.btn_search_cancel.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_search_cancel.Size = new System.Drawing.Size(124, 36);
-            this.btn_search_cancel.TabIndex = 12;
-            this.btn_search_cancel.Text = "Cancelar";
-            this.btn_search_cancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_search_cancel.UseAccentColor = false;
-            this.btn_search_cancel.UseVisualStyleBackColor = true;
+            this.btn_search_limpiar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_search_limpiar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_search_limpiar.Depth = 0;
+            this.btn_search_limpiar.HighEmphasis = true;
+            this.btn_search_limpiar.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.btn_search_limpiar.Location = new System.Drawing.Point(317, 63);
+            this.btn_search_limpiar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_search_limpiar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_search_limpiar.Name = "btn_search_limpiar";
+            this.btn_search_limpiar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_search_limpiar.Size = new System.Drawing.Size(159, 36);
+            this.btn_search_limpiar.TabIndex = 12;
+            this.btn_search_limpiar.Text = "Limpiar Filtro";
+            this.btn_search_limpiar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_search_limpiar.UseAccentColor = false;
+            this.btn_search_limpiar.UseVisualStyleBackColor = true;
+            this.btn_search_limpiar.Click += new System.EventHandler(this.btn_search_limpiar_Click);
             // 
-            // btn_search_save
+            // btn_search_user
             // 
-            this.btn_search_save.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_search_save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_search_save.Depth = 0;
-            this.btn_search_save.HighEmphasis = true;
-            this.btn_search_save.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
-            this.btn_search_save.Location = new System.Drawing.Point(317, 15);
-            this.btn_search_save.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_search_save.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_search_save.Name = "btn_search_save";
-            this.btn_search_save.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_search_save.Size = new System.Drawing.Size(105, 36);
-            this.btn_search_save.TabIndex = 11;
-            this.btn_search_save.Text = "Buscar";
-            this.btn_search_save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_search_save.UseAccentColor = false;
-            this.btn_search_save.UseVisualStyleBackColor = true;
+            this.btn_search_user.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_search_user.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_search_user.Depth = 0;
+            this.btn_search_user.HighEmphasis = true;
+            this.btn_search_user.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.btn_search_user.Location = new System.Drawing.Point(317, 15);
+            this.btn_search_user.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_search_user.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_search_user.Name = "btn_search_user";
+            this.btn_search_user.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_search_user.Size = new System.Drawing.Size(105, 36);
+            this.btn_search_user.TabIndex = 11;
+            this.btn_search_user.Text = "Buscar";
+            this.btn_search_user.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_search_user.UseAccentColor = false;
+            this.btn_search_user.UseVisualStyleBackColor = true;
+            this.btn_search_user.Click += new System.EventHandler(this.btn_search_user_Click);
             // 
             // materialCard_users
             // 
@@ -2240,8 +2244,8 @@
         private MaterialSkin.Controls.MaterialComboBox cmb_serch_nivel;
         private MaterialSkin.Controls.MaterialTextBox txt_search_no_emp;
         private MaterialSkin.Controls.MaterialTextBox txt_search_nom_emp;
-        private MaterialSkin.Controls.MaterialButton btn_search_cancel;
-        private MaterialSkin.Controls.MaterialButton btn_search_save;
+        private MaterialSkin.Controls.MaterialButton btn_search_limpiar;
+        private MaterialSkin.Controls.MaterialButton btn_search_user;
         private MaterialSkin.Controls.MaterialCard materialCard_tab_meta;
         private System.Windows.Forms.TabControl tabControl_meta;
         private System.Windows.Forms.TabPage tabPage7;

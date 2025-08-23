@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\filter_remove.png" />
     <None Include="Resources\remove_user_users.png" />
     <None Include="Resources\add_group_users_business_human.png" />
     <None Include="Resources\5172950_business_eye_focus_internet_security_icon.png" />
