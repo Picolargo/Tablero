@@ -39,10 +39,6 @@ namespace Tablero
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
 
-            // Forzar el color después de inicializar MaterialSkin  
-            pnl_hr_inicio.BackColor = Color.FromArgb(192, 255, 192);
-            pnl_Metahora.BackColor = Color.FromArgb(192, 255, 192);
-
 
             // Personalización de dgv_mecanico
             dgv_mecanico.EnableHeadersVisualStyles = false;
@@ -309,136 +305,123 @@ namespace Tablero
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cb_Area.SelectedIndex == 0)
+            if (cb_Area.SelectedIndex==0)
             {
-                reiniciar_textboxes();// reiniciar los textbox
-                txt_1.EmbeddedLabelText = "Relacion fresco seco meta";
-                txt_2.EmbeddedLabelText = "Relacion fresco seco";
-                txt_3.EmbeddedLabelText = "Kilogramos por hora hombre";
-                txt_4.EmbeddedLabelText = "Kg a Túnel";
-                txt_5.EmbeddedLabelText = "Kg entrada a sumergidor";
-                txt_6.EmbeddedLabelText = "Kg en despegue";
-                txt_7.EmbeddedLabelText = "Kg de repelado";
-                //hacer visible los componentes
-                txt_1.Visible = true;
-                txt_2.Visible = true;
-                txt_3.Visible = true;
-                txt_4.Visible = true;
-                txt_5.Visible = true;
-                txt_6.Visible = true;
-                txt_7.Visible = true;
+                reiniciarCampos();
+                //hacer visible para tunel
                 card_datos.Visible = true;
                 card_TM.Visible = true;
-                // hacer visible los controles de turno y fecha
+                card_botones.Visible = true;
+
+                //habilitar controles
                 cb_Turno.Enabled = true;
+                cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+
+                //nombrar controles
+                Txt_1.EmbeddedLabelText = "Lote";
+                Txt_2.EmbeddedLabelText = "Kg Entrada (Proceso)";
+                Txt_3.EmbeddedLabelText = "Merma Canica";
+                Txt_4.EmbeddedLabelText = "Merma Podrido";
+                Txt_5.EmbeddedLabelText = "Merma de Tina";
+                Txt_6.EmbeddedLabelText = "Merma de Piso";
+                Txt_7.EmbeddedLabelText = "Merma Canaletas";
+                Txt_8.EmbeddedLabelText = "Merma Lavado de Bandas";
+                Txt_9.EmbeddedLabelText = "Personal Operativo";
+                Txt_10.EmbeddedLabelText = "Cascara y Carrete";
+
+                Txt_Read_1.EmbeddedLabelText = "Horas Disponibles";
+                Txt_Read_2.EmbeddedLabelText = "Meta Programada";
+                Txt_Read_3.EmbeddedLabelText = "Horas Progamadas";
+                Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
+                Txt_Read_5.EmbeddedLabelText = "Kg Secos Meta";
+
+                //hacer invisibles controles
+                Txt_11.Visible = false;
+
+                Txt_Read_6.Visible = false;
+                Txt_Read_7.Visible = false;
+                Txt_Read_8.Visible = false;
+                Txt_Read_9.Visible = false;
+
+                //limpiar campos
+                cb_Turno.SelectedIndex = -1;
+                cb_OP.SelectedIndex = -1;
+                dtp1.Value = DateTime.Now;
+                Txt_1.Text = string.Empty;
+                Txt_2.Text = string.Empty;
+                Txt_3.Text = string.Empty;
+                Txt_4.Text = string.Empty;
+                Txt_5.Text = string.Empty;
+                Txt_6.Text = string.Empty;
+                Txt_7.Text = string.Empty;
+                Txt_8.Text = string.Empty;
+                Txt_9.Text = string.Empty;
+                Txt_10.Text = string.Empty;
+                Txt_meta.Text = string.Empty;
+
+                Txt_Read_1.Text = string.Empty;
+                Txt_Read_2.Text = string.Empty;
+                Txt_Read_3.Text = string.Empty;
+                Txt_Read_4.Text = string.Empty;
+                Txt_Read_5.Text = string.Empty;
+
             }
             if (cb_Area.SelectedIndex == 1)
             {
-                reiniciar_textboxes();// reiniciar los textbox
-                txt_1.EmbeddedLabelText = "Kilogramos OK";
-                txt_4.EmbeddedLabelText = "Kg fuera de especificación";
-                txt_5.EmbeddedLabelText = "Merma";
-                txt_6.EmbeddedLabelText = "Lote 1";
-                txt_7.EmbeddedLabelText = "Kg de lote 1";
-                txt_8.EmbeddedLabelText = "Lote 2";
-                txt_9.EmbeddedLabelText = "Kg de lote 2";
-                // hacer visibles los componentes
-                txt_1.Visible = true;
-                txt_4.Visible = true;
-                txt_5.Visible = true;
-                txt_6.Visible = true;
-                txt_7.Visible = true;
-                txt_8.Visible = true;
-                txt_9.Visible = true;
-                card_datos.Visible = true;
-                card_TM.Visible = true;
-                // Habilitar los controles de turno y fecha
-                cb_Turno.Enabled = true;
-                dtp1.Enabled = true;
-            }
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4)
-            {
-                reiniciar_textboxes();// reiniciar los textbox
-                txt_1.EmbeddedLabelText = "Kilogramos OK";
-                txt_4.EmbeddedLabelText = "Kg fuera de especificación";
-                txt_5.EmbeddedLabelText = "Merma";
-                // hacer visibles los componentes
-                txt_1.Visible = true;
-                txt_4.Visible = true;
-                txt_5.Visible = true;
-                card_datos.Visible = true;
-                card_TM.Visible = true;
-                // Habilitar los controles de turno y fecha
-                cb_Turno.Enabled = true;
-                dtp1.Enabled = true;
-            }
-            if (cb_Area.SelectedIndex == 5)
-            {
-                reiniciar_textboxes();// reiniciar los textbox
-                txt_1.EmbeddedLabelText = "Kilogramos OK";
-                txt_4.EmbeddedLabelText = "Kg fuera de especificación";
-                txt_5.EmbeddedLabelText = "Merma";
-                txt_6.EmbeddedLabelText = "Costales empacados";
-                // hacer visibles los componentes
-                txt_1.Visible = true;
-                txt_4.Visible = true;
-                txt_5.Visible = true;
-                txt_6.Visible = true;
-                card_datos.Visible = true;
-                card_TM.Visible = true;
-                // Habilitar los controles de turno y fecha
-                cb_Turno.Enabled = true;
-                dtp1.Enabled = true;
-            }
-            if (cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8)
-            {
-                reiniciar_textboxes();// reiniciar los textbox
+                //Despegue
+                reiniciarCampos();
 
-                // Habilitar los controles
-                cb_Turno.Enabled = true;
-                dtp1.Enabled = true;
-                cb_OP.Enabled = true;
+                //hacer visible para Despegue
+                card_datos.Visible = true;
+                card_TM.Visible = true;
+                card_botones.Visible = true;
+
+                //nombrar controles
+                Txt_1.EmbeddedLabelText = "Lote";
+                Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
+                Txt_3.EmbeddedLabelText = "Merma Kg Secos";
+                Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
+                Txt_5.EmbeddedLabelText = "Kg para Resecar";
+                Txt_6.EmbeddedLabelText = "Personal Operativo";
             }
         }
 
-        public void reiniciar_textboxes()
+        private void reiniciarCampos()
         {
+            cb_Area.SelectedIndex = -1;
+            cb_Turno.SelectedIndex = -1;
+            cb_OP.SelectedIndex = -1;
+            dtp1.Value = DateTime.Now;
+            Txt_1.Text = string.Empty;
+            Txt_2.Text = string.Empty;
+            Txt_3.Text = string.Empty;
+            Txt_4.Text = string.Empty;
+            Txt_5.Text = string.Empty;
+            Txt_6.Text = string.Empty;
+            Txt_7.Text = string.Empty;
+            Txt_8.Text = string.Empty;
+            Txt_9.Text = string.Empty;
+            Txt_10.Text = string.Empty;
+            Txt_11.Text = string.Empty;
+            Txt_meta.Text = string.Empty;
+            Txt_Read_1.Text = string.Empty;
+            Txt_Read_2.Text = string.Empty;
+            Txt_Read_3.Text = string.Empty;
+            Txt_Read_4.Text = string.Empty;
+            Txt_Read_5.Text = string.Empty;
+            Txt_Read_6.Text = string.Empty;
+            Txt_Read_7.Text = string.Empty;
+            Txt_Read_8.Text = string.Empty;
+            Txt_Read_9.Text = string.Empty;
+            //hacer invisibles controles
+            card_datos.Visible = false;
+            card_TM.Visible = false;
+            card_botones.Visible = false;
+            //deshabilitar controles
             cb_Turno.Enabled = false;
             cb_OP.Enabled = false;
             dtp1.Enabled = false;
-            // Reiniciar los textos de los textboxes
-            txt_1.EmbeddedLabelText = string.Empty;
-            txt_2.EmbeddedLabelText = string.Empty;
-            txt_3.EmbeddedLabelText = string.Empty;
-            txt_4.EmbeddedLabelText = string.Empty;
-            txt_5.EmbeddedLabelText = string.Empty;
-            txt_6.EmbeddedLabelText = string.Empty;
-            txt_7.EmbeddedLabelText = string.Empty;
-            txt_8.EmbeddedLabelText = string.Empty;
-            txt_9.EmbeddedLabelText = string.Empty;
-            // Limpiar los valores de los textboxes
-            txt_1.Text = string.Empty;
-            txt_2.Text = string.Empty;
-            txt_3.Text = string.Empty;
-            txt_4.Text = string.Empty;
-            txt_5.Text = string.Empty;
-            txt_6.Text = string.Empty;
-            txt_7.Text = string.Empty;
-            txt_8.Text = string.Empty;
-            txt_9.Text = string.Empty;
-            // Hacer invisibles los componentes
-            txt_1.Visible = false;
-            txt_2.Visible = false;
-            txt_3.Visible = false;
-            txt_4.Visible = false;
-            txt_5.Visible = false;
-            txt_6.Visible = false;
-            txt_7.Visible = false;
-            txt_8.Visible = false;
-            txt_9.Visible = false;
-            card_datos.Visible = false;
-            card_TM.Visible = false;
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
