@@ -64,30 +64,6 @@ namespace Tablero
             dgv_mecanico.MultiSelect = false;
             dgv_mecanico.BorderStyle = BorderStyle.None;
 
-            // Personalización de dgv_almacen
-            dgv_almacen.EnableHeadersVisualStyles = false;
-            dgv_almacen.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_almacen.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_almacen.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_almacen.BackgroundColor = Color.White; // Fondo blanco
-            dgv_almacen.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_almacen.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_almacen.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_almacen.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_almacen.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_almacen.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_almacen.RowHeadersVisible = false;
-            dgv_almacen.AllowUserToAddRows = true;
-            dgv_almacen.AllowUserToDeleteRows = true;
-            dgv_almacen.AllowUserToResizeRows = false;
-            dgv_almacen.ReadOnly = false;
-            dgv_almacen.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_almacen.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_almacen.MultiSelect = false;
-            dgv_almacen.BorderStyle = BorderStyle.None;
-
             // Personalización de dgv_operativo
             dgv_operativo.EnableHeadersVisualStyles = false;
             dgv_operativo.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
@@ -111,30 +87,6 @@ namespace Tablero
             dgv_operativo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_operativo.MultiSelect = false;
             dgv_operativo.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_calidad
-            dgv_calidad.EnableHeadersVisualStyles = false;
-            dgv_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_calidad.BackgroundColor = Color.White; // Fondo blanco
-            dgv_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_calidad.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_calidad.RowHeadersVisible = false;
-            dgv_calidad.AllowUserToAddRows = true;
-            dgv_calidad.AllowUserToDeleteRows = true;
-            dgv_calidad.AllowUserToResizeRows = false;
-            dgv_calidad.ReadOnly = false;
-            dgv_calidad.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_calidad.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_calidad.MultiSelect = false;
-            dgv_calidad.BorderStyle = BorderStyle.None;
 
             // Personalización de dgv_users
             dgv_users.EnableHeadersVisualStyles = false;
@@ -201,51 +153,9 @@ namespace Tablero
             }
         }
 
-        private void dgv_almacen_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (dgv_almacen.CurrentCell.ColumnIndex == 0) // Primera columna
-            {
-                TextBox tb = e.Control as TextBox;
-                if (tb != null)
-                {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Evita múltiples suscripciones
-                    tb.KeyPress += SoloNumeros_KeyPress;
-                }
-            }
-            else
-            {
-                TextBox tb = e.Control as TextBox;
-                if (tb != null)
-                {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Quita la restricción en otras columnas
-                }
-            }
-        }
-
         private void dgv_operativo_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (dgv_operativo.CurrentCell.ColumnIndex == 0) // Primera columna
-            {
-                TextBox tb = e.Control as TextBox;
-                if (tb != null)
-                {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Evita múltiples suscripciones
-                    tb.KeyPress += SoloNumeros_KeyPress;
-                }
-            }
-            else
-            {
-                TextBox tb = e.Control as TextBox;
-                if (tb != null)
-                {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Quita la restricción en otras columnas
-                }
-            }
-        }
-
-        private void dgv_calidad_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (dgv_calidad.CurrentCell.ColumnIndex == 0) // Primera columna
             {
                 TextBox tb = e.Control as TextBox;
                 if (tb != null)
@@ -710,6 +620,14 @@ namespace Tablero
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void cmb_area_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cmb_area.SelectedIndex==0)
+            {
+                
             }
         }
     }
