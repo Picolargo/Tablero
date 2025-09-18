@@ -18,7 +18,7 @@ namespace Tablero
         private string var_no_empledo = string.Empty;
         private string var_nom_empledo = string.Empty;
         private string id_global_users = string.Empty; // Variable para almacenar el ID del usuario seleccionado en el DataGridView
-                                                       // Variable de estado para saber si el filtro está activo
+        private string id_global_meta_deshidratado = string.Empty;
         private bool filtroUsuariosActivo = false;
         //variable para la conexión a la base de datos
         string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
@@ -106,21 +106,21 @@ namespace Tablero
             dgv_users.BorderStyle = BorderStyle.None;
 
             // Personalización de dgv_metas
-            dgv_metas.EnableHeadersVisualStyles = false;
-            dgv_metas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgv_metas_des.EnableHeadersVisualStyles = false;
+            dgv_metas_des.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_metas_des.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv_metas_des.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
-            dgv_metas.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            dgv_metas_des.BackgroundColor = Color.White; // Fondo blanco
+            dgv_metas_des.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
+            dgv_metas_des.DefaultCellStyle.ForeColor = Color.Black;
+            dgv_metas_des.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv_metas_des.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv_metas_des.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
 
-            dgv_metas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas.RowHeadersVisible = false;
-            dgv_metas.BorderStyle = BorderStyle.None;
+            dgv_metas_des.GridColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_metas_des.RowHeadersVisible = false;
+            dgv_metas_des.BorderStyle = BorderStyle.None;
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -189,6 +189,7 @@ namespace Tablero
             lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
 
             actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
+            actualiza_grid_Deshitratado();
 
         }
         private void actualiza_grid_users()
@@ -211,6 +212,30 @@ namespace Tablero
             // Configurar el DataGridView
             dgv_users.Columns[0].Visible = false;
             dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+        }
+
+        private void actualiza_grid_Deshitratado()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT 
+                            ""ID_OP"" as ""ID"", 
+                            ""OP"", 
+                            ""No_box_hr"" as ""No de Cajones/Hr"", 
+                            ""Kg_fresco_hr"" as ""Kg Fresco/Hr"", 
+                            ""Relacion_fr_seco"" as ""Relación Fresco-Seco"",
+                            ""Kg_seco_hr"" as ""Kg Seco/Hr"",
+                            ""Personal_idoneo"" as ""Personal Idóneo""
+                          FROM public.""Deshidratado""
+                          ORDER BY ""OP"" ASC;";  // ← orden ascendente
+
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_metas_des, null);
+
+            // Configurar el DataGridView
+            dgv_metas_des.Columns[0].Visible = false;
+            dgv_metas_des.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
         }
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
@@ -340,7 +365,6 @@ namespace Tablero
             {
                 // Obtener el valor de la primera columna del renglón clicado
                 id_global_users = dgv_users.Rows[e.RowIndex].Cells[0].Value.ToString();
-                // MetroFramework.MetroMessageBox.Show(this, "Usuario id", "id es: "+ id_global_users, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Cargar los datos del usuario seleccionado en los campos de texto
                 txt_no_emp.Text = dgv_users.Rows[e.RowIndex].Cells[1].Value.ToString(); // No Empleado
                 txt_usuario.Text = dgv_users.Rows[e.RowIndex].Cells[2].Value.ToString(); // Nombre de usuario
@@ -455,6 +479,21 @@ namespace Tablero
             cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
             cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
             txt_no_emp.Focus(); // Enfocar el campo de No Empleado
+        }
+        private void limpiarCampos_meta()
+        {
+            cmb_area.SelectedIndex = -1;
+            cmb_proceso.SelectedIndex = -1;
+            txt_op.Text = string.Empty;
+            txt_Meta_1.Text = string.Empty;
+            txt_Meta_2.Text = string.Empty;
+            txt_Meta_3.Text = string.Empty;
+            txt_Meta_4.Text = string.Empty;
+            txt_Meta_5.Text = string.Empty;
+            id_global_meta_deshidratado = string.Empty; // Limpiar la variable global
+            cmb_area.Focus(); 
+            cmb_proceso.Focus();
+            txt_op.Focus();
         }
 
         private void btn_new_user_Click(object sender, EventArgs e)
@@ -625,9 +664,472 @@ namespace Tablero
 
         private void cmb_area_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cmb_area.SelectedIndex==0)
+            reiniciar_controles_meta();
+            if (cmb_area.SelectedIndex==0)
             {
-                
+                //habilitar controles
+                txt_op.Enabled = true;
+                txt_Meta_1.Enabled = true;
+                txt_Meta_2.Enabled = true;
+                txt_Meta_3.Enabled = true;
+                txt_Meta_4.Enabled = true;
+                txt_Meta_5.Enabled = true;
+
+                //nombrar controles
+                txt_Meta_1.Hint = "No. Cajones por Hr";
+                txt_Meta_2.Hint = "Kg Fresco por Hr";
+                txt_Meta_3.Hint = "Relación Fresco-Seco";
+                txt_Meta_4.Hint = "Kg Seco/Hr";
+                txt_Meta_5.Hint = "Personal Idóneo";
+
+                tap_control_metas.SelectedIndex = 0;
+            }
+        }
+
+        private void reiniciar_controles_meta()
+        {
+            txt_Meta_1.Hint = string.Empty;
+            txt_Meta_2.Hint = string.Empty;
+            txt_Meta_3.Hint = string.Empty;
+            txt_Meta_4.Hint = string.Empty;
+            txt_Meta_5.Hint = string.Empty;
+            //deshabilitar controles
+            txt_op.Enabled = false;
+            txt_Meta_1.Enabled = false;
+            txt_Meta_2.Enabled = false;
+            txt_Meta_3.Enabled = false;
+            txt_Meta_4.Enabled = false;
+            txt_Meta_5.Enabled = false;
+        }
+
+        private void btn_new_op_Click(object sender, EventArgs e)
+        {
+            cmb_area.Enabled = true;
+            btn_meta_cancel.Enabled = true;
+            btn_meta_save.Enabled = true;
+            btn_meta_edit.Enabled = false;
+            btn_meta_delete.Enabled = false;
+
+            cmb_area.SelectedIndex = -1;
+            cmb_proceso.SelectedIndex = -1;
+            txt_op.Text = string.Empty;
+            txt_Meta_1.Text = string.Empty;
+            txt_Meta_2.Text = string.Empty;
+            txt_Meta_3.Text = string.Empty;
+            txt_Meta_4.Text = string.Empty;
+            txt_Meta_5.Text = string.Empty;
+
+            cmb_area.Focus();
+            cmb_proceso.Focus();
+            txt_op.Focus();
+        }
+
+        private void btn_meta_save_Click(object sender, EventArgs e)
+        {
+            if(cmb_area.SelectedIndex == -1) 
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if(cmb_area.Text == "Deshidratado" && (txt_op.Text == string.Empty || txt_Meta_1.Text == string.Empty || txt_Meta_2.Text == string.Empty || txt_Meta_3.Text == string.Empty || txt_Meta_4.Text == string.Empty || txt_Meta_5.Text == string.Empty)) 
+            { 
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string queryInsertUpdate = string.Empty;
+                int result;
+                if (!string.IsNullOrEmpty(id_global_meta_deshidratado))
+                {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idmeta = Convert.ToInt32(id_global_meta_deshidratado);
+
+                    queryInsertUpdate = "UPDATE public.\"Deshidratado\" SET \"OP\" = @OP, \"No_box_hr\" = @no_box_hr, \"Kg_fresco_hr\" = @kg_f_h, \"Relacion_fr_seco\" = @relacion_fs, \"Kg_seco_hr\" = @kg_s_h, \"Personal_idoneo\" = @personal_i WHERE \"ID_OP\" = @ID_OP;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_op.Text
+                        },
+                        new NpgsqlParameter("@no_box_hr", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_Meta_1.Text
+                        },
+                        new NpgsqlParameter("@kg_f_h", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_Meta_2.Text
+                        },
+                        new NpgsqlParameter("@relacion_fs", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_Meta_3.Text
+                        },
+                        new NpgsqlParameter("@kg_s_h", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_Meta_4.Text
+                        },
+                        new NpgsqlParameter("@personal_i", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_Meta_5.Text
+                        },
+                        new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idmeta  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+
+                    // Verificar si el usuario ya existe
+                    string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Deshidratado\" WHERE \"OP\"  ILIKE @OP;";
+                    NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text),
+                    };
+                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Deshidratado\" (\"OP\", \"No_box_hr\", \"Kg_fresco_hr\", \"Relacion_fr_seco\", \"Kg_seco_hr\", \"Personal_idoneo\") VALUES (@OP, @No_box_h, @Kg_f_h, @Relacion_f_s, @kg_s_h, @Personal_i);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text),
+                    new NpgsqlParameter("@No_box_h", txt_Meta_1.Text),
+                    new NpgsqlParameter("@Kg_f_h", txt_Meta_2.Text),
+                    new NpgsqlParameter("@Relacion_f_s", txt_Meta_3.Text),
+                    new NpgsqlParameter("@kg_s_h", txt_Meta_4.Text),
+                    new NpgsqlParameter("@Personal_i", txt_Meta_5.Text)
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+
+                if (result > 0)
+                {
+                    actualiza_grid_Deshitratado();
+                    limpiarCampos_meta();
+                    btn_meta_save.Enabled = false;
+                    btn_meta_cancel.Enabled = false;
+                    txt_op.Enabled = false;
+                    txt_Meta_1.Enabled = false;
+                    txt_Meta_2.Enabled = false;
+                    txt_Meta_3.Enabled = false;
+                    txt_Meta_4.Enabled = false;
+                    txt_Meta_5.Enabled = false;
+                    btn_meta_edit.Enabled = false;
+                    id_global_users = string.Empty;
+
+                    cmb_area.Enabled = true;
+                    cmb_area.Focus();
+                    cmb_area.Enabled = false;
+
+                    cmb_proceso.Enabled = true;
+                    cmb_proceso.Focus();
+                    cmb_proceso.Enabled = false;
+                }
+            }
+        }
+
+        private void dgv_metas_des_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                id_global_meta_deshidratado = dgv_metas_des.Rows[e.RowIndex].Cells[0].Value.ToString();
+                txt_op.Text = dgv_metas_des.Rows[e.RowIndex].Cells[1].Value.ToString();
+                txt_Meta_1.Text = dgv_metas_des.Rows[e.RowIndex].Cells[2].Value.ToString();
+                txt_Meta_2.Text = dgv_metas_des.Rows[e.RowIndex].Cells[3].Value.ToString();
+                txt_Meta_3.Text = dgv_metas_des.Rows[e.RowIndex].Cells[4].Value.ToString();
+                txt_Meta_4.Text = dgv_metas_des.Rows[e.RowIndex].Cells[5].Value.ToString();
+                txt_Meta_5.Text = dgv_metas_des.Rows[e.RowIndex].Cells[6].Value.ToString();
+
+                btn_meta_edit.Enabled = true;
+                btn_meta_delete.Enabled = true;
+                cmb_area.Enabled = true;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+            }
+        }
+
+        private void txt_Meta_1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void txt_Meta_1_Validating(object sender, CancelEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string text = textBox.Text;
+
+            if (!string.IsNullOrEmpty(text) && !System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MessageBox.Show("Formato inválido. Solo se permiten números con un punto decimal.");
+                textBox.Focus();
+                e.Cancel = true;
+            }
+        }
+
+        private void txt_Meta_2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void txt_Meta_2_Validating(object sender, CancelEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string text = textBox.Text;
+
+            if (!string.IsNullOrEmpty(text) && !System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MessageBox.Show("Formato inválido. Solo se permiten números con un punto decimal.");
+                textBox.Focus();
+                e.Cancel = true;
+            }
+        }
+
+        private void txt_Meta_3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void txt_Meta_3_Validating(object sender, CancelEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string text = textBox.Text;
+
+            if (!string.IsNullOrEmpty(text) && !System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MessageBox.Show("Formato inválido. Solo se permiten números con un punto decimal.");
+                textBox.Focus();
+                e.Cancel = true;
+            }
+        }
+
+        private void txt_Meta_4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void txt_Meta_4_Validating(object sender, CancelEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string text = textBox.Text;
+
+            if (!string.IsNullOrEmpty(text) && !System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MessageBox.Show("Formato inválido. Solo se permiten números con un punto decimal.");
+                textBox.Focus();
+                e.Cancel = true;
+            }
+        }
+
+        private void txt_Meta_5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void txt_Meta_5_Validating(object sender, CancelEventArgs e)
+        {
+            MaterialTextBox textBox = (MaterialTextBox)sender;
+            string text = textBox.Text;
+
+            if (!string.IsNullOrEmpty(text) && !System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MessageBox.Show("Formato inválido. Solo se permiten números con un punto decimal.");
+                textBox.Focus();
+                e.Cancel = true;
             }
         }
     }
