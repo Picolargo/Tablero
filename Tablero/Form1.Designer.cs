@@ -1369,6 +1369,7 @@
             this.btn_delete_user.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_delete_user.UseAccentColor = false;
             this.btn_delete_user.UseVisualStyleBackColor = true;
+            this.btn_delete_user.Click += new System.EventHandler(this.btn_delete_user_Click);
             // 
             // btn_save
             // 
@@ -2030,6 +2031,7 @@
             this.btn_meta_cancel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_meta_cancel.UseAccentColor = false;
             this.btn_meta_cancel.UseVisualStyleBackColor = true;
+            this.btn_meta_cancel.Click += new System.EventHandler(this.btn_meta_cancel_Click);
             // 
             // btn_meta_delete
             // 
@@ -2094,6 +2096,7 @@
             this.btn_meta_edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_meta_edit.UseAccentColor = false;
             this.btn_meta_edit.UseVisualStyleBackColor = true;
+            this.btn_meta_edit.Click += new System.EventHandler(this.btn_meta_edit_Click);
             // 
             // tabPage8
             // 

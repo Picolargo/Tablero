@@ -736,7 +736,7 @@ namespace Tablero
                 MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            else
+            else if (cmb_area.Text == "Deshidratado")
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string queryInsertUpdate = string.Empty;
@@ -753,27 +753,27 @@ namespace Tablero
                     {
                         new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar)
                         {
-                            Value = txt_op.Text
+                            Value = txt_op.Text.ToUpper()
                         },
-                        new NpgsqlParameter("@no_box_hr", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        new NpgsqlParameter("@no_box_hr", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
-                            Value = txt_Meta_1.Text
+                            Value = Convert.ToInt32(txt_Meta_1.Text)
                         },
-                        new NpgsqlParameter("@kg_f_h", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        new NpgsqlParameter("@kg_f_h", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
-                            Value = txt_Meta_2.Text
+                            Value = Convert.ToInt32(txt_Meta_2.Text)
                         },
-                        new NpgsqlParameter("@relacion_fs", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        new NpgsqlParameter("@relacion_fs", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
-                            Value = txt_Meta_3.Text
+                            Value = Convert.ToInt32(txt_Meta_3.Text)
                         },
-                        new NpgsqlParameter("@kg_s_h", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        new NpgsqlParameter("@kg_s_h", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
-                            Value = txt_Meta_4.Text
+                            Value = Convert.ToInt32(txt_Meta_4.Text)
                         },
-                        new NpgsqlParameter("@personal_i", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        new NpgsqlParameter("@personal_i", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
-                            Value = txt_Meta_5.Text
+                            Value = Convert.ToInt32(txt_Meta_5.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -802,12 +802,12 @@ namespace Tablero
                     queryInsertUpdate = "INSERT INTO public.\"Deshidratado\" (\"OP\", \"No_box_hr\", \"Kg_fresco_hr\", \"Relacion_fr_seco\", \"Kg_seco_hr\", \"Personal_idoneo\") VALUES (@OP, @No_box_h, @Kg_f_h, @Relacion_f_s, @kg_s_h, @Personal_i);";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
-                    new NpgsqlParameter("@OP", txt_op.Text),
-                    new NpgsqlParameter("@No_box_h", txt_Meta_1.Text),
-                    new NpgsqlParameter("@Kg_f_h", txt_Meta_2.Text),
-                    new NpgsqlParameter("@Relacion_f_s", txt_Meta_3.Text),
-                    new NpgsqlParameter("@kg_s_h", txt_Meta_4.Text),
-                    new NpgsqlParameter("@Personal_i", txt_Meta_5.Text)
+                    new NpgsqlParameter("@OP", txt_op.Text.ToUpper()),
+                    new NpgsqlParameter("@No_box_h", Convert.ToInt32(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Kg_f_h", Convert.ToInt32(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Relacion_f_s", Convert.ToInt32(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@kg_s_h", Convert.ToInt32(txt_Meta_4.Text)),
+                    new NpgsqlParameter("@Personal_i", Convert.ToInt32(txt_Meta_5.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -850,11 +850,21 @@ namespace Tablero
                 txt_Meta_4.Text = dgv_metas_des.Rows[e.RowIndex].Cells[5].Value.ToString();
                 txt_Meta_5.Text = dgv_metas_des.Rows[e.RowIndex].Cells[6].Value.ToString();
 
+                
+
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
                 cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 0;
                 cmb_area.Focus();
                 cmb_area.Enabled = false;
+
+                txt_op.Enabled = false;
+                txt_Meta_1.Enabled = false;
+                txt_Meta_2.Enabled = false;
+                txt_Meta_3.Enabled = false;
+                txt_Meta_4.Enabled = false;
+                txt_Meta_5.Enabled = false;
             }
         }
 
@@ -1131,6 +1141,42 @@ namespace Tablero
                 textBox.Focus();
                 e.Cancel = true;
             }
+        }
+
+        private void btn_meta_edit_Click(object sender, EventArgs e)
+        {
+            btn_meta_save.Enabled = true;
+            btn_meta_cancel.Enabled = true;
+            btn_meta_delete.Enabled = false;
+            txt_op.Enabled = true;
+            txt_Meta_1.Enabled = true;
+            txt_Meta_2.Enabled = true;
+            txt_Meta_3.Enabled = true;
+            txt_Meta_4.Enabled = true;
+            txt_Meta_5.Enabled = true;
+            txt_op.Focus();
+        }
+
+        private void btn_meta_cancel_Click(object sender, EventArgs e)
+        {
+            btn_meta_save.Enabled = false;
+            btn_meta_cancel.Enabled = false;
+            btn_meta_delete.Enabled = true;
+            limpiarCampos_meta();
+            cmb_area.Enabled = false;
+            txt_op.Enabled = false;
+            txt_Meta_1.Enabled = false;
+            txt_Meta_2.Enabled = false;
+            txt_Meta_3.Enabled = false;
+            txt_Meta_4.Enabled = false;
+            txt_Meta_5.Enabled = false;
+            btn_meta_edit.Enabled = false;
+            id_global_meta_deshidratado = string.Empty;
+        }
+
+        private void btn_delete_user_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
