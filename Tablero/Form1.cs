@@ -18,6 +18,8 @@ namespace Tablero
         private string id_global_users = string.Empty; // Variable para almacenar el ID del usuario seleccionado en el DataGridView
         private string id_global_meta_deshidratado = string.Empty;
         private string id_global_meta_empacado = string.Empty;
+        private string id_global_meta_inspec = string.Empty;
+        private string id_global_meta_evaporado = string.Empty;
         private bool filtroUsuariosActivo = false;
         //variable para la conexión a la base de datos
         string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
@@ -273,6 +275,8 @@ namespace Tablero
             actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
             actualiza_grid_Deshitratado();
             actualiza_grid_Empacado();
+            actualiza_grid_inspec();
+            actualiza_grid_evaporado();
         }
         private void actualiza_grid_users()
         {
@@ -340,6 +344,50 @@ namespace Tablero
             // Configurar el DataGridView
             dgv_metas_emp.Columns[0].Visible = false;
             dgv_metas_emp.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+        }
+
+        private void actualiza_grid_inspec()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT 
+                            ""ID_OP"" as ""ID"", 
+                            ""OP"", 
+                            ""Kg_person_hr"" as ""Kilogramos/Persona por Hora"", 
+                            ""Meta_kg_hr_line"" as ""Meta Kilogramos/Hora por 1 linea"", 
+                            ""Personal_idoneo"" as ""Personal Idóneo""
+                          FROM public.""Inspeccion""
+                          ORDER BY ""OP"" ASC;";  // ← orden ascendente
+
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_metas_insp, null);
+
+            // Configurar el DataGridView
+            dgv_metas_insp.Columns[0].Visible = false;
+            dgv_metas_insp.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+        }
+        private void actualiza_grid_evaporado()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT 
+                            ""ID_OP"" as ""ID"", 
+                            ""OP"", 
+                            ""Capacidad_trompos"" as ""Capacidad por Trompo"", 
+                            ""Cantidad_trompos"" as ""Cantidad de Trompos"",
+                            ""Meta_kg_hr"" as ""Meta Kg por hora"", 
+                            ""Personal_idoneo"" as ""Personal Idóneo""
+                          FROM public.""Evaporado""
+                          ORDER BY ""OP"" ASC;";  // ← orden ascendente
+
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_metas_Eva, null);
+
+            // Configurar el DataGridView
+            dgv_metas_Eva.Columns[0].Visible = false;
+            dgv_metas_Eva.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
         }
 
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
@@ -586,7 +634,6 @@ namespace Tablero
         private void limpiarCampos_meta()
         {
             cmb_area.SelectedIndex = -1;
-            cmb_proceso.SelectedIndex = -1;
             txt_op.Text = string.Empty;
             txt_Meta_1.Text = string.Empty;
             txt_Meta_2.Text = string.Empty;
@@ -595,7 +642,6 @@ namespace Tablero
             txt_Meta_5.Text = string.Empty;
             id_global_meta_deshidratado = string.Empty; // Limpiar la variable global
             cmb_area.Focus(); 
-            cmb_proceso.Focus();
             txt_op.Focus();
         }
 
@@ -779,11 +825,9 @@ namespace Tablero
                 txt_Meta_4.Visible = true;
                 txt_Meta_5.Visible = true;
 
-                cmb_proceso.Visible = false;
-
                 //nombrar controles
-                txt_Meta_1.Hint = "No. Cajones por Hr";
-                txt_Meta_2.Hint = "Kg Fresco por Hr";
+                txt_Meta_1.Hint = "No. Cajones por Hora";
+                txt_Meta_2.Hint = "Kg Fresco por Hora";
                 txt_Meta_3.Hint = "Relación Fresco-Seco";
                 txt_Meta_4.Hint = "Kg Seco/Hr";
                 txt_Meta_5.Hint = "Personal Idóneo";
@@ -795,7 +839,7 @@ namespace Tablero
                 //nombrar controles
                 txt_op.Enabled = true;
                 txt_Meta_1.Hint = "Personal Idóneo";
-                txt_Meta_2.Hint = "Kg por persona por Hr";
+                txt_Meta_2.Hint = "Kg por persona por Hora";
                 txt_Meta_3.Hint = "Meta Kg por hr por 1 linea";
 
                 //habilitar controles
@@ -805,9 +849,45 @@ namespace Tablero
                 //hacer invisibles controles
                 txt_Meta_4.Visible = false;
                 txt_Meta_5.Visible = false;
-                cmb_proceso.Visible = false;
 
                 tap_control_metas.SelectedIndex = 1;
+            }
+            if (cmb_area.SelectedIndex == 2)
+            {
+                //nombrar controles
+                txt_op.Enabled = true;
+                txt_Meta_1.Hint = "Personal Idóneo";
+                txt_Meta_2.Hint = "Kg por persona por Hora";
+                txt_Meta_3.Hint = "Meta Kg/hr por 1 linea";
+
+                //habilitar controles
+                txt_Meta_1.Enabled = true;
+                txt_Meta_2.Enabled = true;
+
+                //hacer invisibles controles
+                txt_Meta_4.Visible = false;
+                txt_Meta_5.Visible = false;
+
+                tap_control_metas.SelectedIndex = 2;
+            }
+            if (cmb_area.SelectedIndex == 3)
+            {
+                //nombrar controles
+                txt_op.Enabled = true;
+                txt_Meta_1.Hint = "Personal Idóneo";
+                txt_Meta_2.Hint = "Capacidad por trompo";
+                txt_Meta_3.Hint = "Cantidad de trompos";
+                txt_Meta_4.Hint = "Meta Kg por Hora";
+
+                //habilitar controles
+                txt_Meta_1.Enabled = true;
+                txt_Meta_2.Enabled = true;
+                txt_Meta_3.Enabled = true;
+
+                //hacer invisibles controles
+                txt_Meta_5.Visible = false;
+
+                tap_control_metas.SelectedIndex = 3;
             }
         }
 
@@ -836,7 +916,6 @@ namespace Tablero
             btn_meta_delete.Enabled = false;
 
             cmb_area.SelectedIndex = -1;
-            cmb_proceso.SelectedIndex = -1;
             txt_op.Text = string.Empty;
             txt_Meta_1.Text = string.Empty;
             txt_Meta_2.Text = string.Empty;
@@ -844,8 +923,12 @@ namespace Tablero
             txt_Meta_4.Text = string.Empty;
             txt_Meta_5.Text = string.Empty;
 
+            id_global_meta_deshidratado = string.Empty; // Limpiar la variable global
+            id_global_meta_empacado = string.Empty; // Limpiar la variable global
+            id_global_meta_inspec = string.Empty; // Limpiar la variable global
+            id_global_meta_evaporado = string.Empty; // Limpiar la variable global
+
             cmb_area.Focus();
-            cmb_proceso.Focus();
             txt_op.Focus();
 
         }
@@ -1044,6 +1127,97 @@ namespace Tablero
                     txt_Meta_3.Enabled = false;
                     btn_meta_edit.Enabled = false;
                     id_global_meta_empacado = string.Empty;
+
+                    cmb_area.Enabled = true;
+                    cmb_area.Focus();
+                    cmb_area.Enabled = false;
+                }
+            }
+            ///Inspeccion
+            ///
+            if (cmb_area.SelectedIndex == 2 && (txt_op.Text == string.Empty || txt_Meta_1.Text == string.Empty || txt_Meta_2.Text == string.Empty))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (cmb_area.SelectedIndex == 2)
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string queryInsertUpdate = string.Empty;
+                int result;
+                if (!string.IsNullOrEmpty(id_global_meta_inspec))
+                {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idmeta = Convert.ToInt32(id_global_meta_inspec);
+
+                    queryInsertUpdate = "UPDATE public.\"Inspeccion\" SET \"OP\" = @OP, \"Personal_idoneo\" = @Personal_I, \"Kg_person_hr\" = @Kg_p_hr, \"Meta_kg_hr_line\" = @Meta_kg_hr_line WHERE \"ID_OP\" = @ID_OP;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_op.Text.ToUpper()
+                        },
+                        new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                        },
+                        new NpgsqlParameter("@Kg_p_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                        },
+                        new NpgsqlParameter("@Meta_kg_hr_line", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                        },
+                        new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idmeta  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+
+                    // Verificar si el usuario ya existe
+                    string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Inspeccion\" WHERE \"OP\"  ILIKE @OP;";
+                    NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text),
+                    };
+                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Inspeccion\" (\"OP\", \"Personal_idoneo\", \"Kg_person_hr\", \"Meta_kg_hr_line\") VALUES (@OP, @Personal_I, @Kg_person_hr, @Meta_kg_hr_line);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text.ToUpper()),
+                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Kg_person_hr", Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr_line", Convert.ToDecimal(txt_Meta_3.Text))
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+
+                if (result > 0)
+                {
+                    actualiza_grid_inspec();
+                    limpiarCampos_meta();
+                    btn_meta_save.Enabled = false;
+                    btn_meta_cancel.Enabled = false;
+                    txt_op.Enabled = false;
+                    txt_Meta_1.Enabled = false;
+                    txt_Meta_2.Enabled = false;
+                    txt_Meta_3.Enabled = false;
+                    btn_meta_edit.Enabled = false;
+                    id_global_meta_inspec = string.Empty;
 
                     cmb_area.Enabled = true;
                     cmb_area.Focus();
@@ -1362,7 +1536,8 @@ namespace Tablero
 
         private void btn_meta_edit_Click(object sender, EventArgs e)
         {
-            if(cmb_area.SelectedIndex == 0)
+            btn_meta_edit.Enabled = false;
+            if (cmb_area.SelectedIndex == 0)
             {
                 btn_meta_save.Enabled = true;
                 btn_meta_cancel.Enabled = true;
@@ -1375,7 +1550,7 @@ namespace Tablero
                 txt_Meta_5.Enabled = true;
                 txt_op.Focus();
             }
-            if (cmb_area.SelectedIndex == 1)
+            if (cmb_area.SelectedIndex == 1 || cmb_area.SelectedIndex == 2)
             {
                 btn_meta_save.Enabled = true;
                 btn_meta_cancel.Enabled = true;
@@ -1402,6 +1577,8 @@ namespace Tablero
             txt_Meta_5.Enabled = false;
             btn_meta_edit.Enabled = false;
             id_global_meta_deshidratado = string.Empty;
+            id_global_meta_empacado = string.Empty;
+            id_global_meta_inspec = string.Empty;
         }
 
         private void btn_delete_user_Click(object sender, EventArgs e)
@@ -1540,7 +1717,49 @@ namespace Tablero
                 {
                     MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            ///inspeccion
+            ///
+            if (cmb_area.SelectedIndex == 2 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Inspección?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                int id_OP = Convert.ToInt32(id_global_meta_inspec);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
+                string query = @"DELETE FROM public.""Inspeccion""
+                       WHERE ""ID_OP"" = @idOP";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@idOP", NpgsqlTypes.NpgsqlDbType.Integer)
+                    {
+                        Value = id_OP
+                    }
+                };
+
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+                    actualiza_grid_inspec();
+                    limpiarCampos_meta();
+                    btn_meta_save.Enabled = false;
+                    btn_meta_cancel.Enabled = false;
+                    btn_meta_delete.Enabled = false;
+                    txt_op.Enabled = false;
+                    txt_Meta_1.Enabled = false;
+                    txt_Meta_2.Enabled = false;
+                    txt_Meta_3.Enabled = false;
+                    btn_meta_edit.Enabled = false;
+                    id_global_meta_inspec = string.Empty;
+
+                    cmb_area.Enabled = true;
+                    cmb_area.Focus();
+                    cmb_area.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -1581,6 +1800,22 @@ namespace Tablero
                     txt_Meta_4.Text = string.Empty; // Limpia si no es válido
                 }
             }
+            if (cmb_area.SelectedIndex == 3)
+            {
+                decimal valor1;
+                valor1 = decimal.TryParse(txt_Meta_2.Text, out valor1) ? valor1 : 0;
+                if (decimal.TryParse(txt_Meta_3.Text, out decimal valor2))
+                {
+                    // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
+                    decimal resultado = valor1 * valor2;
+
+                    txt_Meta_4.Text = resultado.ToString("0.00"); // 2 decimales
+                }
+                else
+                {
+                    txt_Meta_4.Text = string.Empty; // Limpia si no es válido
+                }
+            }
         }
 
         private void tap_control_metas_Selected(object sender, TabControlEventArgs e)
@@ -1590,7 +1825,7 @@ namespace Tablero
 
         private void txt_Meta_2_TextChanged(object sender, EventArgs e)
         {
-            if (cmb_area.SelectedIndex == 1)
+            if (cmb_area.SelectedIndex == 1 || cmb_area.SelectedIndex == 2)
             {
                 decimal valor1;
                 valor1 = decimal.TryParse(txt_Meta_1.Text, out valor1) ? valor1 : 0;
@@ -1625,6 +1860,64 @@ namespace Tablero
                 btn_meta_delete.Enabled = true;
                 cmb_area.Enabled = true;
                 cmb_area.SelectedIndex = 1;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
+                txt_op.Enabled = false;
+                txt_Meta_1.Enabled = false;
+                txt_Meta_2.Enabled = false;
+                txt_Meta_3.Enabled = false;
+                btn_meta_save.Enabled = false;
+                btn_meta_cancel.Enabled = false;
+            }
+        }
+
+        private void dgv_metas_insp_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                id_global_meta_inspec = dgv_metas_insp.Rows[e.RowIndex].Cells[0].Value.ToString();
+                txt_op.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[1].Value.ToString();
+                txt_Meta_1.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[4].Value.ToString();
+                txt_Meta_2.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[2].Value.ToString();
+                txt_Meta_3.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                txt_Meta_4.Visible = false;
+                txt_Meta_5.Visible = false;
+
+                btn_meta_edit.Enabled = true;
+                btn_meta_delete.Enabled = true;
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 2;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
+                txt_op.Enabled = false;
+                txt_Meta_1.Enabled = false;
+                txt_Meta_2.Enabled = false;
+                txt_Meta_3.Enabled = false;
+                btn_meta_save.Enabled = false;
+                btn_meta_cancel.Enabled = false;
+            }
+        }
+
+        private void dgv_metas_Eva_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                id_global_meta_evaporado = dgv_metas_insp.Rows[e.RowIndex].Cells[0].Value.ToString();
+                txt_op.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[1].Value.ToString();
+                txt_Meta_1.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[4].Value.ToString();
+                txt_Meta_2.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[2].Value.ToString();
+                txt_Meta_3.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[3].Value.ToString();
+                txt_Meta_4.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[5].Value.ToString();
+
+                txt_Meta_5.Visible = false;
+
+                btn_meta_edit.Enabled = true;
+                btn_meta_delete.Enabled = true;
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 3;
                 cmb_area.Focus();
                 cmb_area.Enabled = false;
 

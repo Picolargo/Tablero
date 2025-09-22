@@ -131,10 +131,9 @@
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.btn_new_op = new MaterialSkin.Controls.MaterialButton();
             this.txt_Meta_5 = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_Meta_2 = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_Meta_4 = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_Meta_3 = new MaterialSkin.Controls.MaterialTextBox();
-            this.txt_Meta_2 = new MaterialSkin.Controls.MaterialTextBox();
-            this.cmb_proceso = new MaterialSkin.Controls.MaterialComboBox();
             this.cmb_area = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_op = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_Meta_1 = new MaterialSkin.Controls.MaterialTextBox();
@@ -244,7 +243,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1441, 784);
+            this.tabPage1.Size = new System.Drawing.Size(1441, 761);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
@@ -1159,7 +1158,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1441, 784);
+            this.tabPage2.Size = new System.Drawing.Size(1441, 761);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1172,7 +1171,7 @@
             this.tabPage3.ImageKey = "group_users_people";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1441, 784);
+            this.tabPage3.Size = new System.Drawing.Size(1441, 761);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Usuarios";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1590,7 +1589,7 @@
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
             this.tap_control_metas.Location = new System.Drawing.Point(0, 379);
             this.tap_control_metas.Name = "tap_control_metas";
-            this.tap_control_metas.SelectedIndex = 1;
+            this.tap_control_metas.SelectedIndex = 3;
             this.tap_control_metas.Size = new System.Drawing.Size(1424, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
@@ -1662,6 +1661,7 @@
             this.dgv_metas_emp.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_emp.Name = "dgv_metas_emp";
             this.dgv_metas_emp.ReadOnly = true;
+            this.dgv_metas_emp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_metas_emp.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_emp.TabIndex = 2;
             this.dgv_metas_emp.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_emp_CellClick);
@@ -1685,12 +1685,16 @@
             // 
             this.dgv_metas_insp.AllowUserToAddRows = false;
             this.dgv_metas_insp.AllowUserToDeleteRows = false;
+            this.dgv_metas_insp.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_metas_insp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_metas_insp.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_insp.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_insp.Name = "dgv_metas_insp";
+            this.dgv_metas_insp.ReadOnly = true;
+            this.dgv_metas_insp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_metas_insp.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_insp.TabIndex = 3;
+            this.dgv_metas_insp.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_insp_CellClick);
             // 
             // metroTabPage4
             // 
@@ -1711,12 +1715,16 @@
             // 
             this.dgv_metas_Eva.AllowUserToAddRows = false;
             this.dgv_metas_Eva.AllowUserToDeleteRows = false;
+            this.dgv_metas_Eva.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_metas_Eva.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_metas_Eva.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_Eva.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_Eva.Name = "dgv_metas_Eva";
+            this.dgv_metas_Eva.ReadOnly = true;
+            this.dgv_metas_Eva.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_metas_Eva.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_Eva.TabIndex = 4;
+            this.dgv_metas_Eva.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_Eva_CellClick);
             // 
             // metroTabPage5
             // 
@@ -1737,10 +1745,13 @@
             // 
             this.dgv_metas_Grind.AllowUserToAddRows = false;
             this.dgv_metas_Grind.AllowUserToDeleteRows = false;
+            this.dgv_metas_Grind.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_metas_Grind.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_metas_Grind.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_Grind.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_Grind.Name = "dgv_metas_Grind";
+            this.dgv_metas_Grind.ReadOnly = true;
+            this.dgv_metas_Grind.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_metas_Grind.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_Grind.TabIndex = 4;
             // 
@@ -1763,6 +1774,7 @@
             // 
             this.dgv_metas_platinum.AllowUserToAddRows = false;
             this.dgv_metas_platinum.AllowUserToDeleteRows = false;
+            this.dgv_metas_platinum.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_metas_platinum.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_metas_platinum.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_platinum.Location = new System.Drawing.Point(0, 7);
@@ -1804,7 +1816,6 @@
             this.tabPage7.Controls.Add(this.txt_Meta_2);
             this.tabPage7.Controls.Add(this.txt_Meta_4);
             this.tabPage7.Controls.Add(this.txt_Meta_3);
-            this.tabPage7.Controls.Add(this.cmb_proceso);
             this.tabPage7.Controls.Add(this.cmb_area);
             this.tabPage7.Controls.Add(this.txt_op);
             this.tabPage7.Controls.Add(this.txt_Meta_1);
@@ -1863,6 +1874,27 @@
             this.txt_Meta_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_5_KeyPress);
             this.txt_Meta_5.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_5_Validating);
             // 
+            // txt_Meta_2
+            // 
+            this.txt_Meta_2.AnimateReadOnly = false;
+            this.txt_Meta_2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_Meta_2.Depth = 0;
+            this.txt_Meta_2.Enabled = false;
+            this.txt_Meta_2.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_Meta_2.LeadingIcon = null;
+            this.txt_Meta_2.Location = new System.Drawing.Point(6, 209);
+            this.txt_Meta_2.MaxLength = 50;
+            this.txt_Meta_2.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_Meta_2.Multiline = false;
+            this.txt_Meta_2.Name = "txt_Meta_2";
+            this.txt_Meta_2.Size = new System.Drawing.Size(228, 50);
+            this.txt_Meta_2.TabIndex = 10;
+            this.txt_Meta_2.Text = "";
+            this.txt_Meta_2.TrailingIcon = null;
+            this.txt_Meta_2.TextChanged += new System.EventHandler(this.txt_Meta_2_TextChanged);
+            this.txt_Meta_2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_2_KeyPress);
+            this.txt_Meta_2.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_2_Validating);
+            // 
             // txt_Meta_4
             // 
             this.txt_Meta_4.AnimateReadOnly = false;
@@ -1903,54 +1935,6 @@
             this.txt_Meta_3.TextChanged += new System.EventHandler(this.txt_Meta_3_TextChanged);
             this.txt_Meta_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_3_KeyPress);
             this.txt_Meta_3.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_3_Validating);
-            // 
-            // txt_Meta_2
-            // 
-            this.txt_Meta_2.AnimateReadOnly = false;
-            this.txt_Meta_2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txt_Meta_2.Depth = 0;
-            this.txt_Meta_2.Enabled = false;
-            this.txt_Meta_2.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txt_Meta_2.LeadingIcon = null;
-            this.txt_Meta_2.Location = new System.Drawing.Point(6, 209);
-            this.txt_Meta_2.MaxLength = 50;
-            this.txt_Meta_2.MouseState = MaterialSkin.MouseState.OUT;
-            this.txt_Meta_2.Multiline = false;
-            this.txt_Meta_2.Name = "txt_Meta_2";
-            this.txt_Meta_2.Size = new System.Drawing.Size(228, 50);
-            this.txt_Meta_2.TabIndex = 10;
-            this.txt_Meta_2.Text = "";
-            this.txt_Meta_2.TrailingIcon = null;
-            this.txt_Meta_2.TextChanged += new System.EventHandler(this.txt_Meta_2_TextChanged);
-            this.txt_Meta_2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_2_KeyPress);
-            this.txt_Meta_2.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_2_Validating);
-            // 
-            // cmb_proceso
-            // 
-            this.cmb_proceso.AutoResize = false;
-            this.cmb_proceso.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmb_proceso.Depth = 0;
-            this.cmb_proceso.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmb_proceso.DropDownHeight = 174;
-            this.cmb_proceso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmb_proceso.DropDownWidth = 121;
-            this.cmb_proceso.Enabled = false;
-            this.cmb_proceso.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmb_proceso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmb_proceso.FormattingEnabled = true;
-            this.cmb_proceso.Hint = "Proceso";
-            this.cmb_proceso.IntegralHeight = false;
-            this.cmb_proceso.ItemHeight = 43;
-            this.cmb_proceso.Items.AddRange(new object[] {
-            "Inspecccion",
-            "Reproceso"});
-            this.cmb_proceso.Location = new System.Drawing.Point(294, 16);
-            this.cmb_proceso.MaxDropDownItems = 4;
-            this.cmb_proceso.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmb_proceso.Name = "cmb_proceso";
-            this.cmb_proceso.Size = new System.Drawing.Size(228, 49);
-            this.cmb_proceso.StartIndex = -1;
-            this.cmb_proceso.TabIndex = 9;
             // 
             // cmb_area
             // 
@@ -2212,7 +2196,7 @@
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1441, 784);
+            this.tabPage9.Size = new System.Drawing.Size(1441, 761);
             this.tabPage9.TabIndex = 4;
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -2222,7 +2206,7 @@
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1441, 784);
+            this.tabPage10.Size = new System.Drawing.Size(1441, 761);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2385,7 +2369,6 @@
         private MaterialSkin.Controls.MaterialTextBox txt_OP_Search;
         private MaterialSkin.Controls.MaterialButton materialButton7;
         private System.Windows.Forms.DataGridView dgv_metas_des;
-        private MaterialSkin.Controls.MaterialComboBox cmb_proceso;
         private MetroFramework.Controls.MetroDateTime dtp1;
         private System.Windows.Forms.Label lbl_user_no_emp;
         private System.Windows.Forms.Label lbl_Nom;
