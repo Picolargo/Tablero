@@ -117,9 +117,9 @@
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.dgv_metas_des = new System.Windows.Forms.DataGridView();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgv_metas_emp = new System.Windows.Forms.DataGridView();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dgv_metas_insp = new System.Windows.Forms.DataGridView();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.dgv_metas_Eva = new System.Windows.Forms.DataGridView();
             this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
@@ -196,9 +196,9 @@
             this.metroTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_des)).BeginInit();
             this.metroTabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_emp)).BeginInit();
             this.metroTabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_insp)).BeginInit();
             this.metroTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_Eva)).BeginInit();
             this.metroTabPage5.SuspendLayout();
@@ -228,7 +228,7 @@
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1713, 1026);
+            this.materialTabControl1.Size = new System.Drawing.Size(1449, 804);
             this.materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -244,7 +244,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage1.Size = new System.Drawing.Size(1441, 784);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
@@ -1159,7 +1159,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage2.Size = new System.Drawing.Size(1441, 784);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1172,7 +1172,7 @@
             this.tabPage3.ImageKey = "group_users_people";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage3.Size = new System.Drawing.Size(1441, 784);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Usuarios";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1557,6 +1557,7 @@
             this.dgv_users.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgv_users.Location = new System.Drawing.Point(0, 0);
             this.dgv_users.Name = "dgv_users";
+            this.dgv_users.ReadOnly = true;
             this.dgv_users.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_users.Size = new System.Drawing.Size(1681, 543);
             this.dgv_users.TabIndex = 0;
@@ -1570,7 +1571,7 @@
             this.tabPage4.ImageKey = "flag_icon";
             this.tabPage4.Location = new System.Drawing.Point(4, 39);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage4.Size = new System.Drawing.Size(1441, 761);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Metas";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1587,10 +1588,10 @@
             this.tap_control_metas.Controls.Add(this.metroTabPage6);
             this.tap_control_metas.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
-            this.tap_control_metas.Location = new System.Drawing.Point(0, 438);
+            this.tap_control_metas.Location = new System.Drawing.Point(0, 379);
             this.tap_control_metas.Name = "tap_control_metas";
-            this.tap_control_metas.SelectedIndex = 0;
-            this.tap_control_metas.Size = new System.Drawing.Size(1705, 545);
+            this.tap_control_metas.SelectedIndex = 1;
+            this.tap_control_metas.Size = new System.Drawing.Size(1424, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
             this.tap_control_metas.TabIndex = 4;
@@ -1599,6 +1600,7 @@
             this.tap_control_metas.UseCustomForeColor = true;
             this.tap_control_metas.UseSelectable = true;
             this.tap_control_metas.UseStyleColors = true;
+            this.tap_control_metas.Selected += new System.Windows.Forms.TabControlEventHandler(this.tap_control_metas_Selected);
             // 
             // metroContextMenu1
             // 
@@ -1613,7 +1615,7 @@
             this.metroTabPage1.HorizontalScrollbarSize = 10;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage1.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Deshidratado";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
@@ -1629,61 +1631,66 @@
             this.dgv_metas_des.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_des.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_des.Name = "dgv_metas_des";
-            this.dgv_metas_des.Size = new System.Drawing.Size(1697, 496);
+            this.dgv_metas_des.ReadOnly = true;
+            this.dgv_metas_des.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_metas_des.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_des.TabIndex = 0;
             this.dgv_metas_des.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_des_CellClick);
             // 
             // metroTabPage2
             // 
-            this.metroTabPage2.Controls.Add(this.dataGridView1);
+            this.metroTabPage2.Controls.Add(this.dgv_metas_emp);
             this.metroTabPage2.HorizontalScrollbarBarColor = true;
             this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.HorizontalScrollbarSize = 10;
             this.metroTabPage2.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage2.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Empacado";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
             // 
-            // dataGridView1
+            // dgv_metas_emp
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 7);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1697, 496);
-            this.dataGridView1.TabIndex = 2;
+            this.dgv_metas_emp.AllowUserToAddRows = false;
+            this.dgv_metas_emp.AllowUserToDeleteRows = false;
+            this.dgv_metas_emp.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_metas_emp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas_emp.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgv_metas_emp.Location = new System.Drawing.Point(0, 7);
+            this.dgv_metas_emp.Name = "dgv_metas_emp";
+            this.dgv_metas_emp.ReadOnly = true;
+            this.dgv_metas_emp.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_emp.TabIndex = 2;
+            this.dgv_metas_emp.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_emp_CellClick);
             // 
             // metroTabPage3
             // 
-            this.metroTabPage3.Controls.Add(this.dataGridView2);
+            this.metroTabPage3.Controls.Add(this.dgv_metas_insp);
             this.metroTabPage3.HorizontalScrollbarBarColor = true;
             this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage3.HorizontalScrollbarSize = 10;
             this.metroTabPage3.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage3.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage3.TabIndex = 2;
             this.metroTabPage3.Text = "Inspección";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
             this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage3.VerticalScrollbarSize = 10;
             // 
-            // dataGridView2
+            // dgv_metas_insp
             // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 7);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(1697, 496);
-            this.dataGridView2.TabIndex = 3;
+            this.dgv_metas_insp.AllowUserToAddRows = false;
+            this.dgv_metas_insp.AllowUserToDeleteRows = false;
+            this.dgv_metas_insp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas_insp.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgv_metas_insp.Location = new System.Drawing.Point(0, 7);
+            this.dgv_metas_insp.Name = "dgv_metas_insp";
+            this.dgv_metas_insp.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_insp.TabIndex = 3;
             // 
             // metroTabPage4
             // 
@@ -1693,7 +1700,7 @@
             this.metroTabPage4.HorizontalScrollbarSize = 10;
             this.metroTabPage4.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage4.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage4.TabIndex = 3;
             this.metroTabPage4.Text = "Evaporado";
             this.metroTabPage4.VerticalScrollbarBarColor = true;
@@ -1708,7 +1715,7 @@
             this.dgv_metas_Eva.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_Eva.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_Eva.Name = "dgv_metas_Eva";
-            this.dgv_metas_Eva.Size = new System.Drawing.Size(1697, 496);
+            this.dgv_metas_Eva.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_Eva.TabIndex = 4;
             // 
             // metroTabPage5
@@ -1719,7 +1726,7 @@
             this.metroTabPage5.HorizontalScrollbarSize = 10;
             this.metroTabPage5.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage5.Name = "metroTabPage5";
-            this.metroTabPage5.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage5.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage5.TabIndex = 4;
             this.metroTabPage5.Text = "Grind";
             this.metroTabPage5.VerticalScrollbarBarColor = true;
@@ -1734,7 +1741,7 @@
             this.dgv_metas_Grind.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_Grind.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_Grind.Name = "dgv_metas_Grind";
-            this.dgv_metas_Grind.Size = new System.Drawing.Size(1697, 496);
+            this.dgv_metas_Grind.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_Grind.TabIndex = 4;
             // 
             // metroTabPage6
@@ -1745,7 +1752,7 @@
             this.metroTabPage6.HorizontalScrollbarSize = 10;
             this.metroTabPage6.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage6.Name = "metroTabPage6";
-            this.metroTabPage6.Size = new System.Drawing.Size(1697, 503);
+            this.metroTabPage6.Size = new System.Drawing.Size(1416, 503);
             this.metroTabPage6.TabIndex = 5;
             this.metroTabPage6.Text = "Platinum";
             this.metroTabPage6.VerticalScrollbarBarColor = true;
@@ -1760,7 +1767,9 @@
             this.dgv_metas_platinum.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgv_metas_platinum.Location = new System.Drawing.Point(0, 7);
             this.dgv_metas_platinum.Name = "dgv_metas_platinum";
-            this.dgv_metas_platinum.Size = new System.Drawing.Size(1697, 496);
+            this.dgv_metas_platinum.ReadOnly = true;
+            this.dgv_metas_platinum.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_metas_platinum.Size = new System.Drawing.Size(1416, 496);
             this.dgv_metas_platinum.TabIndex = 5;
             // 
             // materialCard_tab_meta
@@ -1792,9 +1801,9 @@
             // 
             this.tabPage7.Controls.Add(this.btn_new_op);
             this.tabPage7.Controls.Add(this.txt_Meta_5);
+            this.tabPage7.Controls.Add(this.txt_Meta_2);
             this.tabPage7.Controls.Add(this.txt_Meta_4);
             this.tabPage7.Controls.Add(this.txt_Meta_3);
-            this.tabPage7.Controls.Add(this.txt_Meta_2);
             this.tabPage7.Controls.Add(this.cmb_proceso);
             this.tabPage7.Controls.Add(this.cmb_area);
             this.tabPage7.Controls.Add(this.txt_op);
@@ -1820,7 +1829,7 @@
             this.btn_new_op.Icon = global::Tablero.Properties.Resources._1564491_add_create_new_plus_icon;
             this.btn_new_op.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_op.ImageKey = "save_icon";
-            this.btn_new_op.Location = new System.Drawing.Point(578, 45);
+            this.btn_new_op.Location = new System.Drawing.Point(588, 29);
             this.btn_new_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_op.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_op.Name = "btn_new_op";
@@ -1891,6 +1900,7 @@
             this.txt_Meta_3.TabIndex = 11;
             this.txt_Meta_3.Text = "";
             this.txt_Meta_3.TrailingIcon = null;
+            this.txt_Meta_3.TextChanged += new System.EventHandler(this.txt_Meta_3_TextChanged);
             this.txt_Meta_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_3_KeyPress);
             this.txt_Meta_3.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_3_Validating);
             // 
@@ -1902,7 +1912,7 @@
             this.txt_Meta_2.Enabled = false;
             this.txt_Meta_2.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_Meta_2.LeadingIcon = null;
-            this.txt_Meta_2.Location = new System.Drawing.Point(294, 14);
+            this.txt_Meta_2.Location = new System.Drawing.Point(6, 209);
             this.txt_Meta_2.MaxLength = 50;
             this.txt_Meta_2.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_Meta_2.Multiline = false;
@@ -1911,6 +1921,7 @@
             this.txt_Meta_2.TabIndex = 10;
             this.txt_Meta_2.Text = "";
             this.txt_Meta_2.TrailingIcon = null;
+            this.txt_Meta_2.TextChanged += new System.EventHandler(this.txt_Meta_2_TextChanged);
             this.txt_Meta_2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_2_KeyPress);
             this.txt_Meta_2.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_2_Validating);
             // 
@@ -1933,7 +1944,7 @@
             this.cmb_proceso.Items.AddRange(new object[] {
             "Inspecccion",
             "Reproceso"});
-            this.cmb_proceso.Location = new System.Drawing.Point(6, 80);
+            this.cmb_proceso.Location = new System.Drawing.Point(294, 16);
             this.cmb_proceso.MaxDropDownItems = 4;
             this.cmb_proceso.MouseState = MaterialSkin.MouseState.OUT;
             this.cmb_proceso.Name = "cmb_proceso";
@@ -1982,7 +1993,7 @@
             this.txt_op.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_op.Hint = "OP";
             this.txt_op.LeadingIcon = null;
-            this.txt_op.Location = new System.Drawing.Point(6, 144);
+            this.txt_op.Location = new System.Drawing.Point(6, 79);
             this.txt_op.MaxLength = 50;
             this.txt_op.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_op.Multiline = false;
@@ -2000,7 +2011,7 @@
             this.txt_Meta_1.Enabled = false;
             this.txt_Meta_1.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_Meta_1.LeadingIcon = null;
-            this.txt_Meta_1.Location = new System.Drawing.Point(6, 209);
+            this.txt_Meta_1.Location = new System.Drawing.Point(6, 144);
             this.txt_Meta_1.MaxLength = 50;
             this.txt_Meta_1.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_Meta_1.Multiline = false;
@@ -2009,6 +2020,7 @@
             this.txt_Meta_1.TabIndex = 1;
             this.txt_Meta_1.Text = "";
             this.txt_Meta_1.TrailingIcon = null;
+            this.txt_Meta_1.TextChanged += new System.EventHandler(this.txt_Meta_1_TextChanged);
             this.txt_Meta_1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Meta_1_KeyPress);
             this.txt_Meta_1.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Meta_1_Validating);
             // 
@@ -2020,7 +2032,7 @@
             this.btn_meta_cancel.Enabled = false;
             this.btn_meta_cancel.HighEmphasis = true;
             this.btn_meta_cancel.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
-            this.btn_meta_cancel.Location = new System.Drawing.Point(578, 235);
+            this.btn_meta_cancel.Location = new System.Drawing.Point(588, 219);
             this.btn_meta_cancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_meta_cancel.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_meta_cancel.Name = "btn_meta_cancel";
@@ -2041,7 +2053,7 @@
             this.btn_meta_delete.Enabled = false;
             this.btn_meta_delete.HighEmphasis = true;
             this.btn_meta_delete.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
-            this.btn_meta_delete.Location = new System.Drawing.Point(578, 187);
+            this.btn_meta_delete.Location = new System.Drawing.Point(588, 171);
             this.btn_meta_delete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_meta_delete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_meta_delete.Name = "btn_meta_delete";
@@ -2052,6 +2064,7 @@
             this.btn_meta_delete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_meta_delete.UseAccentColor = false;
             this.btn_meta_delete.UseVisualStyleBackColor = true;
+            this.btn_meta_delete.Click += new System.EventHandler(this.btn_meta_delete_Click);
             // 
             // btn_meta_save
             // 
@@ -2063,7 +2076,7 @@
             this.btn_meta_save.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
             this.btn_meta_save.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_meta_save.ImageKey = "save_icon";
-            this.btn_meta_save.Location = new System.Drawing.Point(578, 93);
+            this.btn_meta_save.Location = new System.Drawing.Point(588, 77);
             this.btn_meta_save.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_meta_save.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_meta_save.Name = "btn_meta_save";
@@ -2085,7 +2098,7 @@
             this.btn_meta_edit.Enabled = false;
             this.btn_meta_edit.HighEmphasis = true;
             this.btn_meta_edit.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
-            this.btn_meta_edit.Location = new System.Drawing.Point(578, 139);
+            this.btn_meta_edit.Location = new System.Drawing.Point(588, 123);
             this.btn_meta_edit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_meta_edit.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_meta_edit.Name = "btn_meta_edit";
@@ -2199,7 +2212,7 @@
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage9.Size = new System.Drawing.Size(1441, 784);
             this.tabPage9.TabIndex = 4;
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -2209,7 +2222,7 @@
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1705, 983);
+            this.tabPage10.Size = new System.Drawing.Size(1441, 784);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2222,7 +2235,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1719, 1093);
+            this.ClientSize = new System.Drawing.Size(1455, 871);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
@@ -2286,9 +2299,9 @@
             this.metroTabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_des)).EndInit();
             this.metroTabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_emp)).EndInit();
             this.metroTabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_insp)).EndInit();
             this.metroTabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_Eva)).EndInit();
             this.metroTabPage5.ResumeLayout(false);
@@ -2421,8 +2434,8 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage4;
         private MetroFramework.Controls.MetroTabPage metroTabPage5;
         private MetroFramework.Controls.MetroTabPage metroTabPage6;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView dgv_metas_emp;
+        private System.Windows.Forms.DataGridView dgv_metas_insp;
         private System.Windows.Forms.DataGridView dgv_metas_Eva;
         private System.Windows.Forms.DataGridView dgv_metas_Grind;
         private System.Windows.Forms.DataGridView dgv_metas_platinum;
