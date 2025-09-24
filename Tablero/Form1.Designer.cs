@@ -227,7 +227,7 @@
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1449, 804);
+            this.materialTabControl1.Size = new System.Drawing.Size(1713, 804);
             this.materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -243,7 +243,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage1.Size = new System.Drawing.Size(1705, 761);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
@@ -1158,7 +1158,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage2.Size = new System.Drawing.Size(1705, 761);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1171,7 +1171,7 @@
             this.tabPage3.ImageKey = "group_users_people";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage3.Size = new System.Drawing.Size(1705, 761);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Usuarios";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1500,7 +1500,7 @@
             this.btn_search_limpiar.Depth = 0;
             this.btn_search_limpiar.HighEmphasis = true;
             this.btn_search_limpiar.Icon = global::Tablero.Properties.Resources.filter_remove;
-            this.btn_search_limpiar.Location = new System.Drawing.Point(317, 63);
+            this.btn_search_limpiar.Location = new System.Drawing.Point(294, 64);
             this.btn_search_limpiar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_search_limpiar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_search_limpiar.Name = "btn_search_limpiar";
@@ -1520,7 +1520,7 @@
             this.btn_search_user.Depth = 0;
             this.btn_search_user.HighEmphasis = true;
             this.btn_search_user.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
-            this.btn_search_user.Location = new System.Drawing.Point(317, 15);
+            this.btn_search_user.Location = new System.Drawing.Point(294, 16);
             this.btn_search_user.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_search_user.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_search_user.Name = "btn_search_user";
@@ -1570,7 +1570,7 @@
             this.tabPage4.ImageKey = "flag_icon";
             this.tabPage4.Location = new System.Drawing.Point(4, 39);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage4.Size = new System.Drawing.Size(1705, 761);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Metas";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1589,8 +1589,8 @@
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
             this.tap_control_metas.Location = new System.Drawing.Point(0, 379);
             this.tap_control_metas.Name = "tap_control_metas";
-            this.tap_control_metas.SelectedIndex = 3;
-            this.tap_control_metas.Size = new System.Drawing.Size(1424, 545);
+            this.tap_control_metas.SelectedIndex = 0;
+            this.tap_control_metas.Size = new System.Drawing.Size(1688, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
             this.tap_control_metas.TabIndex = 4;
@@ -1614,7 +1614,7 @@
             this.metroTabPage1.HorizontalScrollbarSize = 10;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage1.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Deshidratado";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
@@ -1632,7 +1632,7 @@
             this.dgv_metas_des.Name = "dgv_metas_des";
             this.dgv_metas_des.ReadOnly = true;
             this.dgv_metas_des.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_des.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_des.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_des.TabIndex = 0;
             this.dgv_metas_des.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_des_CellClick);
             // 
@@ -1644,7 +1644,7 @@
             this.metroTabPage2.HorizontalScrollbarSize = 10;
             this.metroTabPage2.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage2.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Empacado";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
@@ -1662,7 +1662,7 @@
             this.dgv_metas_emp.Name = "dgv_metas_emp";
             this.dgv_metas_emp.ReadOnly = true;
             this.dgv_metas_emp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_emp.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_emp.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_emp.TabIndex = 2;
             this.dgv_metas_emp.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_emp_CellClick);
             // 
@@ -1674,7 +1674,7 @@
             this.metroTabPage3.HorizontalScrollbarSize = 10;
             this.metroTabPage3.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage3.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage3.TabIndex = 2;
             this.metroTabPage3.Text = "Inspección";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
@@ -1692,7 +1692,7 @@
             this.dgv_metas_insp.Name = "dgv_metas_insp";
             this.dgv_metas_insp.ReadOnly = true;
             this.dgv_metas_insp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_insp.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_insp.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_insp.TabIndex = 3;
             this.dgv_metas_insp.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_insp_CellClick);
             // 
@@ -1704,7 +1704,7 @@
             this.metroTabPage4.HorizontalScrollbarSize = 10;
             this.metroTabPage4.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage4.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage4.TabIndex = 3;
             this.metroTabPage4.Text = "Evaporado";
             this.metroTabPage4.VerticalScrollbarBarColor = true;
@@ -1722,7 +1722,7 @@
             this.dgv_metas_Eva.Name = "dgv_metas_Eva";
             this.dgv_metas_Eva.ReadOnly = true;
             this.dgv_metas_Eva.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_Eva.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_Eva.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_Eva.TabIndex = 4;
             this.dgv_metas_Eva.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_Eva_CellClick);
             // 
@@ -1734,7 +1734,7 @@
             this.metroTabPage5.HorizontalScrollbarSize = 10;
             this.metroTabPage5.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage5.Name = "metroTabPage5";
-            this.metroTabPage5.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage5.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage5.TabIndex = 4;
             this.metroTabPage5.Text = "Grind";
             this.metroTabPage5.VerticalScrollbarBarColor = true;
@@ -1752,8 +1752,9 @@
             this.dgv_metas_Grind.Name = "dgv_metas_Grind";
             this.dgv_metas_Grind.ReadOnly = true;
             this.dgv_metas_Grind.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_Grind.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_Grind.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_Grind.TabIndex = 4;
+            this.dgv_metas_Grind.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_Grind_CellClick);
             // 
             // metroTabPage6
             // 
@@ -1763,7 +1764,7 @@
             this.metroTabPage6.HorizontalScrollbarSize = 10;
             this.metroTabPage6.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage6.Name = "metroTabPage6";
-            this.metroTabPage6.Size = new System.Drawing.Size(1416, 503);
+            this.metroTabPage6.Size = new System.Drawing.Size(1680, 503);
             this.metroTabPage6.TabIndex = 5;
             this.metroTabPage6.Text = "Platinum";
             this.metroTabPage6.VerticalScrollbarBarColor = true;
@@ -1781,8 +1782,9 @@
             this.dgv_metas_platinum.Name = "dgv_metas_platinum";
             this.dgv_metas_platinum.ReadOnly = true;
             this.dgv_metas_platinum.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_platinum.Size = new System.Drawing.Size(1416, 496);
+            this.dgv_metas_platinum.Size = new System.Drawing.Size(1680, 496);
             this.dgv_metas_platinum.TabIndex = 5;
+            this.dgv_metas_platinum.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_platinum_CellClick);
             // 
             // materialCard_tab_meta
             // 
@@ -2116,7 +2118,7 @@
             this.materialButton5.Depth = 0;
             this.materialButton5.HighEmphasis = true;
             this.materialButton5.Icon = global::Tablero.Properties.Resources.filter_remove;
-            this.materialButton5.Location = new System.Drawing.Point(294, 62);
+            this.materialButton5.Location = new System.Drawing.Point(294, 64);
             this.materialButton5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton5.Name = "materialButton5";
@@ -2127,6 +2129,7 @@
             this.materialButton5.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton5.UseAccentColor = false;
             this.materialButton5.UseVisualStyleBackColor = true;
+            this.materialButton5.Click += new System.EventHandler(this.materialButton5_Click);
             // 
             // cmb_area_search
             // 
@@ -2144,25 +2147,31 @@
             this.cmb_area_search.IntegralHeight = false;
             this.cmb_area_search.ItemHeight = 43;
             this.cmb_area_search.Items.AddRange(new object[] {
-            "Administrador",
-            "Usuario"});
-            this.cmb_area_search.Location = new System.Drawing.Point(6, 80);
+            "Deshidratado",
+            "Empacado",
+            "Inspeccion",
+            "Evaporado",
+            "Grind",
+            "Platinum"});
+            this.cmb_area_search.Location = new System.Drawing.Point(6, 16);
             this.cmb_area_search.MaxDropDownItems = 4;
             this.cmb_area_search.MouseState = MaterialSkin.MouseState.OUT;
             this.cmb_area_search.Name = "cmb_area_search";
             this.cmb_area_search.Size = new System.Drawing.Size(228, 49);
             this.cmb_area_search.StartIndex = -1;
             this.cmb_area_search.TabIndex = 13;
+            this.cmb_area_search.SelectedIndexChanged += new System.EventHandler(this.cmb_area_search_SelectedIndexChanged);
             // 
             // txt_OP_Search
             // 
             this.txt_OP_Search.AnimateReadOnly = false;
             this.txt_OP_Search.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_OP_Search.Depth = 0;
+            this.txt_OP_Search.Enabled = false;
             this.txt_OP_Search.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_OP_Search.Hint = "OP";
             this.txt_OP_Search.LeadingIcon = null;
-            this.txt_OP_Search.Location = new System.Drawing.Point(6, 16);
+            this.txt_OP_Search.Location = new System.Drawing.Point(6, 79);
             this.txt_OP_Search.MaxLength = 50;
             this.txt_OP_Search.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_OP_Search.Multiline = false;
@@ -2179,7 +2188,7 @@
             this.materialButton7.Depth = 0;
             this.materialButton7.HighEmphasis = true;
             this.materialButton7.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
-            this.materialButton7.Location = new System.Drawing.Point(294, 14);
+            this.materialButton7.Location = new System.Drawing.Point(294, 16);
             this.materialButton7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton7.Name = "materialButton7";
@@ -2190,13 +2199,14 @@
             this.materialButton7.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton7.UseAccentColor = false;
             this.materialButton7.UseVisualStyleBackColor = true;
+            this.materialButton7.Click += new System.EventHandler(this.materialButton7_Click);
             // 
             // tabPage9
             // 
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage9.Size = new System.Drawing.Size(1705, 761);
             this.tabPage9.TabIndex = 4;
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -2206,7 +2216,7 @@
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1441, 761);
+            this.tabPage10.Size = new System.Drawing.Size(1705, 761);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2219,7 +2229,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1455, 871);
+            this.ClientSize = new System.Drawing.Size(1719, 871);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
