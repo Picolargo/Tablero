@@ -24,8 +24,9 @@ namespace Tablero
         private bool isHovering = false;
         private bool showingImage3 = false;
         //variable para la conexión a la base de datos
-        string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
-        
+        // string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
+        string connectionString = string.Empty;
+
 
         // seccion para activar el drag en el formulario
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -174,6 +175,24 @@ namespace Tablero
 
         private void btn_iniciar_Click(object sender, EventArgs e)
         {
+            string var_servidor = Tablero.Properties.Settings.Default.Servidor;
+            string var_password = Tablero.Properties.Settings.Default.Contrasena;
+            string var_usuario = Tablero.Properties.Settings.Default.Usuario;
+
+            if (!string.IsNullOrEmpty(var_servidor) && !string.IsNullOrEmpty(var_password) && !string.IsNullOrEmpty(var_usuario))
+            {
+                // Construir la cadena de conexión
+                connectionString = $"Host={var_servidor};Username={var_usuario};Password={var_password};Database=Reporteo";
+            }
+            else
+            {
+                // Si no hay configuración guardada, abrir el formulario de conexión
+                var frm = new Coneccion_Server();
+                frm.Owner = this;      // <-- importante
+                frm.TopMost = true;
+                frm.Show();
+                this.Hide();
+            }
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
             bool isValid = dbHelper.ValidateUser(txt_user_name.Text, txt_password.Text);
@@ -191,7 +210,7 @@ namespace Tablero
 
                     // Usuario válido
                     this.Visible = false;
-                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text);
+                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, connectionString);
                     principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
                     principal.Show(); // Muestra el formulario principal
                     // Guardar en sesión o usar esta información
@@ -254,6 +273,33 @@ namespace Tablero
             {
                 btn_iniciar_Click(btn_iniciar, EventArgs.Empty);
                 e.SuppressKeyPress = true; // evita el beep
+            }
+        }
+
+        private void login_Shown(object sender, EventArgs e)
+        {
+            string var_servidor = Tablero.Properties.Settings.Default.Servidor;
+            string var_password = Tablero.Properties.Settings.Default.Contrasena;
+            string var_usuario = Tablero.Properties.Settings.Default.Usuario;
+
+            //Tablero.Properties.Settings.Default.Servidor = string.Empty;
+            //Tablero.Properties.Settings.Default.Contrasena = string.Empty;
+            //Tablero.Properties.Settings.Default.Usuario = string.Empty;
+            //Tablero.Properties.Settings.Default.Save();
+
+            if (!string.IsNullOrEmpty(var_servidor) && !string.IsNullOrEmpty(var_password) && !string.IsNullOrEmpty(var_usuario))
+            {
+                // Construir la cadena de conexión
+                connectionString = $"Host={var_servidor};Username={var_usuario};Password={var_password};Database=Reporteo";
+            }
+            else
+            {
+                // Si no hay configuración guardada, abrir el formulario de conexión
+                var frm = new Coneccion_Server();
+                frm.Owner = this;      // <-- importante
+                frm.TopMost = true;
+                frm.Show();
+                this.Hide();
             }
         }
     }

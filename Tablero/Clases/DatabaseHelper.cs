@@ -159,5 +159,64 @@ namespace Tablero
                 return null;
             }
         }
+
+        // Método principal que acepta array de parámetros
+        public void LoadDataIntoComboBox(string query, ComboBox comboBox, string displayMember, string valueMember, NpgsqlParameter[] parameters = null)
+        {
+            try
+            {
+                DataTable dataTable = ExecuteSelectQuery(query, parameters);
+
+                if (dataTable != null && dataTable.Rows.Count > 0)
+                {
+                    comboBox.DataSource = dataTable;
+                    comboBox.DisplayMember = displayMember;
+                    comboBox.ValueMember = valueMember;
+                    comboBox.SelectedIndex = -1;
+                }
+                else
+                {
+                    comboBox.DataSource = null;
+                    comboBox.Items.Clear();
+                    comboBox.Text = "No hay datos disponibles";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar ComboBox: {ex.Message}");
+            }
+        }
+
+        // Método auxiliar para determinar tipos de datos
+        private NpgsqlTypes.NpgsqlDbType GetNpgsqlDbType(object value)
+        {
+            if (value == null) return NpgsqlTypes.NpgsqlDbType.Varchar;
+
+            Type valueType = value.GetType();
+
+            switch (Type.GetTypeCode(valueType))
+            {
+                case TypeCode.Int32: return NpgsqlTypes.NpgsqlDbType.Integer;
+                case TypeCode.String: return NpgsqlTypes.NpgsqlDbType.Varchar;
+                case TypeCode.Decimal: return NpgsqlTypes.NpgsqlDbType.Numeric;
+                case TypeCode.Double: return NpgsqlTypes.NpgsqlDbType.Double;
+                case TypeCode.Single: return NpgsqlTypes.NpgsqlDbType.Real;
+                case TypeCode.Boolean: return NpgsqlTypes.NpgsqlDbType.Boolean;
+                case TypeCode.Int64: return NpgsqlTypes.NpgsqlDbType.Bigint;
+                case TypeCode.DateTime: return NpgsqlTypes.NpgsqlDbType.Date;
+                default: return NpgsqlTypes.NpgsqlDbType.Varchar;
+            }
+        }
+
+        // Método sobrecargado para un solo parámetro
+        public void LoadDataIntoComboBox(string query, ComboBox comboBox, string displayMember, string valueMember, string paramName, object paramValue)
+        {
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter(paramName, GetNpgsqlDbType(paramValue)) { Value = paramValue }
+            };
+
+            LoadDataIntoComboBox(query, comboBox, displayMember, valueMember, parameters);
+        }
     }
 }

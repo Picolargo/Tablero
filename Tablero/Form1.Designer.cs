@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.txt_Tiempo_comida = new MaterialSkin.Controls.MaterialTextBox();
             this.materialTextBox1 = new MaterialSkin.Controls.MaterialTextBox();
@@ -45,13 +45,9 @@
             this.txt_TM_operativo = new MaterialSkin.Controls.MaterialTextBox();
             this.card_dgv_operativo = new MaterialSkin.Controls.MaterialCard();
             this.dgv_operativo = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txt_TM_mecanico = new MaterialSkin.Controls.MaterialTextBox();
             this.card_dgv_mecanico = new MaterialSkin.Controls.MaterialCard();
             this.dgv_mecanico = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.card_datos = new MaterialSkin.Controls.MaterialCard();
             this.Txt_meta = new MaterialSkin.Controls.MaterialTextBox2();
             this.card_datos_captura = new MaterialSkin.Controls.MaterialCard();
@@ -149,9 +145,13 @@
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.materialCard3.SuspendLayout();
+            this.card_meal_energy.SuspendLayout();
             this.card_botones.SuspendLayout();
             this.card_TM.SuspendLayout();
             this.card_dgv_operativo.SuspendLayout();
@@ -233,7 +233,7 @@
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
-            this.tabPage1.Controls.Add(this.materialCard3);
+            this.tabPage1.Controls.Add(this.card_meal_energy);
             this.tabPage1.Controls.Add(this.card_botones);
             this.tabPage1.Controls.Add(this.card_TM);
             this.tabPage1.Controls.Add(this.card_datos);
@@ -247,23 +247,23 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
-            // materialCard3
+            // card_meal_energy
             // 
-            this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard3.Controls.Add(this.materialLabel1);
-            this.materialCard3.Controls.Add(this.txt_Tiempo_comida);
-            this.materialCard3.Controls.Add(this.materialTextBox1);
-            this.materialCard3.Controls.Add(this.lbl_min_comida);
-            this.materialCard3.Depth = 0;
-            this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard3.Location = new System.Drawing.Point(797, 550);
-            this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard3.Name = "materialCard3";
-            this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(874, 78);
-            this.materialCard3.TabIndex = 8;
-            this.materialCard3.Visible = false;
+            this.card_meal_energy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_meal_energy.Controls.Add(this.materialLabel1);
+            this.card_meal_energy.Controls.Add(this.txt_Tiempo_comida);
+            this.card_meal_energy.Controls.Add(this.materialTextBox1);
+            this.card_meal_energy.Controls.Add(this.lbl_min_comida);
+            this.card_meal_energy.Depth = 0;
+            this.card_meal_energy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_meal_energy.Location = new System.Drawing.Point(797, 550);
+            this.card_meal_energy.Margin = new System.Windows.Forms.Padding(14);
+            this.card_meal_energy.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_meal_energy.Name = "card_meal_energy";
+            this.card_meal_energy.Padding = new System.Windows.Forms.Padding(14);
+            this.card_meal_energy.Size = new System.Drawing.Size(874, 78);
+            this.card_meal_energy.TabIndex = 8;
+            this.card_meal_energy.Visible = false;
             // 
             // materialLabel1
             // 
@@ -398,6 +398,7 @@
             this.btn_save_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_save_ficha.UseAccentColor = false;
             this.btn_save_ficha.UseVisualStyleBackColor = true;
+            this.btn_save_ficha.Click += new System.EventHandler(this.btn_save_ficha_Click);
             // 
             // card_TM
             // 
@@ -425,12 +426,12 @@
             this.txt_TM_operativo.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_operativo.Hint = "Minutos Totales";
             this.txt_TM_operativo.LeadingIcon = null;
-            this.txt_TM_operativo.Location = new System.Drawing.Point(431, 324);
+            this.txt_TM_operativo.Location = new System.Drawing.Point(442, 324);
             this.txt_TM_operativo.MaxLength = 50;
             this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_operativo.Multiline = false;
             this.txt_TM_operativo.Name = "txt_TM_operativo";
-            this.txt_TM_operativo.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_operativo.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_operativo.TabIndex = 8;
             this.txt_TM_operativo.Text = "";
             this.txt_TM_operativo.TrailingIcon = null;
@@ -441,12 +442,12 @@
             this.card_dgv_operativo.Controls.Add(this.dgv_operativo);
             this.card_dgv_operativo.Depth = 0;
             this.card_dgv_operativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_operativo.Location = new System.Drawing.Point(431, 129);
+            this.card_dgv_operativo.Location = new System.Drawing.Point(442, 129);
             this.card_dgv_operativo.Margin = new System.Windows.Forms.Padding(14);
             this.card_dgv_operativo.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_operativo.Name = "card_dgv_operativo";
             this.card_dgv_operativo.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_operativo.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_operativo.Size = new System.Drawing.Size(400, 189);
             this.card_dgv_operativo.TabIndex = 7;
             // 
             // dgv_operativo
@@ -457,21 +458,9 @@
             this.dataGridViewTextBoxColumn4});
             this.dgv_operativo.Location = new System.Drawing.Point(0, 0);
             this.dgv_operativo.Name = "dgv_operativo";
-            this.dgv_operativo.Size = new System.Drawing.Size(386, 189);
+            this.dgv_operativo.Size = new System.Drawing.Size(400, 189);
             this.dgv_operativo.TabIndex = 1;
             this.dgv_operativo.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_operativo_EditingControlShowing);
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Minutos Detenidos";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Motivos Operativos";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             // 
             // txt_TM_mecanico
             // 
@@ -486,7 +475,7 @@
             this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_mecanico.Multiline = false;
             this.txt_TM_mecanico.Name = "txt_TM_mecanico";
-            this.txt_TM_mecanico.Size = new System.Drawing.Size(386, 50);
+            this.txt_TM_mecanico.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_mecanico.TabIndex = 3;
             this.txt_TM_mecanico.Text = "";
             this.txt_TM_mecanico.TrailingIcon = null;
@@ -502,7 +491,7 @@
             this.card_dgv_mecanico.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_mecanico.Name = "card_dgv_mecanico";
             this.card_dgv_mecanico.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_mecanico.Size = new System.Drawing.Size(386, 189);
+            this.card_dgv_mecanico.Size = new System.Drawing.Size(400, 189);
             this.card_dgv_mecanico.TabIndex = 2;
             // 
             // dgv_mecanico
@@ -513,21 +502,9 @@
             this.Column2});
             this.dgv_mecanico.Location = new System.Drawing.Point(0, 0);
             this.dgv_mecanico.Name = "dgv_mecanico";
-            this.dgv_mecanico.Size = new System.Drawing.Size(386, 189);
+            this.dgv_mecanico.Size = new System.Drawing.Size(400, 189);
             this.dgv_mecanico.TabIndex = 1;
             this.dgv_mecanico.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_mecanico_EditingControlShowing);
-            // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Minutos Detenidos";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "Motivos Mecánicos";
-            this.Column2.Name = "Column2";
             // 
             // card_datos
             // 
@@ -1030,6 +1007,7 @@
             this.cb_Turno.Size = new System.Drawing.Size(259, 49);
             this.cb_Turno.StartIndex = -1;
             this.cb_Turno.TabIndex = 5;
+            this.cb_Turno.SelectedIndexChanged += new System.EventHandler(this.cb_Turno_SelectedIndexChanged);
             // 
             // cb_Area
             // 
@@ -2225,6 +2203,32 @@
             // 
             this.radTaskbarButton1.OwnerForm = this;
             // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column1.HeaderText = "Minutos Detenidos";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 110;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "Motivos Mecánicos";
+            this.Column2.Name = "Column2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Minutos Detenidos";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 110;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Motivos Operativos";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2241,8 +2245,8 @@
             this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.materialCard3.ResumeLayout(false);
-            this.materialCard3.PerformLayout();
+            this.card_meal_energy.ResumeLayout(false);
+            this.card_meal_energy.PerformLayout();
             this.card_botones.ResumeLayout(false);
             this.card_botones.PerformLayout();
             this.card_TM.ResumeLayout(false);
@@ -2335,16 +2339,12 @@
         private MaterialSkin.Controls.MaterialCard card_TM;
         private MaterialSkin.Controls.MaterialTextBox txt_Tiempo_comida;
         private System.Windows.Forms.DataGridView dgv_mecanico;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private MaterialSkin.Controls.MaterialCard card_dgv_mecanico;
         private MaterialSkin.Controls.MaterialLabel lbl_min_comida;
         private MaterialSkin.Controls.MaterialTextBox txt_TM_mecanico;
         private MaterialSkin.Controls.MaterialTextBox txt_TM_operativo;
         private MaterialSkin.Controls.MaterialCard card_dgv_operativo;
         private System.Windows.Forms.DataGridView dgv_operativo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private MaterialSkin.Controls.MaterialCard materialCard_users;
         private System.Windows.Forms.DataGridView dgv_users;
         private MaterialSkin.Controls.MaterialCard materialCardtab_users;
@@ -2414,7 +2414,7 @@
         private Telerik.WinControls.UI.RadTextBox Txt_Read_6;
         private Telerik.WinControls.UI.RadTextBox Txt_Read_5;
         private MaterialSkin.Controls.MaterialTextBox2 Txt_meta;
-        private MaterialSkin.Controls.MaterialCard materialCard3;
+        private MaterialSkin.Controls.MaterialCard card_meal_energy;
         private MaterialSkin.Controls.MaterialTextBox txt_Meta_4;
         private MaterialSkin.Controls.MaterialTextBox txt_Meta_3;
         private MaterialSkin.Controls.MaterialTextBox txt_Meta_2;
@@ -2433,6 +2433,10 @@
         private System.Windows.Forms.DataGridView dgv_metas_Grind;
         private System.Windows.Forms.DataGridView dgv_metas_platinum;
         private MaterialSkin.Controls.MaterialButton btn_new_op;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
     }
 }
 

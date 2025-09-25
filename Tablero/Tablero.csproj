@@ -134,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clases\DatabaseHelper.cs" />
+    <Compile Include="Coneccion_Server.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Coneccion_Server.Designer.cs">
+      <DependentUpon>Coneccion_Server.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +155,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Coneccion_Server.resx">
+      <DependentUpon>Coneccion_Server.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

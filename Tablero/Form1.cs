@@ -26,15 +26,16 @@ namespace Tablero
         private bool filtroUsuariosActivo_OP = false;
         private int filtroUsuariosActivo_OP_dgv_activo = 0;
         //variable para la conexión a la base de datos
-        string connectionString = "Host=localhost;Username=postgres;Password=Picolargo789;Database=Reporteo";
+        string connectionString = string.Empty;
 
-        public Form_principal(string var_no_empledo, string var_nom_empledo)
+        public Form_principal(string var_no_empledo, string var_nom_empledo, string conexionstring)
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
 
             lbl_no_emp2.Text = var_no_empledo; // Mostrar el número de empleado en el label correspondiente
             lbl_nom2.Text = var_nom_empledo.ToUpper(); // Mostrar el nombre del empleado en el label correspondiente
+            connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
 
             // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -448,6 +449,7 @@ namespace Tablero
                 card_datos.Visible = true;
                 card_TM.Visible = true;
                 card_botones.Visible = true;
+                card_meal_energy.Visible = true;
 
                 //habilitar controles
                 cb_Turno.Enabled = true;
@@ -502,6 +504,13 @@ namespace Tablero
                 Txt_Read_4.Text = string.Empty;
                 Txt_Read_5.Text = string.Empty;
 
+                // Cargar combobox OP
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Deshidratado\" ORDER BY \"OP\";";
+
+                dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
+
             }
             if (cb_Area.SelectedIndex == 1)
             {
@@ -512,6 +521,12 @@ namespace Tablero
                 card_datos.Visible = true;
                 card_TM.Visible = true;
                 card_botones.Visible = true;
+                card_meal_energy.Visible = true;
+
+                //habilitar controles
+                cb_Turno.Enabled = true;
+                cb_OP.Enabled = true;
+                dtp1.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Lote";
@@ -520,12 +535,49 @@ namespace Tablero
                 Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
                 Txt_5.EmbeddedLabelText = "Kg para Resecar";
                 Txt_6.EmbeddedLabelText = "Personal Operativo";
+
+                // Cargar combobox OP
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Deshidratado\" ORDER BY \"OP\";";
+
+                dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
+            }
+            if (cb_Area.SelectedIndex == 2)
+            {
+                //Despegue
+                reiniciarCampos();
+
+                //hacer visible para Despegue
+                card_datos.Visible = true;
+                card_TM.Visible = true;
+                card_botones.Visible = true;
+                card_meal_energy.Visible = true;
+
+                //habilitar controles
+                cb_Turno.Enabled = true;
+                cb_OP.Enabled = true;
+                dtp1.Enabled = true;
+
+                //nombrar controles
+                Txt_1.EmbeddedLabelText = "Lote";
+                Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
+                Txt_3.EmbeddedLabelText = "Merma Kg Secos";
+                Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
+                Txt_5.EmbeddedLabelText = "Kg para Resecar";
+                Txt_6.EmbeddedLabelText = "Personal Operativo";
+
+                // Cargar combobox OP
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Evaporado\" ORDER BY \"OP\";";
+
+                dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
         }
 
         private void reiniciarCampos()
         {
-            cb_Area.SelectedIndex = -1;
             cb_Turno.SelectedIndex = -1;
             cb_OP.SelectedIndex = -1;
             dtp1.Value = DateTime.Now;
@@ -554,6 +606,7 @@ namespace Tablero
             card_datos.Visible = false;
             card_TM.Visible = false;
             card_botones.Visible = false;
+            card_meal_energy.Visible = false;
             //deshabilitar controles
             cb_Turno.Enabled = false;
             cb_OP.Enabled = false;
@@ -3015,6 +3068,42 @@ namespace Tablero
         private void materialButton5_Click(object sender, EventArgs e)
         {
             limpiar_filtros_OP();
+        }
+
+        private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_Turno.SelectedIndex != -1)
+            {
+                if (cb_Turno.SelectedIndex == 0)
+                {
+                    Mask_txt_hr1.Text = "07:00";
+                    Mask_txt_hr2.Text = "15:00";
+                }
+                if (cb_Turno.SelectedIndex == 1)
+                {
+                    Mask_txt_hr1.Text = "15:00";
+                    Mask_txt_hr2.Text = "22:30";
+                }
+                if (cb_Turno.SelectedIndex == 2)
+                {
+                    Mask_txt_hr1.Text = "22:30";
+                    Mask_txt_hr2.Text = "07:00";
+                }
+            }
+        }
+
+        private void btn_save_ficha_Click(object sender, EventArgs e)
+        {
+            if (cb_OP.SelectedValue != null)
+            {
+                // Obtener el ValueMember (ID_OP)
+                int idOP = (int)cb_OP.SelectedValue;
+
+                // Obtener el DisplayMember (OP)
+                string op = cb_OP.Text;
+
+                MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
+            }
         }
     }
 }
