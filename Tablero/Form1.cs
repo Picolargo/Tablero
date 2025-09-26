@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telerik.WinControls.UI;
 
 namespace Tablero
 {
@@ -63,7 +64,7 @@ namespace Tablero
             dgv_mecanico.AllowUserToDeleteRows = true;
             dgv_mecanico.AllowUserToResizeRows = false;
             dgv_mecanico.ReadOnly = false;
-            dgv_mecanico.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            //dgv_mecanico.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             dgv_mecanico.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_mecanico.MultiSelect = false;
             dgv_mecanico.BorderStyle = BorderStyle.None;
@@ -87,7 +88,7 @@ namespace Tablero
             dgv_operativo.AllowUserToDeleteRows = true;
             dgv_operativo.AllowUserToResizeRows = false;
             dgv_operativo.ReadOnly = false;
-            dgv_operativo.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            //dgv_operativo.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             dgv_operativo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_operativo.MultiSelect = false;
             dgv_operativo.BorderStyle = BorderStyle.None;
@@ -486,16 +487,16 @@ namespace Tablero
                 cb_Turno.SelectedIndex = -1;
                 cb_OP.SelectedIndex = -1;
                 dtp1.Value = DateTime.Now;
-                Txt_1.Text = string.Empty;
-                Txt_2.Text = string.Empty;
-                Txt_3.Text = string.Empty;
-                Txt_4.Text = string.Empty;
-                Txt_5.Text = string.Empty;
-                Txt_6.Text = string.Empty;
-                Txt_7.Text = string.Empty;
-                Txt_8.Text = string.Empty;
-                Txt_9.Text = string.Empty;
-                Txt_10.Text = string.Empty;
+                Txt_1.Text = String.Empty;
+                Txt_2.Text = "0";
+                Txt_3.Text = "0";
+                Txt_4.Text = "0";
+                Txt_5.Text = "0";
+                Txt_6.Text = "0";
+                Txt_7.Text = "0";
+                Txt_8.Text = "0";
+                Txt_9.Text = "0";
+                Txt_10.Text = "0";
                 Txt_meta.Text = string.Empty;
 
                 Txt_Read_1.Text = string.Empty;
@@ -510,6 +511,8 @@ namespace Tablero
                 string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Deshidratado\" ORDER BY \"OP\";";
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
+
+                
 
             }
             if (cb_Area.SelectedIndex == 1)
@@ -574,6 +577,25 @@ namespace Tablero
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
+        }
+
+        // Método que suma los valores de Txt_3 a Txt_8
+        private void CalcularSuma()
+        {
+            decimal total = 0;
+
+            // Lista de los TextBox que quieres sumar
+            RadTextBox[] cajas = { Txt_3, Txt_4, Txt_5, Txt_6, Txt_7, Txt_8 };
+
+            foreach (RadTextBox txt in cajas)
+            {
+                if (decimal.TryParse(txt.Text, out decimal valor))
+                {
+                    total += valor;
+                }
+            }
+
+            Txt_Read_4.Text = total.ToString("0.00"); // puedes usar "0.##" si quieres decimales
         }
 
         private void reiniciarCampos()
@@ -3070,6 +3092,28 @@ namespace Tablero
             limpiar_filtros_OP();
         }
 
+        private void calcular_turno()
+        {
+            // Leer las horas ingresadas
+            string horaInicioText = Mask_txt_hr1.Text;
+            string horaFinText = Mask_txt_hr2.Text;
+
+            // Convertir a DateTime
+            DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
+            DateTime horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
+
+            // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
+            if (horaFin < horaInicio)
+            {
+                horaFin = horaFin.AddDays(1);
+            }
+
+            // Calcular diferencia
+            TimeSpan diferencia = horaFin - horaInicio;
+
+            // Mostrar horas totales (con decimales si hay minutos)
+            Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+        }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Turno.SelectedIndex != -1)
@@ -3078,16 +3122,22 @@ namespace Tablero
                 {
                     Mask_txt_hr1.Text = "07:00";
                     Mask_txt_hr2.Text = "15:00";
+
+                    calcular_turno();
                 }
                 if (cb_Turno.SelectedIndex == 1)
                 {
                     Mask_txt_hr1.Text = "15:00";
                     Mask_txt_hr2.Text = "22:30";
+
+                    calcular_turno();
                 }
                 if (cb_Turno.SelectedIndex == 2)
                 {
                     Mask_txt_hr1.Text = "22:30";
                     Mask_txt_hr2.Text = "07:00";
+
+                    calcular_turno();
                 }
             }
         }
@@ -3104,6 +3154,113 @@ namespace Tablero
 
                 MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
             }
+            //MessageBox.Show(Txt_Read_1.Text);
+        }
+
+        private void CalcularTotalMecanico()
+        {
+            decimal total = 0;
+
+            foreach (DataGridViewRow row in dgv_mecanico.Rows)
+            {
+                if (row.IsNewRow) continue; // ignora la fila en blanco para agregar
+
+                if (row.Cells[0].Value != null &&
+                    decimal.TryParse(row.Cells[0].Value.ToString(), out decimal valor))
+                {
+                    total += valor;
+                }
+            }
+
+            txt_TM_mecanico.Text = total.ToString("0"); // formato con 2 decimales
+        }
+
+        private void CalcularTotaloperativo()
+        {
+            decimal total = 0;
+
+            foreach (DataGridViewRow row in dgv_operativo.Rows)
+            {
+                if (row.IsNewRow) continue; // ignora la fila en blanco para agregar
+
+                if (row.Cells[0].Value != null &&
+                    decimal.TryParse(row.Cells[0].Value.ToString(), out decimal valor))
+                {
+                    total += valor;
+                }
+            }
+
+            txt_TM_operativo.Text = total.ToString("0"); // formato con 2 decimales
+        }
+
+        private void dgv_mecanico_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            CalcularTotalMecanico();
+        }
+
+        private void dgv_mecanico_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            CalcularTotalMecanico();
+        }
+
+        private void dgv_mecanico_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            CalcularTotalMecanico();
+        }
+
+        private void dgv_operativo_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            CalcularTotaloperativo();
+        }
+
+        private void dgv_operativo_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            CalcularTotaloperativo();
+        }
+
+        private void dgv_operativo_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            CalcularTotaloperativo();
+        }
+
+        private void Mask_txt_hr1_Leave(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void Mask_txt_hr2_Leave(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void Txt_3_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void Txt_4_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void Txt_5_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void Txt_6_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void Txt_7_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void Txt_8_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
         }
     }
 }
