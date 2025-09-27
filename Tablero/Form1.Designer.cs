@@ -431,10 +431,11 @@
             this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_operativo.Multiline = false;
             this.txt_TM_operativo.Name = "txt_TM_operativo";
+            this.txt_TM_operativo.ReadOnly = true;
             this.txt_TM_operativo.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_operativo.TabIndex = 8;
-            this.txt_TM_operativo.Text = "";
             this.txt_TM_operativo.TrailingIcon = null;
+            this.txt_TM_operativo.TextChanged += new System.EventHandler(this.txt_TM_operativo_TextChanged);
             // 
             // card_dgv_operativo
             // 
@@ -491,10 +492,11 @@
             this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_mecanico.Multiline = false;
             this.txt_TM_mecanico.Name = "txt_TM_mecanico";
+            this.txt_TM_mecanico.ReadOnly = true;
             this.txt_TM_mecanico.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_mecanico.TabIndex = 3;
-            this.txt_TM_mecanico.Text = "";
             this.txt_TM_mecanico.TrailingIcon = null;
+            this.txt_TM_mecanico.TextChanged += new System.EventHandler(this.txt_TM_mecanico_TextChanged);
             // 
             // card_dgv_mecanico
             // 
@@ -580,7 +582,7 @@
             this.Txt_meta.Size = new System.Drawing.Size(155, 48);
             this.Txt_meta.TabIndex = 6;
             this.Txt_meta.TabStop = false;
-            this.Txt_meta.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_meta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Txt_meta.TrailingIcon = null;
             this.Txt_meta.UseSystemPasswordChar = false;
             // 
@@ -1105,6 +1107,7 @@
             this.cb_OP.Size = new System.Drawing.Size(250, 49);
             this.cb_OP.StartIndex = 0;
             this.cb_OP.TabIndex = 1;
+            this.cb_OP.SelectedIndexChanged += new System.EventHandler(this.cb_OP_SelectedIndexChanged);
             // 
             // materialCard1
             // 

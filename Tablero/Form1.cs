@@ -38,6 +38,8 @@ namespace Tablero
             lbl_nom2.Text = var_nom_empledo.ToUpper(); // Mostrar el nombre del empleado en el label correspondiente
             connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
 
+
+
             // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
@@ -469,9 +471,9 @@ namespace Tablero
                 Txt_9.EmbeddedLabelText = "Personal Operativo";
                 Txt_10.EmbeddedLabelText = "Cascara y Carrete";
 
-                Txt_Read_1.EmbeddedLabelText = "Horas Disponibles";
+                Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
-                Txt_Read_3.EmbeddedLabelText = "Horas Progamadas";
+                Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
                 Txt_Read_5.EmbeddedLabelText = "Kg Secos Meta";
 
@@ -583,7 +585,7 @@ namespace Tablero
         private void CalcularSuma()
         {
             decimal total = 0;
-
+            decimal Kg_entrada = 0;
             // Lista de los TextBox que quieres sumar
             RadTextBox[] cajas = { Txt_3, Txt_4, Txt_5, Txt_6, Txt_7, Txt_8 };
 
@@ -594,8 +596,9 @@ namespace Tablero
                     total += valor;
                 }
             }
-
-            Txt_Read_4.Text = total.ToString("0.00"); // puedes usar "0.##" si quieres decimales
+            Kg_entrada = Txt_2.Text == string.Empty ? 0 : Convert.ToDecimal(Txt_2.Text);
+            decimal resultado = Kg_entrada - total;
+            Txt_Read_4.Text = resultado.ToString("0.00"); // puedes usar "0.##" si quieres decimales
         }
 
         private void reiniciarCampos()
@@ -3092,30 +3095,89 @@ namespace Tablero
             limpiar_filtros_OP();
         }
 
+        //private void calcular_turno()
+        //{
+        //    // Leer las horas ingresadas
+        //    string horaInicioText = Mask_txt_hr1.Text;
+        //    string horaFinText = Mask_txt_hr2.Text;
+
+        //    // Convertir a DateTime
+        //    DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
+        //    DateTime horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
+
+        //    // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
+        //    if (horaFin < horaInicio)
+        //    {
+        //        horaFin = horaFin.AddDays(1);
+        //    }
+
+        //    // Calcular diferencia
+        //    TimeSpan diferencia = horaFin - horaInicio;
+
+        //    // Mostrar horas totales (con decimales si hay minutos)
+        //    Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+        //}
+
         private void calcular_turno()
         {
-            // Leer las horas ingresadas
-            string horaInicioText = Mask_txt_hr1.Text;
-            string horaFinText = Mask_txt_hr2.Text;
-
-            // Convertir a DateTime
-            DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
-            DateTime horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
-
-            // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
-            if (horaFin < horaInicio)
+            try
             {
-                horaFin = horaFin.AddDays(1);
+                
+                if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
+                {
+                    string horaInicioText = Mask_txt_hr1.Text;
+                    string horaFinText = Mask_txt_hr2.Text;
+
+                    // Convertir a DateTime
+                    DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
+                    DateTime horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
+
+                    // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
+                    if (horaFin < horaInicio)
+                    {
+                        horaFin = horaFin.AddDays(1);
+                    }
+
+                    // Calcular diferencia inicial
+                    TimeSpan diferencia = horaFin - horaInicio;
+
+                    // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
+                    Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+
+                    // Calcular la nueva diferencia restando los minutos
+                    TimeSpan diferenciaConDescuento = diferencia;
+
+                    // Restar minutos mecánicos
+                    if (!string.IsNullOrEmpty(txt_TM_mecanico.Text) && int.TryParse(txt_TM_mecanico.Text, out int minutosMecanico))
+                    {
+                        diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosMecanico));
+                    }
+
+                    // Restar minutos operativos
+                    if (!string.IsNullOrEmpty(txt_TM_operativo.Text) && int.TryParse(txt_TM_operativo.Text, out int minutosOperativo))
+                    {
+                        diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
+                    }
+
+                    // Asegurar que no sea negativo
+                    if (diferenciaConDescuento.TotalMinutes < 0)
+                    {
+                        diferenciaConDescuento = TimeSpan.Zero;
+                    }
+
+                    // Mostrar el resultado con descuento en Txt_Read_3
+                    Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
+                }
+               
             }
-
-            // Calcular diferencia
-            TimeSpan diferencia = horaFin - horaInicio;
-
-            // Mostrar horas totales (con decimales si hay minutos)
-            Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error en cálculo: {ex.Message}");
+            }
         }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             if (cb_Turno.SelectedIndex != -1)
             {
                 if (cb_Turno.SelectedIndex == 0)
@@ -3154,7 +3216,6 @@ namespace Tablero
 
                 MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
             }
-            //MessageBox.Show(Txt_Read_1.Text);
         }
 
         private void CalcularTotalMecanico()
@@ -3261,6 +3322,51 @@ namespace Tablero
         private void Txt_8_TextChanged(object sender, EventArgs e)
         {
             CalcularSuma();
+        }
+
+        private void cb_OP_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string valorBuscado = cb_OP.Text; 
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            if(cb_Area.SelectedIndex == 0)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"No_box_hr\", \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string resultado = string.Empty;
+                string resultado2 = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    resultado = dt.Rows[0]["No_box_hr"].ToString();
+                    resultado2 = dt.Rows[0]["Kg_seco_hr"].ToString();
+                    Txt_meta.Text = resultado;
+                    Txt_Read_5.Text = resultado2;
+                }
+            }
+        }
+
+        private void txt_TM_mecanico_TextChanged(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void txt_TM_operativo_TextChanged(object sender, EventArgs e)
+        {
+            calcular_turno();
         }
     }
 }
