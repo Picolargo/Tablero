@@ -187,6 +187,36 @@ namespace Tablero
             }
         }
 
+
+        //public void LoadDataIntoComboBox(out bool bande_consulta, string query, ComboBox comboBox, string displayMember, string valueMember, NpgsqlParameter[] parameters = null)
+        //{
+        //    bande_consulta = false; // Inicializar
+
+        //    try
+        //    {
+        //        DataTable dataTable = ExecuteSelectQuery(query, parameters);
+
+        //        if (dataTable != null && dataTable.Rows.Count > 0)
+        //        {
+        //            comboBox.DataSource = dataTable;
+        //            comboBox.DisplayMember = displayMember;
+        //            comboBox.ValueMember = valueMember;
+        //            comboBox.SelectedIndex = -1;
+        //            bande_consulta = true;
+        //        }
+        //        else
+        //        {
+        //            comboBox.DataSource = null;
+        //            comboBox.Items.Clear();
+        //            comboBox.Text = "No hay datos disponibles";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error al cargar ComboBox: {ex.Message}");
+        //    }
+        //}
+
         // Método auxiliar para determinar tipos de datos
         private NpgsqlTypes.NpgsqlDbType GetNpgsqlDbType(object value)
         {

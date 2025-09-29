@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls.UI;
+using static System.Net.Mime.MediaTypeNames;
+using System.Globalization;
 
 namespace Tablero
 {
@@ -486,8 +488,6 @@ namespace Tablero
                 Txt_Read_9.Visible = false;
 
                 //limpiar campos
-                cb_Turno.SelectedIndex = -1;
-                cb_OP.SelectedIndex = -1;
                 dtp1.Value = DateTime.Now;
                 Txt_1.Text = String.Empty;
                 Txt_2.Text = "0";
@@ -511,11 +511,7 @@ namespace Tablero
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Deshidratado\" ORDER BY \"OP\";";
-
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
-
-                
-
             }
             if (cb_Area.SelectedIndex == 1)
             {
@@ -604,7 +600,6 @@ namespace Tablero
         private void reiniciarCampos()
         {
             cb_Turno.SelectedIndex = -1;
-            cb_OP.SelectedIndex = -1;
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
             Txt_2.Text = string.Empty;
@@ -627,6 +622,7 @@ namespace Tablero
             Txt_Read_7.Text = string.Empty;
             Txt_Read_8.Text = string.Empty;
             Txt_Read_9.Text = string.Empty;
+            txt_Tiempo_comida.Text = "30";
             //hacer invisibles controles
             card_datos.Visible = false;
             card_TM.Visible = false;
@@ -3118,15 +3114,26 @@ namespace Tablero
         //    Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
         //}
 
+        private void calcular_horas_programadas()
+        {
+            double hr_programada, meta_programada, meta_x_hr;
+
+            hr_programada = double.TryParse(Txt_Read_1.Text, out hr_programada) ? hr_programada : 0;
+            meta_x_hr = double.TryParse(Txt_meta.Text, out meta_x_hr) ? meta_x_hr : 0;
+            meta_programada = hr_programada * meta_x_hr;
+            Txt_Read_2.Text = meta_programada.ToString("0.##");
+        }
+
         private void calcular_turno()
         {
             try
             {
-                
+
                 if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
                 {
                     string horaInicioText = Mask_txt_hr1.Text;
                     string horaFinText = Mask_txt_hr2.Text;
+
 
                     // Convertir a DateTime
                     DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
@@ -3141,8 +3148,16 @@ namespace Tablero
                     // Calcular diferencia inicial
                     TimeSpan diferencia = horaFin - horaInicio;
 
+                    // Restar minutos comida
+                    if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
+                    {
+                        diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
+                    }
+
                     // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
                     Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+
+
 
                     // Calcular la nueva diferencia restando los minutos
                     TimeSpan diferenciaConDescuento = diferencia;
@@ -3158,21 +3173,27 @@ namespace Tablero
                     {
                         diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
                     }
-
                     // Asegurar que no sea negativo
                     if (diferenciaConDescuento.TotalMinutes < 0)
                     {
                         diferenciaConDescuento = TimeSpan.Zero;
                     }
-
+                    if (!string.IsNullOrEmpty(Txt_meta.Text))
+                    {
+                        calcular_horas_programadas();
+                    }
                     // Mostrar el resultado con descuento en Txt_Read_3
                     Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
                 }
-               
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error en cálculo: {ex.Message}");
+                 //MessageBox.Show($"Error en cálculo: {ex.Message}");
+                if(ex is FormatException)
+                {
+                    MessageBox.Show("Formato de hora inválido. Asegúrese de usar HH:mm.");
+                }
             }
         }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
@@ -3232,7 +3253,6 @@ namespace Tablero
                     total += valor;
                 }
             }
-
             txt_TM_mecanico.Text = total.ToString("0"); // formato con 2 decimales
         }
 
@@ -3250,7 +3270,6 @@ namespace Tablero
                     total += valor;
                 }
             }
-
             txt_TM_operativo.Text = total.ToString("0"); // formato con 2 decimales
         }
 
@@ -3286,12 +3305,12 @@ namespace Tablero
 
         private void Mask_txt_hr1_Leave(object sender, EventArgs e)
         {
-            calcular_turno();
+            //calcular_turno();
         }
 
         private void Mask_txt_hr2_Leave(object sender, EventArgs e)
         {
-            calcular_turno();
+            //calcular_turno();
         }
 
         private void Txt_3_TextChanged(object sender, EventArgs e)
@@ -3326,11 +3345,32 @@ namespace Tablero
 
         private void cb_OP_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string valorBuscado = cb_OP.Text; 
+           
+        }
+
+        private void txt_TM_mecanico_TextChanged(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void txt_TM_operativo_TextChanged(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void Txt_2_TextChanged(object sender, EventArgs e)
+        {
+            CalcularSuma();
+        }
+
+        private void cb_OP_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            //MessageBox.Show("entró");
+            string valorBuscado = cb_OP.Text;
 
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            if(cb_Area.SelectedIndex == 0)
+            if (cb_Area.SelectedIndex == 0 && cb_OP.SelectedIndex != -1)
             {
                 // Consulta para buscar donde OP = valor_buscado
                 string query = "SELECT \"No_box_hr\", \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
@@ -3355,16 +3395,26 @@ namespace Tablero
                     resultado2 = dt.Rows[0]["Kg_seco_hr"].ToString();
                     Txt_meta.Text = resultado;
                     Txt_Read_5.Text = resultado2;
+
+                    if (!string.IsNullOrEmpty(Txt_Read_1.Text))
+                    {
+                        calcular_horas_programadas();
+                    }
                 }
             }
         }
 
-        private void txt_TM_mecanico_TextChanged(object sender, EventArgs e)
+        private void txt_Tiempo_comida_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
         }
 
-        private void txt_TM_operativo_TextChanged(object sender, EventArgs e)
+        private void Mask_txt_hr1_TextChanged(object sender, EventArgs e)
+        {
+            calcular_turno();
+        }
+
+        private void Mask_txt_hr2_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
         }

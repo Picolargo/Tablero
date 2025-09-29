@@ -294,6 +294,7 @@
             this.txt_Tiempo_comida.TabIndex = 0;
             this.txt_Tiempo_comida.Text = "";
             this.txt_Tiempo_comida.TrailingIcon = null;
+            this.txt_Tiempo_comida.TextChanged += new System.EventHandler(this.txt_Tiempo_comida_TextChanged);
             this.txt_Tiempo_comida.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_comida_KeyPress);
             // 
             // materialTextBox1
@@ -423,6 +424,7 @@
             this.txt_TM_operativo.AnimateReadOnly = false;
             this.txt_TM_operativo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_TM_operativo.Depth = 0;
+            this.txt_TM_operativo.Enabled = false;
             this.txt_TM_operativo.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_operativo.Hint = "Minutos Totales";
             this.txt_TM_operativo.LeadingIcon = null;
@@ -431,9 +433,9 @@
             this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_operativo.Multiline = false;
             this.txt_TM_operativo.Name = "txt_TM_operativo";
-            this.txt_TM_operativo.ReadOnly = true;
             this.txt_TM_operativo.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_operativo.TabIndex = 8;
+            this.txt_TM_operativo.Text = "";
             this.txt_TM_operativo.TrailingIcon = null;
             this.txt_TM_operativo.TextChanged += new System.EventHandler(this.txt_TM_operativo_TextChanged);
             // 
@@ -484,6 +486,7 @@
             this.txt_TM_mecanico.AnimateReadOnly = false;
             this.txt_TM_mecanico.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_TM_mecanico.Depth = 0;
+            this.txt_TM_mecanico.Enabled = false;
             this.txt_TM_mecanico.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_mecanico.Hint = "Minutos Totales";
             this.txt_TM_mecanico.LeadingIcon = null;
@@ -492,9 +495,9 @@
             this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_mecanico.Multiline = false;
             this.txt_TM_mecanico.Name = "txt_TM_mecanico";
-            this.txt_TM_mecanico.ReadOnly = true;
             this.txt_TM_mecanico.Size = new System.Drawing.Size(163, 50);
             this.txt_TM_mecanico.TabIndex = 3;
+            this.txt_TM_mecanico.Text = "";
             this.txt_TM_mecanico.TrailingIcon = null;
             this.txt_TM_mecanico.TextChanged += new System.EventHandler(this.txt_TM_mecanico_TextChanged);
             // 
@@ -876,6 +879,7 @@
             this.Txt_2.ShowEmbeddedLabel = true;
             this.Txt_2.Size = new System.Drawing.Size(170, 43);
             this.Txt_2.TabIndex = 16;
+            this.Txt_2.TextChanged += new System.EventHandler(this.Txt_2_TextChanged);
             // 
             // Mask_txt_hr2
             // 
@@ -922,6 +926,7 @@
             this.Mask_txt_hr2.UseSystemPasswordChar = false;
             this.Mask_txt_hr2.ValidatingType = null;
             this.Mask_txt_hr2.Leave += new System.EventHandler(this.Mask_txt_hr2_Leave);
+            this.Mask_txt_hr2.TextChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
             // Mask_txt_hr1
             // 
@@ -968,6 +973,7 @@
             this.Mask_txt_hr1.UseSystemPasswordChar = false;
             this.Mask_txt_hr1.ValidatingType = null;
             this.Mask_txt_hr1.Leave += new System.EventHandler(this.Mask_txt_hr1_Leave);
+            this.Mask_txt_hr1.TextChanged += new System.EventHandler(this.Mask_txt_hr1_TextChanged);
             // 
             // Txt_1
             // 
@@ -1108,6 +1114,7 @@
             this.cb_OP.StartIndex = 0;
             this.cb_OP.TabIndex = 1;
             this.cb_OP.SelectedIndexChanged += new System.EventHandler(this.cb_OP_SelectedIndexChanged);
+            this.cb_OP.SelectionChangeCommitted += new System.EventHandler(this.cb_OP_SelectionChangeCommitted);
             // 
             // materialCard1
             // 
