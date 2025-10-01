@@ -1,18 +1,19 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using MetroFramework.Controls;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls.UI;
 using static System.Net.Mime.MediaTypeNames;
-using System.Globalization;
 
 namespace Tablero
 {
@@ -25,13 +26,18 @@ namespace Tablero
         private string id_global_meta_evaporado = string.Empty;
         private string id_global_meta_grind = string.Empty;
         private string id_global_meta_platinum = string.Empty;
+        private int id_user = 0;
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
         private int filtroUsuariosActivo_OP_dgv_activo = 0;
+        private string horaInicioText = string.Empty;
+        private string horaFinText = string.Empty;
+        private DateTime horaInicio;
+        private DateTime horaFin;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
 
-        public Form_principal(string var_no_empledo, string var_nom_empledo, string conexionstring)
+        public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string conexionstring)
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
@@ -39,7 +45,7 @@ namespace Tablero
             lbl_no_emp2.Text = var_no_empledo; // Mostrar el número de empleado en el label correspondiente
             lbl_nom2.Text = var_nom_empledo.ToUpper(); // Mostrar el nombre del empleado en el label correspondiente
             connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
-
+            id_user = ID_usuario; // Asignar el ID del usuario pasado como parámetro
 
 
             // Initialize MaterialSkinManager and set the theme and color scheme  
@@ -477,11 +483,11 @@ namespace Tablero
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
-                Txt_Read_5.EmbeddedLabelText = "Kg Secos Meta";
 
                 //hacer invisibles controles
                 Txt_11.Visible = false;
 
+                Txt_Read_5.Visible = false;
                 Txt_Read_6.Visible = false;
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
@@ -505,7 +511,6 @@ namespace Tablero
                 Txt_Read_2.Text = string.Empty;
                 Txt_Read_3.Text = string.Empty;
                 Txt_Read_4.Text = string.Empty;
-                Txt_Read_5.Text = string.Empty;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -600,6 +605,9 @@ namespace Tablero
         private void reiniciarCampos()
         {
             cb_Turno.SelectedIndex = -1;
+            cb_Turno.Focus();
+            cb_OP.SelectedIndex = -1;
+            cb_OP.Focus();
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
             Txt_2.Text = string.Empty;
@@ -632,6 +640,7 @@ namespace Tablero
             cb_Turno.Enabled = false;
             cb_OP.Enabled = false;
             dtp1.Enabled = false;
+            txt_Tiempo_energia.Text = "0";
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -3131,14 +3140,6 @@ namespace Tablero
 
                 if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
                 {
-                    string horaInicioText = Mask_txt_hr1.Text;
-                    string horaFinText = Mask_txt_hr2.Text;
-
-
-                    // Convertir a DateTime
-                    DateTime horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
-                    DateTime horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
-
                     // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
                     if (horaFin < horaInicio)
                     {
@@ -3147,6 +3148,12 @@ namespace Tablero
 
                     // Calcular diferencia inicial
                     TimeSpan diferencia = horaFin - horaInicio;
+
+                    // Restar minutos energia
+                    if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
+                    {
+                        diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
+                    }
 
                     // Restar minutos comida
                     if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
@@ -3185,14 +3192,16 @@ namespace Tablero
                     // Mostrar el resultado con descuento en Txt_Read_3
                     Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
                 }
-
+                btn_save_ficha.Enabled = true;
             }
             catch (Exception ex)
             {
                  //MessageBox.Show($"Error en cálculo: {ex.Message}");
                 if(ex is FormatException)
                 {
-                    MessageBox.Show("Formato de hora inválido. Asegúrese de usar HH:mm.");
+                    //MetroFramework.MetroMessageBox.Show(this, "Formato de hora inválido. Asegúrese de usar HH:mm.",
+                    //                                    "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btn_save_ficha.Enabled = false;
                 }
             }
         }
@@ -3227,15 +3236,233 @@ namespace Tablero
 
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
-            if (cb_OP.SelectedValue != null)
+            //if (cb_OP.SelectedValue != null)
+            //{
+            //    // Obtener el ValueMember (ID_OP)
+            //    int idOP = (int)cb_OP.SelectedValue;
+
+            //    // Obtener el DisplayMember (OP)
+            //    string op = cb_OP.Text;
+
+            //    MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
+            //}
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            try
             {
-                // Obtener el ValueMember (ID_OP)
-                int idOP = (int)cb_OP.SelectedValue;
+                // Obtener ID del usuario actual (debes implementar esto)
+                int idUsuarioActual = id_user;
 
-                // Obtener el DisplayMember (OP)
+                // Obtener datos de los TextBox
+                DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                int turno = Convert.ToInt32(cb_Turno.Text);
+                string lote = Txt_1.Text;
                 string op = cb_OP.Text;
+                decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
+                decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
+                decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
+                decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
+                decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
+                decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
+                decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
+                decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
+                int personal_Op = Convert.ToInt32(Txt_9.Text);
+                decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
+                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
+                string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
+                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+
+                // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
+                    kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
+                    mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_prog, area, meta);
+
+                if (idFicha > 0)
+                {
+                    // Insertar en tablas relacionadas
+                    InsertarTiemposMuertos(dbHelper, idFicha);
+
+                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cb_Area.SelectedIndex = -1;
+                    reiniciarCampos();
+                    cb_Area.Focus();
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error al guardar: {ex.Message}",
+                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private int InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
+     int turno, string lote, string op, decimal kgEnterProceso, decimal kgFrescosEnterSe,
+     decimal mermaCanica, decimal mermaPodrido, decimal mermaTina, decimal mermaPiso,
+     decimal mermaCanaletas, decimal mermaLavadoBandas, decimal cascaraCarrete,
+     TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas, 
+     decimal meta_prog, string area_f, decimal metaHr)
+        {
+            string query = @"INSERT INTO public.""Ficha"" (
+                    ""ID_user"", ""Fecha"", ""Turno"", ""Lote"", ""OP"",
+                    ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
+                    ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
+                    ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""MetaProg"", ""Area"", ""MetaHr""
+                ) VALUES (
+                    @id_user, @fecha, @turno, @lote, @op,
+                    @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
+                    @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @meta_prog, @Area, @MetaHr
+                ) RETURNING ""ID_Ficha"";";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                new NpgsqlParameter("@lote", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = lote ?? (object)DBNull.Value },
+                new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = op ?? (object)DBNull.Value },
+                new NpgsqlParameter("@kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = kgEnterProceso },
+                new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = kgFrescosEnterSe },
+                new NpgsqlParameter("@merma_canica", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaCanica },
+                new NpgsqlParameter("@merma_podrido", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaPodrido },
+                new NpgsqlParameter("@merma_tina", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaTina },
+                new NpgsqlParameter("@merma_piso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaPiso },
+                new NpgsqlParameter("@merma_canaletas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaCanaletas },
+                new NpgsqlParameter("@merma_lavado_bandas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaLavadoBandas },
+                new NpgsqlParameter("@cascara_carrete", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = cascaraCarrete },
+                new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                new NpgsqlParameter("@hr_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                new NpgsqlParameter("@Personal_Op", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
+                new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
+                new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
+                new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+            };
+
+            return dbHelper.ExecuteScalarInt(query, parameters);
+        }
+
+        private void InsertarTiemposMuertos(DatabaseHelper dbHelper, int idFicha)
+        {
+            // Insertar tiempos muertos mecánicos desde DataGridView
+            InsertarTiemposMuertosMecanicos(dbHelper, idFicha);
+
+            // Insertar tiempos muertos operativos desde DataGridView
+            InsertarTiemposMuertosOperativos(dbHelper, idFicha);
+
+            // Insertar tiempo muerto comida desde TextBox
+            InsertarTiempoMuertoComida(dbHelper, idFicha);
+
+            // Insertar tiempo muerto energía desde TextBox
+            InsertarTiempoMuertoEnergia(dbHelper, idFicha);
+        }
+
+        // Insertar en Tiempo_muerto_Mecanico desde DataGridView
+        private void InsertarTiemposMuertosMecanicos(DatabaseHelper dbHelper, int idFicha)
+        {
+            foreach (DataGridViewRow row in dgv_mecanico.Rows)
+            {
+                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    string motivos = row.Cells[1].Value.ToString();
+
+                    string query = @"INSERT INTO public.""Tiempo_muerto_Mecanico"" (
+                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos""
+                        ) VALUES (@id_ficha, @min_detenidos, @motivos);";
+
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                    };
+
+                    dbHelper.ExecuteNonQuery(query, parameters);
+                }
+            }
+        }
+
+        // Insertar en Tiempo_Muerto_Operativo desde DataGridView
+        private void InsertarTiemposMuertosOperativos(DatabaseHelper dbHelper, int idFicha)
+        {
+            foreach (DataGridViewRow row in dgv_operativo.Rows)
+            {
+                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    string motivos = row.Cells[1].Value.ToString();
+
+                    string query = @"INSERT INTO public.""Tiempo_Muerto_Operativo"" (
+                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos""
+                        ) VALUES (@id_ficha, @min_detenidos, @motivos);";
+
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                    };
+
+                    dbHelper.ExecuteNonQuery(query, parameters);
+                }
+            }
+        }
+
+        // Insertar en Tiempo_Muerto_Comida desde TextBox
+        private void InsertarTiempoMuertoComida(DatabaseHelper dbHelper, int idFicha)
+        {
+            if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
+            {
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text);
+
+                string query = @"INSERT INTO public.""Tiempo_Muerto_Comida"" (
+                        ""ID_Ficha"", ""Minutos_Detenidos""
+                    ) VALUES (@id_ficha, @minutos_detenidos);";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+                    new NpgsqlParameter("@minutos_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minutosDetenidos }
+                };
+
+                dbHelper.ExecuteNonQuery(query, parameters);
+            }
+        }
+
+        // Insertar en Tiempo_Muerto_Energia desde TextBox
+        private void InsertarTiempoMuertoEnergia(DatabaseHelper dbHelper, int idFicha)
+        {
+            if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
+            {
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text);
+
+                string query = @"INSERT INTO public.""Tiempo_Muerto_Energia"" (
+                        ""ID_Ficha"", ""Minutos_Detenidos""
+                    ) VALUES (@id_ficha, @minutos_detenidos);";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+                    new NpgsqlParameter("@minutos_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minutosDetenidos }
+                };
+
+                dbHelper.ExecuteNonQuery(query, parameters);
             }
         }
 
@@ -3303,16 +3530,6 @@ namespace Tablero
             CalcularTotaloperativo();
         }
 
-        private void Mask_txt_hr1_Leave(object sender, EventArgs e)
-        {
-            //calcular_turno();
-        }
-
-        private void Mask_txt_hr2_Leave(object sender, EventArgs e)
-        {
-            //calcular_turno();
-        }
-
         private void Txt_3_TextChanged(object sender, EventArgs e)
         {
             CalcularSuma();
@@ -3373,7 +3590,7 @@ namespace Tablero
             if (cb_Area.SelectedIndex == 0 && cb_OP.SelectedIndex != -1)
             {
                 // Consulta para buscar donde OP = valor_buscado
-                string query = "SELECT \"No_box_hr\", \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
+                string query = "SELECT \"No_box_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
 
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -3386,15 +3603,12 @@ namespace Tablero
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
-                string resultado2 = string.Empty;
-
+             
                 // Verificar si se encontraron resultados
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     resultado = dt.Rows[0]["No_box_hr"].ToString();
-                    resultado2 = dt.Rows[0]["Kg_seco_hr"].ToString();
                     Txt_meta.Text = resultado;
-                    Txt_Read_5.Text = resultado2;
 
                     if (!string.IsNullOrEmpty(Txt_Read_1.Text))
                     {
@@ -3411,10 +3625,41 @@ namespace Tablero
 
         private void Mask_txt_hr1_TextChanged(object sender, EventArgs e)
         {
-            calcular_turno();
+            try
+            {
+                horaInicioText = Mask_txt_hr1.Text;
+                // Convertir a DateTime
+                horaInicio = DateTime.ParseExact(horaInicioText, "HH:mm", null);
+                errorProvider1.SetError(Mask_txt_hr1, ""); // Borra el error si es válido
+                btn_save_ficha.Enabled = true;
+                calcular_turno();
+            }
+            catch (Exception ex)
+            {
+                errorProvider1.SetError(Mask_txt_hr1, "Formato de hora inválido. Asegúrese de usar HH:mm.");
+                btn_save_ficha.Enabled = false;
+            }
         }
 
         private void Mask_txt_hr2_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                horaFinText = Mask_txt_hr2.Text;
+                // Convertir a DateTime
+                horaFin = DateTime.ParseExact(horaFinText, "HH:mm", null);
+                errorProvider2.SetError(Mask_txt_hr2, ""); // Borra el error si es válido
+                btn_save_ficha.Enabled = true;
+                calcular_turno();
+            }
+            catch (Exception ex)
+            {
+                errorProvider2.SetError(Mask_txt_hr2, "Formato de hora inválido. Asegúrese de usar HH:mm.");
+                btn_save_ficha.Enabled = false;
+            }
+        }
+
+        private void txt_Tiempo_energia_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
         }

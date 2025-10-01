@@ -210,7 +210,7 @@ namespace Tablero
 
                     // Usuario válido
                     this.Visible = false;
-                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, connectionString);
+                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, idUser, connectionString);
                     principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
                     principal.Show(); // Muestra el formulario principal
                     // Guardar en sesión o usar esta información

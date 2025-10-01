@@ -62,6 +62,33 @@ namespace Tablero
             }
         }
 
+        // Agrega estos métodos a tu clase DatabaseHelper
+        public int ExecuteScalarInt(string query, NpgsqlParameter[] parameters = null)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                    {
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+
+                        object result = command.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) : -1;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error en ExecuteScalar: " + ex.Message);
+                    return -1;
+                }
+            }
+        }
+
         // Ejecutar INSERT, UPDATE, DELETE
         public int ExecuteNonQuery(string query, NpgsqlParameter[] parameters = null)
         {

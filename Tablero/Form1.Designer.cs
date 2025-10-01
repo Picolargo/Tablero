@@ -35,7 +35,7 @@
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.txt_Tiempo_comida = new MaterialSkin.Controls.MaterialTextBox();
-            this.materialTextBox1 = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_Tiempo_energia = new MaterialSkin.Controls.MaterialTextBox();
             this.lbl_min_comida = new MaterialSkin.Controls.MaterialLabel();
             this.card_botones = new MaterialSkin.Controls.MaterialCard();
             this.btn_cancelar_ficha = new MaterialSkin.Controls.MaterialButton();
@@ -149,6 +149,8 @@
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -208,6 +210,8 @@
             this.tabControl_meta.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -252,7 +256,7 @@
             this.card_meal_energy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.card_meal_energy.Controls.Add(this.materialLabel1);
             this.card_meal_energy.Controls.Add(this.txt_Tiempo_comida);
-            this.card_meal_energy.Controls.Add(this.materialTextBox1);
+            this.card_meal_energy.Controls.Add(this.txt_Tiempo_energia);
             this.card_meal_energy.Controls.Add(this.lbl_min_comida);
             this.card_meal_energy.Depth = 0;
             this.card_meal_energy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -297,23 +301,24 @@
             this.txt_Tiempo_comida.TextChanged += new System.EventHandler(this.txt_Tiempo_comida_TextChanged);
             this.txt_Tiempo_comida.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_comida_KeyPress);
             // 
-            // materialTextBox1
+            // txt_Tiempo_energia
             // 
-            this.materialTextBox1.AnimateReadOnly = false;
-            this.materialTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.materialTextBox1.Depth = 0;
-            this.materialTextBox1.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialTextBox1.Hint = "Tiempo sin Energía";
-            this.materialTextBox1.LeadingIcon = null;
-            this.materialTextBox1.Location = new System.Drawing.Point(431, 11);
-            this.materialTextBox1.MaxLength = 50;
-            this.materialTextBox1.MouseState = MaterialSkin.MouseState.OUT;
-            this.materialTextBox1.Multiline = false;
-            this.materialTextBox1.Name = "materialTextBox1";
-            this.materialTextBox1.Size = new System.Drawing.Size(226, 50);
-            this.materialTextBox1.TabIndex = 11;
-            this.materialTextBox1.Text = "";
-            this.materialTextBox1.TrailingIcon = null;
+            this.txt_Tiempo_energia.AnimateReadOnly = false;
+            this.txt_Tiempo_energia.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_Tiempo_energia.Depth = 0;
+            this.txt_Tiempo_energia.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_Tiempo_energia.Hint = "Tiempo sin Energía";
+            this.txt_Tiempo_energia.LeadingIcon = null;
+            this.txt_Tiempo_energia.Location = new System.Drawing.Point(431, 11);
+            this.txt_Tiempo_energia.MaxLength = 50;
+            this.txt_Tiempo_energia.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_Tiempo_energia.Multiline = false;
+            this.txt_Tiempo_energia.Name = "txt_Tiempo_energia";
+            this.txt_Tiempo_energia.Size = new System.Drawing.Size(226, 50);
+            this.txt_Tiempo_energia.TabIndex = 11;
+            this.txt_Tiempo_energia.Text = "";
+            this.txt_Tiempo_energia.TrailingIcon = null;
+            this.txt_Tiempo_energia.TextChanged += new System.EventHandler(this.txt_Tiempo_energia_TextChanged);
             // 
             // lbl_min_comida
             // 
@@ -925,7 +930,6 @@
             this.Mask_txt_hr2.TrailingIcon = null;
             this.Mask_txt_hr2.UseSystemPasswordChar = false;
             this.Mask_txt_hr2.ValidatingType = null;
-            this.Mask_txt_hr2.Leave += new System.EventHandler(this.Mask_txt_hr2_Leave);
             this.Mask_txt_hr2.TextChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
             // Mask_txt_hr1
@@ -972,7 +976,6 @@
             this.Mask_txt_hr1.TrailingIcon = null;
             this.Mask_txt_hr1.UseSystemPasswordChar = false;
             this.Mask_txt_hr1.ValidatingType = null;
-            this.Mask_txt_hr1.Leave += new System.EventHandler(this.Mask_txt_hr1_Leave);
             this.Mask_txt_hr1.TextChanged += new System.EventHandler(this.Mask_txt_hr1_TextChanged);
             // 
             // Txt_1
@@ -2253,6 +2256,16 @@
             // 
             this.radTaskbarButton1.OwnerForm = this;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr1_TextChanged);
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
+            this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2336,6 +2349,8 @@
             this.tabPage7.PerformLayout();
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2407,7 +2422,7 @@
         private System.Windows.Forms.Label lbl_user_no_emp;
         private System.Windows.Forms.Label lbl_Nom;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialTextBox materialTextBox1;
+        private MaterialSkin.Controls.MaterialTextBox txt_Tiempo_energia;
         private Telerik.WinControls.UI.RadTextBox Txt_1;
         private MaterialSkin.Controls.MaterialCard card_datos_captura;
         private Telerik.WinControls.UI.RadTaskbarButton radTaskbarButton1;
@@ -2461,6 +2476,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
     }
 }
 
