@@ -779,9 +779,11 @@
             this.Txt_10.ForeColor = System.Drawing.Color.Black;
             this.Txt_10.Location = new System.Drawing.Point(240, 312);
             this.Txt_10.Name = "Txt_10";
+            this.Txt_10.ShortcutsEnabled = false;
             this.Txt_10.ShowEmbeddedLabel = true;
             this.Txt_10.Size = new System.Drawing.Size(170, 43);
             this.Txt_10.TabIndex = 24;
+            this.Txt_10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_10_KeyPress);
             // 
             // Txt_9
             // 
@@ -791,9 +793,11 @@
             this.Txt_9.ForeColor = System.Drawing.Color.Black;
             this.Txt_9.Location = new System.Drawing.Point(240, 254);
             this.Txt_9.Name = "Txt_9";
+            this.Txt_9.ShortcutsEnabled = false;
             this.Txt_9.ShowEmbeddedLabel = true;
             this.Txt_9.Size = new System.Drawing.Size(170, 43);
             this.Txt_9.TabIndex = 23;
+            this.Txt_9.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_9_KeyPress);
             // 
             // Txt_8
             // 
@@ -803,10 +807,12 @@
             this.Txt_8.ForeColor = System.Drawing.Color.Black;
             this.Txt_8.Location = new System.Drawing.Point(240, 196);
             this.Txt_8.Name = "Txt_8";
+            this.Txt_8.ShortcutsEnabled = false;
             this.Txt_8.ShowEmbeddedLabel = true;
             this.Txt_8.Size = new System.Drawing.Size(170, 43);
             this.Txt_8.TabIndex = 22;
             this.Txt_8.TextChanged += new System.EventHandler(this.Txt_8_TextChanged);
+            this.Txt_8.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_8_Validating);
             // 
             // Txt_7
             // 
@@ -816,10 +822,12 @@
             this.Txt_7.ForeColor = System.Drawing.Color.Black;
             this.Txt_7.Location = new System.Drawing.Point(240, 138);
             this.Txt_7.Name = "Txt_7";
+            this.Txt_7.ShortcutsEnabled = false;
             this.Txt_7.ShowEmbeddedLabel = true;
             this.Txt_7.Size = new System.Drawing.Size(170, 43);
             this.Txt_7.TabIndex = 21;
             this.Txt_7.TextChanged += new System.EventHandler(this.Txt_7_TextChanged);
+            this.Txt_7.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_7_Validating);
             // 
             // Txt_6
             // 
@@ -829,10 +837,12 @@
             this.Txt_6.ForeColor = System.Drawing.Color.Black;
             this.Txt_6.Location = new System.Drawing.Point(240, 80);
             this.Txt_6.Name = "Txt_6";
+            this.Txt_6.ShortcutsEnabled = false;
             this.Txt_6.ShowEmbeddedLabel = true;
             this.Txt_6.Size = new System.Drawing.Size(170, 43);
             this.Txt_6.TabIndex = 20;
             this.Txt_6.TextChanged += new System.EventHandler(this.Txt_6_TextChanged);
+            this.Txt_6.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_6_Validating);
             // 
             // Txt_5
             // 
@@ -842,10 +852,12 @@
             this.Txt_5.ForeColor = System.Drawing.Color.Black;
             this.Txt_5.Location = new System.Drawing.Point(20, 312);
             this.Txt_5.Name = "Txt_5";
+            this.Txt_5.ShortcutsEnabled = false;
             this.Txt_5.ShowEmbeddedLabel = true;
             this.Txt_5.Size = new System.Drawing.Size(170, 43);
             this.Txt_5.TabIndex = 19;
             this.Txt_5.TextChanged += new System.EventHandler(this.Txt_5_TextChanged);
+            this.Txt_5.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_5_Validating);
             // 
             // Txt_4
             // 
@@ -855,10 +867,12 @@
             this.Txt_4.ForeColor = System.Drawing.Color.Black;
             this.Txt_4.Location = new System.Drawing.Point(20, 254);
             this.Txt_4.Name = "Txt_4";
+            this.Txt_4.ShortcutsEnabled = false;
             this.Txt_4.ShowEmbeddedLabel = true;
             this.Txt_4.Size = new System.Drawing.Size(170, 43);
             this.Txt_4.TabIndex = 18;
             this.Txt_4.TextChanged += new System.EventHandler(this.Txt_4_TextChanged);
+            this.Txt_4.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_4_Validating);
             // 
             // Txt_3
             // 
@@ -868,10 +882,12 @@
             this.Txt_3.ForeColor = System.Drawing.Color.Black;
             this.Txt_3.Location = new System.Drawing.Point(20, 196);
             this.Txt_3.Name = "Txt_3";
+            this.Txt_3.ShortcutsEnabled = false;
             this.Txt_3.ShowEmbeddedLabel = true;
             this.Txt_3.Size = new System.Drawing.Size(170, 43);
             this.Txt_3.TabIndex = 17;
             this.Txt_3.TextChanged += new System.EventHandler(this.Txt_3_TextChanged);
+            this.Txt_3.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_3_Validating);
             // 
             // Txt_2
             // 
@@ -881,10 +897,13 @@
             this.Txt_2.ForeColor = System.Drawing.Color.Black;
             this.Txt_2.Location = new System.Drawing.Point(20, 138);
             this.Txt_2.Name = "Txt_2";
+            this.Txt_2.ShortcutsEnabled = false;
             this.Txt_2.ShowEmbeddedLabel = true;
             this.Txt_2.Size = new System.Drawing.Size(170, 43);
             this.Txt_2.TabIndex = 16;
             this.Txt_2.TextChanged += new System.EventHandler(this.Txt_2_TextChanged);
+            this.Txt_2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_2_KeyPress);
+            this.Txt_2.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_2_Validating);
             // 
             // Mask_txt_hr2
             // 

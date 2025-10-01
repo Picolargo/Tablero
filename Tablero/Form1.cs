@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls.UI;
@@ -582,7 +583,27 @@ namespace Tablero
             }
         }
 
-        // Método que suma los valores de Txt_3 a Txt_8
+        //// Método que suma los valores de Txt_3 a Txt_8
+        //private void CalcularSuma()
+        //{
+        //    decimal total = 0;
+        //    decimal Kg_entrada = 0;
+        //    // Lista de los TextBox que quieres sumar
+        //    RadTextBox[] cajas = { Txt_3, Txt_4, Txt_5, Txt_6, Txt_7, Txt_8 };
+
+        //    foreach (RadTextBox txt in cajas)
+        //    {
+        //        if (decimal.TryParse(txt.Text, out decimal valor))
+        //        {
+        //            total += valor;
+        //        }
+        //    }
+        //    Kg_entrada = Txt_2.Text == string.Empty ? 0 : Convert.ToDecimal(Txt_2.Text);
+        //    decimal resultado = Kg_entrada - total;
+        //    Txt_Read_4.Text = resultado.ToString("0.00"); // puedes usar "0.##" si quieres decimales
+        //}
+
+        // 3) CalcularSuma: no usar Convert.ToDecimal directo — usar TryParse
         private void CalcularSuma()
         {
             decimal total = 0;
@@ -592,15 +613,23 @@ namespace Tablero
 
             foreach (RadTextBox txt in cajas)
             {
-                if (decimal.TryParse(txt.Text, out decimal valor))
+                if (decimal.TryParse(txt.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal valor) ||
+                    decimal.TryParse(txt.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out valor))
                 {
                     total += valor;
                 }
             }
-            Kg_entrada = Txt_2.Text == string.Empty ? 0 : Convert.ToDecimal(Txt_2.Text);
+
+            // Para Txt_2 usar TryParse (evita excepciones mientras el usuario escribe)
+            if (!decimal.TryParse(Txt_2.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out Kg_entrada) &&
+                !decimal.TryParse(Txt_2.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out Kg_entrada))
+            {
+                Kg_entrada = 0m;
+            }
+
             decimal resultado = Kg_entrada - total;
-            Txt_Read_4.Text = resultado.ToString("0.00"); // puedes usar "0.##" si quieres decimales
-        }
+            Txt_Read_4.Text = resultado.ToString("0.00", CultureInfo.CurrentCulture);
+        }                                              
 
         private void reiniciarCampos()
         {
@@ -3532,31 +3561,97 @@ namespace Tablero
 
         private void Txt_3_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
         private void Txt_4_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
         private void Txt_5_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
         private void Txt_6_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
         private void Txt_7_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
         private void Txt_8_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
@@ -3577,9 +3672,44 @@ namespace Tablero
 
         private void Txt_2_TextChanged(object sender, EventArgs e)
         {
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
+
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
             CalcularSuma();
         }
 
+        // Función que deja sólo dígitos y un solo punto (mantiene el primer punto)
+        private string SanitizeNumericText(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            // Elimina todo excepto dígitos y puntos
+            string onlyDigitsAndDots = Regex.Replace(input, @"[^0-9.]", "");
+
+            int firstDot = onlyDigitsAndDots.IndexOf('.');
+            if (firstDot >= 0)
+            {
+                // deja sólo el primer punto
+                string before = onlyDotsAndTrim(onlyDigitsAndDots.Substring(0, firstDot + 1));
+                string after = onlyDigitsAndDots.Substring(firstDot + 1).Replace(".", ""); // eliminar puntos siguientes
+                return before + after;
+            }
+            else
+            {
+                return onlyDotsAndTrim(onlyDigitsAndDots);
+            }
+
+            // local helper
+            string onlyDotsAndTrim(string s) => s; // ya está limpio en este flujo
+        }
         private void cb_OP_SelectionChangeCommitted(object sender, EventArgs e)
         {
             //MessageBox.Show("entró");
@@ -3662,6 +3792,167 @@ namespace Tablero
         private void txt_Tiempo_energia_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
+        }
+
+        private void Txt_2_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var tb = (RadTextBox)sender;
+            char decimalSep = '.'; // si quieres respetar cultura: CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+
+            // Permitir backspace
+            if (e.KeyChar == '\b') return;
+
+            // Permitir un solo punto decimal
+            if (e.KeyChar == decimalSep)
+            {
+                if (tb.Text.Contains(decimalSep)) e.Handled = true;
+                return;
+            }
+
+            // Permitir solo dígitos
+            if (!char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void Txt_3_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_4_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_5_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_6_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_7_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_8_Validating(object sender, CancelEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string text = textBox.Text;
+
+            // Regex que acepta "" o dígitos con un punto decimal opcional
+            if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // mantiene el foco en el control
+            }
+        }
+
+        private void Txt_9_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir control de borrado (Backspace)
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                return;
+            }
+
+            // Permitir solo un punto decimal
+            if (e.KeyChar == '.')
+            {
+                if ((sender as TextBox).Text.Contains("."))
+                {
+                    e.Handled = true; // Ya hay un punto → se bloquea
+                }
+                return;
+            }
+
+            // Permitir solo números
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear todo lo que no sea número
+            }
+        }
+
+        private void Txt_10_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir control de borrado (Backspace)
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                return;
+            }
+
+            // Permitir solo un punto decimal
+            if (e.KeyChar == '.')
+            {
+                if ((sender as TextBox).Text.Contains("."))
+                {
+                    e.Handled = true; // Ya hay un punto → se bloquea
+                }
+                return;
+            }
+
+            // Permitir solo números
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear todo lo que no sea número
+            }
         }
     }
 }
