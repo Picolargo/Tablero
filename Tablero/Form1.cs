@@ -468,6 +468,7 @@ namespace Tablero
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
 
+
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Lote";
                 Txt_2.EmbeddedLabelText = "Kg Entrada (Proceso)";
@@ -485,33 +486,20 @@ namespace Tablero
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
 
+                Txt_1.Visible = true;
+                Txt_7.Visible = true;
+                Txt_8.Visible = true;
+                Txt_9.Visible = true;
+                Txt_10.Visible = true;
+
                 //hacer invisibles controles
                 Txt_11.Visible = false;
-
                 Txt_Read_5.Visible = false;
                 Txt_Read_6.Visible = false;
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-
-                //limpiar campos
-                dtp1.Value = DateTime.Now;
-                Txt_1.Text = String.Empty;
-                Txt_2.Text = "0";
-                Txt_3.Text = "0";
-                Txt_4.Text = "0";
-                Txt_5.Text = "0";
-                Txt_6.Text = "0";
-                Txt_7.Text = "0";
-                Txt_8.Text = "0";
-                Txt_9.Text = "0";
-                Txt_10.Text = "0";
-                Txt_meta.Text = string.Empty;
-
-                Txt_Read_1.Text = string.Empty;
-                Txt_Read_2.Text = string.Empty;
-                Txt_Read_3.Text = string.Empty;
-                Txt_Read_4.Text = string.Empty;
+                cb_lote.Visible = false;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -530,18 +518,42 @@ namespace Tablero
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
 
+                Txt_1.Visible = false;
+
                 //habilitar controles
-                cb_Turno.Enabled = true;
-                cb_OP.Enabled = true;
+                cb_Turno.Enabled = false;
+                cb_OP.Enabled = false;
                 dtp1.Enabled = true;
 
+                cb_lote.Visible = true;
+
                 //nombrar controles
-                Txt_1.EmbeddedLabelText = "Lote";
                 Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
                 Txt_3.EmbeddedLabelText = "Merma Kg Secos";
                 Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
                 Txt_5.EmbeddedLabelText = "Kg para Resecar";
                 Txt_6.EmbeddedLabelText = "Personal Operativo";
+
+                Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
+                Txt_Read_2.EmbeddedLabelText = "Meta Programada";
+                Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
+                Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
+                Txt_Read_5.EmbeddedLabelText = "Porcentaje de Cumplimiento a Metas";
+                Txt_Read_6.EmbeddedLabelText = "Kg Secos Meta";
+                Txt_Read_7.EmbeddedLabelText = "Relación Fresco-Seco";
+                Txt_Read_8.EmbeddedLabelText = "FTT";
+
+                Txt_Read_5.Visible = true;
+                Txt_Read_6.Visible = true;
+                Txt_Read_7.Visible = true;
+                Txt_Read_8.Visible = true;
+
+                Txt_Read_9.Visible = false;
+                Txt_7.Visible = false;
+                Txt_8.Visible = false;
+                Txt_9.Visible = false;
+                Txt_10.Visible = false;
+                Txt_11.Visible = false;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -549,6 +561,11 @@ namespace Tablero
                 string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Deshidratado\" ORDER BY \"OP\";";
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
+
+                // Cargar combobox lote
+
+                query = "SELECT \"ID_Ficha\", \"Lote\" FROM public.\"Ficha\" WHERE \"Kg_prod_seco\" is null and \"Area\" = 'TUNEL/ SUMERGIDOR' ORDER BY \"Lote\";";
+                dbHelper.LoadDataIntoComboBox(query, cb_lote, "Lote", "ID_Ficha");
             }
             if (cb_Area.SelectedIndex == 2)
             {
@@ -639,16 +656,16 @@ namespace Tablero
             cb_OP.Focus();
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
-            Txt_2.Text = string.Empty;
-            Txt_3.Text = string.Empty;
-            Txt_4.Text = string.Empty;
-            Txt_5.Text = string.Empty;
-            Txt_6.Text = string.Empty;
-            Txt_7.Text = string.Empty;
-            Txt_8.Text = string.Empty;
-            Txt_9.Text = string.Empty;
-            Txt_10.Text = string.Empty;
-            Txt_11.Text = string.Empty;
+            Txt_2.Text = "0";
+            Txt_3.Text = "0";
+            Txt_4.Text = "0";
+            Txt_5.Text = "0";
+            Txt_6.Text = "0";
+            Txt_7.Text = "0";
+            Txt_8.Text = "0";
+            Txt_9.Text = "0";
+            Txt_10.Text = "0";
+            Txt_11.Text = "0";
             Txt_meta.Text = string.Empty;
             Txt_Read_1.Text = string.Empty;
             Txt_Read_2.Text = string.Empty;
@@ -3152,7 +3169,7 @@ namespace Tablero
         //    Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
         //}
 
-        private void calcular_horas_programadas()
+        private void calcular_meta_programada()
         {
             double hr_programada, meta_programada, meta_x_hr;
 
@@ -3164,75 +3181,105 @@ namespace Tablero
 
         private void calcular_turno()
         {
-            try
+            if (cb_Area.SelectedIndex == 0 || cb_Area.SelectedIndex == 1) 
             {
-
-                if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
+                try
                 {
-                    // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
-                    if (horaFin < horaInicio)
+
+                    if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
                     {
-                        horaFin = horaFin.AddDays(1);
+                        // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
+                        if (horaFin < horaInicio)
+                        {
+                            horaFin = horaFin.AddDays(1);
+                        }
+
+                        // Calcular diferencia inicial
+                        TimeSpan diferencia = horaFin - horaInicio;
+
+                        // Restar minutos energia
+                        if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
+                        {
+                            diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
+                        }
+
+                        // Restar minutos comida
+                        if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
+                        {
+                            diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
+                        }
+
+                        // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
+                        Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+
+                        if (cb_Area.SelectedIndex == 1)
+                        {
+                            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                            string valorBuscado2 = cb_OP.Text;
+                            // Consulta para buscar donde OP = valor_buscado
+                            string query2 = "SELECT \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
+
+                            // Crear parámetro
+                            NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                            {
+                                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado2 }
+                            };
+
+                            // Ejecutar consulta
+                            DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                            decimal horas_prog = Convert.ToDecimal(Txt_Read_1.Text);
+                            // Variable string donde guardar el resultado
+                            decimal kg_seco_hr, kg_secos_meta;
+
+                            // Verificar si se encontraron resultados
+                            if (dt2 != null && dt2.Rows.Count > 0)
+                            {
+                                kg_seco_hr = Convert.ToDecimal(dt2.Rows[0]["Kg_seco_hr"].ToString());
+                                kg_secos_meta = kg_seco_hr * horas_prog;
+                                Txt_Read_6.Text = kg_secos_meta.ToString("0.##");
+                            }
+                        }
+
+                        // Calcular la nueva diferencia restando los minutos
+                        TimeSpan diferenciaConDescuento = diferencia;
+
+                        // Restar minutos mecánicos
+                        if (!string.IsNullOrEmpty(txt_TM_mecanico.Text) && int.TryParse(txt_TM_mecanico.Text, out int minutosMecanico))
+                        {
+                            diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosMecanico));
+                        }
+
+                        // Restar minutos operativos
+                        if (!string.IsNullOrEmpty(txt_TM_operativo.Text) && int.TryParse(txt_TM_operativo.Text, out int minutosOperativo))
+                        {
+                            diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
+                        }
+                        // Asegurar que no sea negativo
+                        if (diferenciaConDescuento.TotalMinutes < 0)
+                        {
+                            diferenciaConDescuento = TimeSpan.Zero;
+                        }
+                        if (!string.IsNullOrEmpty(Txt_meta.Text))
+                        {
+                            calcular_meta_programada();
+                        }
+                        // Mostrar el resultado con descuento en Txt_Read_3
+                        Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
                     }
-
-                    // Calcular diferencia inicial
-                    TimeSpan diferencia = horaFin - horaInicio;
-
-                    // Restar minutos energia
-                    if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
-                    {
-                        diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
-                    }
-
-                    // Restar minutos comida
-                    if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
-                    {
-                        diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
-                    }
-
-                    // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
-                    Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
-
-
-
-                    // Calcular la nueva diferencia restando los minutos
-                    TimeSpan diferenciaConDescuento = diferencia;
-
-                    // Restar minutos mecánicos
-                    if (!string.IsNullOrEmpty(txt_TM_mecanico.Text) && int.TryParse(txt_TM_mecanico.Text, out int minutosMecanico))
-                    {
-                        diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosMecanico));
-                    }
-
-                    // Restar minutos operativos
-                    if (!string.IsNullOrEmpty(txt_TM_operativo.Text) && int.TryParse(txt_TM_operativo.Text, out int minutosOperativo))
-                    {
-                        diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
-                    }
-                    // Asegurar que no sea negativo
-                    if (diferenciaConDescuento.TotalMinutes < 0)
-                    {
-                        diferenciaConDescuento = TimeSpan.Zero;
-                    }
-                    if (!string.IsNullOrEmpty(Txt_meta.Text))
-                    {
-                        calcular_horas_programadas();
-                    }
-                    // Mostrar el resultado con descuento en Txt_Read_3
-                    Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
+                    btn_save_ficha.Enabled = true;
                 }
-                btn_save_ficha.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                 //MessageBox.Show($"Error en cálculo: {ex.Message}");
-                if(ex is FormatException)
+                catch (Exception ex)
                 {
-                    //MetroFramework.MetroMessageBox.Show(this, "Formato de hora inválido. Asegúrese de usar HH:mm.",
-                    //                                    "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    btn_save_ficha.Enabled = false;
+                    //MessageBox.Show($"Error en cálculo: {ex.Message}");
+                    if (ex is FormatException)
+                    {
+                        //MetroFramework.MetroMessageBox.Show(this, "Formato de hora inválido. Asegúrese de usar HH:mm.",
+                        //                                    "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        btn_save_ficha.Enabled = false;
+                    }
                 }
             }
+            
         }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -3303,6 +3350,20 @@ namespace Tablero
                 decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
                 string area = cb_Area.Text;
                 decimal meta = Convert.ToDecimal(Txt_meta.Text);
+
+
+                // Verificar si el usuario ya existe
+                string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
+                NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@Lote", lote),
+                };
+                DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -3561,103 +3622,117 @@ namespace Tablero
 
         private void Txt_3_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
             }
-            CalcularSuma();
         }
 
         private void Txt_4_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
             }
-            CalcularSuma();
         }
 
         private void Txt_5_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
-            }
-            CalcularSuma();
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
+            } 
         }
 
         private void Txt_6_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
             }
-            CalcularSuma();
         }
+                
 
         private void Txt_7_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
-            }
-            CalcularSuma();
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
+            }  
         }
 
         private void Txt_8_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if (cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
-            }
-            CalcularSuma();
-        }
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
 
-        private void cb_OP_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
+            }   
         }
 
         private void txt_TM_mecanico_TextChanged(object sender, EventArgs e)
@@ -3672,18 +3747,21 @@ namespace Tablero
 
         private void Txt_2_TextChanged(object sender, EventArgs e)
         {
-            var tb = (RadTextBox)sender;
-            string original = tb.Text;
-            string saneado = SanitizeNumericText(original);
-
-            if (saneado != original)
+            if(cb_Area.SelectedIndex == 0) 
             {
-                int sel = tb.SelectionStart;
-                tb.Text = saneado;
-                // Ajusta la posición del cursor (no exceder la longitud)
-                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                CalcularSuma();
             }
-            CalcularSuma();
         }
 
         // Función que deja sólo dígitos y un solo punto (mantiene el primer punto)
@@ -3712,12 +3790,17 @@ namespace Tablero
         }
         private void cb_OP_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            buscar_Meta_hr();
+        }
+
+        private void buscar_Meta_hr()
+        {
             //MessageBox.Show("entró");
             string valorBuscado = cb_OP.Text;
 
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            if (cb_Area.SelectedIndex == 0 && cb_OP.SelectedIndex != -1)
+            if ((cb_Area.SelectedIndex == 0 || cb_Area.SelectedIndex == 1) && cb_OP.SelectedIndex != -1)
             {
                 // Consulta para buscar donde OP = valor_buscado
                 string query = "SELECT \"No_box_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
@@ -3733,7 +3816,7 @@ namespace Tablero
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
-             
+
                 // Verificar si se encontraron resultados
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -3742,7 +3825,7 @@ namespace Tablero
 
                     if (!string.IsNullOrEmpty(Txt_Read_1.Text))
                     {
-                        calcular_horas_programadas();
+                        calcular_meta_programada();
                     }
                 }
             }
@@ -3764,7 +3847,7 @@ namespace Tablero
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
             }
-            catch (Exception ex)
+            catch
             {
                 errorProvider1.SetError(Mask_txt_hr1, "Formato de hora inválido. Asegúrese de usar HH:mm.");
                 btn_save_ficha.Enabled = false;
@@ -3782,7 +3865,7 @@ namespace Tablero
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
             }
-            catch (Exception ex)
+            catch
             {
                 errorProvider2.SetError(Mask_txt_hr2, "Formato de hora inválido. Asegúrese de usar HH:mm.");
                 btn_save_ficha.Enabled = false;
@@ -3952,6 +4035,52 @@ namespace Tablero
             if (!char.IsDigit(e.KeyChar))
             {
                 e.Handled = true; // Bloquear todo lo que no sea número
+            }
+        }
+
+        private void cb_lote_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string valorBuscado = cb_lote.Text;
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            if (cb_lote.SelectedIndex != -1)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"OP\", \"kg_frescos_enter_se\" FROM public.\"Ficha\" WHERE \"Lote\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string OP = string.Empty;
+                string kgFrescoEnterSecador = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    OP = dt.Rows[0]["OP"].ToString();
+                    kgFrescoEnterSecador = dt.Rows[0]["kg_frescos_enter_se"].ToString();
+                    cb_OP.Enabled = true;
+                    cb_OP.Text = OP;
+                    cb_OP.Enabled = false;
+
+                    cb_Turno.Enabled = true;
+
+                    Txt_Read_4.Text = kgFrescoEnterSecador;
+                    buscar_Meta_hr();
+                }
+            }
+            else
+            {
+                cb_Turno.SelectedIndex = -1;
+                cb_Turno.Enabled = false;
             }
         }
     }

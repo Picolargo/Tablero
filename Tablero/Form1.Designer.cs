@@ -65,6 +65,7 @@
             this.Txt_Read_2 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_Read_1 = new Telerik.WinControls.UI.RadTextBox();
             this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
+            this.cb_lote = new MaterialSkin.Controls.MaterialComboBox();
             this.Txt_11 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_10 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_9 = new Telerik.WinControls.UI.RadTextBox();
@@ -736,6 +737,7 @@
             // Card_only_read
             // 
             this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.cb_lote);
             this.Card_only_read.Controls.Add(this.Txt_11);
             this.Card_only_read.Controls.Add(this.Txt_10);
             this.Card_only_read.Controls.Add(this.Txt_9);
@@ -758,6 +760,31 @@
             this.Card_only_read.Padding = new System.Windows.Forms.Padding(14);
             this.Card_only_read.Size = new System.Drawing.Size(718, 377);
             this.Card_only_read.TabIndex = 4;
+            // 
+            // cb_lote
+            // 
+            this.cb_lote.AutoResize = false;
+            this.cb_lote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_lote.Depth = 0;
+            this.cb_lote.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_lote.DropDownHeight = 174;
+            this.cb_lote.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_lote.DropDownWidth = 121;
+            this.cb_lote.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_lote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_lote.FormattingEnabled = true;
+            this.cb_lote.Hint = "Lote";
+            this.cb_lote.IntegralHeight = false;
+            this.cb_lote.ItemHeight = 43;
+            this.cb_lote.Location = new System.Drawing.Point(20, 80);
+            this.cb_lote.MaxDropDownItems = 4;
+            this.cb_lote.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_lote.Name = "cb_lote";
+            this.cb_lote.Size = new System.Drawing.Size(168, 49);
+            this.cb_lote.StartIndex = 0;
+            this.cb_lote.TabIndex = 26;
+            this.cb_lote.Visible = false;
+            this.cb_lote.SelectionChangeCommitted += new System.EventHandler(this.cb_lote_SelectionChangeCommitted);
             // 
             // Txt_11
             // 
@@ -1135,7 +1162,6 @@
             this.cb_OP.Size = new System.Drawing.Size(250, 49);
             this.cb_OP.StartIndex = 0;
             this.cb_OP.TabIndex = 1;
-            this.cb_OP.SelectedIndexChanged += new System.EventHandler(this.cb_OP_SelectedIndexChanged);
             this.cb_OP.SelectionChangeCommitted += new System.EventHandler(this.cb_OP_SelectionChangeCommitted);
             // 
             // materialCard1
@@ -2497,6 +2523,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ErrorProvider errorProvider2;
+        private MaterialSkin.Controls.MaterialComboBox cb_lote;
     }
 }
 
