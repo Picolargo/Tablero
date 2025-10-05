@@ -797,6 +797,7 @@
             this.Txt_11.ShowEmbeddedLabel = true;
             this.Txt_11.Size = new System.Drawing.Size(170, 43);
             this.Txt_11.TabIndex = 25;
+            this.Txt_11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_11_KeyPress);
             // 
             // Txt_10
             // 

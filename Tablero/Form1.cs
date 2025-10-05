@@ -3,12 +3,14 @@ using MaterialSkin.Controls;
 using MetroFramework.Controls;
 using Npgsql;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -472,7 +474,7 @@ namespace Tablero
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Lote";
                 Txt_2.EmbeddedLabelText = "Kg Entrada (Proceso)";
-                Txt_3.EmbeddedLabelText = "Merma Canica";
+                Txt_3.EmbeddedLabelText = "Canica";
                 Txt_4.EmbeddedLabelText = "Merma Podrido";
                 Txt_5.EmbeddedLabelText = "Merma de Tina";
                 Txt_6.EmbeddedLabelText = "Merma de Piso";
@@ -480,6 +482,7 @@ namespace Tablero
                 Txt_8.EmbeddedLabelText = "Merma Lavado de Bandas";
                 Txt_9.EmbeddedLabelText = "Personal Operativo";
                 Txt_10.EmbeddedLabelText = "Cascara y Carrete";
+                Txt_11.EmbeddedLabelText = "Merma de Túnel";
 
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
@@ -491,9 +494,10 @@ namespace Tablero
                 Txt_8.Visible = true;
                 Txt_9.Visible = true;
                 Txt_10.Visible = true;
+                Txt_11.Visible = true;
 
                 //hacer invisibles controles
-                Txt_11.Visible = false;
+
                 Txt_Read_5.Visible = false;
                 Txt_Read_6.Visible = false;
                 Txt_Read_7.Visible = false;
@@ -530,15 +534,15 @@ namespace Tablero
                 //nombrar controles
                 Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
                 Txt_3.EmbeddedLabelText = "Merma Kg Secos";
-                Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
+                Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Espec.";
                 Txt_5.EmbeddedLabelText = "Kg para Resecar";
                 Txt_6.EmbeddedLabelText = "Personal Operativo";
 
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
-                Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
-                Txt_Read_5.EmbeddedLabelText = "Porcentaje de Cumplimiento a Metas";
+                Txt_Read_4.EmbeddedLabelText = "Kg Frescos Entrada a secador";
+                Txt_Read_5.EmbeddedLabelText = "Cumplimiento de Metas (%)";
                 Txt_Read_6.EmbeddedLabelText = "Kg Secos Meta";
                 Txt_Read_7.EmbeddedLabelText = "Relación Fresco-Seco";
                 Txt_Read_8.EmbeddedLabelText = "FTT";
@@ -554,6 +558,12 @@ namespace Tablero
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+
+                Txt_2.Enabled = false;
+                Txt_3.Enabled = false;
+                Txt_4.Enabled = false;
+                Txt_5.Enabled = false;
+                Txt_6.Enabled = false;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -3307,6 +3317,15 @@ namespace Tablero
 
                     calcular_turno();
                 }
+
+                if (cb_Area.SelectedIndex == 1) 
+                {
+                    Txt_2.Enabled = true;
+                    Txt_3.Enabled = true;
+                    Txt_4.Enabled = true;
+                    Txt_5.Enabled = true;
+                    Txt_6.Enabled = true;
+                }
             }
         }
 
@@ -3324,55 +3343,105 @@ namespace Tablero
             //}
 
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-            try
+            if (cb_Turno.SelectedIndex == 0) 
             {
-                // Obtener ID del usuario actual (debes implementar esto)
-                int idUsuarioActual = id_user;
+                try
+                {
+                    int idUsuarioActual = id_user;
 
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string lote = Txt_1.Text;
+                    string op = cb_OP.Text;
+                    decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
+                    decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                    decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
+                    decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
+                    decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
+                    decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
+                    decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
+                    decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
+                    decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
+                    int personal_Op = Convert.ToInt32(Txt_9.Text);
+                    decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
+                    string area = cb_Area.Text;
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
+
+
+                    // Verificar si el usuario ya existe
+                    string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
+                    NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@Lote", lote),
+                    };
+                    DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                    if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+
+                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
+                        kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
+                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_prog, area, meta, merma_tunel);
+
+                    if (idFicha > 0)
+                    {
+                        // Insertar en tablas relacionadas
+                        InsertarTiemposMuertos(dbHelper, idFicha);
+
+                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        cb_Area.SelectedIndex = -1;
+                        reiniciarCampos();
+                        cb_Area.Focus();
+                    }
+                    else
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, $"Error al guardar: {ex.Message}",
+                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }else if (cb_Turno.SelectedIndex == 1) 
+            {
+                int idUsuarioActual = id_user;
                 // Obtener datos de los TextBox
                 DateTime fecha = dtp1.Value; // Tu MetroDateTime
                 int turno = Convert.ToInt32(cb_Turno.Text);
-                string lote = Txt_1.Text;
-                string op = cb_OP.Text;
-                decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
-                decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
-                decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
-                decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
-                decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
-                decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
-                decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
-                decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
-                decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
-                int personal_Op = Convert.ToInt32(Txt_9.Text);
-                decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                decimal KgProdSeco = Convert.ToDecimal(Txt_2.Text);
+                decimal MermaKgSeco = Convert.ToDecimal(Txt_3.Text);
+                decimal KgFueraSpec = Convert.ToDecimal(Txt_4.Text);
+                decimal KgResecar = Convert.ToDecimal(Txt_5.Text);
+                int PersonalOpe = Convert.ToInt32(Txt_6.Text);
+                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
                 decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
-
-
-                // Verificar si el usuario ya existe
-                string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
-                NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
-                {
-                    new NpgsqlParameter("@Lote", lote),
-                };
-                DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-                if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
+                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                decimal PorcentCumplimiento = Convert.ToDecimal(Txt_Read_5.Text);
+                decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
+                decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
+                decimal FTT = Convert.ToDecimal(Txt_Read_8.Text);
                 // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
-                    kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                    mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_prog, area, meta);
+                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, null, null,
+                    KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                    KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_prog, null, 0, 0);
 
                 if (idFicha > 0)
                 {
@@ -3391,61 +3460,97 @@ namespace Tablero
                                                         "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this, $"Error al guardar: {ex.Message}",
-                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private int InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
-     int turno, string lote, string op, decimal kgEnterProceso, decimal kgFrescosEnterSe,
-     decimal mermaCanica, decimal mermaPodrido, decimal mermaTina, decimal mermaPiso,
-     decimal mermaCanaletas, decimal mermaLavadoBandas, decimal cascaraCarrete,
-     TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas, 
-     decimal meta_prog, string area_f, decimal metaHr)
+        int turno, string var1, string var2, decimal var3, decimal var4,
+        decimal var5, decimal var6, decimal var7, decimal var8,
+        decimal var9, decimal var10, decimal var11,
+        TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas, 
+        decimal meta_prog, string area_f, decimal metaHr, decimal var12)
         {
-            string query = @"INSERT INTO public.""Ficha"" (
+            string query = String.Empty;
+            NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
+            if (cb_Area.SelectedIndex == 0) 
+            {
+                query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""Lote"", ""OP"",
                     ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
                     ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
                     ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""MetaProg"", ""Area"", ""MetaHr""
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""MetaProg"", ""Area"", ""MetaHr"", ""Merma_Tunel""
                 ) VALUES (
                     @id_user, @fecha, @turno, @lote, @op,
                     @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
                     @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
-                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @meta_prog, @Area, @MetaHr
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @meta_prog, @Area, @MetaHr, @merma_tunel
                 ) RETURNING ""ID_Ficha"";";
 
-            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@lote", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var2 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@merma_canica", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@merma_podrido", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@merma_tina", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@merma_piso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@merma_canaletas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@merma_lavado_bandas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@cascara_carrete", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@hr_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Personal_Op", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
+                    new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@merma_tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
+                    new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog }
+                };
+            }
+            if (cb_Area.SelectedIndex == 1)
             {
-                new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
-                new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
-                new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
-                new NpgsqlParameter("@lote", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = lote ?? (object)DBNull.Value },
-                new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = op ?? (object)DBNull.Value },
-                new NpgsqlParameter("@kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = kgEnterProceso },
-                new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = kgFrescosEnterSe },
-                new NpgsqlParameter("@merma_canica", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaCanica },
-                new NpgsqlParameter("@merma_podrido", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaPodrido },
-                new NpgsqlParameter("@merma_tina", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaTina },
-                new NpgsqlParameter("@merma_piso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaPiso },
-                new NpgsqlParameter("@merma_canaletas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaCanaletas },
-                new NpgsqlParameter("@merma_lavado_bandas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = mermaLavadoBandas },
-                new NpgsqlParameter("@cascara_carrete", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = cascaraCarrete },
-                new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
-                new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
-                new NpgsqlParameter("@hr_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
-                new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                new NpgsqlParameter("@Personal_Op", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
-                new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
-                new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
-                new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
-            };
-
+                query = @"INSERT INTO public.""Ficha"" (
+                    ""ID_user"", ""Fecha_Desp"", ""Turno_Desp"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", 
+                    ""Kg_resecar"", ""Personal_OP_Desp"", ""Hr_prog_Desp"",
+                    ""MetaProg_Desp"", ""Hr_efectivas_Desp"", ""porcent_cump_meta"", ""Kg_meta"",
+                    ""Relacion_Fr_seco"", ""FTT"", ""Hr_inicio_Desp"", ""Hr_fin_Desp""
+                ) VALUES (
+                    @id_user, @fecha, @turno, @Kg_prod_seco, @Merma_kg_seco, @Kg_fuera_spec,
+                    @Kg_resecar, @Personal_Operativo, @Hr_programadas,
+                    @MetaProg, @Hr_efectivas, @Porcent_cumplimiento, @Kg_secos_meta,
+                    @Relacion_fresco_seco, @FTT, @hr_inicio, @hr_fin
+                ) RETURNING ""ID_Ficha"";";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@Kg_prod_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@Kg_fuera_spec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Merma_kg_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_resecar", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@MetaProg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Porcent_cumplimiento", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Kg_secos_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@Relacion_fresco_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@FTT", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin }
+                };
+                
+            }
             return dbHelper.ExecuteScalarInt(query, parameters);
         }
+
 
         private void InsertarTiemposMuertos(DatabaseHelper dbHelper, int idFicha)
         {
@@ -3641,20 +3746,27 @@ namespace Tablero
 
         private void Txt_4_TextChanged(object sender, EventArgs e)
         {
-            if (cb_Area.SelectedIndex == 0) 
-            {
-                var tb = (RadTextBox)sender;
-                string original = tb.Text;
-                string saneado = SanitizeNumericText(original);
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
 
-                if (saneado != original)
-                {
-                    int sel = tb.SelectionStart;
-                    tb.Text = saneado;
-                    // Ajusta la posición del cursor (no exceder la longitud)
-                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
-                }
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
+
+            if (cb_Area.SelectedIndex == 0)
+            {
                 CalcularSuma();
+            }
+            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_6.Text))
+            {
+                porcentaje_cumplimiento_metas();
+                Ftt_metodo();
+                Relacion_Fresco_seco();
             }
         }
 
@@ -3747,20 +3859,27 @@ namespace Tablero
 
         private void Txt_2_TextChanged(object sender, EventArgs e)
         {
-            if(cb_Area.SelectedIndex == 0) 
-            {
-                var tb = (RadTextBox)sender;
-                string original = tb.Text;
-                string saneado = SanitizeNumericText(original);
+            var tb = (RadTextBox)sender;
+            string original = tb.Text;
+            string saneado = SanitizeNumericText(original);
 
-                if (saneado != original)
-                {
-                    int sel = tb.SelectionStart;
-                    tb.Text = saneado;
-                    // Ajusta la posición del cursor (no exceder la longitud)
-                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
-                }
+            if (saneado != original)
+            {
+                int sel = tb.SelectionStart;
+                tb.Text = saneado;
+                // Ajusta la posición del cursor (no exceder la longitud)
+                tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+            }
+
+            if (cb_Area.SelectedIndex == 0) 
+            {
                 CalcularSuma();
+            }
+            if(cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_6.Text)) 
+            {
+                porcentaje_cumplimiento_metas();
+                Ftt_metodo();
+                Relacion_Fresco_seco();
             }
         }
 
@@ -4038,6 +4157,79 @@ namespace Tablero
             }
         }
 
+        private void porcentaje_cumplimiento_metas() 
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
+            double kg_secos_meta = Convert.ToDouble(Txt_Read_6.Text);
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (kg_secos_meta == 0)
+            {
+                Txt_Read_5.Text = "";
+                return;
+            }
+
+            // Calcular la fórmula: ((Q2 - S2) / P2)
+            double resultado = (kg_prod_seco - kg_fuera_espec) / kg_secos_meta;
+
+            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+            if (resultado > 1.0)
+            {
+                resultado = 1.0;
+            }
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+        }
+
+        private void Ftt_metodo()
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (kg_prod_seco == 0)
+            {
+                Txt_Read_8.Text = "";
+                return;
+            }
+
+            double resultado = (kg_prod_seco - kg_fuera_espec) / kg_prod_seco;
+
+            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+            if (resultado > 1.0)
+            {
+                resultado = 1.0;
+            }
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_8.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+        }
+
+        private void Relacion_Fresco_seco()
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double kg_frescos_enter_sec = Convert.ToDouble(Txt_Read_4.Text);
+            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (kg_prod_seco == 0)
+            {
+                Txt_Read_7.Text = "";
+                return;
+            }
+
+            double resultado = kg_frescos_enter_sec / kg_prod_seco;
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_7.Text = resultado.ToString("0.##"); // Formato de porcentaje con 2 decimales
+        }
         private void cb_lote_SelectionChangeCommitted(object sender, EventArgs e)
         {
             string valorBuscado = cb_lote.Text;
@@ -4072,7 +4264,7 @@ namespace Tablero
                     cb_OP.Enabled = false;
 
                     cb_Turno.Enabled = true;
-
+                    
                     Txt_Read_4.Text = kgFrescoEnterSecador;
                     buscar_Meta_hr();
                 }
@@ -4081,6 +4273,31 @@ namespace Tablero
             {
                 cb_Turno.SelectedIndex = -1;
                 cb_Turno.Enabled = false;
+            }
+        }
+
+        private void Txt_11_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir control de borrado (Backspace)
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                return;
+            }
+
+            // Permitir solo un punto decimal
+            if (e.KeyChar == '.')
+            {
+                if ((sender as TextBox).Text.Contains("."))
+                {
+                    e.Handled = true; // Ya hay un punto → se bloquea
+                }
+                return;
+            }
+
+            // Permitir solo números
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear todo lo que no sea número
             }
         }
     }
