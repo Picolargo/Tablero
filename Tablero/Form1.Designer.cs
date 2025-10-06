@@ -1036,6 +1036,9 @@
             this.Txt_1.ShowEmbeddedLabel = true;
             this.Txt_1.Size = new System.Drawing.Size(170, 43);
             this.Txt_1.TabIndex = 15;
+            this.Txt_1.TextChanged += new System.EventHandler(this.Txt_1_TextChanged);
+            this.Txt_1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_1_KeyPress);
+            this.Txt_1.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_1_Validating);
             // 
             // lbl_meta
             // 

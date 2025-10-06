@@ -490,6 +490,7 @@ namespace Tablero
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
 
                 Txt_1.Visible = true;
+                Txt_6.Visible = true;
                 Txt_7.Visible = true;
                 Txt_8.Visible = true;
                 Txt_9.Visible = true;
@@ -582,24 +583,55 @@ namespace Tablero
                 //Despegue
                 reiniciarCampos();
 
+                cb_lote.Visible = false;
                 //hacer visible para Despegue
                 card_datos.Visible = true;
                 card_TM.Visible = true;
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
+                Txt_1.Visible = true;
+
+                Txt_1.Text = "0";
 
                 //habilitar controles
-                cb_Turno.Enabled = true;
+                
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
 
+                //Inabilitar controles
+                cb_Turno.Enabled = false;
+                Txt_1.Enabled = false;
+                Txt_2.Enabled = false;
+                Txt_3.Enabled = false;
+                Txt_4.Enabled = false;
+                Txt_5.Enabled = false;
+
                 //nombrar controles
-                Txt_1.EmbeddedLabelText = "Lote";
-                Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
-                Txt_3.EmbeddedLabelText = "Merma Kg Secos";
-                Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Especificación";
-                Txt_5.EmbeddedLabelText = "Kg para Resecar";
-                Txt_6.EmbeddedLabelText = "Personal Operativo";
+                Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
+                Txt_2.EmbeddedLabelText = "Kg Producto Terminado";
+                Txt_3.EmbeddedLabelText = "Kg fuera de Espec.";
+                Txt_4.EmbeddedLabelText = "Merma en Kg";
+                Txt_5.EmbeddedLabelText = "Personal Operativo";
+
+                //hacer invisibles controles
+                Txt_6.Visible = false;
+                Txt_7.Visible = false;
+                Txt_8.Visible = false;
+                Txt_9.Visible = false;
+                Txt_10.Visible = false;
+                Txt_11.Visible = false;
+
+                Txt_Read_6.Visible = false;
+                Txt_Read_7.Visible = false;
+                Txt_Read_8.Visible = false;
+                Txt_Read_9.Visible = false;
+
+                //nombrar controles
+                Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
+                Txt_Read_2.EmbeddedLabelText = "Meta en Kg";
+                Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
+                Txt_Read_4.EmbeddedLabelText = "Logro de Planeación (%)";
+                Txt_Read_5.EmbeddedLabelText = "Aumento por humedad (%)";
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -662,6 +694,7 @@ namespace Tablero
         {
             cb_Turno.SelectedIndex = -1;
             cb_Turno.Focus();
+            cb_OP.Enabled = true;
             cb_OP.SelectedIndex = -1;
             cb_OP.Focus();
             dtp1.Value = DateTime.Now;
@@ -3191,7 +3224,7 @@ namespace Tablero
 
         private void calcular_turno()
         {
-            if (cb_Area.SelectedIndex == 0 || cb_Area.SelectedIndex == 1) 
+            if (cb_Area.SelectedIndex == 0 || cb_Area.SelectedIndex == 1 || cb_Area.SelectedIndex == 2) 
             {
                 try
                 {
@@ -3326,6 +3359,14 @@ namespace Tablero
                     Txt_5.Enabled = true;
                     Txt_6.Enabled = true;
                 }
+                if (cb_Area.SelectedIndex == 2) 
+                {
+                    Txt_1.Enabled = true;
+                    Txt_2.Enabled = true;
+                    Txt_3.Enabled = true;
+                    Txt_4.Enabled = true;
+                    Txt_5.Enabled = true;
+                }
             }
         }
 
@@ -3416,7 +3457,8 @@ namespace Tablero
                     MetroFramework.MetroMessageBox.Show(this, $"Error al guardar: {ex.Message}",
                                                             "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }else if (cb_Turno.SelectedIndex == 1) 
+            }
+            if (cb_Turno.SelectedIndex == 1) 
             {
                 int idUsuarioActual = id_user;
                 // Obtener datos de los TextBox
@@ -3442,6 +3484,48 @@ namespace Tablero
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, null, null,
                     KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
                     KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_prog, null, 0, 0);
+
+                if (idFicha > 0)
+                {
+                    // Insertar en tablas relacionadas
+                    InsertarTiemposMuertos(dbHelper, idFicha);
+
+                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cb_Area.SelectedIndex = -1;
+                    reiniciarCampos();
+                    cb_Area.Focus();
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            if (cb_Turno.SelectedIndex == 2)
+            {
+                int idUsuarioActual = id_user;
+                // Obtener datos de los TextBox
+                DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                int turno = Convert.ToInt32(cb_Turno.Text);
+                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
+                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                decimal Porcent_Logrado = Convert.ToDecimal(Txt_Read_4.Text);
+                decimal Porcent_Aumento_Hume = Convert.ToDecimal(Txt_Read_5.Text);
+                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+
+                // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, null, null,
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
+                    Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, null, 0, 0);
 
                 if (idFicha > 0)
                 {
@@ -3510,6 +3594,7 @@ namespace Tablero
                     new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
                     new NpgsqlParameter("@merma_tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog }
                 };
             }
@@ -3742,6 +3827,21 @@ namespace Tablero
                 }
                 CalcularSuma();
             }
+            if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                porcentaje_logrado_planeacion();
+            }
         }
 
         private void Txt_4_TextChanged(object sender, EventArgs e)
@@ -3881,6 +3981,14 @@ namespace Tablero
                 Ftt_metodo();
                 Relacion_Fresco_seco();
             }
+            if(cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text)) 
+            {
+                porcentaje_logrado_planeacion();
+            }
+            if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+            {
+                porcentaje_aumento_humedad();
+            }
         }
 
         // Función que deja sólo dígitos y un solo punto (mantiene el primer punto)
@@ -3909,6 +4017,11 @@ namespace Tablero
         }
         private void cb_OP_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            if(cb_Area.SelectedIndex == 2) 
+            {
+                cb_Turno.Enabled = true;
+            }
+            
             buscar_Meta_hr();
         }
 
@@ -3946,6 +4059,30 @@ namespace Tablero
                     {
                         calcular_meta_programada();
                     }
+                }
+            }
+            if (cb_Area.SelectedIndex == 2)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"Meta_kg_hr\" FROM public.\"Evaporado\" WHERE \"OP\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string resultado = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    resultado = dt.Rows[0]["Meta_kg_hr"].ToString();
+                    Txt_meta.Text = resultado;
                 }
             }
         }
@@ -4118,7 +4255,7 @@ namespace Tablero
             // Permitir solo un punto decimal
             if (e.KeyChar == '.')
             {
-                if ((sender as TextBox).Text.Contains("."))
+                if ((sender as RadTextBox).Text.Contains("."))
                 {
                     e.Handled = true; // Ya hay un punto → se bloquea
                 }
@@ -4143,7 +4280,7 @@ namespace Tablero
             // Permitir solo un punto decimal
             if (e.KeyChar == '.')
             {
-                if ((sender as TextBox).Text.Contains("."))
+                if ((sender as RadTextBox).Text.Contains("."))
                 {
                     e.Handled = true; // Ya hay un punto → se bloquea
                 }
@@ -4155,6 +4292,62 @@ namespace Tablero
             {
                 e.Handled = true; // Bloquear todo lo que no sea número
             }
+        }
+
+        private void porcentaje_logrado_planeacion()
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
+            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            double kg_fuera_espec = Convert.ToDouble(Txt_3.Text);
+            
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (meta_kg == 0)
+            {
+                Txt_Read_4.Text = "";
+                return;
+            }
+
+            // Calcular la fórmula: ((Q2 - S2) / P2)
+            double resultado = (Kg_Prod_Terminado - kg_fuera_espec) / meta_kg;
+
+            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+            if (resultado > 1.0)
+            {
+                resultado = 1.0;
+            }
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+        }
+
+        private void porcentaje_aumento_humedad()
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double Kg_entrada = Convert.ToDouble(Txt_1.Text);
+            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (Kg_entrada == 0)
+            {
+                Txt_Read_5.Text = "";
+                return;
+            }
+
+            // Calcular la fórmula: ((Q2 - S2) / P2)
+            double resultado = (Kg_Prod_Terminado / Kg_entrada)-1;
+
+            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+            if (resultado > 1.0)
+            {
+                resultado = 1.0;
+            }
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
         }
 
         private void porcentaje_cumplimiento_metas() 
@@ -4298,6 +4491,67 @@ namespace Tablero
             if (!char.IsDigit(e.KeyChar))
             {
                 e.Handled = true; // Bloquear todo lo que no sea número
+            }
+        }
+
+        private void Txt_1_TextChanged(object sender, EventArgs e)
+        {
+            if (cb_Area.SelectedIndex == 2) 
+            {
+                var tb = (RadTextBox)sender;
+                string original = tb.Text;
+                string saneado = SanitizeNumericText(original);
+
+                if (saneado != original)
+                {
+                    int sel = tb.SelectionStart;
+                    tb.Text = saneado;
+                    // Ajusta la posición del cursor (no exceder la longitud)
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length);
+                }
+                if (!string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+                {
+                    porcentaje_aumento_humedad();
+                }
+            }   
+        }
+
+        private void Txt_1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (cb_Area.SelectedIndex == 2) 
+            {
+                var tb = (RadTextBox)sender;
+                char decimalSep = '.'; // si quieres respetar cultura: CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+
+                // Permitir backspace
+                if (e.KeyChar == '\b') return;
+
+                // Permitir un solo punto decimal
+                if (e.KeyChar == decimalSep)
+                {
+                    if (tb.Text.Contains(decimalSep)) e.Handled = true;
+                    return;
+                }
+
+                // Permitir solo dígitos
+                if (!char.IsDigit(e.KeyChar))
+                    e.Handled = true;
+            }
+        }
+
+        private void Txt_1_Validating(object sender, CancelEventArgs e)
+        {
+            if (cb_Area.SelectedIndex == 2) 
+            {
+                RadTextBox textBox = (RadTextBox)sender;
+                string text = textBox.Text;
+
+                // Regex que acepta "" o dígitos con un punto decimal opcional
+                if (!string.IsNullOrEmpty(text) && !Regex.IsMatch(text, @"^\d*\.?\d*$"))
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Formato inválido. Solo se permiten números con un punto decimal.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    e.Cancel = true; // mantiene el foco en el control
+                }
             }
         }
     }
