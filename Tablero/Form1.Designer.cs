@@ -65,6 +65,7 @@
             this.Txt_Read_2 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_Read_1 = new Telerik.WinControls.UI.RadTextBox();
             this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
+            this.cb_proceso = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_lote = new MaterialSkin.Controls.MaterialComboBox();
             this.Txt_11 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_10 = new Telerik.WinControls.UI.RadTextBox();
@@ -320,6 +321,7 @@
             this.txt_Tiempo_energia.Text = "";
             this.txt_Tiempo_energia.TrailingIcon = null;
             this.txt_Tiempo_energia.TextChanged += new System.EventHandler(this.txt_Tiempo_energia_TextChanged);
+            this.txt_Tiempo_energia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_Tiempo_energia_KeyPress);
             // 
             // lbl_min_comida
             // 
@@ -506,6 +508,7 @@
             this.txt_TM_mecanico.Text = "";
             this.txt_TM_mecanico.TrailingIcon = null;
             this.txt_TM_mecanico.TextChanged += new System.EventHandler(this.txt_TM_mecanico_TextChanged);
+            this.txt_TM_mecanico.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_TM_mecanico_KeyPress);
             // 
             // card_dgv_mecanico
             // 
@@ -737,6 +740,7 @@
             // Card_only_read
             // 
             this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.cb_proceso);
             this.Card_only_read.Controls.Add(this.cb_lote);
             this.Card_only_read.Controls.Add(this.Txt_11);
             this.Card_only_read.Controls.Add(this.Txt_10);
@@ -760,6 +764,33 @@
             this.Card_only_read.Padding = new System.Windows.Forms.Padding(14);
             this.Card_only_read.Size = new System.Drawing.Size(718, 377);
             this.Card_only_read.TabIndex = 4;
+            // 
+            // cb_proceso
+            // 
+            this.cb_proceso.AutoResize = false;
+            this.cb_proceso.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_proceso.Depth = 0;
+            this.cb_proceso.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_proceso.DropDownHeight = 174;
+            this.cb_proceso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_proceso.DropDownWidth = 121;
+            this.cb_proceso.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_proceso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_proceso.FormattingEnabled = true;
+            this.cb_proceso.Hint = "Proceso";
+            this.cb_proceso.IntegralHeight = false;
+            this.cb_proceso.ItemHeight = 43;
+            this.cb_proceso.Items.AddRange(new object[] {
+            "INSPECCION",
+            "REPROCESO"});
+            this.cb_proceso.Location = new System.Drawing.Point(240, 80);
+            this.cb_proceso.MaxDropDownItems = 4;
+            this.cb_proceso.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_proceso.Name = "cb_proceso";
+            this.cb_proceso.Size = new System.Drawing.Size(168, 49);
+            this.cb_proceso.StartIndex = -1;
+            this.cb_proceso.TabIndex = 27;
+            this.cb_proceso.Visible = false;
             // 
             // cb_lote
             // 
@@ -2528,6 +2559,7 @@
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ErrorProvider errorProvider2;
         private MaterialSkin.Controls.MaterialComboBox cb_lote;
+        private MaterialSkin.Controls.MaterialComboBox cb_proceso;
     }
 }
 
