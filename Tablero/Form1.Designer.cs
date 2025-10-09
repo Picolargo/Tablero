@@ -153,6 +153,8 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.metroTabPage7 = new MetroFramework.Controls.MetroTabPage();
+            this.dgv_metas_polvos = new System.Windows.Forms.DataGridView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -214,6 +216,8 @@
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            this.metroTabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1696,11 +1700,12 @@
             this.tap_control_metas.Controls.Add(this.metroTabPage4);
             this.tap_control_metas.Controls.Add(this.metroTabPage5);
             this.tap_control_metas.Controls.Add(this.metroTabPage6);
+            this.tap_control_metas.Controls.Add(this.metroTabPage7);
             this.tap_control_metas.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
             this.tap_control_metas.Location = new System.Drawing.Point(0, 395);
             this.tap_control_metas.Name = "tap_control_metas";
-            this.tap_control_metas.SelectedIndex = 0;
+            this.tap_control_metas.SelectedIndex = 6;
             this.tap_control_metas.Size = new System.Drawing.Size(1682, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
@@ -2071,7 +2076,8 @@
             "Inspeccion",
             "Evaporado",
             "Grind",
-            "Platinum"});
+            "Platinum",
+            "Polvos"});
             this.cmb_area.Location = new System.Drawing.Point(6, 16);
             this.cmb_area.MaxDropDownItems = 4;
             this.cmb_area.MouseState = MaterialSkin.MouseState.OUT;
@@ -2346,6 +2352,36 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
+            // metroTabPage7
+            // 
+            this.metroTabPage7.Controls.Add(this.dgv_metas_polvos);
+            this.metroTabPage7.HorizontalScrollbarBarColor = true;
+            this.metroTabPage7.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage7.HorizontalScrollbarSize = 10;
+            this.metroTabPage7.Location = new System.Drawing.Point(4, 4);
+            this.metroTabPage7.Name = "metroTabPage7";
+            this.metroTabPage7.Size = new System.Drawing.Size(1674, 503);
+            this.metroTabPage7.TabIndex = 6;
+            this.metroTabPage7.Text = "Polvos";
+            this.metroTabPage7.VerticalScrollbarBarColor = true;
+            this.metroTabPage7.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage7.VerticalScrollbarSize = 10;
+            // 
+            // dgv_metas_polvos
+            // 
+            this.dgv_metas_polvos.AllowUserToAddRows = false;
+            this.dgv_metas_polvos.AllowUserToDeleteRows = false;
+            this.dgv_metas_polvos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_metas_polvos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas_polvos.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgv_metas_polvos.Location = new System.Drawing.Point(0, 7);
+            this.dgv_metas_polvos.Name = "dgv_metas_polvos";
+            this.dgv_metas_polvos.ReadOnly = true;
+            this.dgv_metas_polvos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_metas_polvos.Size = new System.Drawing.Size(1674, 496);
+            this.dgv_metas_polvos.TabIndex = 6;
+            this.dgv_metas_polvos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_polvos_CellClick);
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2431,6 +2467,8 @@
             this.tabPage8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            this.metroTabPage7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2560,6 +2598,8 @@
         private System.Windows.Forms.ErrorProvider errorProvider2;
         private MaterialSkin.Controls.MaterialComboBox cb_lote;
         private MaterialSkin.Controls.MaterialComboBox cb_proceso;
+        private MetroFramework.Controls.MetroTabPage metroTabPage7;
+        private System.Windows.Forms.DataGridView dgv_metas_polvos;
     }
 }
 
