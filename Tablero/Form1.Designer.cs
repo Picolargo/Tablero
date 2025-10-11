@@ -91,6 +91,11 @@
             this.lbl_user_no_emp = new System.Windows.Forms.Label();
             this.lbl_nom2 = new MaterialSkin.Controls.MaterialLabel();
             this.lbl_no_emp2 = new MaterialSkin.Controls.MaterialLabel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.borrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
@@ -191,6 +196,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Txt_1)).BeginInit();
             this.materialCard2.SuspendLayout();
             this.materialCard1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.materialCardtab_users.SuspendLayout();
             this.tabControl_usuarios.SuspendLayout();
@@ -253,6 +259,7 @@
             this.tabPage1.Controls.Add(this.card_datos);
             this.tabPage1.Controls.Add(this.materialCard2);
             this.tabPage1.Controls.Add(this.materialCard1);
+            this.tabPage1.Controls.Add(this.menuStrip1);
             this.tabPage1.ImageKey = "home_house";
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
@@ -350,7 +357,7 @@
             this.card_botones.Controls.Add(this.btn_save_ficha);
             this.card_botones.Depth = 0;
             this.card_botones.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_botones.Location = new System.Drawing.Point(797, 17);
+            this.card_botones.Location = new System.Drawing.Point(797, 46);
             this.card_botones.Margin = new System.Windows.Forms.Padding(14);
             this.card_botones.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_botones.Name = "card_botones";
@@ -368,7 +375,7 @@
             this.btn_cancelar_ficha.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
             this.btn_cancelar_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_cancelar_ficha.ImageList = this.imageList1;
-            this.btn_cancelar_ficha.Location = new System.Drawing.Point(431, 22);
+            this.btn_cancelar_ficha.Location = new System.Drawing.Point(371, 20);
             this.btn_cancelar_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_cancelar_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_cancelar_ficha.Name = "btn_cancelar_ficha";
@@ -380,6 +387,7 @@
             this.btn_cancelar_ficha.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_cancelar_ficha.UseAccentColor = false;
             this.btn_cancelar_ficha.UseVisualStyleBackColor = true;
+            this.btn_cancelar_ficha.Click += new System.EventHandler(this.btn_cancelar_ficha_Click);
             // 
             // imageList1
             // 
@@ -403,7 +411,7 @@
             this.btn_save_ficha.HighEmphasis = true;
             this.btn_save_ficha.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
             this.btn_save_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_ficha.Location = new System.Drawing.Point(287, 22);
+            this.btn_save_ficha.Location = new System.Drawing.Point(227, 20);
             this.btn_save_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_save_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_save_ficha.Name = "btn_save_ficha";
@@ -426,12 +434,12 @@
             this.card_TM.Controls.Add(this.card_dgv_mecanico);
             this.card_TM.Depth = 0;
             this.card_TM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_TM.Location = new System.Drawing.Point(797, 123);
+            this.card_TM.Location = new System.Drawing.Point(797, 140);
             this.card_TM.Margin = new System.Windows.Forms.Padding(14);
             this.card_TM.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_TM.Name = "card_TM";
             this.card_TM.Padding = new System.Windows.Forms.Padding(14);
-            this.card_TM.Size = new System.Drawing.Size(874, 412);
+            this.card_TM.Size = new System.Drawing.Size(874, 395);
             this.card_TM.TabIndex = 4;
             this.card_TM.Visible = false;
             // 
@@ -1100,7 +1108,7 @@
             this.materialCard2.Controls.Add(this.cb_OP);
             this.materialCard2.Depth = 0;
             this.materialCard2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard2.Location = new System.Drawing.Point(14, 123);
+            this.materialCard2.Location = new System.Drawing.Point(14, 140);
             this.materialCard2.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard2.Name = "materialCard2";
@@ -1217,7 +1225,7 @@
             this.materialCard1.Controls.Add(this.lbl_no_emp2);
             this.materialCard1.Depth = 0;
             this.materialCard1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard1.Location = new System.Drawing.Point(17, 17);
+            this.materialCard1.Location = new System.Drawing.Point(14, 46);
             this.materialCard1.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard1.Name = "materialCard1";
@@ -1270,6 +1278,46 @@
             this.lbl_no_emp2.Size = new System.Drawing.Size(25, 19);
             this.lbl_no_emp2.TabIndex = 6;
             this.lbl_no_emp2.Text = "      ";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.archivoToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(3, 3);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1676, 24);
+            this.menuStrip1.TabIndex = 9;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // archivoToolStripMenuItem
+            // 
+            this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editarToolStripMenuItem});
+            this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.archivoToolStripMenuItem.Text = "Archivo";
+            // 
+            // editarToolStripMenuItem
+            // 
+            this.editarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editarToolStripMenuItem1,
+            this.borrarToolStripMenuItem});
+            this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.editarToolStripMenuItem.Text = "Ficha";
+            // 
+            // editarToolStripMenuItem1
+            // 
+            this.editarToolStripMenuItem1.Name = "editarToolStripMenuItem1";
+            this.editarToolStripMenuItem1.Size = new System.Drawing.Size(106, 22);
+            this.editarToolStripMenuItem1.Text = "Editar";
+            this.editarToolStripMenuItem1.Click += new System.EventHandler(this.editarToolStripMenuItem1_Click);
+            // 
+            // borrarToolStripMenuItem
+            // 
+            this.borrarToolStripMenuItem.Name = "borrarToolStripMenuItem";
+            this.borrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.borrarToolStripMenuItem.Text = "Borrar";
             // 
             // tabPage2
             // 
@@ -2428,6 +2476,7 @@
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form_principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " ";
@@ -2435,6 +2484,7 @@
             this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.card_meal_energy.ResumeLayout(false);
             this.card_meal_energy.PerformLayout();
             this.card_botones.ResumeLayout(false);
@@ -2473,6 +2523,8 @@
             this.materialCard2.ResumeLayout(false);
             this.materialCard1.ResumeLayout(false);
             this.materialCard1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.materialCardtab_users.ResumeLayout(false);
             this.tabControl_usuarios.ResumeLayout(false);
@@ -2641,6 +2693,11 @@
         private System.Windows.Forms.DataGridView dgv_metas_polvos;
         private MetroFramework.Controls.MetroTabPage metroTabPage8;
         private System.Windows.Forms.DataGridView dgv_metas_maquinas;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem borrarToolStripMenuItem;
     }
 }
 

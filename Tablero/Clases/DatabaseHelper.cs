@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using Telerik.WinControls.UI;
 
 namespace Tablero
 {
@@ -123,6 +124,23 @@ namespace Tablero
                 if (dataTable != null)
                 {
                     dataGridView.DataSource = dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar datos: " + ex.Message);
+            }
+        }
+
+        // Cargar RadGridView
+        public void LoadDataIntoDataGridViewTelerik(string query, RadGridView radGridView, NpgsqlParameter[] parameters = null)
+        {
+            try
+            {
+                DataTable dataTable = ExecuteSelectQuery(query, parameters);
+                if (dataTable != null)
+                {
+                    radGridView.DataSource = dataTable;
                 }
             }
             catch (Exception ex)

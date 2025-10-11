@@ -4277,7 +4277,7 @@ namespace Tablero
                     decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
                     decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
                     decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
-                    string area = cb_Area.Text;
+                    string area = "Deshidratado";
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
                     decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
 
@@ -6245,6 +6245,19 @@ namespace Tablero
                 btn_meta_save.Enabled = false;
                 btn_meta_cancel.Enabled = false;
             }
+        }
+
+        private void btn_cancelar_ficha_Click(object sender, EventArgs e)
+        {
+            cb_Area.SelectedIndex = -1;
+            reiniciarCampos();
+            cb_Area.Focus();
+        }
+
+        private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            RadForm1 Editar_ficha = new RadForm1(connectionString);
+            Editar_ficha.Show();
         }
     }
 }
