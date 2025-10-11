@@ -15,6 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telerik.WinControls.Svg.ExCSS;
 using Telerik.WinControls.UI;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -30,6 +31,7 @@ namespace Tablero
         private string id_global_meta_grind = string.Empty;
         private string id_global_meta_revolturas = string.Empty;
         private string id_global_meta_polvos = string.Empty;
+        private string id_global_meta_maquinas = string.Empty;
         private int id_user = 0;
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
@@ -1117,7 +1119,9 @@ namespace Tablero
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
-                cb_proceso.Visible = true;
+                Txt_6.Visible = true;
+                Txt_7.Visible = true;
+                Txt_8.Visible = true;
 
                 Txt_1.Text = "0";
 
@@ -1127,19 +1131,29 @@ namespace Tablero
                 dtp1.Enabled = true;
 
                 //nombrar controles
-                Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
+                Txt_1.EmbeddedLabelText = "Piezas Producidas";
                 Txt_2.EmbeddedLabelText = "Kg Producto Terminado";
                 Txt_3.EmbeddedLabelText = "Kg fuera de Espec.";
                 Txt_4.EmbeddedLabelText = "Merma en Kg";
                 Txt_5.EmbeddedLabelText = "Personal Operativo";
+                Txt_6.EmbeddedLabelText = "Bobina Kg Entrada";
+                Txt_7.EmbeddedLabelText = "Bobina Utilizada";
+                Txt_8.EmbeddedLabelText = "Bobina Merma";
+
+                //nombrar controles
+                Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
+                Txt_Read_2.EmbeddedLabelText = "Meta en Kg";
+                Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
+                Txt_Read_4.EmbeddedLabelText = "Logro de Planeación (%)";
+                Txt_Read_5.EmbeddedLabelText = "Kg entrada (proceso)";
 
                 //hacer invisibles controles
-                Txt_6.Visible = false;
-                Txt_7.Visible = false;
-                Txt_8.Visible = false;
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_Read_6.Visible = false;
+                Txt_Read_7.Visible = false;
+                Txt_Read_8.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1148,6 +1162,9 @@ namespace Tablero
                 Txt_3.Enabled = false;
                 Txt_4.Enabled = false;
                 Txt_5.Enabled = false;
+                Txt_6.Enabled = false;
+                Txt_7.Enabled = false;
+                Txt_8.Enabled = false;
                 Mask_txt_hr1.Enabled = false;
                 Mask_txt_hr2.Enabled = false;
                 txt_Tiempo_comida.Enabled = false;
@@ -1156,22 +1173,13 @@ namespace Tablero
                 dgv_operativo.Enabled = false;
                 cb_proceso.Enabled = false;
 
-                Txt_Read_5.Visible = false;
-                Txt_Read_6.Visible = false;
-                Txt_Read_7.Visible = false;
-                Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-
-                //nombrar controles
-                Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
-                Txt_Read_2.EmbeddedLabelText = "Meta en Kg";
-                Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
-                Txt_Read_4.EmbeddedLabelText = "Logro de Planeación (%)";
+                cb_proceso.Visible = false;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Inspeccion\" ORDER BY \"OP\";";
+                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Maquinas\" ORDER BY \"OP\";";
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
@@ -2098,7 +2106,6 @@ namespace Tablero
                 }
                 else
                 {
-
                     // Verificar si el usuario ya existe
                     string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Inspeccion\" WHERE \"OP\"  ILIKE @OP;";
                     NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
@@ -2217,7 +2224,6 @@ namespace Tablero
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
-
                 if (result > 0)
                 {
                     actualiza_grid_evaporado();
@@ -2288,7 +2294,6 @@ namespace Tablero
                 }
                 else
                 {
-
                     // Verificar si el usuario ya existe
                     string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Grind\" WHERE \"OP\"  ILIKE @OP;";
                     NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
@@ -2384,7 +2389,6 @@ namespace Tablero
                 }
                 else
                 {
-
                     // Verificar si el usuario ya existe
                     string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Revolturas\" WHERE \"OP\"  ILIKE @OP;";
                     NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
@@ -2476,7 +2480,6 @@ namespace Tablero
                 }
                 else
                 {
-
                     // Verificar si el usuario ya existe
                     string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Polvos\" WHERE \"OP\"  ILIKE @OP;";
                     NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
@@ -2500,7 +2503,6 @@ namespace Tablero
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
-
                 if (result > 0)
                 {
                     actualiza_polvos();
@@ -2513,6 +2515,107 @@ namespace Tablero
                     txt_Meta_3.Enabled = false;
                     btn_meta_edit.Enabled = false;
                     id_global_meta_polvos = string.Empty;
+
+                    cmb_area.Enabled = true;
+                    cmb_area.Focus();
+                    cmb_area.Enabled = false;
+                }
+            }
+            ///Maquinas
+            ///
+            if (cmb_area.SelectedIndex == 7 && (txt_op.Text == string.Empty || txt_Meta_1.Text == string.Empty || txt_Meta_2.Text == string.Empty || txt_Meta_3.Text == string.Empty || txt_Meta_5.Text == string.Empty))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (cmb_area.SelectedIndex == 7)
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string queryInsertUpdate = string.Empty;
+                int result;
+                if (!string.IsNullOrEmpty(id_global_meta_maquinas))
+                {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idmeta = Convert.ToInt32(id_global_meta_maquinas);
+
+                    queryInsertUpdate = "UPDATE public.\"Maquinas\" SET \"OP\" = @OP, \"Personal_Idoneo\" = @Personal_I, \"Cap_Trompo_machin\" = @Cap_Trompo_m, \"Canti_Trompo_machin\" = @Cantidad_Trompo_m, \"Meta_Kg_Hr\" = @Meta_kg_hr, \"Kg_pz\" = @Kg_pz WHERE \"ID_OP\" = @ID_OP;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = txt_op.Text.ToUpper()
+                        },
+                        new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                        },
+                        new NpgsqlParameter("@Cap_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                        },
+                        new NpgsqlParameter("@Cantidad_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                        },
+                        new NpgsqlParameter("@Meta_kg_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                        },
+                        new NpgsqlParameter("@Kg_pz", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_Meta_5.Text)
+                        },
+                        new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idmeta  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+                    // Verificar si el usuario ya existe
+                    string queryCheckmeta = "SELECT COUNT(*) FROM public.\"Maquinas\" WHERE \"OP\"  ILIKE @OP;";
+                    NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text),
+                    };
+                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Maquinas\" (\"OP\", \"Personal_Idoneo\", \"Cap_Trompo_machin\", \"Canti_Trompo_machin\", \"Meta_Kg_Hr\", \"Kg_pz\") VALUES (@OP, @Personal_I, @Capacidad_Trompo_m, @Cantidad_Trompo_m, @Meta_kg_hr, @Kg_pz);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_op.Text.ToUpper()),
+                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Capacidad_Trompo_m", Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Cantidad_Trompo_m", Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr", Convert.ToDecimal(txt_Meta_4.Text)),
+                    new NpgsqlParameter("@Kg_pz", Convert.ToDecimal(txt_Meta_5.Text))
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+
+                if (result > 0)
+                {
+                    actualiza_maquinas();
+                    limpiarCampos_meta();
+                    btn_meta_save.Enabled = false;
+                    btn_meta_cancel.Enabled = false;
+                    txt_op.Enabled = false;
+                    txt_Meta_1.Enabled = false;
+                    txt_Meta_2.Enabled = false;
+                    txt_Meta_3.Enabled = false;
+                    txt_Meta_5.Enabled = false;
+                    btn_meta_edit.Enabled = false;
+                    id_global_meta_maquinas = string.Empty;
 
                     cmb_area.Enabled = true;
                     cmb_area.Focus();
@@ -2853,7 +2956,7 @@ namespace Tablero
                 txt_Meta_2.Enabled = true;
                 txt_op.Focus();
             }
-            if (cmb_area.SelectedIndex == 3 || cmb_area.SelectedIndex == 4 || cmb_area.SelectedIndex == 5 || cmb_area.SelectedIndex == 6)
+            if (cmb_area.SelectedIndex == 3 || cmb_area.SelectedIndex == 4 || cmb_area.SelectedIndex == 5 || cmb_area.SelectedIndex == 6 || cmb_area.SelectedIndex == 7)
             {
                 btn_meta_save.Enabled = true;
                 btn_meta_cancel.Enabled = true;
@@ -2862,6 +2965,7 @@ namespace Tablero
                 txt_Meta_1.Enabled = true;
                 txt_Meta_2.Enabled = true;
                 txt_Meta_3.Enabled = true;
+                if(cmb_area.SelectedIndex == 7) { txt_Meta_5.Enabled = true; }
                 txt_op.Focus();
             }
         }
@@ -2949,7 +3053,6 @@ namespace Tablero
                         Value = id_OP
                     }
                 };
-
                 int result = dbHelper.ExecuteNonQuery(query, parameters);
 
                 if (result > 0)
@@ -2976,7 +3079,6 @@ namespace Tablero
                 {
                     MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
             }
 
             ///empacado
@@ -3227,6 +3329,50 @@ namespace Tablero
                     txt_Meta_3.Enabled = false;
                     btn_meta_edit.Enabled = false;
                     id_global_meta_polvos = string.Empty;
+
+                    cmb_area.Enabled = true;
+                    cmb_area.Focus();
+                    cmb_area.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            ///Maquinas
+            ///
+            if (cmb_area.SelectedIndex == 7 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Maquinas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                int id_OP = Convert.ToInt32(id_global_meta_maquinas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"DELETE FROM public.""Maquinas""
+                       WHERE ""ID_OP"" = @idOP";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@idOP", NpgsqlTypes.NpgsqlDbType.Integer)
+                    {
+                        Value = id_OP
+                    }
+                };
+
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+                    actualiza_maquinas();
+                    limpiarCampos_meta();
+                    btn_meta_save.Enabled = false;
+                    btn_meta_cancel.Enabled = false;
+                    btn_meta_delete.Enabled = false;
+                    txt_op.Enabled = false;
+                    txt_Meta_1.Enabled = false;
+                    txt_Meta_2.Enabled = false;
+                    txt_Meta_3.Enabled = false;
+                    txt_Meta_5.Enabled = false;
+                    btn_meta_edit.Enabled = false;
+                    id_global_meta_maquinas = string.Empty;
 
                     cmb_area.Enabled = true;
                     cmb_area.Focus();
@@ -4503,6 +4649,55 @@ namespace Tablero
                                                         "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            if (cb_Area.SelectedIndex == 8)
+            {
+                //Revolturas
+                int idUsuarioActual = id_user;
+                // Obtener datos de los TextBox
+                DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                int turno = Convert.ToInt32(cb_Turno.Text);
+                string op = cb_OP.Text;
+                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                decimal Pz_producidas = Convert.ToDecimal(Txt_1.Text);
+                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                string area = cb_Area.Text;
+                decimal kg_entrada = Convert.ToDecimal(Txt_Read_5.Text);
+                decimal bobina_entrada = Convert.ToDecimal(Txt_6.Text);
+                decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
+                decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
+
+                // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
+                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, bobina_merma);
+
+                if (idFicha > 0)
+                {
+                    // Insertar en tablas relacionadas
+                    InsertarTiemposMuertos(dbHelper, idFicha);
+
+                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cb_Area.SelectedIndex = -1;
+                    reiniciarCampos();
+                    cb_Area.Focus();
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                    "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private int InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
@@ -4616,7 +4811,7 @@ namespace Tablero
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@porcent_aumento_hum", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
@@ -4646,7 +4841,7 @@ namespace Tablero
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
@@ -4676,7 +4871,7 @@ namespace Tablero
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
@@ -4705,7 +4900,7 @@ namespace Tablero
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
@@ -4734,11 +4929,55 @@ namespace Tablero
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Polvo_Colector", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Granulo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                };
+            }
+            //int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+            //        Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
+            //        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, bobina_merma, area, 0, 0);
+
+        //    InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
+        //int turno, string var1, string var2, decimal var3, decimal var4,
+        //decimal var5, decimal var6, decimal var7, decimal var8,
+        //decimal var9, decimal var10, decimal var11,
+        //TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
+        //decimal meta_prog, string area_f, decimal metaHr, decimal var12)
+            if (cb_Area.SelectedIndex == 8)
+            {
+                query = @"INSERT INTO public.""Ficha"" (
+                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Pz_prod"", ""Kg_prod_term"", ""Kg_fuera_espec"", ""Merma_kg"", ""Kg_meta"", ""porcent_cump_meta"", 
+                    ""Kg_enter_proceso"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Hr_inicio"", ""Hr_fin"", ""Personal_Operativo"", ""Hr_programadas"", ""Bobina_merma"", 
+                    ""Hr_efectivas"", ""Area""
+                ) VALUES (
+                    @id_user, @fecha, @turno, @OP, @Pz_prod, @Kg_prod_term, @Kg_fuera_espec, @Merma_kg, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Bobina_kg_enter,  
+                    @Bobina_utilizada, @Hr_inicio, @Hr_fin, @Personal_Operativo, @Hr_programadas, @Bobina_merma, @Hr_efectivas, @Area
+                ) RETURNING ""ID_Ficha"";";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Pz_prod", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Kg_fuera_espec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@Bobina_kg_enter", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Bobina_utilizada", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Bobina_merma", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
                 };
             }
@@ -5095,13 +5334,17 @@ namespace Tablero
                 Ftt_metodo();
                 Relacion_Fresco_seco();
             }
-            if((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text)) 
+            if((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text)) 
             {
                 porcentaje_logrado_planeacion();
             }
             if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
             {
                 porcentaje_aumento_humedad();
+            }
+            if((cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_logrado_planeacion_platinum();
             }
         }
 
@@ -5135,7 +5378,7 @@ namespace Tablero
             {
                 cb_Turno.Enabled = true;
             }
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7) 
+            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8) 
             {
                 cb_Turno.Enabled = true;
             }
@@ -5305,6 +5548,30 @@ namespace Tablero
             {
                 // Consulta para buscar donde OP = valor_buscado
                 string query = "SELECT \"Meta_Kg_Hr\" FROM public.\"Revolturas\" WHERE \"OP\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string resultado = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    resultado = dt.Rows[0]["Meta_Kg_Hr"].ToString();
+                    Txt_meta.Text = resultado;
+                }
+            }
+            if (cb_Area.SelectedIndex == 8)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"Meta_Kg_Hr\" FROM public.\"Maquinas\" WHERE \"OP\" = @valorBuscado;";
 
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -5541,7 +5808,6 @@ namespace Tablero
             double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
             double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
             double kg_fuera_espec = Convert.ToDouble(Txt_3.Text);
-            
 
             // Verificar que P2 no sea cero para evitar división por cero
             if (meta_kg == 0)
@@ -5561,6 +5827,61 @@ namespace Tablero
 
             // Convertir a porcentaje y mostrar en el TextBox de resultado
             Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+        }
+        private void porcentaje_logrado_planeacion_platinum()
+        {
+            // Obtener los valores de los TextBox y convertirlos a double
+
+            double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
+            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+
+            // Verificar que P2 no sea cero para evitar división por cero
+            if (meta_kg == 0)
+            {
+                Txt_Read_4.Text = "";
+                return;
+            }
+
+            double resultado = Kg_Prod_Terminado / meta_kg;
+
+            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+            if (resultado > 1.0)
+            {
+                resultado = 1.0;
+            }
+
+            // Convertir a porcentaje y mostrar en el TextBox de resultado
+            Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+        }
+        private void calcular_kg_entrada_proceso()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // Consulta para buscar donde OP = valor_buscado
+            string query = "SELECT \"Kg_pz\" FROM public.\"Maquinas\" WHERE \"OP\" = @valorBuscado;";
+            string valorBuscado = cb_OP.Text;
+            string kg_pz_string;
+            decimal kg_pz, pz_producidas, resultado;
+            kg_pz = 0;
+
+            // Crear parámetro
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+            };
+
+            // Ejecutar consulta
+            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+            // Verificar si se encontraron resultados
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                kg_pz_string = dt.Rows[0]["Kg_pz"].ToString();
+                kg_pz = Convert.ToDecimal(kg_pz_string);
+            }
+            pz_producidas = Convert.ToDecimal(Txt_1.Text);
+            resultado = pz_producidas *kg_pz;
+
+            Txt_Read_5.Text = resultado.ToString();
         }
 
         private void porcentaje_aumento_humedad()
@@ -5736,7 +6057,7 @@ namespace Tablero
 
         private void Txt_1_TextChanged(object sender, EventArgs e)
         {
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7) 
+            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8) 
             {
                 var tb = (RadTextBox)sender;
                 string original = tb.Text;
@@ -5752,6 +6073,10 @@ namespace Tablero
                 if (!string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && cb_Area.SelectedIndex == 2)
                 {
                     porcentaje_aumento_humedad();
+                }
+                if (!string.IsNullOrEmpty(Txt_1.Text) && cb_Area.SelectedIndex == 8) 
+                {
+                    calcular_kg_entrada_proceso();
                 }
             }   
         }
@@ -5888,6 +6213,35 @@ namespace Tablero
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
                 txt_Meta_3.Enabled = false;
+                btn_meta_save.Enabled = false;
+                btn_meta_cancel.Enabled = false;
+            }
+        }
+
+        private void dgv_metas_maquinas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                id_global_meta_maquinas = dgv_metas_maquinas.Rows[e.RowIndex].Cells[0].Value.ToString();
+                txt_op.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[1].Value.ToString();
+                txt_Meta_1.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[5].Value.ToString();
+                txt_Meta_2.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[2].Value.ToString();
+                txt_Meta_3.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[3].Value.ToString();
+                txt_Meta_4.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[4].Value.ToString();
+                txt_Meta_5.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[6].Value.ToString();
+
+                btn_meta_edit.Enabled = true;
+                btn_meta_delete.Enabled = true;
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 7;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
+                txt_op.Enabled = false;
+                txt_Meta_1.Enabled = false;
+                txt_Meta_2.Enabled = false;
+                txt_Meta_3.Enabled = false;
+                txt_Meta_5.Enabled = false;
                 btn_meta_save.Enabled = false;
                 btn_meta_cancel.Enabled = false;
             }

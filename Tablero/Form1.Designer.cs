@@ -130,6 +130,8 @@
             this.dgv_metas_revolturas = new System.Windows.Forms.DataGridView();
             this.metroTabPage7 = new MetroFramework.Controls.MetroTabPage();
             this.dgv_metas_polvos = new System.Windows.Forms.DataGridView();
+            this.metroTabPage8 = new MetroFramework.Controls.MetroTabPage();
+            this.dgv_metas_maquinas = new System.Windows.Forms.DataGridView();
             this.materialCard_tab_meta = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_meta = new System.Windows.Forms.TabControl();
             this.tabPage7 = new System.Windows.Forms.TabPage();
@@ -155,8 +157,6 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.metroTabPage8 = new MetroFramework.Controls.MetroTabPage();
-            this.dgv_metas_maquinas = new System.Windows.Forms.DataGridView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -214,14 +214,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_revolturas)).BeginInit();
             this.metroTabPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos)).BeginInit();
+            this.metroTabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_maquinas)).BeginInit();
             this.materialCard_tab_meta.SuspendLayout();
             this.tabControl_meta.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.metroTabPage8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_maquinas)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1938,6 +1938,36 @@
             this.dgv_metas_polvos.TabIndex = 6;
             this.dgv_metas_polvos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_polvos_CellClick);
             // 
+            // metroTabPage8
+            // 
+            this.metroTabPage8.Controls.Add(this.dgv_metas_maquinas);
+            this.metroTabPage8.HorizontalScrollbarBarColor = true;
+            this.metroTabPage8.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage8.HorizontalScrollbarSize = 10;
+            this.metroTabPage8.Location = new System.Drawing.Point(4, 4);
+            this.metroTabPage8.Name = "metroTabPage8";
+            this.metroTabPage8.Size = new System.Drawing.Size(1674, 503);
+            this.metroTabPage8.TabIndex = 7;
+            this.metroTabPage8.Text = "Máquinas";
+            this.metroTabPage8.VerticalScrollbarBarColor = true;
+            this.metroTabPage8.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage8.VerticalScrollbarSize = 10;
+            // 
+            // dgv_metas_maquinas
+            // 
+            this.dgv_metas_maquinas.AllowUserToAddRows = false;
+            this.dgv_metas_maquinas.AllowUserToDeleteRows = false;
+            this.dgv_metas_maquinas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_metas_maquinas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas_maquinas.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgv_metas_maquinas.Location = new System.Drawing.Point(0, 7);
+            this.dgv_metas_maquinas.Name = "dgv_metas_maquinas";
+            this.dgv_metas_maquinas.ReadOnly = true;
+            this.dgv_metas_maquinas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_metas_maquinas.Size = new System.Drawing.Size(1674, 496);
+            this.dgv_metas_maquinas.TabIndex = 6;
+            this.dgv_metas_maquinas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_maquinas_CellClick);
+            // 
             // materialCard_tab_meta
             // 
             this.materialCard_tab_meta.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -2389,35 +2419,6 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // metroTabPage8
-            // 
-            this.metroTabPage8.Controls.Add(this.dgv_metas_maquinas);
-            this.metroTabPage8.HorizontalScrollbarBarColor = true;
-            this.metroTabPage8.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage8.HorizontalScrollbarSize = 10;
-            this.metroTabPage8.Location = new System.Drawing.Point(4, 4);
-            this.metroTabPage8.Name = "metroTabPage8";
-            this.metroTabPage8.Size = new System.Drawing.Size(1674, 503);
-            this.metroTabPage8.TabIndex = 7;
-            this.metroTabPage8.Text = "Máquinas";
-            this.metroTabPage8.VerticalScrollbarBarColor = true;
-            this.metroTabPage8.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage8.VerticalScrollbarSize = 10;
-            // 
-            // dgv_metas_maquinas
-            // 
-            this.dgv_metas_maquinas.AllowUserToAddRows = false;
-            this.dgv_metas_maquinas.AllowUserToDeleteRows = false;
-            this.dgv_metas_maquinas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgv_metas_maquinas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_metas_maquinas.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgv_metas_maquinas.Location = new System.Drawing.Point(0, 7);
-            this.dgv_metas_maquinas.Name = "dgv_metas_maquinas";
-            this.dgv_metas_maquinas.ReadOnly = true;
-            this.dgv_metas_maquinas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_maquinas.Size = new System.Drawing.Size(1674, 496);
-            this.dgv_metas_maquinas.TabIndex = 6;
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2497,6 +2498,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_revolturas)).EndInit();
             this.metroTabPage7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos)).EndInit();
+            this.metroTabPage8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_maquinas)).EndInit();
             this.materialCard_tab_meta.ResumeLayout(false);
             this.tabControl_meta.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
@@ -2505,8 +2508,6 @@
             this.tabPage8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.metroTabPage8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_maquinas)).EndInit();
             this.ResumeLayout(false);
 
         }
