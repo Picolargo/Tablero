@@ -1,6 +1,6 @@
 ﻿namespace Tablero
 {
-    partial class RadForm1
+    partial class Editar
     {
         /// <summary>
         /// Required designer variable.
@@ -53,14 +53,15 @@
             this.radGridView1.Size = new System.Drawing.Size(977, 618);
             this.radGridView1.TabIndex = 0;
             this.radGridView1.ThemeName = "TelerikMetro";
+            this.radGridView1.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.radGridView1_CellDoubleClick);
             // 
-            // RadForm1
+            // Editar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(977, 618);
             this.Controls.Add(this.radGridView1);
-            this.Name = "RadForm1";
+            this.Name = "Editar";
             this.Text = "Fichas";
             this.ThemeName = "TelerikMetro";
             this.Load += new System.EventHandler(this.RadForm1_Load);

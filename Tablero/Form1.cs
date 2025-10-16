@@ -40,6 +40,7 @@ namespace Tablero
         private string horaFinText = string.Empty;
         private DateTime horaInicio;
         private DateTime horaFin;
+        private bool editar = false;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
 
@@ -540,7 +541,8 @@ namespace Tablero
             if (cb_Area.SelectedIndex==0)
             {
                 //TUNEL/ SUMERGIDOR
-                reiniciarCampos();
+                if(editar == false) { reiniciarCampos(); }
+                
                 //hacer visible para tunel
                 card_datos.Visible = true;
                 card_TM.Visible = true;
@@ -1244,16 +1246,16 @@ namespace Tablero
             cb_proceso.Focus();
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
-            Txt_2.Text = "0";
-            Txt_3.Text = "0";
-            Txt_4.Text = "0";
-            Txt_5.Text = "0";
-            Txt_6.Text = "0";
-            Txt_7.Text = "0";
-            Txt_8.Text = "0";
-            Txt_9.Text = "0";
-            Txt_10.Text = "0";
-            Txt_11.Text = "0";
+            Txt_2.Text = string.Empty;
+            Txt_3.Text = string.Empty;
+            Txt_4.Text = string.Empty;
+            Txt_5.Text = string.Empty;
+            Txt_6.Text = string.Empty;
+            Txt_7.Text = string.Empty;
+            Txt_8.Text = string.Empty;
+            Txt_9.Text = string.Empty;
+            Txt_10.Text = string.Empty;
+            Txt_11.Text = string.Empty;
             Txt_meta.Text = string.Empty;
             Txt_Read_1.Text = string.Empty;
             Txt_Read_2.Text = string.Empty;
@@ -1275,6 +1277,7 @@ namespace Tablero
             cb_OP.Enabled = false;
             dtp1.Enabled = false;
             txt_Tiempo_energia.Text = "0";
+            editar = false;
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -4276,8 +4279,8 @@ namespace Tablero
                     int personal_Op = Convert.ToInt32(Txt_9.Text);
                     decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
                     decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                    decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
-                    string area = "Deshidratado";
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string area = cb_Area.Text;
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
                     decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
 
@@ -4301,7 +4304,7 @@ namespace Tablero
                     // Insertar en tabla Ficha y obtener el ID_Ficha generado
                     int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
                         kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_prog, area, meta, merma_tunel);
+                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
 
                     if (idFicha > 0)
                     {
@@ -4333,13 +4336,14 @@ namespace Tablero
                 // Obtener datos de los TextBox
                 DateTime fecha = dtp1.Value; // Tu MetroDateTime
                 int turno = Convert.ToInt32(cb_Turno.Text);
+                string op = cb_OP.Text;
                 decimal KgProdSeco = Convert.ToDecimal(Txt_2.Text);
                 decimal MermaKgSeco = Convert.ToDecimal(Txt_3.Text);
                 decimal KgFueraSpec = Convert.ToDecimal(Txt_4.Text);
                 decimal KgResecar = Convert.ToDecimal(Txt_5.Text);
                 int PersonalOpe = Convert.ToInt32(Txt_6.Text);
                 decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal meta_prog = Convert.ToDecimal(Txt_Read_2.Text);
+                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
                 decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
                 string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
                 decimal PorcentCumplimiento = Convert.ToDecimal(textoPorcentCumplimiento)/100m;
@@ -4347,15 +4351,17 @@ namespace Tablero
                 decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
                 string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
                 decimal FTT = Convert.ToDecimal(textoFTT)/100m;
-        
+                string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
+
                 // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, null, null,
+                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
                     KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
-                    KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_prog, null, 0, 0);
+                    KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4398,11 +4404,12 @@ namespace Tablero
                 // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4443,11 +4450,12 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                 string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4489,11 +4497,12 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                 string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4534,11 +4543,12 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                 string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4581,11 +4591,12 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                 string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4626,11 +4637,12 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                 TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                 string area = cb_Area.Text;
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, 0);
+                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                 if (idFicha > 0)
                 {
@@ -4675,11 +4687,12 @@ namespace Tablero
                 decimal bobina_entrada = Convert.ToDecimal(Txt_6.Text);
                 decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
                 decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
+                decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
                 // Insertar en tabla Ficha y obtener el ID_Ficha generado
                 int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, 0, area, 0, bobina_merma);
+                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
 
                 if (idFicha > 0)
                 {
@@ -4705,7 +4718,7 @@ namespace Tablero
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas, 
-        decimal meta_prog, string area_f, decimal metaHr, decimal var12)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12)
         {
             string query = String.Empty;
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -4716,12 +4729,12 @@ namespace Tablero
                     ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
                     ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
                     ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""MetaProg"", ""Area"", ""MetaHr"", ""Merma_Tunel""
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""Merma_Tunel"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @lote, @op,
                     @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
                     @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
-                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @meta_prog, @Area, @MetaHr, @merma_tunel
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @merma_tunel, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
 
                 parameters = new NpgsqlParameter[]
@@ -4743,46 +4756,47 @@ namespace Tablero
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@hr_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
-                    new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Personal_Op", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
-                    new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
+                    new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
                     new NpgsqlParameter("@merma_tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@meta_prog", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 1)
             {
                 query = @"INSERT INTO public.""Ficha"" (
-                    ""ID_user"", ""Fecha_Desp"", ""Turno_Desp"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
-                    ""Personal_OP_Desp"", ""Hr_prog_Desp"",""MetaProg_Desp"", ""Hr_efectivas_Desp"", ""porcent_cump_meta"", ""Kg_meta"",
-                    ""Relacion_Fr_seco"", ""FTT"", ""Hr_inicio_Desp"", ""Hr_fin_Desp""
+                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
+                    ""Personal_Operativo"", ""Hr_programadas"", ""Hr_efectivas"", ""porcent_cump_meta"", ""Kg_meta"",
+                    ""Relacion_Fr_seco"", ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
                 ) VALUES (
-                    @id_user, @fecha, @turno, @Kg_prod_seco, @Merma_kg_seco, @Kg_fuera_spec,
+                    @id_user, @fecha, @turno, @op, @Kg_prod_seco, @Merma_kg_seco, @Kg_fuera_spec,
                     @Kg_resecar, @Personal_Operativo, @Hr_programadas,
-                    @MetaProg, @Hr_efectivas, @Porcent_cumplimiento, @Kg_secos_meta,
-                    @Relacion_fresco_seco, @FTT, @hr_inicio, @hr_fin
+                    @Hr_efectivas, @Porcent_cumplimiento, @Kg_meta,
+                    @Relacion_fresco_seco, @FTT, @hr_inicio, @hr_fin, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
                     new NpgsqlParameter("@Kg_prod_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Kg_fuera_spec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
                     new NpgsqlParameter("@Merma_kg_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_resecar", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
-                    new NpgsqlParameter("@MetaProg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_prog },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Porcent_cumplimiento", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
-                    new NpgsqlParameter("@Kg_secos_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
                     new NpgsqlParameter("@Relacion_fresco_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
                     new NpgsqlParameter("@FTT", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
-                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin }
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 2)
@@ -4790,12 +4804,12 @@ namespace Tablero
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", 
                     ""Kg_prod_term"", ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", 
-                    ""porcent_aumento_hum"", ""Hr_inicio"", ""Hr_fin"", ""Area""
+                    ""porcent_aumento_hum"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta,
                     @Kg_enter_proceso, @Kg_prod_term, @Kg_fuera_espec,
                     @Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo,
-                    @porcent_aumento_hum, @Hr_inicio, @Hr_fin, @Area
+                    @porcent_aumento_hum, @Hr_inicio, @Hr_fin, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4803,7 +4817,7 @@ namespace Tablero
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
@@ -4815,17 +4829,18 @@ namespace Tablero
                     new NpgsqlParameter("@porcent_aumento_hum", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 7)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area""
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4833,7 +4848,7 @@ namespace Tablero
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
@@ -4844,17 +4859,18 @@ namespace Tablero
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 4)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Proceso"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area""
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @Proceso, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4863,7 +4879,7 @@ namespace Tablero
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
@@ -4874,17 +4890,18 @@ namespace Tablero
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 5)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area""
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4892,7 +4909,7 @@ namespace Tablero
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
@@ -4903,17 +4920,18 @@ namespace Tablero
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             if (cb_Area.SelectedIndex == 6)
             {
                 query = @"INSERT INTO public.""Ficha"" (
-                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Polvo_colector"", ""Granulo"", ""Area""
+                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", ""Kg_fuera_espec"", 
+                    ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Polvo_colector"", ""Granulo"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Polvo_Colector, @Granulo, @Area
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Polvo_Colector, @Granulo, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4921,7 +4939,7 @@ namespace Tablero
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
@@ -4934,28 +4952,19 @@ namespace Tablero
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Polvo_Colector", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Granulo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
-            //int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-            //        Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, meta_kg, Porcent_Logrado,
-            //        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, bobina_merma, area, 0, 0);
-
-        //    InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
-        //int turno, string var1, string var2, decimal var3, decimal var4,
-        //decimal var5, decimal var6, decimal var7, decimal var8,
-        //decimal var9, decimal var10, decimal var11,
-        //TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        //decimal meta_prog, string area_f, decimal metaHr, decimal var12)
             if (cb_Area.SelectedIndex == 8)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Pz_prod"", ""Kg_prod_term"", ""Kg_fuera_espec"", ""Merma_kg"", ""Kg_meta"", ""porcent_cump_meta"", 
                     ""Kg_enter_proceso"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Hr_inicio"", ""Hr_fin"", ""Personal_Operativo"", ""Hr_programadas"", ""Bobina_merma"", 
-                    ""Hr_efectivas"", ""Area""
+                    ""Hr_efectivas"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Pz_prod, @Kg_prod_term, @Kg_fuera_espec, @Merma_kg, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Bobina_kg_enter,  
-                    @Bobina_utilizada, @Hr_inicio, @Hr_fin, @Personal_Operativo, @Hr_programadas, @Bobina_merma, @Hr_efectivas, @Area
+                    @Bobina_utilizada, @Hr_inicio, @Hr_fin, @Personal_Operativo, @Hr_programadas, @Bobina_merma, @Hr_efectivas, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -4967,7 +4976,7 @@ namespace Tablero
                     new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
                     new NpgsqlParameter("@Kg_fuera_espec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
                     new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
-                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
                     new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Bobina_kg_enter", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
@@ -4978,7 +4987,8 @@ namespace Tablero
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
                     new NpgsqlParameter("@Bobina_merma", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
             return dbHelper.ExecuteScalarInt(query, parameters);
@@ -6256,8 +6266,238 @@ namespace Tablero
 
         private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            RadForm1 Editar_ficha = new RadForm1(connectionString);
+            editar = true;
+            Editar Editar_ficha = new Editar(connectionString, editar);
+
+            // Suscripción al evento con los dos parámetros
+            Editar_ficha.FichaSeleccionada += (id_global, area) =>
+            {
+                //MessageBox.Show($"ID seleccionado: {id_global}\nÁrea: {area}");
+
+                if(area== "Tunel/ Sumergidor") 
+                {
+                    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                    // Consulta para buscar donde OP = valor_buscado
+                    string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
+                    "\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
+                    "\"Merma_Tunel\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                    };
+
+                    // Ejecutar consulta
+                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    // Variables
+                    string OP = string.Empty;
+                    string Turno = string.Empty;
+                    string Hr_inicio = string.Empty;
+                    string Hr_fin = string.Empty;
+                    string MetaHr = string.Empty;
+                    string Lote = string.Empty;
+                    string Kg_enter_proceso = string.Empty;
+                    string Merma_canica = string.Empty;
+                    string Merma_podrido = string.Empty;
+                    string Merma_tina = string.Empty;
+                    string Merma_piso = string.Empty;
+                    string Merma_canaletas = string.Empty;
+                    string Merma_lavado_bandas = string.Empty;
+                    string Personal_Operativo = string.Empty;
+                    string Cascara_carrete = string.Empty;
+                    string Merma_Tunel = string.Empty;
+
+                    // Verificar si se encontraron resultados
+                    if (dt2 != null && dt2.Rows.Count > 0)
+                    {
+                        OP = dt2.Rows[0]["OP"].ToString();
+                        Turno = dt2.Rows[0]["Turno"].ToString();
+                        Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
+                        Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
+                        MetaHr = dt2.Rows[0]["MetaHr"].ToString();
+                        Lote = dt2.Rows[0]["Lote"].ToString();
+                        Kg_enter_proceso = dt2.Rows[0]["Kg_enter_proceso"].ToString();
+                        Merma_canica = dt2.Rows[0]["Merma_canica"].ToString();
+                        Merma_podrido = dt2.Rows[0]["Merma_podrido"].ToString();
+                        Merma_tina = dt2.Rows[0]["Merma_tina"].ToString();
+                        Merma_piso = dt2.Rows[0]["Merma_piso"].ToString();
+                        Merma_canaletas = dt2.Rows[0]["Merma_canaletas"].ToString();
+                        Merma_lavado_bandas = dt2.Rows[0]["Merma_lavado_bandas"].ToString();
+                        Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                        Cascara_carrete = dt2.Rows[0]["Cascara_carrete"].ToString();
+                        Merma_Tunel = dt2.Rows[0]["Merma_Tunel"].ToString();
+                    }
+
+                    cb_Area.Text =  area;
+                    cb_OP.Text = OP;
+                    // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
+                    cb_OP_SelectionChangeCommitted(cb_OP, EventArgs.Empty);
+
+                    cb_Turno.Text = Turno;
+                    cb_Turno.Focus();
+                    Mask_txt_hr1.Text = Hr_inicio;
+                    Mask_txt_hr2.Text = Hr_fin;
+                    Txt_meta.Text = MetaHr;
+                    Txt_1.Text = Lote;
+                    Txt_2.Text = Kg_enter_proceso;
+                    Txt_3.Text = Merma_canica;
+                    Txt_4.Text = Merma_podrido;
+                    Txt_5.Text = Merma_tina;
+                    Txt_6.Text = Merma_piso;
+                    Txt_7.Text = Merma_canaletas;
+                    Txt_8.Text = Merma_lavado_bandas;
+                    Txt_9.Text = Personal_Operativo;
+                    Txt_10.Text = Cascara_carrete;
+                    Txt_11.Text = Merma_Tunel;
+
+                    actualiza_tiempos(id_global);
+                }
+
+                // Aquí puedes usar los valores para una consulta o asignarlos a variables globales
+              //  string query = $"SELECT * FROM public.\"Ficha\" WHERE \"ID_Ficha\" = {id_global} AND \"Area\" = '{area}';";
+            };
+
             Editar_ficha.Show();
+        }
+
+        private void actualiza_tiempos(string id)
+        {
+            try
+            {
+                // Cargar tiempos muertos mecánicos
+                actualiza_tiempos_mecanicos(id);
+
+                // Cargar tiempos muertos operativos
+                actualiza_tiempos_operativos(id);
+
+                // Cargar tiempos muertos comida (si es necesario)
+                actualiza_tiempo_comida(id);
+
+                // Cargar tiempos muertos energía (si es necesario)
+                actualiza_tiempo_energia(id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar tiempos muertos: {ex.Message}");
+            }
+        }
+
+        private void actualiza_tiempos_mecanicos(string id)
+        {
+            dgv_mecanico.DataSource = null;
+            dgv_mecanico.Columns.Clear();
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+                            ""Motivos"" as ""Motivos Mecánicos"" 
+                     FROM public.""Tiempo_muerto_Mecanico"" 
+                     WHERE ""ID_Ficha"" = @id_ficha 
+                     ORDER BY ""ID_T_Mecanico"" ASC;";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+            };
+
+            dbHelper.LoadDataIntoDataGridView(query, dgv_mecanico, parameters);
+            // Configurar columnas DESPUÉS de cargar los datos
+            ConfigurarColumnasDataGridView(dgv_mecanico);
+        }
+
+        private void actualiza_tiempos_operativos(string id)
+        {
+            dgv_operativo.DataSource = null;
+            dgv_operativo.Columns.Clear();
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+                            ""Motivos"" as ""Motivos Operativos"" 
+                     FROM public.""Tiempo_Muerto_Operativo"" 
+                     WHERE ""ID_Ficha"" = @id_ficha 
+                     ORDER BY ""ID_T_Operativo"" ASC;";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+            };
+
+            dbHelper.LoadDataIntoDataGridView(query, dgv_operativo, parameters);
+            // Configurar columnas DESPUÉS de cargar los datos
+            ConfigurarColumnasDataGridView(dgv_operativo);
+        }
+
+        private void actualiza_tiempo_comida(string id)
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT ""Minutos_Detenidos"" 
+                     FROM public.""Tiempo_Muerto_Comida"" 
+                     WHERE ""ID_Ficha"" = @id_ficha;";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+            };
+
+            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                txt_Tiempo_comida.Text = dt.Rows[0]["Minutos_Detenidos"].ToString();
+            }
+            else
+            {
+                txt_Tiempo_comida.Text = "0";
+            }
+        }
+
+        private void actualiza_tiempo_energia(string id)
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT ""Minutos_Detenidos"" 
+                     FROM public.""Tiempo_Muerto_Energia"" 
+                     WHERE ""ID_Ficha"" = @id_ficha;";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+            };
+
+            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                txt_Tiempo_energia.Text = dt.Rows[0]["Minutos_Detenidos"].ToString();
+            }
+            else
+            {
+                txt_Tiempo_energia.Text = "0";
+            }
+        }
+
+        private void ConfigurarColumnasDataGridView(DataGridView dataGridView)
+        {
+            if (dataGridView.Columns.Count >= 2)
+            {
+                // Primera columna: AutoSizeMode = AllCells
+                dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
+
+                // Segunda columna: AutoSizeMode = Fill
+                dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataGridView.Columns[1].HeaderText = "Motivos";
+
+                // Opcional: Configuración adicional para mejor apariencia
+                dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+                dataGridView.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dataGridView.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
         }
     }
 }
