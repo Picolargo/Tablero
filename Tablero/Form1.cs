@@ -542,7 +542,7 @@ namespace Tablero
             if (cb_Area.SelectedIndex==0)
             {
                 //TUNEL/ SUMERGIDOR
-                if(editar == false) { reiniciarCampos(); }
+                if(!editar) { reiniciarCampos(); }
                 
                 //hacer visible para tunel
                 card_datos.Visible = true;
@@ -623,7 +623,7 @@ namespace Tablero
             if (cb_Area.SelectedIndex == 1)
             {
                 //Despegue
-                reiniciarCampos();
+                if (!editar) { reiniciarCampos(); }
 
                 //hacer visible para Despegue
                 card_datos.Visible = true;
@@ -698,7 +698,7 @@ namespace Tablero
 
                 // Cargar combobox lote
 
-                query = "SELECT \"ID_Ficha\", \"Lote\" FROM public.\"Ficha\" WHERE \"Kg_prod_seco\" is null and \"Area\" = 'TUNEL/ SUMERGIDOR' ORDER BY \"Lote\";";
+                query = "SELECT \"ID_Ficha\", \"Lote\" FROM public.\"Ficha\" WHERE \"Terminado_Tunel\" = false and \"Area\" = 'Tunel/Sumergidor' ORDER BY \"Lote\";";
                 dbHelper.LoadDataIntoComboBox(query, cb_lote, "Lote", "ID_Ficha");
             }
             if (cb_Area.SelectedIndex == 2)
@@ -4196,7 +4196,7 @@ namespace Tablero
                 }
                 if(cb_Turno.SelectedIndex == 0) 
                 {
-                    if (editar == false) { Txt_1.Enabled = true;}else { Txt_1.Enabled = false; }
+                    if (!editar) { Txt_1.Enabled = true;}else{ Txt_1.Enabled = false; }
                     Txt_2.Enabled = true;
                     Txt_3.Enabled = true;
                     Txt_4.Enabled = true;
@@ -4290,7 +4290,7 @@ namespace Tablero
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
-                    if(editar == true)
+                    if(editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                         kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
@@ -4369,26 +4369,35 @@ namespace Tablero
                 TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
-                // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
-                    KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-
-                if (idFicha > 0)
+                if (editar) 
                 {
-                    // Insertar en tablas relacionadas
-                    InsertarTiemposMuertos(dbHelper, idFicha);
-
-                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    cb_Area.SelectedIndex = -1;
-                    reiniciarCampos();
-                    cb_Area.Focus();
+                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                        KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                 }
                 else
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                        KgProdSeco, MermaKgSeco, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+
+                    if (idFicha > 0)
+                    {
+                        // Insertar en tablas relacionadas
+                        InsertarTiemposMuertos(dbHelper, idFicha);
+
+                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        cb_Area.SelectedIndex = -1;
+                        reiniciarCampos();
+                        cb_Area.Focus();
+                    }
+                    else
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             if (cb_Area.SelectedIndex == 2)
@@ -4735,12 +4744,12 @@ namespace Tablero
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
             string queryInsertUpdate = string.Empty;
             int result = 0;
+            // Convertir el ID a entero ANTES de crear el parámetro
+            int idFicha = Convert.ToInt32(id_global_ficha);
             if (cb_Area.SelectedIndex == 0) 
             {
                 // actualizar
-                // Convertir el ID a entero ANTES de crear el parámetro
-                int idFicha = Convert.ToInt32(id_global_ficha);
-
+                
                 queryInsertUpdate = "UPDATE public.\"Ficha\" SET \"ID_user\" = @id_user, \"Fecha\" = @Fecha, \"Turno\" = @Turno, \"OP\" = @OP," +
                     " \"Kg_enter_proceso\" = @Kg_enter_proceso, \"kg_frescos_enter_se\" = @kg_frescos_enter_se, \"Merma_canica\" = @Merma_canica, \"Merma_podrido\" = @Merma_podrido," +
                     " \"Merma_tina\" = @Merma_tina, \"Merma_piso\" = @Merma_piso, \"Merma_canaletas\" = @Merma_canaletas, \"Merma_lavado_bandas\" = @Merma_lavado_bandas," +
@@ -4776,7 +4785,34 @@ namespace Tablero
             }
             if (cb_Area.SelectedIndex == 1) 
             {
-                
+                queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_prod_seco"" = @Kg_prod_seco,
+                                    ""Merma_kg"" = @Merma_kg_seco, ""Kg_fuera_espec"" = @Kg_fuera_spec, ""Kg_resecar"" = @Kg_resecar, ""Personal_Operativo"" = @Personal_Operativo, 
+                                    ""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, ""porcent_cump_meta"" = @Porcent_cumplimiento, ""Kg_meta"" = @Kg_meta,
+                                    ""Relacion_Fr_seco"" = @Relacion_fresco_seco, ""FTT"" = @FTT, ""Hr_inicio"" = @hr_inicio, ""Hr_fin"" = @hr_fin, ""MetaHr"" = @MetaHr 
+                                    WHERE ""ID_Ficha"" = @ID_Ficha;";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Kg_prod_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@Kg_fuera_spec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Merma_kg_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_resecar", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Porcent_cumplimiento", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Relacion_fresco_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@FTT", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                };
+                result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
             UpdateTiemposMuertos(dbHelper);
             if (result > 0)
@@ -6435,7 +6471,7 @@ namespace Tablero
             {
                 //MessageBox.Show($"ID seleccionado: {id_global}\nÁrea: {area}");
                 id_global_ficha= id_global;
-                if (area== "Tunel/ Sumergidor") 
+                if (area == "Tunel/ Sumergidor") 
                 {
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     // Consulta para buscar donde OP = valor_buscado
@@ -6454,6 +6490,7 @@ namespace Tablero
                     // Variables
                     string OP = string.Empty;
                     string Turno = string.Empty;
+                    DateTime Fecha = DateTime.MinValue;
                     string Hr_inicio = string.Empty;
                     string Hr_fin = string.Empty;
                     string MetaHr = string.Empty;
@@ -6474,6 +6511,7 @@ namespace Tablero
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
+                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -6497,6 +6535,7 @@ namespace Tablero
 
                     cb_Turno.Text = Turno;
                     cb_Turno.Focus();
+                    dtp1.Value = Fecha;
                     Mask_txt_hr1.Text = Hr_inicio;
                     Mask_txt_hr2.Text = Hr_fin;
                     Txt_meta.Text = MetaHr;
@@ -6511,14 +6550,87 @@ namespace Tablero
                     Txt_9.Text = Personal_Operativo;
                     Txt_10.Text = Cascara_carrete;
                     Txt_11.Text = Merma_Tunel;
+                    // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
                     Txt_1.Enabled = false;
 
                     actualiza_tiempos(id_global);
                 }
+                if (area == "Despegue") 
+                {
+                    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                    // Consulta para buscar donde OP = valor_buscado
+                    string query2 = @"SELECT ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Lote"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
+                                    ""Personal_Operativo"", ""Hr_programadas"", ""Hr_efectivas"", ""porcent_cump_meta"", ""Kg_meta"", ""Relacion_Fr_seco"", 
+                                    ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""MetaHr"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                    };
+
+                    // Ejecutar consulta
+                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+
+                    // Variables
+                    string OP = string.Empty;
+                    string Turno = string.Empty;
+                    DateTime Fecha = DateTime.MinValue;
+                    string Hr_inicio = string.Empty;
+                    string Hr_fin = string.Empty;
+                    string MetaHr = string.Empty;
+                    string Lote = string.Empty;
+                    string Kg_prod_seco = string.Empty;
+                    string Merma_kg = string.Empty;
+                    string Kg_fuera_espec = string.Empty;
+                    string Kg_resecar = string.Empty;
+                    string Personal_Operativo = string.Empty;
+
+                    if (dt2 != null && dt2.Rows.Count > 0) 
+                    {
+                        OP = dt2.Rows[0]["OP"].ToString();
+                        Turno = dt2.Rows[0]["Turno"].ToString();
+                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
+                        Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
+                        MetaHr = dt2.Rows[0]["MetaHr"].ToString();
+                        Lote = dt2.Rows[0]["Lote"].ToString();
+                        Kg_prod_seco = dt2.Rows[0]["Kg_prod_seco"].ToString();
+                        Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
+                        Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
+                        Kg_resecar = dt2.Rows[0]["Kg_resecar"].ToString();
+                        Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                    }
+
+                    cb_Area.Text = area;
+                    cb_OP.Text = OP;
+                    // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
+                    cb_OP_SelectionChangeCommitted(cb_OP, EventArgs.Empty);
+                    cb_Turno.Text = Turno;
+                    cb_Turno.Focus();
+                    dtp1.Value = Fecha;
+                    Mask_txt_hr1.Text = Hr_inicio;
+                    Mask_txt_hr2.Text = Hr_fin;
+                    Txt_meta.Text = MetaHr;
+                    cb_lote.Text = Lote;
+                    cb_lote.Focus();
+                    cb_lote_SelectionChangeCommitted(cb_lote, EventArgs.Empty);
+                    Txt_2.Text = Kg_prod_seco;
+                    Txt_3.Text = Merma_kg;
+                    Txt_4.Text = Kg_fuera_espec;
+                    Txt_5.Text = Kg_resecar;
+                    Txt_6.Text = Personal_Operativo;
+
+                    // Deshabilitar controles no editables
+                    cb_Area.Enabled = false;
+                    cb_lote.Enabled = false;
+
+                    actualiza_tiempos(id_global);
+                }
 
                 // Aquí puedes usar los valores para una consulta o asignarlos a variables globales
-              //  string query = $"SELECT * FROM public.\"Ficha\" WHERE \"ID_Ficha\" = {id_global} AND \"Area\" = '{area}';";
+                //  string query = $"SELECT * FROM public.\"Ficha\" WHERE \"ID_Ficha\" = {id_global} AND \"Area\" = '{area}';";
             };
 
             Editar_ficha.Show();
