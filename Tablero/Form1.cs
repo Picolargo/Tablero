@@ -4295,8 +4295,6 @@ namespace Tablero
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                         kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
                         mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, merma_tunel);
-
-                        
                     }
                     else
                     {
@@ -5091,48 +5089,37 @@ namespace Tablero
         private void UpdateTiemposMuertosMecanicos(DatabaseHelper dbHelper)
         {
             int id_ficha_int = Convert.ToInt32(id_global_ficha);
-            foreach (DataGridViewRow row in dgv_mecanico.Rows)
+
+            // Primero eliminamos todos los registros existentes para esta ficha
+            string deleteQuery = @"DELETE FROM public.""Tiempo_muerto_Mecanico""
+                         WHERE ""ID_Ficha"" = @id_ficha;";
+
+            NpgsqlParameter[] deleteParams = new NpgsqlParameter[]
             {
-                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
-                {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
-                    string motivos = row.Cells[1].Value.ToString();
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int }
+            };
 
-                    string query = @"UPDATE public.""Tiempo_muerto_Mecanico"" SET ""Min_Detenidos"" = @min_detenidos, ""Motivos"" = @motivos where ""ID_Ficha"" = @id_ficha;";
+            dbHelper.ExecuteNonQuery(deleteQuery, deleteParams);
 
-                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-                    {
-                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
-                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
-                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
-                    };
-
-                    dbHelper.ExecuteNonQuery(query, parameters);
-                }
-            }
+            InsertarTiemposMuertosMecanicos(dbHelper, id_ficha_int);
         }
         private void UpdateTiemposMuertosOperativos(DatabaseHelper dbHelper)
         {
             int id_ficha_int = Convert.ToInt32(id_global_ficha);
-            foreach (DataGridViewRow row in dgv_operativo.Rows)
+
+            // Primero eliminamos todos los registros existentes para esta ficha
+            string deleteQuery = @"DELETE FROM public.""Tiempo_Muerto_Operativo"" 
+                         WHERE ""ID_Ficha"" = @id_ficha;";
+
+            NpgsqlParameter[] deleteParams = new NpgsqlParameter[]
             {
-                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
-                {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
-                    string motivos = row.Cells[1].Value.ToString();
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int }
+            };
 
-                    string query = @"UPDATE public.""Tiempo_Muerto_Operativo"" SET ""Min_Detenidos"" = @min_detenidos, ""Motivos"" = @motivos WHERE ""ID_Ficha"" = @id_ficha;";
+            dbHelper.ExecuteNonQuery(deleteQuery, deleteParams);
 
-                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-                    {
-                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
-                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
-                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
-                    };
-
-                    dbHelper.ExecuteNonQuery(query, parameters);
-                }
-            }
+            // Luego insertamos todos los registros del DataGridView
+            InsertarTiemposMuertosOperativos(dbHelper, id_ficha_int);
         }
         private void UpdateTiempoMuertoComida(DatabaseHelper dbHelper)
         {
@@ -6661,11 +6648,11 @@ namespace Tablero
             {
                 // Primera columna: AutoSizeMode = AllCells
                 dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
+                //dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
 
                 // Segunda columna: AutoSizeMode = Fill
                 dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns[1].HeaderText = "Motivos";
+                //dataGridView.Columns[1].HeaderText = "Motivos";
 
                 // Opcional: Configuración adicional para mejor apariencia
                 dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
