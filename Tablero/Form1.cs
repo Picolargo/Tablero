@@ -32,6 +32,7 @@ namespace Tablero
         private string id_global_meta_revolturas = string.Empty;
         private string id_global_meta_polvos = string.Empty;
         private string id_global_meta_maquinas = string.Empty;
+        private string id_global_ficha = string.Empty;
         private int id_user = 0;
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
@@ -573,6 +574,7 @@ namespace Tablero
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos de Entrada a secador";
 
+                //hacer visibles controles
                 Txt_1.Visible = true;
                 Txt_6.Visible = true;
                 Txt_7.Visible = true;
@@ -4194,7 +4196,7 @@ namespace Tablero
                 }
                 if(cb_Turno.SelectedIndex == 0) 
                 {
-                    Txt_1.Enabled = true;
+                    if (editar == false) { Txt_1.Enabled = true;}else { Txt_1.Enabled = false; }
                     Txt_2.Enabled = true;
                     Txt_3.Enabled = true;
                     Txt_4.Enabled = true;
@@ -4284,43 +4286,54 @@ namespace Tablero
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
                     decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
 
-                    // Verificar si el usuario ya existe
-                    string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
-                    NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
-                    {
-                    new NpgsqlParameter("@Lote", lote),
-                    };
-                    DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-                    if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
-                    {
-                        MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
-                        kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
-
-                    if (idFicha > 0)
+                    if(editar == true)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
+                        kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
+                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, merma_tunel);
 
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Verificar si el usuario ya existe
+                        string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
+                        NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
+                        {
+                            new NpgsqlParameter("@Lote", lote),
+                        };
+                        DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                        if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
+                            kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
+
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -4713,6 +4726,73 @@ namespace Tablero
             }
         }
 
+        private void updateFicha(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
+        int turno, string var1, string var2, decimal var3, decimal var4,
+        decimal var5, decimal var6, decimal var7, decimal var8,
+        decimal var9, decimal var10, decimal var11,
+        TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12) 
+        {
+            DatabaseHelper dbHelper2 = new DatabaseHelper(connectionString);
+            NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
+            string queryInsertUpdate = string.Empty;
+            int result = 0;
+            if (cb_Area.SelectedIndex == 0) 
+            {
+                // actualizar
+                // Convertir el ID a entero ANTES de crear el parámetro
+                int idFicha = Convert.ToInt32(id_global_ficha);
+
+                queryInsertUpdate = "UPDATE public.\"Ficha\" SET \"ID_user\" = @id_user, \"Fecha\" = @Fecha, \"Turno\" = @Turno, \"OP\" = @OP," +
+                    " \"Kg_enter_proceso\" = @Kg_enter_proceso, \"kg_frescos_enter_se\" = @kg_frescos_enter_se, \"Merma_canica\" = @Merma_canica, \"Merma_podrido\" = @Merma_podrido," +
+                    " \"Merma_tina\" = @Merma_tina, \"Merma_piso\" = @Merma_piso, \"Merma_canaletas\" = @Merma_canaletas, \"Merma_lavado_bandas\" = @Merma_lavado_bandas," +
+                    " \"Cascara_carrete\" = @Cascara_carrete, \"Hr_inicio\" = @Hr_inicio, \"Hr_fin\" = @Hr_fin, \"Hr_programadas\" = @Hr_programadas, \"Personal_Operativo\" = @Personal_Operativo," +
+                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"Merma_Tunel\" = @Merma_Tunel, \"MetaHr\" = @MetaHr WHERE \"ID_Ficha\" = @ID_Ficha;";
+
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@Turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var2 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Merma_canica", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Merma_podrido", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@merma_tina", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var7 },
+                    new NpgsqlParameter("@Merma_piso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@Merma_canaletas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@Merma_lavado_bandas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Cascara_carrete", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@Hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
+                    new NpgsqlParameter("@Merma_Tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                };
+                result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
+            }
+            if (cb_Area.SelectedIndex == 1) 
+            {
+                
+            }
+            UpdateTiemposMuertos(dbHelper);
+            if (result > 0)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                cb_Area.SelectedIndex = -1;
+                reiniciarCampos();
+                cb_Area.Focus();
+                editar = false; // Reiniciar el estado de edición
+                id_global_ficha = string.Empty; // Limpiar el ID global
+            }
+        }
+
         private int InsertarFichaYRetornarID(DatabaseHelper dbHelper, int idUsuario, DateTime fecha,
         int turno, string var1, string var2, decimal var3, decimal var4,
         decimal var5, decimal var6, decimal var7, decimal var8,
@@ -4994,7 +5074,102 @@ namespace Tablero
             return dbHelper.ExecuteScalarInt(query, parameters);
         }
 
+        private void UpdateTiemposMuertos(DatabaseHelper dbHelper)
+        {
+            // Insertar tiempos muertos mecánicos desde DataGridView
+            UpdateTiemposMuertosMecanicos(dbHelper);
 
+            // Insertar tiempos muertos operativos desde DataGridView
+            UpdateTiemposMuertosOperativos(dbHelper);
+
+            // Insertar tiempo muerto comida desde TextBox
+            UpdateTiempoMuertoComida(dbHelper);
+
+            // Insertar tiempo muerto energía desde TextBox
+            UpdateTiempoMuertoEnergia(dbHelper);
+        }
+        private void UpdateTiemposMuertosMecanicos(DatabaseHelper dbHelper)
+        {
+            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            foreach (DataGridViewRow row in dgv_mecanico.Rows)
+            {
+                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    string motivos = row.Cells[1].Value.ToString();
+
+                    string query = @"UPDATE public.""Tiempo_muerto_Mecanico"" SET ""Min_Detenidos"" = @min_detenidos, ""Motivos"" = @motivos where ""ID_Ficha"" = @id_ficha;";
+
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
+                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                    };
+
+                    dbHelper.ExecuteNonQuery(query, parameters);
+                }
+            }
+        }
+        private void UpdateTiemposMuertosOperativos(DatabaseHelper dbHelper)
+        {
+            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            foreach (DataGridViewRow row in dgv_operativo.Rows)
+            {
+                if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
+                {
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    string motivos = row.Cells[1].Value.ToString();
+
+                    string query = @"UPDATE public.""Tiempo_Muerto_Operativo"" SET ""Min_Detenidos"" = @min_detenidos, ""Motivos"" = @motivos WHERE ""ID_Ficha"" = @id_ficha;";
+
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
+                        new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                    };
+
+                    dbHelper.ExecuteNonQuery(query, parameters);
+                }
+            }
+        }
+        private void UpdateTiempoMuertoComida(DatabaseHelper dbHelper)
+        {
+            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
+            {
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text);
+
+                string query = @"UPDATE public.""Tiempo_Muerto_Comida"" SET ""Minutos_Detenidos"" = @minutos_detenidos WHERE ""ID_Ficha"" = @id_ficha;";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
+                    new NpgsqlParameter("@minutos_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minutosDetenidos }
+                };
+
+                dbHelper.ExecuteNonQuery(query, parameters);
+            }
+        }
+        private void UpdateTiempoMuertoEnergia(DatabaseHelper dbHelper)
+        {
+            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
+            {
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text);
+
+                string query = @"UPDATE public.""Tiempo_Muerto_Energia"" SET ""Minutos_Detenidos"" = @minutos_detenidos WHERE ""ID_Ficha"" = @id_ficha;";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int },
+                    new NpgsqlParameter("@minutos_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minutosDetenidos }
+                };
+
+                dbHelper.ExecuteNonQuery(query, parameters);
+            }
+        }
         private void InsertarTiemposMuertos(DatabaseHelper dbHelper, int idFicha)
         {
             // Insertar tiempos muertos mecánicos desde DataGridView
@@ -6268,13 +6443,12 @@ namespace Tablero
         {
             editar = true;
             Editar Editar_ficha = new Editar(connectionString, editar);
-
             // Suscripción al evento con los dos parámetros
             Editar_ficha.FichaSeleccionada += (id_global, area) =>
             {
                 //MessageBox.Show($"ID seleccionado: {id_global}\nÁrea: {area}");
-
-                if(area== "Tunel/ Sumergidor") 
+                id_global_ficha= id_global;
+                if (area== "Tunel/ Sumergidor") 
                 {
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     // Consulta para buscar donde OP = valor_buscado
@@ -6350,6 +6524,8 @@ namespace Tablero
                     Txt_9.Text = Personal_Operativo;
                     Txt_10.Text = Cascara_carrete;
                     Txt_11.Text = Merma_Tunel;
+                    cb_Area.Enabled = false;
+                    Txt_1.Enabled = false;
 
                     actualiza_tiempos(id_global);
                 }
