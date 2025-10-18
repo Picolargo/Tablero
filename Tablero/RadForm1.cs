@@ -16,6 +16,8 @@ namespace Tablero
         string connectionString = string.Empty;
         // 🔹 Evento público que enviará dos valores: id_global y area
         public event Action<string, string> FichaSeleccionada;
+        // 🔹 Bandera interna para saber si se hizo doble clic
+        private bool fichaSeleccionada = false;
         public Editar(string connectionString, bool tipo)
         {
             InitializeComponent();
@@ -45,17 +47,26 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
-                // 🔹 Columna 0 → ID_Ficha
                 string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-
-                // 🔹 Columna 4 → Área (recuerda que el índice comienza en 0)
                 string area = radGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
 
-                // 🔹 Dispara el evento enviando ambos valores
+                // 🔹 Marca que sí se seleccionó una ficha
+                fichaSeleccionada = true;
+
+                // 🔹 Dispara el evento
                 FichaSeleccionada?.Invoke(id_global, area);
 
                 // 🔹 Cierra el formulario
                 this.Close();
+            }
+        }
+
+        private void Editar_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // 🔹 Si no se seleccionó nada, dispara un evento con valores nulos opcionalmente
+            if (!fichaSeleccionada)
+            {
+                FichaSeleccionada?.Invoke(null, null);
             }
         }
     }
