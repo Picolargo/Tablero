@@ -1761,7 +1761,6 @@
             this.tap_control_metas.UseCustomForeColor = true;
             this.tap_control_metas.UseSelectable = true;
             this.tap_control_metas.UseStyleColors = true;
-            this.tap_control_metas.Selected += new System.Windows.Forms.TabControlEventHandler(this.tap_control_metas_Selected);
             // 
             // metroContextMenu1
             // 

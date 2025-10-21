@@ -1658,6 +1658,13 @@ namespace Tablero
 
         private void cmb_area_SelectedIndexChanged(object sender, EventArgs e)
         {
+            txt_op.Text = string.Empty;
+            txt_Meta_1.Text = string.Empty;
+            txt_Meta_2.Text = string.Empty;
+            txt_Meta_3.Text = string.Empty;
+            txt_Meta_4.Text = string.Empty;
+            txt_Meta_5.Text = string.Empty;
+            txt_op.Focus();
             reiniciar_controles_meta();
             if (cmb_area.SelectedIndex==0)
             {
@@ -3397,6 +3404,7 @@ namespace Tablero
         {
             if (cmb_area.SelectedIndex == 0)
             {
+                kg_seco_hr();
                 if (decimal.TryParse(txt_Meta_1.Text, out decimal valor))
                 {
                     // Fórmula: (valor * 380) - (valor * 380 * 10%)
@@ -3409,66 +3417,75 @@ namespace Tablero
                     txt_Meta_2.Text = string.Empty; // Limpia si no es válido
                 }
             }
+            if (cmb_area.SelectedIndex == 1 || cmb_area.SelectedIndex == 2)
+            {
+                meta_hr_linea();
+            }
+        }
+        private void kg_seco_hr()
+        {
+            if (decimal.TryParse(txt_Meta_3.Text, out decimal valor2) && decimal.TryParse(txt_Meta_2.Text, out decimal valor1))
+            {
+                // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
+                decimal resultado = valor1 / valor2;
+
+                txt_Meta_4.Text = resultado.ToString("0.00"); // 2 decimales
+            }
+            else
+            {
+                txt_Meta_4.Text = string.Empty; // Limpia si no es válido
+            }
         }
 
         private void txt_Meta_3_TextChanged(object sender, EventArgs e)
         {
             if (cmb_area.SelectedIndex == 0)
             {
-                decimal valor1;
-                valor1 = decimal.TryParse(txt_Meta_2.Text, out valor1) ? valor1 : 0;
-                if (decimal.TryParse(txt_Meta_3.Text, out decimal valor2))
-                {
-                    // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
-                    decimal resultado = valor1 / valor2;
-
-                    txt_Meta_4.Text = resultado.ToString("0.00"); // 2 decimales
-                }
-                else
-                {
-                    txt_Meta_4.Text = string.Empty; // Limpia si no es válido
-                }
+                kg_seco_hr();
             }
             if (cmb_area.SelectedIndex == 3 || cmb_area.SelectedIndex == 4 || cmb_area.SelectedIndex == 5 || cmb_area.SelectedIndex == 7)
             {
-                decimal valor1;
-                valor1 = decimal.TryParse(txt_Meta_2.Text, out valor1) ? valor1 : 0;
-                if (decimal.TryParse(txt_Meta_3.Text, out decimal valor2))
-                {
-                    // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
-                    decimal resultado = valor1 * valor2;
-
-                    txt_Meta_4.Text = resultado.ToString("0.00"); // 2 decimales
-                }
-                else
-                {
-                    txt_Meta_4.Text = string.Empty; // Limpia si no es válido
-                }
+                meta_hr();
             }
         }
-
-        private void tap_control_metas_Selected(object sender, TabControlEventArgs e)
+        private void meta_hr()
         {
-            
-        }
+            if (decimal.TryParse(txt_Meta_3.Text, out decimal valor2) && decimal.TryParse(txt_Meta_2.Text, out decimal valor1))
+            {
+                // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
+                decimal resultado = valor1 * valor2;
 
+                txt_Meta_4.Text = resultado.ToString("0.00"); // 2 decimales
+            }
+            else
+            {
+                txt_Meta_4.Text = string.Empty; // Limpia si no es válido
+            }
+        }
         private void txt_Meta_2_TextChanged(object sender, EventArgs e)
         {
             if (cmb_area.SelectedIndex == 1 || cmb_area.SelectedIndex == 2)
             {
-                decimal valor1;
-                valor1 = decimal.TryParse(txt_Meta_1.Text, out valor1) ? valor1 : 0;
-                if (decimal.TryParse(txt_Meta_2.Text, out decimal valor2))
-                {
-                    // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
-                    decimal resultado = valor1 * valor2;
+                meta_hr_linea();
+            }
+            if (cmb_area.SelectedIndex == 3 || cmb_area.SelectedIndex == 4 || cmb_area.SelectedIndex == 5 || cmb_area.SelectedIndex == 7)
+            {
+                meta_hr();
+            }
+        }
 
-                    txt_Meta_3.Text = resultado.ToString("0.00"); // 2 decimales
-                }
-                else
-                {
-                    txt_Meta_3.Text = string.Empty; // Limpia si no es válido
-                }
+        private void meta_hr_linea()
+        {
+            if (decimal.TryParse(txt_Meta_2.Text, out decimal valor2) && decimal.TryParse(txt_Meta_1.Text, out decimal valor1))
+            {
+                // Fórmula: KG FRESCO POR HORA/RELACION FRESCO-SECO
+                decimal resultado = valor1 * valor2;
+
+                txt_Meta_3.Text = resultado.ToString("0.00"); // 2 decimales
+            }
+            else
+            {
+                txt_Meta_3.Text = string.Empty; // Limpia si no es válido
             }
         }
 
@@ -4173,7 +4190,6 @@ namespace Tablero
         }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             if (cb_Turno.SelectedIndex != -1)
             {
                 if (cb_Turno.SelectedIndex == 0)
@@ -4218,7 +4234,6 @@ namespace Tablero
                     Txt_11.Enabled = true;
                     
                 }
-
                 if (cb_Area.SelectedIndex == 1) 
                 {
                     Txt_2.Enabled = true;
@@ -4243,6 +4258,17 @@ namespace Tablero
                         Txt_6.Enabled = true;
                         Txt_7.Enabled = true;
                     }
+                }
+                if (cb_Area.SelectedIndex == 8)
+                {
+                    Txt_1.Enabled = true;
+                    Txt_2.Enabled = true;
+                    Txt_3.Enabled = true;
+                    Txt_4.Enabled = true;
+                    Txt_5.Enabled = true;
+                    Txt_6.Enabled = true;
+                    Txt_7.Enabled = true;
+                    Txt_8.Enabled = true;
                 }
             }
         }
@@ -4629,52 +4655,6 @@ namespace Tablero
                     }
                 }
             }
-            if (cb_Area.SelectedIndex == 7)
-            {
-                //Revolturas
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
-
-                // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-
-                if (idFicha > 0)
-                {
-                    // Insertar en tablas relacionadas
-                    InsertarTiemposMuertos(dbHelper, idFicha);
-
-                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    cb_Area.SelectedIndex = -1;
-                    reiniciarCampos();
-                    cb_Area.Focus();
-                }
-                else
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                        "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
             if (cb_Area.SelectedIndex == 8)
             {
                 //Revolturas
@@ -4703,26 +4683,33 @@ namespace Tablero
                 decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
                 decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
-
-                if (idFicha > 0)
+                if (editar) 
                 {
-                    // Insertar en tablas relacionadas
-                    InsertarTiemposMuertos(dbHelper, idFicha);
-
-                    MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                        "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    cb_Area.SelectedIndex = -1;
-                    reiniciarCampos();
-                    cb_Area.Focus();
+                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, bobina_merma);
                 }
                 else
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                    "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
+                    if (idFicha > 0)
+                    {
+                        // Insertar en tablas relacionadas
+                        InsertarTiemposMuertos(dbHelper, idFicha);
+                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        cb_Area.SelectedIndex = -1;
+                        reiniciarCampos();
+                        cb_Area.Focus();
+                    }
+                    else
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -4922,6 +4909,39 @@ namespace Tablero
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Polvo_Colector", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Granulo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                };
+                result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
+            }
+            if (cb_Area.SelectedIndex == 8)
+            {
+                queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @OP, ""Pz_prod"" = @Pz_prod, 
+                    ""Kg_prod_term"" = @Kg_prod_term, ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg, ""Kg_meta"" = @Kg_meta, ""porcent_cump_meta"" = @porcent_cump_meta, 
+                    ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Bobina_kg_enter"" = @Bobina_kg_enter, ""Bobina_utilizada"" = @Bobina_utilizada, ""Hr_inicio"" = @Hr_inicio, 
+                    ""Hr_fin"" = @Hr_fin, ""Personal_Operativo"" = @Personal_Operativo, ""Hr_programadas"" = @Hr_programadas, ""Bobina_merma"" = @Bobina_merma, 
+                    ""Hr_efectivas"" = @Hr_efectivas, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Pz_prod", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Kg_fuera_espec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
+                    new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
+                    new NpgsqlParameter("@Bobina_kg_enter", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
+                    new NpgsqlParameter("@Bobina_utilizada", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Bobina_merma", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
                 };
@@ -6917,6 +6937,82 @@ namespace Tablero
                     cb_Area.Enabled = false;
                     actualiza_tiempos(id_global);
                 }
+                if (area == "Máquinas")
+                {
+                    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                    string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""MetaHr"", ""Hr_inicio"", ""Hr_fin"", ""Pz_prod"", ""Kg_meta"", ""Kg_prod_term"", 
+                    ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Bobina_merma"" 
+                    FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                    };
+
+                    // Ejecutar consulta
+                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+
+                    // Variables
+                    string OP = string.Empty;
+                    string Turno = string.Empty;
+                    DateTime Fecha = DateTime.MinValue;
+                    string Hr_inicio = string.Empty;
+                    string Hr_fin = string.Empty;
+                    string MetaHr = string.Empty;
+                    string Kg_meta = string.Empty;
+                    string Kg_prod_term = string.Empty;
+                    string Kg_fuera_espec = string.Empty;
+                    string Merma_kg = string.Empty;
+                    string Personal_Operativo = string.Empty;
+                    string Pz_prod = string.Empty;
+                    string Bobina_kg_enter = string.Empty;
+                    string Bobina_utilizada = string.Empty;
+                    string Bobina_merma = string.Empty;
+
+                    if (dt2 != null && dt2.Rows.Count > 0)
+                    {
+                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Turno = dt2.Rows[0]["Turno"].ToString();
+                        OP = dt2.Rows[0]["OP"].ToString();
+                        MetaHr = dt2.Rows[0]["MetaHr"].ToString();
+                        Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
+                        Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
+                        Pz_prod = dt2.Rows[0]["Pz_prod"].ToString();
+                        Kg_meta = dt2.Rows[0]["Kg_meta"].ToString();
+                        Kg_prod_term = dt2.Rows[0]["Kg_prod_term"].ToString();
+                        Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
+                        Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
+                        Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                        Bobina_kg_enter = dt2.Rows[0]["Bobina_kg_enter"].ToString();
+                        Bobina_utilizada = dt2.Rows[0]["Bobina_utilizada"].ToString();
+                        Bobina_merma = dt2.Rows[0]["Bobina_merma"].ToString();
+                    }
+
+                    cb_Area.Text = area;
+                    cb_OP.Text = OP;
+                    // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
+                    cb_OP_SelectionChangeCommitted(cb_OP, EventArgs.Empty);
+                    cb_OP.Focus();
+                    cb_Turno.Text = Turno;
+                    cb_Turno.Focus();
+                    dtp1.Value = Fecha;
+                    Mask_txt_hr1.Text = Hr_inicio;
+                    Mask_txt_hr2.Text = Hr_fin;
+                    Txt_meta.Text = MetaHr;
+                    Txt_1.Text = Pz_prod;
+                    Txt_2.Text = Kg_prod_term;
+                    Txt_3.Text = Kg_fuera_espec;
+                    Txt_4.Text = Merma_kg;
+                    Txt_5.Text = Personal_Operativo;
+                    Txt_6.Text = Bobina_kg_enter;
+                    Txt_7.Text = Bobina_utilizada;
+                    Txt_8.Text = Bobina_merma;
+                    // Deshabilitar controles no editables
+                    cb_Area.Enabled = false;
+
+                    actualiza_tiempos(id_global);
+                }
+
             };
 
             Editar_ficha.Show();
