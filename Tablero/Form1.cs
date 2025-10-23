@@ -55,7 +55,6 @@ namespace Tablero
             connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
             id_user = ID_usuario; // Asignar el ID del usuario pasado como parámetro
 
-
             // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
@@ -263,6 +262,23 @@ namespace Tablero
             dgv_metas_maquinas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_metas_maquinas.RowHeadersVisible = false;
             dgv_metas_maquinas.BorderStyle = BorderStyle.None;
+
+            // Personalización de dgv_metas_polvos_calidad
+            dgv_metas_polvos_calidad.EnableHeadersVisualStyles = false;
+            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dgv_metas_polvos_calidad.BackgroundColor = Color.White; // Fondo blanco
+            dgv_metas_polvos_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
+            dgv_metas_polvos_calidad.DefaultCellStyle.ForeColor = Color.Black;
+            dgv_metas_polvos_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv_metas_polvos_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv_metas_polvos_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+
+            dgv_metas_polvos_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_metas_polvos_calidad.RowHeadersVisible = false;
+            dgv_metas_polvos_calidad.BorderStyle = BorderStyle.None;
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -329,6 +345,9 @@ namespace Tablero
         {
             lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            dtp_calidad.Value = DateTime.Now;
+            // Obtener y mostrar el número de semana inicial
+            ActualizarNumeroSemana();
 
             actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
             actualiza_grid_Deshitratado();
@@ -339,6 +358,7 @@ namespace Tablero
             actualiza_revolturas();
             actualiza_maquinas();
             actualiza_polvos();
+            actualiza_polvos_calidad();
         }
         private void actualiza_grid_users()
         {
@@ -537,6 +557,31 @@ namespace Tablero
             dgv_metas_polvos.Columns[0].Visible = false;
             dgv_metas_polvos.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
         }
+        private void actualiza_polvos_calidad()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"SELECT 
+                    ""ID_Limpieza"" as ""ID"", 
+                    ""Fecha"", 
+                    EXTRACT(WEEK FROM ""Fecha"") as ""No Semana"",
+                    ""Kg_merma"" as ""Kg de merma por Limpieza""
+                  FROM public.""Limpieza_polvos""
+                  ORDER BY ""Fecha"" DESC;";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_metas_polvos_calidad, null);
+
+            // Configurar el DataGridView
+            dgv_metas_polvos_calidad.Columns[0].Visible = false;
+
+            // Configurar formato para la columna de fecha
+            if (dgv_metas_polvos_calidad.Columns["Fecha"] != null)
+            {
+                dgv_metas_polvos_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            }
+        }
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Area.SelectedIndex==0)
@@ -714,7 +759,7 @@ namespace Tablero
                 Txt_1.Visible = true;
                 Txt_Read_5.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
                 
@@ -782,7 +827,7 @@ namespace Tablero
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -851,7 +896,7 @@ namespace Tablero
                 Txt_1.Visible = true;
                 cb_proceso.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -918,7 +963,7 @@ namespace Tablero
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -989,7 +1034,7 @@ namespace Tablero
                 Txt_6.Visible = true;
                 Txt_7.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -1059,7 +1104,7 @@ namespace Tablero
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -1130,7 +1175,7 @@ namespace Tablero
                 Txt_7.Visible = true;
                 Txt_8.Visible = true;
 
-                Txt_1.Text = "0";
+                Txt_1.Text = string.Empty;
 
                 //habilitar controles
 
@@ -4275,17 +4320,6 @@ namespace Tablero
 
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
-            //if (cb_OP.SelectedValue != null)
-            //{
-            //    // Obtener el ValueMember (ID_OP)
-            //    int idOP = (int)cb_OP.SelectedValue;
-
-            //    // Obtener el DisplayMember (OP)
-            //    string op = cb_OP.Text;
-
-            //    MessageBox.Show($"ID_OP: {idOP}\nOP: {op}");
-            //}
-
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             ////TUNEL/ SUMERGIDOR
             if (cb_Area.SelectedIndex == 0) 
@@ -4294,74 +4328,77 @@ namespace Tablero
                 {
                     int idUsuarioActual = id_user;
 
-                    // Obtener datos de los TextBox
-                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
-                    string lote = Txt_1.Text;
-                    string op = cb_OP.Text;
-                    decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
-                    decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
-                    decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
-                    decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
-                    decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
-                    decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
-                    decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
-                    decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
-                    decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
-                    int personal_Op = Convert.ToInt32(Txt_9.Text);
-                    decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                    string area = cb_Area.Text;
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
-                    decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
-
-                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-
-                    if(editar)
+                    if(!string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text) && !string.IsNullOrEmpty(Txt_11.Text))
                     {
-                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
-                        kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                        mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, merma_tunel);
-                        
-                    }
-                    else
-                    {
-                        // Verificar si el usuario ya existe
-                        string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
-                        NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
-                        {
-                            new NpgsqlParameter("@Lote", lote),
-                        };
-                        DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-                        if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
-                        {
-                            MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
+                        // Obtener datos de los TextBox
+                        DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                        int turno = Convert.ToInt32(cb_Turno.Text);
+                        string lote = Txt_1.Text;
+                        string op = cb_OP.Text;
+                        decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
+                        decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                        decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
+                        decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
+                        decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
+                        decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
+                        decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
+                        decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
+                        decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
+                        int personal_Op = Convert.ToInt32(Txt_9.Text);
+                        decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
+                        decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                        decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                        string area = cb_Area.Text;
+                        decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                        decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
 
-                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
+                        // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                        TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                        TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+
+                        if (editar)
+                        {
+                            updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, merma_tunel);
 
-                        if (idFicha > 0)
-                        {
-                            // Insertar en tablas relacionadas
-                            InsertarTiemposMuertos(dbHelper, idFicha);
-
-                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cb_Area.SelectedIndex = -1;
-                            reiniciarCampos();
-                            cb_Area.Focus();
                         }
                         else
                         {
-                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            // Verificar si el usuario ya existe
+                            string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
+                            NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
+                            {
+                            new NpgsqlParameter("@Lote", lote),
+                            };
+                            DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                            if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
+                            {
+                                MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+
+                            // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                            int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
+                                kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
+                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
+
+                            if (idFicha > 0)
+                            {
+                                // Insertar en tablas relacionadas
+                                InsertarTiemposMuertos(dbHelper, idFicha);
+
+                                MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                    "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                cb_Area.SelectedIndex = -1;
+                                reiniciarCampos();
+                                cb_Area.Focus();
+                            }
+                            else
+                            {
+                                MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                    "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                 }
@@ -6120,53 +6157,57 @@ namespace Tablero
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
-            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
-            double kg_fuera_espec = Convert.ToDouble(Txt_3.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (meta_kg == 0)
+            //double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
+            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            //double kg_fuera_espec = Convert.ToDouble(Txt_3.Text);
+            if (double.TryParse(Txt_Read_2.Text, out double meta_kg) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado) && double.TryParse(Txt_3.Text, out double kg_fuera_espec)) 
             {
-                Txt_Read_4.Text = "";
-                return;
-            }
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (meta_kg == 0)
+                {
+                    Txt_Read_4.Text = "";
+                    return;
+                }
 
-            // Calcular la fórmula: ((Q2 - S2) / P2)
-            double resultado = (Kg_Prod_Terminado - kg_fuera_espec) / meta_kg;
+                // Calcular la fórmula: ((Q2 - S2) / P2)
+                double resultado = (Kg_Prod_Terminado - kg_fuera_espec) / meta_kg;
 
-            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
-            if (resultado > 1.0)
-            {
-                resultado = 1.0;
-            }
+                // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+                if (resultado > 1.0)
+                {
+                    resultado = 1.0;
+                }
 
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
+            }   
         }
         private void porcentaje_logrado_planeacion_platinum()
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
-            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (meta_kg == 0)
+            //double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
+            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            if (double.TryParse(Txt_Read_2.Text, out double meta_kg) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado))
             {
-                Txt_Read_4.Text = "";
-                return;
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (meta_kg == 0)
+                {
+                    Txt_Read_4.Text = "";
+                    return;
+                }
+
+                double resultado = Kg_Prod_Terminado / meta_kg;
+
+                // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+                if (resultado > 1.0)
+                {
+                    resultado = 1.0;
+                }
+
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
             }
-
-            double resultado = Kg_Prod_Terminado / meta_kg;
-
-            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
-            if (resultado > 1.0)
-            {
-                resultado = 1.0;
-            }
-
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_4.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
         }
         private void calcular_kg_entrada_proceso()
         {
@@ -6203,101 +6244,109 @@ namespace Tablero
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double Kg_entrada = Convert.ToDouble(Txt_1.Text);
-            double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (Kg_entrada == 0)
+            //double Kg_entrada = Convert.ToDouble(Txt_1.Text);
+            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            if (double.TryParse(Txt_1.Text, out double Kg_entrada) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado))
             {
-                Txt_Read_5.Text = "";
-                return;
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (Kg_entrada == 0)
+                {
+                    Txt_Read_5.Text = "";
+                    return;
+                }
+
+                // Calcular la fórmula: ((Q2 - S2) / P2)
+                double resultado = (Kg_Prod_Terminado / Kg_entrada) - 1;
+
+                // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+                if (resultado > 1.0)
+                {
+                    resultado = 1.0;
+                }
+
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
             }
-
-            // Calcular la fórmula: ((Q2 - S2) / P2)
-            double resultado = (Kg_Prod_Terminado / Kg_entrada)-1;
-
-            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
-            if (resultado > 1.0)
-            {
-                resultado = 1.0;
-            }
-
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
         }
 
         private void porcentaje_cumplimiento_metas() 
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
-            double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
-            double kg_secos_meta = Convert.ToDouble(Txt_Read_6.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (kg_secos_meta == 0)
+            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            //double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
+            //double kg_secos_meta = Convert.ToDouble(Txt_Read_6.Text);
+            if (double.TryParse(Txt_2.Text, out double kg_prod_seco) && double.TryParse(Txt_4.Text, out double kg_fuera_espec) && double.TryParse(Txt_Read_6.Text, out double kg_secos_meta))
             {
-                Txt_Read_5.Text = "";
-                return;
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (kg_secos_meta == 0)
+                {
+                    Txt_Read_5.Text = "";
+                    return;
+                }
+
+                // Calcular la fórmula: ((Q2 - S2) / P2)
+                double resultado = (kg_prod_seco - kg_fuera_espec) / kg_secos_meta;
+
+                // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+                if (resultado > 1.0)
+                {
+                    resultado = 1.0;
+                }
+
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
             }
-
-            // Calcular la fórmula: ((Q2 - S2) / P2)
-            double resultado = (kg_prod_seco - kg_fuera_espec) / kg_secos_meta;
-
-            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
-            if (resultado > 1.0)
-            {
-                resultado = 1.0;
-            }
-
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_5.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
         }
 
         private void Ftt_metodo()
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
-            double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (kg_prod_seco == 0)
+            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            //double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
+            if (double.TryParse(Txt_2.Text, out double kg_prod_seco) && double.TryParse(Txt_4.Text, out double kg_fuera_espec))
             {
-                Txt_Read_8.Text = "";
-                return;
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (kg_prod_seco == 0)
+                {
+                    Txt_Read_8.Text = "";
+                    return;
+                }
+
+                double resultado = (kg_prod_seco - kg_fuera_espec) / kg_prod_seco;
+
+                // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
+                if (resultado > 1.0)
+                {
+                    resultado = 1.0;
+                }
+
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_8.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
             }
-
-            double resultado = (kg_prod_seco - kg_fuera_espec) / kg_prod_seco;
-
-            // Aplicar la condición: si es mayor a 1 (100%), usar 1 (100%)
-            if (resultado > 1.0)
-            {
-                resultado = 1.0;
-            }
-
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_8.Text = resultado.ToString("P2"); // Formato de porcentaje con 2 decimales
         }
 
         private void Relacion_Fresco_seco()
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            double kg_frescos_enter_sec = Convert.ToDouble(Txt_Read_4.Text);
-            double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
-
-            // Verificar que P2 no sea cero para evitar división por cero
-            if (kg_prod_seco == 0)
+            //double kg_frescos_enter_sec = Convert.ToDouble(Txt_Read_4.Text);
+            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            if (double.TryParse(Txt_Read_4.Text, out double kg_frescos_enter_sec) && double.TryParse(Txt_2.Text, out double kg_prod_seco))
             {
-                Txt_Read_7.Text = "";
-                return;
-            }
+                // Verificar que P2 no sea cero para evitar división por cero
+                if (kg_prod_seco == 0)
+                {
+                    Txt_Read_7.Text = "";
+                    return;
+                }
 
-            double resultado = kg_frescos_enter_sec / kg_prod_seco;
+                double resultado = kg_frescos_enter_sec / kg_prod_seco;
 
-            // Convertir a porcentaje y mostrar en el TextBox de resultado
-            Txt_Read_7.Text = resultado.ToString("0.##"); // Formato de porcentaje con 2 decimales
+                // Convertir a porcentaje y mostrar en el TextBox de resultado
+                Txt_Read_7.Text = resultado.ToString("0.##"); // Formato de porcentaje con 2 decimales
+            }    
         }
         private void cb_lote_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -7154,6 +7203,37 @@ namespace Tablero
 
                 dataGridView.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dataGridView.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+        }
+
+        private void dtp_calidad_ValueChanged(object sender, EventArgs e)
+        {
+            ActualizarNumeroSemana();
+        }
+        // Método para actualizar el número de semana
+        private void ActualizarNumeroSemana()
+        {
+            try
+            {
+                DateTime fechaSeleccionada = dtp_calidad.Value;
+
+                // Obtener el número de semana según el calendario gregoriano
+                CultureInfo cultura = CultureInfo.CurrentCulture;
+                Calendar calendario = cultura.Calendar;
+
+                // Calcular el número de semana
+                int numeroSemana = calendario.GetWeekOfYear(
+                    fechaSeleccionada,
+                    cultura.DateTimeFormat.CalendarWeekRule,
+                    cultura.DateTimeFormat.FirstDayOfWeek
+                );
+
+                // Mostrar en el TextBox
+                txt_no_semana.Text = numeroSemana.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al calcular el número de semana: {ex.Message}");
             }
         }
     }

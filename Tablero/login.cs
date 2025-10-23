@@ -182,7 +182,7 @@ namespace Tablero
             if (!string.IsNullOrEmpty(var_servidor) && !string.IsNullOrEmpty(var_password) && !string.IsNullOrEmpty(var_usuario))
             {
                 // Construir la cadena de conexión
-                connectionString = $"Host={var_servidor};Username={var_usuario};Password={var_password};Database=Reporteo";
+                connectionString = $"Host={var_servidor};Port=5433;Username={var_usuario};Password={var_password};Database=Reporteo";
             }
             else
             {

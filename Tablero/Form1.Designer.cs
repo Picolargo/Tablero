@@ -158,6 +158,16 @@
             this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.lbl_titulo_calidad = new System.Windows.Forms.TabPage();
+            this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            this.lb_no_semana = new System.Windows.Forms.Label();
+            this.txt_no_semana = new System.Windows.Forms.TextBox();
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
+            this.txt_merma_calidad = new Telerik.WinControls.UI.RadTextBox();
+            this.dtp_calidad = new MetroFramework.Controls.MetroDateTime();
+            this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_metas_polvos_calidad = new System.Windows.Forms.DataGridView();
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
@@ -225,6 +235,11 @@
             this.tabControl_meta.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            this.lbl_titulo_calidad.SuspendLayout();
+            this.materialCard4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_merma_calidad)).BeginInit();
+            this.materialCard3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos_calidad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.SuspendLayout();
@@ -237,6 +252,7 @@
             this.materialTabControl1.Controls.Add(this.tabPage4);
             this.materialTabControl1.Controls.Add(this.tabPage9);
             this.materialTabControl1.Controls.Add(this.tabPage10);
+            this.materialTabControl1.Controls.Add(this.lbl_titulo_calidad);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTabControl1.ImageList = this.imageList1;
@@ -401,6 +417,7 @@
             this.imageList1.Images.SetKeyName(6, "slash_icon");
             this.imageList1.Images.SetKeyName(7, "box_open.png");
             this.imageList1.Images.SetKeyName(8, "file_document_paper_page.png");
+            this.imageList1.Images.SetKeyName(9, "award_prize.png");
             // 
             // btn_save_ficha
             // 
@@ -1120,11 +1137,11 @@
             this.dtp1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtp1.Enabled = false;
             this.dtp1.FontSize = MetroFramework.MetroDateTimeSize.Tall;
-            this.dtp1.FontWeight = MetroFramework.MetroDateTimeWeight.Bold;
+            this.dtp1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp1.Location = new System.Drawing.Point(393, 80);
             this.dtp1.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp1.Name = "dtp1";
-            this.dtp1.Size = new System.Drawing.Size(250, 35);
+            this.dtp1.Size = new System.Drawing.Size(259, 35);
             this.dtp1.TabIndex = 7;
             // 
             // cb_Turno
@@ -1210,7 +1227,7 @@
             this.cb_OP.MaxDropDownItems = 4;
             this.cb_OP.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_OP.Name = "cb_OP";
-            this.cb_OP.Size = new System.Drawing.Size(250, 49);
+            this.cb_OP.Size = new System.Drawing.Size(259, 49);
             this.cb_OP.StartIndex = 0;
             this.cb_OP.TabIndex = 1;
             this.cb_OP.SelectionChangeCommitted += new System.EventHandler(this.cb_OP_SelectionChangeCommitted);
@@ -1301,7 +1318,7 @@
             this.editarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editarToolStripMenuItem1});
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.editarToolStripMenuItem.Text = "Ficha";
             // 
             // editarToolStripMenuItem1
@@ -2444,6 +2461,131 @@
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
+            // lbl_titulo_calidad
+            // 
+            this.lbl_titulo_calidad.Controls.Add(this.materialCard4);
+            this.lbl_titulo_calidad.Controls.Add(this.materialCard3);
+            this.lbl_titulo_calidad.ImageKey = "award_prize.png";
+            this.lbl_titulo_calidad.Location = new System.Drawing.Point(4, 39);
+            this.lbl_titulo_calidad.Name = "lbl_titulo_calidad";
+            this.lbl_titulo_calidad.Size = new System.Drawing.Size(1682, 940);
+            this.lbl_titulo_calidad.TabIndex = 6;
+            this.lbl_titulo_calidad.Text = "Calidad";
+            this.lbl_titulo_calidad.UseVisualStyleBackColor = true;
+            // 
+            // materialCard4
+            // 
+            this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard4.Controls.Add(this.lb_no_semana);
+            this.materialCard4.Controls.Add(this.txt_no_semana);
+            this.materialCard4.Controls.Add(this.metroLabel1);
+            this.materialCard4.Controls.Add(this.materialDivider1);
+            this.materialCard4.Controls.Add(this.txt_merma_calidad);
+            this.materialCard4.Controls.Add(this.dtp_calidad);
+            this.materialCard4.Depth = 0;
+            this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard4.Location = new System.Drawing.Point(10, 366);
+            this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard4.Name = "materialCard4";
+            this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard4.Size = new System.Drawing.Size(594, 208);
+            this.materialCard4.TabIndex = 1;
+            // 
+            // lb_no_semana
+            // 
+            this.lb_no_semana.AutoSize = true;
+            this.lb_no_semana.Location = new System.Drawing.Point(371, 80);
+            this.lb_no_semana.Name = "lb_no_semana";
+            this.lb_no_semana.Size = new System.Drawing.Size(66, 13);
+            this.lb_no_semana.TabIndex = 23;
+            this.lb_no_semana.Text = "No. Semana";
+            // 
+            // txt_no_semana
+            // 
+            this.txt_no_semana.BackColor = System.Drawing.Color.White;
+            this.txt_no_semana.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_no_semana.Enabled = false;
+            this.txt_no_semana.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_no_semana.Location = new System.Drawing.Point(374, 96);
+            this.txt_no_semana.Name = "txt_no_semana";
+            this.txt_no_semana.Size = new System.Drawing.Size(100, 22);
+            this.txt_no_semana.TabIndex = 22;
+            // 
+            // metroLabel1
+            // 
+            this.metroLabel1.AutoSize = true;
+            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.metroLabel1.Location = new System.Drawing.Point(17, 14);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(264, 25);
+            this.metroLabel1.TabIndex = 20;
+            this.metroLabel1.Text = "Merma de Limpieza para Polvos";
+            // 
+            // materialDivider1
+            // 
+            this.materialDivider1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.materialDivider1.Depth = 0;
+            this.materialDivider1.Location = new System.Drawing.Point(287, 39);
+            this.materialDivider1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialDivider1.Name = "materialDivider1";
+            this.materialDivider1.Size = new System.Drawing.Size(302, 3);
+            this.materialDivider1.TabIndex = 19;
+            this.materialDivider1.Text = "materialDivider1";
+            // 
+            // txt_merma_calidad
+            // 
+            this.txt_merma_calidad.BackColor = System.Drawing.Color.White;
+            this.txt_merma_calidad.EmbeddedLabelText = "Kg Merma por Limpieza";
+            this.txt_merma_calidad.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_merma_calidad.ForeColor = System.Drawing.Color.Black;
+            this.txt_merma_calidad.Location = new System.Drawing.Point(57, 137);
+            this.txt_merma_calidad.Name = "txt_merma_calidad";
+            this.txt_merma_calidad.ShortcutsEnabled = false;
+            this.txt_merma_calidad.ShowEmbeddedLabel = true;
+            this.txt_merma_calidad.Size = new System.Drawing.Size(170, 43);
+            this.txt_merma_calidad.TabIndex = 17;
+            // 
+            // dtp_calidad
+            // 
+            this.dtp_calidad.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtp_calidad.FontSize = MetroFramework.MetroDateTimeSize.Tall;
+            this.dtp_calidad.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
+            this.dtp_calidad.Location = new System.Drawing.Point(57, 83);
+            this.dtp_calidad.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_calidad.Name = "dtp_calidad";
+            this.dtp_calidad.Size = new System.Drawing.Size(289, 35);
+            this.dtp_calidad.TabIndex = 8;
+            this.dtp_calidad.ValueChanged += new System.EventHandler(this.dtp_calidad_ValueChanged);
+            // 
+            // materialCard3
+            // 
+            this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard3.Controls.Add(this.dgv_metas_polvos_calidad);
+            this.materialCard3.Depth = 0;
+            this.materialCard3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard3.Location = new System.Drawing.Point(0, 0);
+            this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard3.Name = "materialCard3";
+            this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard3.Size = new System.Drawing.Size(1682, 338);
+            this.materialCard3.TabIndex = 0;
+            // 
+            // dgv_metas_polvos_calidad
+            // 
+            this.dgv_metas_polvos_calidad.AllowUserToAddRows = false;
+            this.dgv_metas_polvos_calidad.AllowUserToDeleteRows = false;
+            this.dgv_metas_polvos_calidad.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_metas_polvos_calidad.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_metas_polvos_calidad.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_metas_polvos_calidad.Location = new System.Drawing.Point(14, 14);
+            this.dgv_metas_polvos_calidad.Name = "dgv_metas_polvos_calidad";
+            this.dgv_metas_polvos_calidad.Size = new System.Drawing.Size(1654, 310);
+            this.dgv_metas_polvos_calidad.TabIndex = 0;
+            // 
             // radTaskbarButton1
             // 
             this.radTaskbarButton1.OwnerForm = this;
@@ -2549,6 +2691,12 @@
             this.tabPage7.PerformLayout();
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
+            this.lbl_titulo_calidad.ResumeLayout(false);
+            this.materialCard4.ResumeLayout(false);
+            this.materialCard4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_merma_calidad)).EndInit();
+            this.materialCard3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos_calidad)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.ResumeLayout(false);
@@ -2688,6 +2836,16 @@
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
+        private System.Windows.Forms.TabPage lbl_titulo_calidad;
+        private MaterialSkin.Controls.MaterialCard materialCard3;
+        private System.Windows.Forms.DataGridView dgv_metas_polvos_calidad;
+        private MaterialSkin.Controls.MaterialCard materialCard4;
+        private Telerik.WinControls.UI.RadTextBox txt_merma_calidad;
+        private MetroFramework.Controls.MetroDateTime dtp_calidad;
+        private MetroFramework.Controls.MetroLabel metroLabel1;
+        private MaterialSkin.Controls.MaterialDivider materialDivider1;
+        private System.Windows.Forms.Label lb_no_semana;
+        private System.Windows.Forms.TextBox txt_no_semana;
     }
 }
 
