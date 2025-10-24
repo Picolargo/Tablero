@@ -171,6 +171,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btn_save_calidad = new MaterialSkin.Controls.MaterialButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -2476,6 +2477,7 @@
             // materialCard4
             // 
             this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard4.Controls.Add(this.btn_save_calidad);
             this.materialCard4.Controls.Add(this.lb_no_semana);
             this.materialCard4.Controls.Add(this.txt_no_semana);
             this.materialCard4.Controls.Add(this.metroLabel1);
@@ -2489,7 +2491,7 @@
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(594, 208);
+            this.materialCard4.Size = new System.Drawing.Size(609, 208);
             this.materialCard4.TabIndex = 1;
             // 
             // lb_no_semana
@@ -2506,10 +2508,10 @@
             this.txt_no_semana.BackColor = System.Drawing.Color.White;
             this.txt_no_semana.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_no_semana.Enabled = false;
-            this.txt_no_semana.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_no_semana.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_no_semana.Location = new System.Drawing.Point(374, 96);
             this.txt_no_semana.Name = "txt_no_semana";
-            this.txt_no_semana.Size = new System.Drawing.Size(100, 22);
+            this.txt_no_semana.Size = new System.Drawing.Size(100, 24);
             this.txt_no_semana.TabIndex = 22;
             // 
             // metroLabel1
@@ -2546,6 +2548,7 @@
             this.txt_merma_calidad.ShowEmbeddedLabel = true;
             this.txt_merma_calidad.Size = new System.Drawing.Size(170, 43);
             this.txt_merma_calidad.TabIndex = 17;
+            this.txt_merma_calidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_merma_calidad_KeyPress);
             // 
             // dtp_calidad
             // 
@@ -2599,6 +2602,29 @@
             // 
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
+            // 
+            // btn_save_calidad
+            // 
+            this.btn_save_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save_calidad.Depth = 0;
+            this.btn_save_calidad.HighEmphasis = true;
+            this.btn_save_calidad.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save_calidad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save_calidad.ImageKey = "save_icon";
+            this.btn_save_calidad.Location = new System.Drawing.Point(473, 152);
+            this.btn_save_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save_calidad.Name = "btn_save_calidad";
+            this.btn_save_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save_calidad.Size = new System.Drawing.Size(116, 36);
+            this.btn_save_calidad.TabIndex = 24;
+            this.btn_save_calidad.Text = "Guardar";
+            this.btn_save_calidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save_calidad.UseAccentColor = false;
+            this.btn_save_calidad.UseVisualStyleBackColor = true;
+            this.btn_save_calidad.Click += new System.EventHandler(this.btn_save_calidad_Click);
             // 
             // Form_principal
             // 
@@ -2846,6 +2872,7 @@
         private MaterialSkin.Controls.MaterialDivider materialDivider1;
         private System.Windows.Forms.Label lb_no_semana;
         private System.Windows.Forms.TextBox txt_no_semana;
+        private MaterialSkin.Controls.MaterialButton btn_save_calidad;
     }
 }
 

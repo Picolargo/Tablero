@@ -4328,7 +4328,7 @@ namespace Tablero
                 {
                     int idUsuarioActual = id_user;
 
-                    if(!string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text) && !string.IsNullOrEmpty(Txt_11.Text))
+                    if(cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text == "  :" && Mask_txt_hr2.Text == "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text) && !string.IsNullOrEmpty(Txt_11.Text))
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -4401,6 +4401,11 @@ namespace Tablero
                             }
                         }
                     }
+                    else
+                    {                         MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                            "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -4410,343 +4415,397 @@ namespace Tablero
             }
             if (cb_Area.SelectedIndex == 1) 
             {
-                //Despegue
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal KgProdSeco = Convert.ToDecimal(Txt_2.Text);
-                decimal MermaKgSeco = Convert.ToDecimal(Txt_3.Text);
-                decimal KgFueraSpec = Convert.ToDecimal(Txt_4.Text);
-                decimal KgResecar = Convert.ToDecimal(Txt_5.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_6.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
-                decimal PorcentCumplimiento = Convert.ToDecimal(textoPorcentCumplimiento)/100m;
-                decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
-                decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
-                string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
-                decimal FTT = Convert.ToDecimal(textoFTT)/100m;
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
-                string lote = cb_lote.Text;
-                decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && cb_lote.SelectedIndex != -1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text))
+                {
+                    //Despegue
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal KgProdSeco = Convert.ToDecimal(Txt_2.Text);
+                    decimal MermaKgSeco = Convert.ToDecimal(Txt_3.Text);
+                    decimal KgFueraSpec = Convert.ToDecimal(Txt_4.Text);
+                    decimal KgResecar = Convert.ToDecimal(Txt_5.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_6.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
+                    decimal PorcentCumplimiento = Convert.ToDecimal(textoPorcentCumplimiento) / 100m;
+                    decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
+                    decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
+                    string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
+                    decimal FTT = Convert.ToDecimal(textoFTT) / 100m;
+                    string area = cb_Area.Text;
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    string lote = cb_lote.Text;
+                    decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
 
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
 
-                if (editar) 
-                {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                        KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
-                        KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
-                        KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
-                        KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-
-                    if (idFicha > 0)
+                    if (editar)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                            KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
+                            KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             if (cb_Area.SelectedIndex == 2)
             {
-                //Evaporado
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado)/100m;
-                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                string textoPorcent_Aumento_Hume = Txt_Read_5.Text.Replace("%", "").Trim();
-                string area = cb_Area.Text;
-                decimal Porcent_Aumento_Hume = Convert.ToDecimal(textoPorcent_Aumento_Hume)/100m;
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
-
-                if (editar) 
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
                 {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                    //Evaporado
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    string textoPorcent_Aumento_Hume = Txt_Read_5.Text.Replace("%", "").Trim();
+                    string area = cb_Area.Text;
+                    decimal Porcent_Aumento_Hume = Convert.ToDecimal(textoPorcent_Aumento_Hume) / 100m;
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                    if (idFicha > 0)
+                    if (editar)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-                }     
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 7)
             {
-                //Grind
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
+                {
+                    //Grind
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    string area = cb_Area.Text;
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
 
-                if (editar) 
-                {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-                    if (idFicha > 0)
+                    if (editar)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             if (cb_Area.SelectedIndex == 4)
             {
-                //Inspeccion
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                string proceso = cb_proceso.Text;
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                if (cb_proceso.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
+                {
+                    //Inspeccion
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    string proceso = cb_proceso.Text;
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    string area = cb_Area.Text;
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                if (editar) 
-                {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-                    if (idFicha > 0)
+                    if (editar)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             if (cb_Area.SelectedIndex == 6)
             {
-                //Polvos
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                decimal polvo_colector = Convert.ToDecimal(Txt_6.Text);
-                decimal Granulo = Convert.ToDecimal(Txt_7.Text);
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                string area = cb_Area.Text;
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text))
+                {
+                    //Polvos
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal polvo_colector = Convert.ToDecimal(Txt_6.Text);
+                    decimal Granulo = Convert.ToDecimal(Txt_7.Text);
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    string area = cb_Area.Text;
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                if (editar) 
-                {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                    if (editar)
+                    {
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
-
-                    if (idFicha > 0)
-                    {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                            KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                            polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             if (cb_Area.SelectedIndex == 8)
             {
-                //Revolturas
-                int idUsuarioActual = id_user;
-                // Obtener datos de los TextBox
-                DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                int turno = Convert.ToInt32(cb_Turno.Text);
-                string op = cb_OP.Text;
-                decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                decimal Pz_producidas = Convert.ToDecimal(Txt_1.Text);
-                decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
-                TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
-                TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                string area = cb_Area.Text;
-                decimal kg_entrada = Convert.ToDecimal(Txt_Read_5.Text);
-                decimal bobina_entrada = Convert.ToDecimal(Txt_6.Text);
-                decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
-                decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
-                decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text))
+                {
+                    //Revolturas
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal Pz_producidas = Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    string area = cb_Area.Text;
+                    decimal kg_entrada = Convert.ToDecimal(Txt_Read_5.Text);
+                    decimal bobina_entrada = Convert.ToDecimal(Txt_6.Text);
+                    decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
+                    decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
+                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
 
-                if (editar) 
-                {
-                    updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                    Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                    kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, bobina_merma);
-                }
-                else
-                {
-                    // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                    int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                        Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
-                    if (idFicha > 0)
+                    if (editar)
                     {
-                        // Insertar en tablas relacionadas
-                        InsertarTiemposMuertos(dbHelper, idFicha);
-                        MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                            "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cb_Area.SelectedIndex = -1;
-                        reiniciarCampos();
-                        cb_Area.Focus();
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, bobina_merma);
                     }
                     else
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
-                                                            "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                            Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                            kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
         }
@@ -7235,6 +7294,53 @@ namespace Tablero
             {
                 MessageBox.Show($"Error al calcular el número de semana: {ex.Message}");
             }
+        }
+
+        private void txt_merma_calidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void btn_save_calidad_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

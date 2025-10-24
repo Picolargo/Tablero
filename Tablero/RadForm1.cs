@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialSkin.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,13 +23,27 @@ namespace Tablero
         {
             InitializeComponent();
             this.connectionString = connectionString;
+            materialExpansionPanel1.SaveClick += MaterialExpansionPanel1_OnActionButtonClick;
+            materialExpansionPanel1.CancelClick += MaterialExpansionPanel1_OnCancelButtonClick;
         }
-
-        private void RadForm1_Load(object sender, EventArgs e)
+        // 🔹 Evento del botón "Validar"
+        private void MaterialExpansionPanel1_OnActionButtonClick(object sender, EventArgs e)
         {
+            MessageBox.Show("✅ Validación completada correctamente.",
+                            "Validación",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+            this.Controls.Remove(materialExpansionPanel1); // lo elimina visualmente
+            materialExpansionPanel1.Dispose();              // libera recursos
+            radGridView1.Visible = true;          // muestra el grid
             actualiza_fichas();
         }
 
+        // 🔹 Evento del botón "Cancelar"
+        private void MaterialExpansionPanel1_OnCancelButtonClick(object sender, EventArgs e)
+        {
+            this.Close(); // 🔹 Cierra el formulario actual
+        }
         private void actualiza_fichas()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -66,6 +81,10 @@ namespace Tablero
             // 🔹 Si no se seleccionó nada, dispara un evento con valores nulos opcionalmente
             if (!fichaSeleccionada)
             {
+                MessageBox.Show("❌ Se canceló la operación.",
+                            "Cancelado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                 FichaSeleccionada?.Invoke(null, null);
             }
         }
