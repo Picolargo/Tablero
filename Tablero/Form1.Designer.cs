@@ -96,6 +96,7 @@
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_usuarios = new System.Windows.Forms.TabControl();
@@ -157,8 +158,34 @@
             this.txt_OP_Search = new MaterialSkin.Controls.MaterialTextBox();
             this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
             this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.lbl_titulo_calidad = new System.Windows.Forms.TabPage();
+            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_detalles_op = new System.Windows.Forms.DataGridView();
+            this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.txt_clacificacion = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_op_origen = new MaterialSkin.Controls.MaterialTextBox();
+            this.cb_Manzana = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_area_proceso = new MaterialSkin.Controls.MaterialTextBox();
+            this.cb_Comercio = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_analisis = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_humedad = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_new_dt_op = new MaterialSkin.Controls.MaterialButton();
+            this.txt_especificacion = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_medida = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_ingredientes = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_descripcion = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_orden_produc = new MaterialSkin.Controls.MaterialTextBox();
+            this.txt_producto = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_cancel_dt_op = new MaterialSkin.Controls.MaterialButton();
+            this.btn_delete_dt_op = new MaterialSkin.Controls.MaterialButton();
+            this.btn_save_dt_op = new MaterialSkin.Controls.MaterialButton();
+            this.btn_edit_dt_op = new MaterialSkin.Controls.MaterialButton();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
+            this.txt_buscar_dt_op = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
             this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
             this.btn_new_calidad = new MaterialSkin.Controls.MaterialButton();
             this.btn_cancel_calidad = new MaterialSkin.Controls.MaterialButton();
@@ -240,7 +267,14 @@
             this.tabControl_meta.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
-            this.lbl_titulo_calidad.SuspendLayout();
+            this.tabPage9.SuspendLayout();
+            this.materialCard6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).BeginInit();
+            this.materialCard5.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage12.SuspendLayout();
+            this.tabPage13.SuspendLayout();
+            this.tabPage11.SuspendLayout();
             this.materialCard4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_merma_calidad)).BeginInit();
             this.materialCard3.SuspendLayout();
@@ -253,11 +287,11 @@
             // 
             this.materialTabControl1.Controls.Add(this.tabPage1);
             this.materialTabControl1.Controls.Add(this.tabPage2);
+            this.materialTabControl1.Controls.Add(this.tabPage10);
             this.materialTabControl1.Controls.Add(this.tabPage3);
             this.materialTabControl1.Controls.Add(this.tabPage4);
             this.materialTabControl1.Controls.Add(this.tabPage9);
-            this.materialTabControl1.Controls.Add(this.tabPage10);
-            this.materialTabControl1.Controls.Add(this.lbl_titulo_calidad);
+            this.materialTabControl1.Controls.Add(this.tabPage11);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTabControl1.ImageList = this.imageList1;
@@ -1344,6 +1378,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage10
+            // 
+            this.tabPage10.ImageKey = "file_document_paper_page.png";
+            this.tabPage10.Location = new System.Drawing.Point(4, 39);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Size = new System.Drawing.Size(1682, 940);
+            this.tabPage10.TabIndex = 5;
+            this.tabPage10.Text = "Reportes";
+            this.tabPage10.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -2449,6 +2493,8 @@
             // 
             // tabPage9
             // 
+            this.tabPage9.Controls.Add(this.materialCard6);
+            this.tabPage9.Controls.Add(this.materialCard5);
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
@@ -2457,27 +2503,539 @@
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
             // 
-            // tabPage10
+            // materialCard6
             // 
-            this.tabPage10.ImageKey = "file_document_paper_page.png";
-            this.tabPage10.Location = new System.Drawing.Point(4, 39);
-            this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1682, 940);
-            this.tabPage10.TabIndex = 5;
-            this.tabPage10.Text = "Reportes";
-            this.tabPage10.UseVisualStyleBackColor = true;
+            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard6.Controls.Add(this.dgv_detalles_op);
+            this.materialCard6.Depth = 0;
+            this.materialCard6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard6.Location = new System.Drawing.Point(0, 395);
+            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard6.Name = "materialCard6";
+            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard6.Size = new System.Drawing.Size(1682, 545);
+            this.materialCard6.TabIndex = 5;
             // 
-            // lbl_titulo_calidad
+            // dgv_detalles_op
             // 
-            this.lbl_titulo_calidad.Controls.Add(this.materialCard4);
-            this.lbl_titulo_calidad.Controls.Add(this.materialCard3);
-            this.lbl_titulo_calidad.ImageKey = "award_prize.png";
-            this.lbl_titulo_calidad.Location = new System.Drawing.Point(4, 39);
-            this.lbl_titulo_calidad.Name = "lbl_titulo_calidad";
-            this.lbl_titulo_calidad.Size = new System.Drawing.Size(1682, 940);
-            this.lbl_titulo_calidad.TabIndex = 6;
-            this.lbl_titulo_calidad.Text = "Calidad";
-            this.lbl_titulo_calidad.UseVisualStyleBackColor = true;
+            this.dgv_detalles_op.AllowUserToAddRows = false;
+            this.dgv_detalles_op.AllowUserToDeleteRows = false;
+            this.dgv_detalles_op.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_detalles_op.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_detalles_op.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_detalles_op.Location = new System.Drawing.Point(14, 14);
+            this.dgv_detalles_op.Name = "dgv_detalles_op";
+            this.dgv_detalles_op.ReadOnly = true;
+            this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_detalles_op.Size = new System.Drawing.Size(1654, 517);
+            this.dgv_detalles_op.TabIndex = 8;
+            // 
+            // materialCard5
+            // 
+            this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard5.Controls.Add(this.tabControl1);
+            this.materialCard5.Depth = 0;
+            this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard5.Location = new System.Drawing.Point(10, 14);
+            this.materialCard5.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard5.Name = "materialCard5";
+            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard5.Size = new System.Drawing.Size(1056, 365);
+            this.materialCard5.TabIndex = 4;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage12);
+            this.tabControl1.Controls.Add(this.tabPage13);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(14, 14);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1028, 337);
+            this.tabControl1.TabIndex = 7;
+            // 
+            // tabPage12
+            // 
+            this.tabPage12.Controls.Add(this.txt_clacificacion);
+            this.tabPage12.Controls.Add(this.txt_op_origen);
+            this.tabPage12.Controls.Add(this.cb_Manzana);
+            this.tabPage12.Controls.Add(this.txt_area_proceso);
+            this.tabPage12.Controls.Add(this.cb_Comercio);
+            this.tabPage12.Controls.Add(this.txt_analisis);
+            this.tabPage12.Controls.Add(this.txt_humedad);
+            this.tabPage12.Controls.Add(this.btn_new_dt_op);
+            this.tabPage12.Controls.Add(this.txt_especificacion);
+            this.tabPage12.Controls.Add(this.txt_medida);
+            this.tabPage12.Controls.Add(this.txt_ingredientes);
+            this.tabPage12.Controls.Add(this.txt_descripcion);
+            this.tabPage12.Controls.Add(this.txt_orden_produc);
+            this.tabPage12.Controls.Add(this.txt_producto);
+            this.tabPage12.Controls.Add(this.btn_cancel_dt_op);
+            this.tabPage12.Controls.Add(this.btn_delete_dt_op);
+            this.tabPage12.Controls.Add(this.btn_save_dt_op);
+            this.tabPage12.Controls.Add(this.btn_edit_dt_op);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage12.Size = new System.Drawing.Size(1020, 311);
+            this.tabPage12.TabIndex = 0;
+            this.tabPage12.Text = "Gestión de Datos";
+            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // txt_clacificacion
+            // 
+            this.txt_clacificacion.AnimateReadOnly = false;
+            this.txt_clacificacion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_clacificacion.Depth = 0;
+            this.txt_clacificacion.Enabled = false;
+            this.txt_clacificacion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_clacificacion.Hint = "Clacificación";
+            this.txt_clacificacion.LeadingIcon = null;
+            this.txt_clacificacion.Location = new System.Drawing.Point(582, 121);
+            this.txt_clacificacion.MaxLength = 50;
+            this.txt_clacificacion.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_clacificacion.Multiline = false;
+            this.txt_clacificacion.Name = "txt_clacificacion";
+            this.txt_clacificacion.Size = new System.Drawing.Size(228, 50);
+            this.txt_clacificacion.TabIndex = 21;
+            this.txt_clacificacion.Text = "";
+            this.txt_clacificacion.TrailingIcon = null;
+            // 
+            // txt_op_origen
+            // 
+            this.txt_op_origen.AnimateReadOnly = false;
+            this.txt_op_origen.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_op_origen.Depth = 0;
+            this.txt_op_origen.Enabled = false;
+            this.txt_op_origen.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_op_origen.Hint = "OP de Origen";
+            this.txt_op_origen.LeadingIcon = null;
+            this.txt_op_origen.Location = new System.Drawing.Point(582, 63);
+            this.txt_op_origen.MaxLength = 50;
+            this.txt_op_origen.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_op_origen.Multiline = false;
+            this.txt_op_origen.Name = "txt_op_origen";
+            this.txt_op_origen.Size = new System.Drawing.Size(228, 50);
+            this.txt_op_origen.TabIndex = 20;
+            this.txt_op_origen.Text = "";
+            this.txt_op_origen.TrailingIcon = null;
+            // 
+            // cb_Manzana
+            // 
+            this.cb_Manzana.AutoResize = false;
+            this.cb_Manzana.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_Manzana.Depth = 0;
+            this.cb_Manzana.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_Manzana.DropDownHeight = 174;
+            this.cb_Manzana.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_Manzana.DropDownWidth = 121;
+            this.cb_Manzana.Enabled = false;
+            this.cb_Manzana.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_Manzana.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_Manzana.FormattingEnabled = true;
+            this.cb_Manzana.Hint = "Manzana";
+            this.cb_Manzana.IntegralHeight = false;
+            this.cb_Manzana.ItemHeight = 43;
+            this.cb_Manzana.Items.AddRange(new object[] {
+            "SIN PESTICIDAS",
+            "REGULAR",
+            "ORGANICA"});
+            this.cb_Manzana.Location = new System.Drawing.Point(294, 176);
+            this.cb_Manzana.MaxDropDownItems = 4;
+            this.cb_Manzana.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_Manzana.Name = "cb_Manzana";
+            this.cb_Manzana.Size = new System.Drawing.Size(228, 49);
+            this.cb_Manzana.StartIndex = -1;
+            this.cb_Manzana.TabIndex = 19;
+            // 
+            // txt_area_proceso
+            // 
+            this.txt_area_proceso.AnimateReadOnly = false;
+            this.txt_area_proceso.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_area_proceso.Depth = 0;
+            this.txt_area_proceso.Enabled = false;
+            this.txt_area_proceso.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_area_proceso.Hint = "Área de Proceso";
+            this.txt_area_proceso.LeadingIcon = null;
+            this.txt_area_proceso.Location = new System.Drawing.Point(582, 6);
+            this.txt_area_proceso.MaxLength = 50;
+            this.txt_area_proceso.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_area_proceso.Multiline = false;
+            this.txt_area_proceso.Name = "txt_area_proceso";
+            this.txt_area_proceso.Size = new System.Drawing.Size(228, 50);
+            this.txt_area_proceso.TabIndex = 18;
+            this.txt_area_proceso.Text = "";
+            this.txt_area_proceso.TrailingIcon = null;
+            // 
+            // cb_Comercio
+            // 
+            this.cb_Comercio.AutoResize = false;
+            this.cb_Comercio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_Comercio.Depth = 0;
+            this.cb_Comercio.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_Comercio.DropDownHeight = 174;
+            this.cb_Comercio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_Comercio.DropDownWidth = 121;
+            this.cb_Comercio.Enabled = false;
+            this.cb_Comercio.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_Comercio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_Comercio.FormattingEnabled = true;
+            this.cb_Comercio.Hint = "Comercio";
+            this.cb_Comercio.IntegralHeight = false;
+            this.cb_Comercio.ItemHeight = 43;
+            this.cb_Comercio.Items.AddRange(new object[] {
+            "EXPORTACIÓN",
+            "NACIONAL"});
+            this.cb_Comercio.Location = new System.Drawing.Point(294, 120);
+            this.cb_Comercio.MaxDropDownItems = 4;
+            this.cb_Comercio.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_Comercio.Name = "cb_Comercio";
+            this.cb_Comercio.Size = new System.Drawing.Size(228, 49);
+            this.cb_Comercio.StartIndex = -1;
+            this.cb_Comercio.TabIndex = 17;
+            // 
+            // txt_analisis
+            // 
+            this.txt_analisis.AnimateReadOnly = false;
+            this.txt_analisis.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_analisis.Depth = 0;
+            this.txt_analisis.Enabled = false;
+            this.txt_analisis.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_analisis.Hint = "Analisis";
+            this.txt_analisis.LeadingIcon = null;
+            this.txt_analisis.Location = new System.Drawing.Point(294, 233);
+            this.txt_analisis.MaxLength = 50;
+            this.txt_analisis.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_analisis.Multiline = false;
+            this.txt_analisis.Name = "txt_analisis";
+            this.txt_analisis.Size = new System.Drawing.Size(228, 50);
+            this.txt_analisis.TabIndex = 16;
+            this.txt_analisis.Text = "";
+            this.txt_analisis.TrailingIcon = null;
+            // 
+            // txt_humedad
+            // 
+            this.txt_humedad.AnimateReadOnly = false;
+            this.txt_humedad.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_humedad.Depth = 0;
+            this.txt_humedad.Enabled = false;
+            this.txt_humedad.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_humedad.Hint = "Humedad";
+            this.txt_humedad.LeadingIcon = null;
+            this.txt_humedad.Location = new System.Drawing.Point(294, 63);
+            this.txt_humedad.MaxLength = 50;
+            this.txt_humedad.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_humedad.Multiline = false;
+            this.txt_humedad.Name = "txt_humedad";
+            this.txt_humedad.Size = new System.Drawing.Size(228, 50);
+            this.txt_humedad.TabIndex = 15;
+            this.txt_humedad.Text = "";
+            this.txt_humedad.TrailingIcon = null;
+            // 
+            // btn_new_dt_op
+            // 
+            this.btn_new_dt_op.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_dt_op.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_dt_op.Depth = 0;
+            this.btn_new_dt_op.HighEmphasis = true;
+            this.btn_new_dt_op.Icon = global::Tablero.Properties.Resources._1564491_add_create_new_plus_icon;
+            this.btn_new_dt_op.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_dt_op.ImageKey = "save_icon";
+            this.btn_new_dt_op.Location = new System.Drawing.Point(870, 20);
+            this.btn_new_dt_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_dt_op.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_dt_op.Name = "btn_new_dt_op";
+            this.btn_new_dt_op.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_dt_op.Size = new System.Drawing.Size(121, 36);
+            this.btn_new_dt_op.TabIndex = 14;
+            this.btn_new_dt_op.Text = "Nuevo OP";
+            this.btn_new_dt_op.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_dt_op.UseAccentColor = false;
+            this.btn_new_dt_op.UseVisualStyleBackColor = true;
+            this.btn_new_dt_op.Click += new System.EventHandler(this.btn_new_dt_op_Click);
+            // 
+            // txt_especificacion
+            // 
+            this.txt_especificacion.AnimateReadOnly = false;
+            this.txt_especificacion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_especificacion.Depth = 0;
+            this.txt_especificacion.Enabled = false;
+            this.txt_especificacion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_especificacion.Hint = "Especificación";
+            this.txt_especificacion.LeadingIcon = null;
+            this.txt_especificacion.Location = new System.Drawing.Point(6, 231);
+            this.txt_especificacion.MaxLength = 50;
+            this.txt_especificacion.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_especificacion.Multiline = false;
+            this.txt_especificacion.Name = "txt_especificacion";
+            this.txt_especificacion.Size = new System.Drawing.Size(228, 50);
+            this.txt_especificacion.TabIndex = 13;
+            this.txt_especificacion.Text = "";
+            this.txt_especificacion.TrailingIcon = null;
+            // 
+            // txt_medida
+            // 
+            this.txt_medida.AnimateReadOnly = false;
+            this.txt_medida.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_medida.Depth = 0;
+            this.txt_medida.Enabled = false;
+            this.txt_medida.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_medida.Hint = "Medida";
+            this.txt_medida.LeadingIcon = null;
+            this.txt_medida.Location = new System.Drawing.Point(6, 119);
+            this.txt_medida.MaxLength = 50;
+            this.txt_medida.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_medida.Multiline = false;
+            this.txt_medida.Name = "txt_medida";
+            this.txt_medida.Size = new System.Drawing.Size(228, 50);
+            this.txt_medida.TabIndex = 10;
+            this.txt_medida.Text = "";
+            this.txt_medida.TrailingIcon = null;
+            // 
+            // txt_ingredientes
+            // 
+            this.txt_ingredientes.AnimateReadOnly = false;
+            this.txt_ingredientes.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_ingredientes.Depth = 0;
+            this.txt_ingredientes.Enabled = false;
+            this.txt_ingredientes.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_ingredientes.Hint = "Ingredientes";
+            this.txt_ingredientes.LeadingIcon = null;
+            this.txt_ingredientes.Location = new System.Drawing.Point(294, 6);
+            this.txt_ingredientes.MaxLength = 50;
+            this.txt_ingredientes.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_ingredientes.Multiline = false;
+            this.txt_ingredientes.Name = "txt_ingredientes";
+            this.txt_ingredientes.Size = new System.Drawing.Size(228, 50);
+            this.txt_ingredientes.TabIndex = 12;
+            this.txt_ingredientes.Text = "";
+            this.txt_ingredientes.TrailingIcon = null;
+            // 
+            // txt_descripcion
+            // 
+            this.txt_descripcion.AnimateReadOnly = false;
+            this.txt_descripcion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_descripcion.Depth = 0;
+            this.txt_descripcion.Enabled = false;
+            this.txt_descripcion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_descripcion.Hint = "Descripción";
+            this.txt_descripcion.LeadingIcon = null;
+            this.txt_descripcion.Location = new System.Drawing.Point(6, 175);
+            this.txt_descripcion.MaxLength = 50;
+            this.txt_descripcion.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_descripcion.Multiline = false;
+            this.txt_descripcion.Name = "txt_descripcion";
+            this.txt_descripcion.Size = new System.Drawing.Size(228, 50);
+            this.txt_descripcion.TabIndex = 11;
+            this.txt_descripcion.Text = "";
+            this.txt_descripcion.TrailingIcon = null;
+            // 
+            // txt_orden_produc
+            // 
+            this.txt_orden_produc.AnimateReadOnly = false;
+            this.txt_orden_produc.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_orden_produc.Depth = 0;
+            this.txt_orden_produc.Enabled = false;
+            this.txt_orden_produc.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_orden_produc.Hint = "Orden de Producción";
+            this.txt_orden_produc.LeadingIcon = null;
+            this.txt_orden_produc.Location = new System.Drawing.Point(6, 6);
+            this.txt_orden_produc.MaxLength = 50;
+            this.txt_orden_produc.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_orden_produc.Multiline = false;
+            this.txt_orden_produc.Name = "txt_orden_produc";
+            this.txt_orden_produc.Size = new System.Drawing.Size(228, 50);
+            this.txt_orden_produc.TabIndex = 0;
+            this.txt_orden_produc.Text = "";
+            this.txt_orden_produc.TrailingIcon = null;
+            // 
+            // txt_producto
+            // 
+            this.txt_producto.AnimateReadOnly = false;
+            this.txt_producto.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_producto.Depth = 0;
+            this.txt_producto.Enabled = false;
+            this.txt_producto.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_producto.Hint = "Producto";
+            this.txt_producto.LeadingIcon = null;
+            this.txt_producto.Location = new System.Drawing.Point(6, 63);
+            this.txt_producto.MaxLength = 50;
+            this.txt_producto.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_producto.Multiline = false;
+            this.txt_producto.Name = "txt_producto";
+            this.txt_producto.Size = new System.Drawing.Size(228, 50);
+            this.txt_producto.TabIndex = 1;
+            this.txt_producto.Text = "";
+            this.txt_producto.TrailingIcon = null;
+            // 
+            // btn_cancel_dt_op
+            // 
+            this.btn_cancel_dt_op.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_cancel_dt_op.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_cancel_dt_op.Depth = 0;
+            this.btn_cancel_dt_op.Enabled = false;
+            this.btn_cancel_dt_op.HighEmphasis = true;
+            this.btn_cancel_dt_op.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.btn_cancel_dt_op.Location = new System.Drawing.Point(870, 204);
+            this.btn_cancel_dt_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_cancel_dt_op.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_cancel_dt_op.Name = "btn_cancel_dt_op";
+            this.btn_cancel_dt_op.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_cancel_dt_op.Size = new System.Drawing.Size(124, 36);
+            this.btn_cancel_dt_op.TabIndex = 6;
+            this.btn_cancel_dt_op.Text = "Cancelar";
+            this.btn_cancel_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_cancel_dt_op.UseAccentColor = false;
+            this.btn_cancel_dt_op.UseVisualStyleBackColor = true;
+            // 
+            // btn_delete_dt_op
+            // 
+            this.btn_delete_dt_op.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_delete_dt_op.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_delete_dt_op.Depth = 0;
+            this.btn_delete_dt_op.Enabled = false;
+            this.btn_delete_dt_op.HighEmphasis = true;
+            this.btn_delete_dt_op.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
+            this.btn_delete_dt_op.Location = new System.Drawing.Point(870, 158);
+            this.btn_delete_dt_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_delete_dt_op.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_delete_dt_op.Name = "btn_delete_dt_op";
+            this.btn_delete_dt_op.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_delete_dt_op.Size = new System.Drawing.Size(106, 36);
+            this.btn_delete_dt_op.TabIndex = 5;
+            this.btn_delete_dt_op.Text = "Borrar";
+            this.btn_delete_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_delete_dt_op.UseAccentColor = false;
+            this.btn_delete_dt_op.UseVisualStyleBackColor = true;
+            // 
+            // btn_save_dt_op
+            // 
+            this.btn_save_dt_op.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save_dt_op.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save_dt_op.Depth = 0;
+            this.btn_save_dt_op.Enabled = false;
+            this.btn_save_dt_op.HighEmphasis = true;
+            this.btn_save_dt_op.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save_dt_op.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save_dt_op.ImageKey = "save_icon";
+            this.btn_save_dt_op.Location = new System.Drawing.Point(870, 66);
+            this.btn_save_dt_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save_dt_op.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save_dt_op.Name = "btn_save_dt_op";
+            this.btn_save_dt_op.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save_dt_op.Size = new System.Drawing.Size(116, 36);
+            this.btn_save_dt_op.TabIndex = 3;
+            this.btn_save_dt_op.Text = "Guardar";
+            this.btn_save_dt_op.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save_dt_op.UseAccentColor = false;
+            this.btn_save_dt_op.UseVisualStyleBackColor = true;
+            // 
+            // btn_edit_dt_op
+            // 
+            this.btn_edit_dt_op.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_edit_dt_op.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_edit_dt_op.Depth = 0;
+            this.btn_edit_dt_op.Enabled = false;
+            this.btn_edit_dt_op.HighEmphasis = true;
+            this.btn_edit_dt_op.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.btn_edit_dt_op.Location = new System.Drawing.Point(870, 112);
+            this.btn_edit_dt_op.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_edit_dt_op.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_edit_dt_op.Name = "btn_edit_dt_op";
+            this.btn_edit_dt_op.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_edit_dt_op.Size = new System.Drawing.Size(99, 36);
+            this.btn_edit_dt_op.TabIndex = 4;
+            this.btn_edit_dt_op.Text = "Editar";
+            this.btn_edit_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_edit_dt_op.UseAccentColor = false;
+            this.btn_edit_dt_op.UseVisualStyleBackColor = true;
+            // 
+            // tabPage13
+            // 
+            this.tabPage13.Controls.Add(this.materialButton8);
+            this.tabPage13.Controls.Add(this.txt_buscar_dt_op);
+            this.tabPage13.Controls.Add(this.materialButton9);
+            this.tabPage13.Location = new System.Drawing.Point(4, 22);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(1020, 311);
+            this.tabPage13.TabIndex = 1;
+            this.tabPage13.Text = "Buscar";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // materialButton8
+            // 
+            this.materialButton8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton8.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton8.Depth = 0;
+            this.materialButton8.HighEmphasis = true;
+            this.materialButton8.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.materialButton8.Location = new System.Drawing.Point(288, 112);
+            this.materialButton8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton8.Name = "materialButton8";
+            this.materialButton8.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton8.Size = new System.Drawing.Size(159, 36);
+            this.materialButton8.TabIndex = 14;
+            this.materialButton8.Text = "Limpiar Filtro";
+            this.materialButton8.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton8.UseAccentColor = false;
+            this.materialButton8.UseVisualStyleBackColor = true;
+            // 
+            // txt_buscar_dt_op
+            // 
+            this.txt_buscar_dt_op.AnimateReadOnly = false;
+            this.txt_buscar_dt_op.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_buscar_dt_op.Depth = 0;
+            this.txt_buscar_dt_op.Enabled = false;
+            this.txt_buscar_dt_op.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_buscar_dt_op.Hint = "Ingresa texto...";
+            this.txt_buscar_dt_op.LeadingIcon = null;
+            this.txt_buscar_dt_op.Location = new System.Drawing.Point(6, 50);
+            this.txt_buscar_dt_op.MaxLength = 50;
+            this.txt_buscar_dt_op.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_buscar_dt_op.Multiline = false;
+            this.txt_buscar_dt_op.Name = "txt_buscar_dt_op";
+            this.txt_buscar_dt_op.Size = new System.Drawing.Size(228, 50);
+            this.txt_buscar_dt_op.TabIndex = 9;
+            this.txt_buscar_dt_op.Text = "";
+            this.txt_buscar_dt_op.TrailingIcon = null;
+            // 
+            // materialButton9
+            // 
+            this.materialButton9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton9.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton9.Depth = 0;
+            this.materialButton9.HighEmphasis = true;
+            this.materialButton9.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.materialButton9.Location = new System.Drawing.Point(288, 64);
+            this.materialButton9.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton9.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton9.Name = "materialButton9";
+            this.materialButton9.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton9.Size = new System.Drawing.Size(105, 36);
+            this.materialButton9.TabIndex = 11;
+            this.materialButton9.Text = "Buscar";
+            this.materialButton9.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton9.UseAccentColor = false;
+            this.materialButton9.UseVisualStyleBackColor = true;
+            // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.materialCard4);
+            this.tabPage11.Controls.Add(this.materialCard3);
+            this.tabPage11.ImageKey = "award_prize.png";
+            this.tabPage11.Location = new System.Drawing.Point(4, 39);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Size = new System.Drawing.Size(1682, 940);
+            this.tabPage11.TabIndex = 6;
+            this.tabPage11.Text = "Calidad";
+            this.tabPage11.UseVisualStyleBackColor = true;
             // 
             // materialCard4
             // 
@@ -2677,7 +3235,7 @@
             this.dtp_calidad.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_calidad.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_calidad.Location = new System.Drawing.Point(17, 88);
-            this.dtp_calidad.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_calidad.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_calidad.Name = "dtp_calidad";
             this.dtp_calidad.Size = new System.Drawing.Size(289, 35);
             this.dtp_calidad.TabIndex = 8;
@@ -2818,7 +3376,16 @@
             this.tabPage7.PerformLayout();
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
-            this.lbl_titulo_calidad.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.materialCard6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).EndInit();
+            this.materialCard5.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage12.ResumeLayout(false);
+            this.tabPage12.PerformLayout();
+            this.tabPage13.ResumeLayout(false);
+            this.tabPage13.PerformLayout();
+            this.tabPage11.ResumeLayout(false);
             this.materialCard4.ResumeLayout(false);
             this.materialCard4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_merma_calidad)).EndInit();
@@ -2963,7 +3530,7 @@
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
-        private System.Windows.Forms.TabPage lbl_titulo_calidad;
+        private System.Windows.Forms.TabPage tabPage11;
         private MaterialSkin.Controls.MaterialCard materialCard3;
         private MaterialSkin.Controls.MaterialCard materialCard4;
         private Telerik.WinControls.UI.RadTextBox txt_merma_calidad;
@@ -2978,6 +3545,33 @@
         private MaterialSkin.Controls.MaterialButton btn_edit_calidad;
         private System.Windows.Forms.DataGridView dgv_metas_polvos_calidad;
         private MaterialSkin.Controls.MaterialButton btn_new_calidad;
+        private MaterialSkin.Controls.MaterialCard materialCard6;
+        private MaterialSkin.Controls.MaterialCard materialCard5;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage12;
+        private MaterialSkin.Controls.MaterialButton btn_new_dt_op;
+        private MaterialSkin.Controls.MaterialTextBox txt_especificacion;
+        private MaterialSkin.Controls.MaterialTextBox txt_medida;
+        private MaterialSkin.Controls.MaterialTextBox txt_ingredientes;
+        private MaterialSkin.Controls.MaterialTextBox txt_descripcion;
+        private MaterialSkin.Controls.MaterialTextBox txt_orden_produc;
+        private MaterialSkin.Controls.MaterialTextBox txt_producto;
+        private MaterialSkin.Controls.MaterialButton btn_cancel_dt_op;
+        private MaterialSkin.Controls.MaterialButton btn_delete_dt_op;
+        private MaterialSkin.Controls.MaterialButton btn_save_dt_op;
+        private MaterialSkin.Controls.MaterialButton btn_edit_dt_op;
+        private System.Windows.Forms.TabPage tabPage13;
+        private MaterialSkin.Controls.MaterialButton materialButton8;
+        private MaterialSkin.Controls.MaterialTextBox txt_buscar_dt_op;
+        private MaterialSkin.Controls.MaterialButton materialButton9;
+        private System.Windows.Forms.DataGridView dgv_detalles_op;
+        private MaterialSkin.Controls.MaterialComboBox cb_Comercio;
+        private MaterialSkin.Controls.MaterialTextBox txt_analisis;
+        private MaterialSkin.Controls.MaterialTextBox txt_humedad;
+        private MaterialSkin.Controls.MaterialComboBox cb_Manzana;
+        private MaterialSkin.Controls.MaterialTextBox txt_area_proceso;
+        private MaterialSkin.Controls.MaterialTextBox txt_clacificacion;
+        private MaterialSkin.Controls.MaterialTextBox txt_op_origen;
     }
 }
 

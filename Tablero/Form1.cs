@@ -34,6 +34,7 @@ namespace Tablero
         private string id_global_meta_maquinas = string.Empty;
         private string id_global_ficha = string.Empty;
         private string id_global_meta_polvos_calidad = string.Empty;
+        private string id_global_detalles_OP = string.Empty;
         private int id_user = 0;
         private string nivel_user = string.Empty;
         private bool filtroUsuariosActivo = false;
@@ -282,6 +283,23 @@ namespace Tablero
             dgv_metas_polvos_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_metas_polvos_calidad.RowHeadersVisible = false;
             dgv_metas_polvos_calidad.BorderStyle = BorderStyle.None;
+
+            // Personalización de dgv_detalles_op
+            dgv_detalles_op.EnableHeadersVisualStyles = false;
+            dgv_detalles_op.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_detalles_op.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv_detalles_op.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dgv_detalles_op.BackgroundColor = Color.White; // Fondo blanco
+            dgv_detalles_op.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
+            dgv_detalles_op.DefaultCellStyle.ForeColor = Color.Black;
+            dgv_detalles_op.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv_detalles_op.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv_detalles_op.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+
+            dgv_detalles_op.GridColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_detalles_op.RowHeadersVisible = false;
+            dgv_detalles_op.BorderStyle = BorderStyle.None;
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -346,22 +364,51 @@ namespace Tablero
 
         private void Form_principal_Load(object sender, EventArgs e)
         {
-            lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            dtp_calidad.Value = DateTime.Now;
-            // Obtener y mostrar el número de semana inicial
-            ActualizarNumeroSemana();
+            if(nivel_user == "Administrador") 
+            {
+                lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                dtp_calidad.Value = DateTime.Now;
+                // Obtener y mostrar el número de semana inicial
+                ActualizarNumeroSemana();
 
-            actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
-            actualiza_grid_Deshitratado();
-            actualiza_grid_Empacado();
-            actualiza_grid_inspec();
-            actualiza_grid_evaporado();
-            actualiza_grid_grind();
-            actualiza_revolturas();
-            actualiza_maquinas();
-            actualiza_polvos();
-            actualiza_polvos_calidad();
+                actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
+                actualiza_grid_Deshitratado();
+                actualiza_grid_Empacado();
+                actualiza_grid_inspec();
+                actualiza_grid_evaporado();
+                actualiza_grid_grind();
+                actualiza_revolturas();
+                actualiza_maquinas();
+                actualiza_polvos();
+                actualiza_polvos_calidad();
+                actualiza_detalles_OP();
+            } 
+            if(nivel_user == "Supervisor")
+            {
+                materialTabControl1.TabPages.Remove(tabPage2);
+                materialTabControl1.TabPages.Remove(tabPage3);
+                materialTabControl1.TabPages.Remove(tabPage4);
+                materialTabControl1.TabPages.Remove(tabPage10);
+                materialTabControl1.TabPages.Remove(tabPage11);
+
+                lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            }
+            if (nivel_user == "Calidad")
+            {
+                materialTabControl1.TabPages.Remove(tabPage1);
+                materialTabControl1.TabPages.Remove(tabPage2);
+                materialTabControl1.TabPages.Remove(tabPage3);
+                materialTabControl1.TabPages.Remove(tabPage4);
+                materialTabControl1.TabPages.Remove(tabPage9);
+                materialTabControl1.TabPages.Remove(tabPage10);
+
+                dtp_calidad.Value = DateTime.Now;
+                // Obtener y mostrar el número de semana inicial
+                ActualizarNumeroSemana();
+                actualiza_polvos_calidad();
+            }
         }
         private void actualiza_grid_users()
         {
@@ -559,6 +606,37 @@ namespace Tablero
             // Configurar el DataGridView
             dgv_metas_polvos.Columns[0].Visible = false;
             dgv_metas_polvos.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+        }
+
+        private void actualiza_detalles_OP()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT 
+                            ""ID_Dt_OP"" as ""ID"", 
+                            ""Orden_Produccion"" as ""Orden de Producción"", 
+                            ""Producto"", 
+                            ""Medida"",
+                            ""Descripcion"" as ""Descripción"", 
+                            ""Especificacion"" as ""Especificación"",
+                            ""Ingredientes"",
+                            ""Humedad"",
+                            ""Comercio"",
+                            ""Manzana"",
+                            ""Analisis"",
+                            ""Area_Proceso"" as ""Área de Proceso"",
+                            ""OP_Origen"" as ""OP de Origen"",
+                            ""Destino"",
+                            ""Clasificacion"" as ""Clasificación""
+                          FROM public.""Detalles_OP""
+                          ORDER BY ""Orden_Produccion"" ASC;";  // ← orden ascendente
+
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_detalles_op, null);
+
+            // Configurar el DataGridView
+            dgv_detalles_op.Columns[0].Visible = false;
+            dgv_detalles_op.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
         }
         private void actualiza_polvos_calidad()
         {
@@ -1918,7 +1996,6 @@ namespace Tablero
             //enfocar controles
             cmb_area.Focus();
             txt_op.Focus();
-
         }
 
         private void btn_meta_save_Click(object sender, EventArgs e)
@@ -7512,6 +7589,51 @@ namespace Tablero
                     MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+
+        private void btn_new_dt_op_Click(object sender, EventArgs e)
+        {
+            //habilitar controles
+            txt_orden_produc.Enabled = true;
+            txt_producto.Enabled = true;
+            txt_medida.Enabled = true;
+            txt_descripcion.Enabled = true;
+            txt_especificacion.Enabled = true;
+            txt_ingredientes.Enabled = true;
+            txt_humedad.Enabled = true;
+            cb_Comercio.Enabled = true;
+            cb_Manzana.Enabled = true;
+            txt_analisis.Enabled = true;
+            txt_area_proceso.Enabled = true;
+            txt_op_origen.Enabled = true;
+            txt_clacificacion.Enabled = true;
+            btn_cancel_dt_op.Enabled = true;
+            btn_save_dt_op.Enabled = true;
+            btn_edit_dt_op.Enabled = false;
+            btn_delete_dt_op.Enabled = false;
+
+            //limpiar campos
+            cb_Comercio.SelectedIndex = -1;
+            cb_Manzana.SelectedIndex = -1;
+            txt_orden_produc.Text = string.Empty;
+            txt_producto.Text = string.Empty;
+            txt_medida.Text = string.Empty;
+            txt_descripcion.Text = string.Empty;
+            txt_especificacion.Text = string.Empty;
+            txt_ingredientes.Text = string.Empty;
+            txt_humedad.Text = string.Empty;
+            txt_analisis.Text = string.Empty;
+            txt_area_proceso.Text = string.Empty;
+            txt_op_origen.Text = string.Empty;
+            txt_clacificacion.Text = string.Empty;
+
+            //limpiar variables globales
+            id_global_detalles_OP = string.Empty;
+
+            //enfocar controles
+            cb_Comercio.Focus();
+            cb_Manzana.Focus();
+            txt_orden_produc.Focus();
         }
     }
 }
