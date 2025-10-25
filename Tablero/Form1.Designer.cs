@@ -160,6 +160,11 @@
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.lbl_titulo_calidad = new System.Windows.Forms.TabPage();
             this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_new_calidad = new MaterialSkin.Controls.MaterialButton();
+            this.btn_cancel_calidad = new MaterialSkin.Controls.MaterialButton();
+            this.btn_delete_calidad = new MaterialSkin.Controls.MaterialButton();
+            this.btn_edit_calidad = new MaterialSkin.Controls.MaterialButton();
+            this.btn_save_calidad = new MaterialSkin.Controls.MaterialButton();
             this.lb_no_semana = new System.Windows.Forms.Label();
             this.txt_no_semana = new System.Windows.Forms.TextBox();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
@@ -171,7 +176,6 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btn_save_calidad = new MaterialSkin.Controls.MaterialButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -1439,7 +1443,8 @@
             this.cmb_nivel_user.ItemHeight = 43;
             this.cmb_nivel_user.Items.AddRange(new object[] {
             "Administrador",
-            "Usuario"});
+            "Supervisor",
+            "Calidad"});
             this.cmb_nivel_user.Location = new System.Drawing.Point(13, 183);
             this.cmb_nivel_user.MaxDropDownItems = 4;
             this.cmb_nivel_user.MouseState = MaterialSkin.MouseState.OUT;
@@ -1769,7 +1774,7 @@
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
             this.tap_control_metas.Location = new System.Drawing.Point(0, 395);
             this.tap_control_metas.Name = "tap_control_metas";
-            this.tap_control_metas.SelectedIndex = 7;
+            this.tap_control_metas.SelectedIndex = 0;
             this.tap_control_metas.Size = new System.Drawing.Size(1682, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
@@ -2477,6 +2482,10 @@
             // materialCard4
             // 
             this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard4.Controls.Add(this.btn_new_calidad);
+            this.materialCard4.Controls.Add(this.btn_cancel_calidad);
+            this.materialCard4.Controls.Add(this.btn_delete_calidad);
+            this.materialCard4.Controls.Add(this.btn_edit_calidad);
             this.materialCard4.Controls.Add(this.btn_save_calidad);
             this.materialCard4.Controls.Add(this.lb_no_semana);
             this.materialCard4.Controls.Add(this.txt_no_semana);
@@ -2486,18 +2495,128 @@
             this.materialCard4.Controls.Add(this.dtp_calidad);
             this.materialCard4.Depth = 0;
             this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard4.Location = new System.Drawing.Point(10, 366);
+            this.materialCard4.Location = new System.Drawing.Point(14, 14);
             this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(609, 208);
+            this.materialCard4.Size = new System.Drawing.Size(797, 286);
             this.materialCard4.TabIndex = 1;
+            // 
+            // btn_new_calidad
+            // 
+            this.btn_new_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_calidad.Depth = 0;
+            this.btn_new_calidad.HighEmphasis = true;
+            this.btn_new_calidad.Icon = global::Tablero.Properties.Resources._1564491_add_create_new_plus_icon;
+            this.btn_new_calidad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_calidad.ImageKey = "save_icon";
+            this.btn_new_calidad.Location = new System.Drawing.Point(639, 37);
+            this.btn_new_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_calidad.Name = "btn_new_calidad";
+            this.btn_new_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_calidad.Size = new System.Drawing.Size(121, 36);
+            this.btn_new_calidad.TabIndex = 28;
+            this.btn_new_calidad.Text = "Nuevo OP";
+            this.btn_new_calidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_calidad.UseAccentColor = false;
+            this.btn_new_calidad.UseVisualStyleBackColor = true;
+            this.btn_new_calidad.Click += new System.EventHandler(this.btn_new_calidad_Click);
+            // 
+            // btn_cancel_calidad
+            // 
+            this.btn_cancel_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_cancel_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_cancel_calidad.Depth = 0;
+            this.btn_cancel_calidad.Enabled = false;
+            this.btn_cancel_calidad.HighEmphasis = true;
+            this.btn_cancel_calidad.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
+            this.btn_cancel_calidad.Location = new System.Drawing.Point(639, 229);
+            this.btn_cancel_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_cancel_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_cancel_calidad.Name = "btn_cancel_calidad";
+            this.btn_cancel_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_cancel_calidad.Size = new System.Drawing.Size(124, 36);
+            this.btn_cancel_calidad.TabIndex = 27;
+            this.btn_cancel_calidad.Text = "Cancelar";
+            this.btn_cancel_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_cancel_calidad.UseAccentColor = false;
+            this.btn_cancel_calidad.UseVisualStyleBackColor = true;
+            this.btn_cancel_calidad.Click += new System.EventHandler(this.btn_cancel_calidad_Click);
+            // 
+            // btn_delete_calidad
+            // 
+            this.btn_delete_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_delete_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_delete_calidad.Depth = 0;
+            this.btn_delete_calidad.Enabled = false;
+            this.btn_delete_calidad.HighEmphasis = true;
+            this.btn_delete_calidad.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
+            this.btn_delete_calidad.Location = new System.Drawing.Point(639, 181);
+            this.btn_delete_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_delete_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_delete_calidad.Name = "btn_delete_calidad";
+            this.btn_delete_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_delete_calidad.Size = new System.Drawing.Size(106, 36);
+            this.btn_delete_calidad.TabIndex = 26;
+            this.btn_delete_calidad.Text = "Borrar";
+            this.btn_delete_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_delete_calidad.UseAccentColor = false;
+            this.btn_delete_calidad.UseVisualStyleBackColor = true;
+            this.btn_delete_calidad.Click += new System.EventHandler(this.btn_delete_calidad_Click);
+            // 
+            // btn_edit_calidad
+            // 
+            this.btn_edit_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_edit_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_edit_calidad.Depth = 0;
+            this.btn_edit_calidad.Enabled = false;
+            this.btn_edit_calidad.HighEmphasis = true;
+            this.btn_edit_calidad.Icon = global::Tablero.Properties.Resources._8666681_edit_icon;
+            this.btn_edit_calidad.Location = new System.Drawing.Point(639, 133);
+            this.btn_edit_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_edit_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_edit_calidad.Name = "btn_edit_calidad";
+            this.btn_edit_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_edit_calidad.Size = new System.Drawing.Size(99, 36);
+            this.btn_edit_calidad.TabIndex = 25;
+            this.btn_edit_calidad.Text = "Editar";
+            this.btn_edit_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_edit_calidad.UseAccentColor = false;
+            this.btn_edit_calidad.UseVisualStyleBackColor = true;
+            this.btn_edit_calidad.Click += new System.EventHandler(this.btn_edit_calidad_Click);
+            // 
+            // btn_save_calidad
+            // 
+            this.btn_save_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save_calidad.Depth = 0;
+            this.btn_save_calidad.Enabled = false;
+            this.btn_save_calidad.HighEmphasis = true;
+            this.btn_save_calidad.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save_calidad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save_calidad.ImageKey = "save_icon";
+            this.btn_save_calidad.Location = new System.Drawing.Point(639, 85);
+            this.btn_save_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save_calidad.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save_calidad.Name = "btn_save_calidad";
+            this.btn_save_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save_calidad.Size = new System.Drawing.Size(116, 36);
+            this.btn_save_calidad.TabIndex = 24;
+            this.btn_save_calidad.Text = "Guardar";
+            this.btn_save_calidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save_calidad.UseAccentColor = false;
+            this.btn_save_calidad.UseVisualStyleBackColor = true;
+            this.btn_save_calidad.Click += new System.EventHandler(this.btn_save_calidad_Click);
             // 
             // lb_no_semana
             // 
             this.lb_no_semana.AutoSize = true;
-            this.lb_no_semana.Location = new System.Drawing.Point(371, 80);
+            this.lb_no_semana.Location = new System.Drawing.Point(331, 85);
             this.lb_no_semana.Name = "lb_no_semana";
             this.lb_no_semana.Size = new System.Drawing.Size(66, 13);
             this.lb_no_semana.TabIndex = 23;
@@ -2509,7 +2628,7 @@
             this.txt_no_semana.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_no_semana.Enabled = false;
             this.txt_no_semana.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_no_semana.Location = new System.Drawing.Point(374, 96);
+            this.txt_no_semana.Location = new System.Drawing.Point(334, 101);
             this.txt_no_semana.Name = "txt_no_semana";
             this.txt_no_semana.Size = new System.Drawing.Size(100, 24);
             this.txt_no_semana.TabIndex = 22;
@@ -2540,9 +2659,10 @@
             // 
             this.txt_merma_calidad.BackColor = System.Drawing.Color.White;
             this.txt_merma_calidad.EmbeddedLabelText = "Kg Merma por Limpieza";
+            this.txt_merma_calidad.Enabled = false;
             this.txt_merma_calidad.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_merma_calidad.ForeColor = System.Drawing.Color.Black;
-            this.txt_merma_calidad.Location = new System.Drawing.Point(57, 137);
+            this.txt_merma_calidad.Location = new System.Drawing.Point(17, 142);
             this.txt_merma_calidad.Name = "txt_merma_calidad";
             this.txt_merma_calidad.ShortcutsEnabled = false;
             this.txt_merma_calidad.ShowEmbeddedLabel = true;
@@ -2553,9 +2673,10 @@
             // dtp_calidad
             // 
             this.dtp_calidad.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtp_calidad.Enabled = false;
             this.dtp_calidad.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_calidad.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
-            this.dtp_calidad.Location = new System.Drawing.Point(57, 83);
+            this.dtp_calidad.Location = new System.Drawing.Point(17, 88);
             this.dtp_calidad.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp_calidad.Name = "dtp_calidad";
             this.dtp_calidad.Size = new System.Drawing.Size(289, 35);
@@ -2567,14 +2688,14 @@
             this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard3.Controls.Add(this.dgv_metas_polvos_calidad);
             this.materialCard3.Depth = 0;
-            this.materialCard3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.materialCard3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard3.Location = new System.Drawing.Point(0, 0);
+            this.materialCard3.Location = new System.Drawing.Point(0, 395);
             this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard3.Name = "materialCard3";
             this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(1682, 338);
+            this.materialCard3.Size = new System.Drawing.Size(1682, 545);
             this.materialCard3.TabIndex = 0;
             // 
             // dgv_metas_polvos_calidad
@@ -2586,8 +2707,11 @@
             this.dgv_metas_polvos_calidad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_metas_polvos_calidad.Location = new System.Drawing.Point(14, 14);
             this.dgv_metas_polvos_calidad.Name = "dgv_metas_polvos_calidad";
-            this.dgv_metas_polvos_calidad.Size = new System.Drawing.Size(1654, 310);
-            this.dgv_metas_polvos_calidad.TabIndex = 0;
+            this.dgv_metas_polvos_calidad.ReadOnly = true;
+            this.dgv_metas_polvos_calidad.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_metas_polvos_calidad.Size = new System.Drawing.Size(1654, 517);
+            this.dgv_metas_polvos_calidad.TabIndex = 7;
+            this.dgv_metas_polvos_calidad.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_polvos_calidad_CellClick);
             // 
             // radTaskbarButton1
             // 
@@ -2602,29 +2726,6 @@
             // 
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
-            // 
-            // btn_save_calidad
-            // 
-            this.btn_save_calidad.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_save_calidad.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_save_calidad.Depth = 0;
-            this.btn_save_calidad.HighEmphasis = true;
-            this.btn_save_calidad.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
-            this.btn_save_calidad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_calidad.ImageKey = "save_icon";
-            this.btn_save_calidad.Location = new System.Drawing.Point(473, 152);
-            this.btn_save_calidad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_save_calidad.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_save_calidad.Name = "btn_save_calidad";
-            this.btn_save_calidad.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_save_calidad.Size = new System.Drawing.Size(116, 36);
-            this.btn_save_calidad.TabIndex = 24;
-            this.btn_save_calidad.Text = "Guardar";
-            this.btn_save_calidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_save_calidad.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_save_calidad.UseAccentColor = false;
-            this.btn_save_calidad.UseVisualStyleBackColor = true;
-            this.btn_save_calidad.Click += new System.EventHandler(this.btn_save_calidad_Click);
             // 
             // Form_principal
             // 
@@ -2864,7 +2965,6 @@
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
         private System.Windows.Forms.TabPage lbl_titulo_calidad;
         private MaterialSkin.Controls.MaterialCard materialCard3;
-        private System.Windows.Forms.DataGridView dgv_metas_polvos_calidad;
         private MaterialSkin.Controls.MaterialCard materialCard4;
         private Telerik.WinControls.UI.RadTextBox txt_merma_calidad;
         private MetroFramework.Controls.MetroDateTime dtp_calidad;
@@ -2873,6 +2973,11 @@
         private System.Windows.Forms.Label lb_no_semana;
         private System.Windows.Forms.TextBox txt_no_semana;
         private MaterialSkin.Controls.MaterialButton btn_save_calidad;
+        private MaterialSkin.Controls.MaterialButton btn_cancel_calidad;
+        private MaterialSkin.Controls.MaterialButton btn_delete_calidad;
+        private MaterialSkin.Controls.MaterialButton btn_edit_calidad;
+        private System.Windows.Forms.DataGridView dgv_metas_polvos_calidad;
+        private MaterialSkin.Controls.MaterialButton btn_new_calidad;
     }
 }
 

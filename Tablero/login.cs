@@ -210,7 +210,7 @@ namespace Tablero
 
                     // Usuario válido
                     this.Visible = false;
-                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, idUser, connectionString);
+                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, idUser, nivel, connectionString);
                     principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
                     principal.Show(); // Muestra el formulario principal
                     // Guardar en sesión o usar esta información
@@ -222,8 +222,6 @@ namespace Tablero
                 MetroFramework.MetroMessageBox.Show(this, "El usuario y/o la contraseña son incorrectos. Por favor, verifique sus datos e intente nuevamente.\r\n\r\n", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 limpiarCampos(); // Limpia los campos de texto
             }
-
-
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)

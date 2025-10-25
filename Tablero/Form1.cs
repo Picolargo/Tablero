@@ -33,7 +33,9 @@ namespace Tablero
         private string id_global_meta_polvos = string.Empty;
         private string id_global_meta_maquinas = string.Empty;
         private string id_global_ficha = string.Empty;
+        private string id_global_meta_polvos_calidad = string.Empty;
         private int id_user = 0;
+        private string nivel_user = string.Empty;
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
         private int filtroUsuariosActivo_OP_dgv_activo = 0;
@@ -45,7 +47,7 @@ namespace Tablero
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
 
-        public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string conexionstring)
+        public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
@@ -54,6 +56,7 @@ namespace Tablero
             lbl_nom2.Text = var_nom_empledo.ToUpper(); // Mostrar el nombre del empleado en el label correspondiente
             connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
             id_user = ID_usuario; // Asignar el ID del usuario pasado como parámetro
+            nivel_user = nivel; // Asignar el nivel del usuario pasado como parámetro
 
             // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -7304,12 +7307,14 @@ namespace Tablero
             // Permitir teclas de control (backspace, delete, etc.)
             if (char.IsControl(e.KeyChar))
             {
+                btn_cancel_calidad.Enabled = true;
                 return;
             }
 
             // Permitir dígitos
             if (char.IsDigit(e.KeyChar))
             {
+                btn_cancel_calidad.Enabled = true;
                 return;
             }
 
@@ -7329,7 +7334,7 @@ namespace Tablero
                     e.Handled = true;
                     return;
                 }
-
+                btn_cancel_calidad.Enabled = true;
                 // Permitir el punto
                 return;
             }
@@ -7340,7 +7345,173 @@ namespace Tablero
 
         private void btn_save_calidad_Click(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(txt_merma_calidad.Text))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string queryInsertUpdate = string.Empty;
+                int result;
+                DateTime fecha = dtp_calidad.Value;
+                if (!string.IsNullOrEmpty(id_global_meta_polvos_calidad))
+                {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idCalidad = Convert.ToInt32(id_global_meta_polvos_calidad);
 
+                    queryInsertUpdate = "UPDATE public.\"Limpieza_polvos\" SET \"Fecha\" = @Fecha, \"Kg_merma\" = @Kg_merma WHERE \"ID_Limpieza\" = @ID_Limpieza;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) 
+                        { 
+                            Value = fecha 
+                        },
+                        new NpgsqlParameter("@Kg_merma", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_merma_calidad.Text)
+                        },
+                        new NpgsqlParameter("@ID_Limpieza", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idCalidad  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Limpieza_polvos\" (\"Fecha\", \"Kg_merma\") VALUES (@Fecha, @Kg_merma);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_calidad.Text))
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+
+                if (result > 0)
+                {
+                    actualiza_polvos_calidad();
+                    txt_merma_calidad.Text = string.Empty;
+                    txt_no_semana.Text = string.Empty;
+                    btn_cancel_calidad.Enabled = false;
+                    btn_edit_calidad.Enabled = false;
+                    id_global_meta_polvos_calidad = string.Empty;
+                    btn_save_calidad.Enabled = false;
+                    txt_merma_calidad.Enabled = false;
+                    dtp_calidad.Enabled = false;
+                }
+            }
+        }
+
+        private void dgv_metas_polvos_calidad_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DateTime Fecha = DateTime.MinValue;
+            if (e.RowIndex >= 0)
+            {
+                id_global_meta_polvos_calidad = dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
+                Fecha = Convert.ToDateTime(dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[1].Value);
+                txt_merma_calidad.Text = dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                dtp_calidad.Value = Fecha;
+                btn_edit_calidad.Enabled = true;
+                btn_delete_calidad.Enabled = true;
+                txt_merma_calidad.Enabled = false;
+                dtp_calidad.Enabled = false;
+                btn_save_calidad.Enabled = false;
+                btn_cancel_calidad.Enabled = false;
+            }
+        }
+
+        private void btn_new_calidad_Click(object sender, EventArgs e)
+        {
+            //habilitar controles
+            dtp_calidad.Enabled = true;
+            txt_merma_calidad.Enabled = true;
+            btn_cancel_calidad.Enabled = true;
+            btn_save_calidad.Enabled = true;
+            btn_edit_calidad.Enabled = false;
+            btn_delete_calidad.Enabled = false;
+
+            //limpiar campos
+            txt_merma_calidad.Text = string.Empty;
+            dtp_calidad.Value = DateTime.Now;
+
+            //limpiar variables globales
+            id_global_meta_polvos_calidad = string.Empty;
+
+            //enfocar
+            txt_merma_calidad.Focus();
+        }
+
+        private void btn_edit_calidad_Click(object sender, EventArgs e)
+        {
+            btn_edit_calidad.Enabled = false;
+            btn_save_calidad.Enabled = true;
+            btn_cancel_calidad.Enabled = true;
+            btn_delete_calidad.Enabled = false;
+            txt_merma_calidad.Enabled = true;
+            txt_merma_calidad.Focus();
+        }
+
+        private void btn_cancel_calidad_Click(object sender, EventArgs e)
+        {
+            btn_save_calidad.Enabled = false;
+            btn_cancel_calidad.Enabled = false;
+            btn_delete_calidad.Enabled = false;
+            dtp_calidad.Value = DateTime.Now;
+            txt_merma_calidad.Text = string.Empty;
+            btn_edit_calidad.Enabled = false;
+            id_global_meta_polvos_calidad = string.Empty;
+            txt_merma_calidad.Enabled = false;
+            dtp_calidad.Enabled = false;
+        }
+
+        private void btn_delete_calidad_Click(object sender, EventArgs e)
+        {
+            ///deshidratado
+            ///
+            if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Merma de la tabla?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                int id_calidad = Convert.ToInt32(id_global_meta_polvos_calidad);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"DELETE FROM public.""Limpieza_polvos""
+                       WHERE ""ID_Limpieza"" = @id";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id", NpgsqlTypes.NpgsqlDbType.Integer)
+                    {
+                        Value = id_calidad
+                    }
+                };
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+
+                    actualiza_polvos_calidad();
+                    txt_merma_calidad.Text = string.Empty;
+                    txt_no_semana.Text = string.Empty;
+                    btn_cancel_calidad.Enabled = false;
+                    btn_edit_calidad.Enabled = false;
+                    id_global_meta_polvos_calidad = string.Empty;
+                    btn_save_calidad.Enabled = false;
+                    btn_delete_calidad.Enabled = false;
+                    txt_merma_calidad.Enabled = false;
+                    dtp_calidad.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
     }
 }
