@@ -3102,7 +3102,7 @@
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(797, 286);
+            this.materialCard4.Size = new System.Drawing.Size(791, 365);
             this.materialCard4.TabIndex = 1;
             // 
             // btn_new_calidad
