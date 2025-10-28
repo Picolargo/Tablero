@@ -122,10 +122,6 @@ namespace Tablero
             // 🔹 Si no se seleccionó nada, dispara un evento con valores nulos opcionalmente
             if (!fichaSeleccionada)
             {
-                MessageBox.Show("❌ Se canceló la operación.",
-                            "Cancelado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
                 FichaSeleccionada?.Invoke(null, null);
             }
         }

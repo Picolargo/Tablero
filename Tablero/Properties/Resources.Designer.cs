@@ -223,6 +223,16 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logopicolargo_pet {
+            get {
+                object obj = ResourceManager.GetObject("logopicolargo_pet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap remove_user_users {
             get {
                 object obj = ResourceManager.GetObject("remove_user_users", resourceCulture);

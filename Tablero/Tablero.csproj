@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\logopicolargo_pet.jpg" />
     <None Include="Resources\49855_closed_padlock_icon.png" />
     <None Include="Resources\1564535_customer_user_userphoto_account_person_icon.png" />
     <None Include="Resources\1564491_add_create_new_plus_icon.png" />

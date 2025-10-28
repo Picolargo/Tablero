@@ -161,8 +161,9 @@
             this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
             this.dgv_detalles_op = new System.Windows.Forms.DataGridView();
             this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl_detallesOP = new System.Windows.Forms.TabControl();
             this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.txt_destino = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_clacificacion = new MaterialSkin.Controls.MaterialTextBox();
             this.txt_op_origen = new MaterialSkin.Controls.MaterialTextBox();
             this.cb_Manzana = new MaterialSkin.Controls.MaterialComboBox();
@@ -182,9 +183,10 @@
             this.btn_save_dt_op = new MaterialSkin.Controls.MaterialButton();
             this.btn_edit_dt_op = new MaterialSkin.Controls.MaterialButton();
             this.tabPage13 = new System.Windows.Forms.TabPage();
-            this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
+            this.radPictureBox1 = new Telerik.WinControls.UI.RadPictureBox();
+            this.btn_limpiar_detalles = new MaterialSkin.Controls.MaterialButton();
             this.txt_buscar_dt_op = new MaterialSkin.Controls.MaterialTextBox();
-            this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
+            this.btn_buscar_detalles = new MaterialSkin.Controls.MaterialButton();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
             this.btn_new_calidad = new MaterialSkin.Controls.MaterialButton();
@@ -203,6 +205,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.radPictureBox2 = new Telerik.WinControls.UI.RadPictureBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -271,9 +274,10 @@
             this.materialCard6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).BeginInit();
             this.materialCard5.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControl_detallesOP.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.tabPage13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox1)).BeginInit();
             this.tabPage11.SuspendLayout();
             this.materialCard4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_merma_calidad)).BeginInit();
@@ -281,6 +285,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos_calidad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1429,6 +1434,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.BackColor = System.Drawing.Color.White;
             this.tabPage5.Controls.Add(this.btn_new_user);
             this.tabPage5.Controls.Add(this.cmb_nivel_user);
             this.tabPage5.Controls.Add(this.txt_no_emp);
@@ -1444,7 +1450,6 @@
             this.tabPage5.Size = new System.Drawing.Size(513, 311);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "Usuarios";
-            this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // btn_new_user
             // 
@@ -1644,6 +1649,7 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.BackColor = System.Drawing.Color.White;
             this.tabPage6.Controls.Add(this.cmb_serch_nivel);
             this.tabPage6.Controls.Add(this.txt_search_no_emp);
             this.tabPage6.Controls.Add(this.txt_search_nom_emp);
@@ -1655,7 +1661,6 @@
             this.tabPage6.Size = new System.Drawing.Size(513, 311);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "Buscar";
-            this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // cmb_serch_nivel
             // 
@@ -2101,6 +2106,7 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.BackColor = System.Drawing.Color.White;
             this.tabPage7.Controls.Add(this.btn_new_op);
             this.tabPage7.Controls.Add(this.txt_Meta_5);
             this.tabPage7.Controls.Add(this.txt_Meta_2);
@@ -2119,7 +2125,6 @@
             this.tabPage7.Size = new System.Drawing.Size(755, 311);
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "Usuarios";
-            this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // btn_new_op
             // 
@@ -2389,6 +2394,8 @@
             // 
             // tabPage8
             // 
+            this.tabPage8.BackColor = System.Drawing.Color.White;
+            this.tabPage8.Controls.Add(this.radPictureBox2);
             this.tabPage8.Controls.Add(this.materialButton5);
             this.tabPage8.Controls.Add(this.cmb_area_search);
             this.tabPage8.Controls.Add(this.txt_OP_Search);
@@ -2399,7 +2406,6 @@
             this.tabPage8.Size = new System.Drawing.Size(755, 311);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "Buscar";
-            this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // materialButton5
             // 
@@ -2531,11 +2537,12 @@
             this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_detalles_op.Size = new System.Drawing.Size(1654, 517);
             this.dgv_detalles_op.TabIndex = 8;
+            this.dgv_detalles_op.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_detalles_op_CellClick);
             // 
             // materialCard5
             // 
             this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard5.Controls.Add(this.tabControl1);
+            this.materialCard5.Controls.Add(this.tabControl_detallesOP);
             this.materialCard5.Depth = 0;
             this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard5.Location = new System.Drawing.Point(10, 14);
@@ -2546,19 +2553,21 @@
             this.materialCard5.Size = new System.Drawing.Size(1056, 365);
             this.materialCard5.TabIndex = 4;
             // 
-            // tabControl1
+            // tabControl_detallesOP
             // 
-            this.tabControl1.Controls.Add(this.tabPage12);
-            this.tabControl1.Controls.Add(this.tabPage13);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(14, 14);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1028, 337);
-            this.tabControl1.TabIndex = 7;
+            this.tabControl_detallesOP.Controls.Add(this.tabPage12);
+            this.tabControl_detallesOP.Controls.Add(this.tabPage13);
+            this.tabControl_detallesOP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl_detallesOP.Location = new System.Drawing.Point(14, 14);
+            this.tabControl_detallesOP.Name = "tabControl_detallesOP";
+            this.tabControl_detallesOP.SelectedIndex = 0;
+            this.tabControl_detallesOP.Size = new System.Drawing.Size(1028, 337);
+            this.tabControl_detallesOP.TabIndex = 7;
             // 
             // tabPage12
             // 
+            this.tabPage12.BackColor = System.Drawing.Color.White;
+            this.tabPage12.Controls.Add(this.txt_destino);
             this.tabPage12.Controls.Add(this.txt_clacificacion);
             this.tabPage12.Controls.Add(this.txt_op_origen);
             this.tabPage12.Controls.Add(this.cb_Manzana);
@@ -2583,7 +2592,25 @@
             this.tabPage12.Size = new System.Drawing.Size(1020, 311);
             this.tabPage12.TabIndex = 0;
             this.tabPage12.Text = "Gestión de Datos";
-            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // txt_destino
+            // 
+            this.txt_destino.AnimateReadOnly = false;
+            this.txt_destino.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_destino.Depth = 0;
+            this.txt_destino.Enabled = false;
+            this.txt_destino.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_destino.Hint = "Destino";
+            this.txt_destino.LeadingIcon = null;
+            this.txt_destino.Location = new System.Drawing.Point(582, 121);
+            this.txt_destino.MaxLength = 50;
+            this.txt_destino.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_destino.Multiline = false;
+            this.txt_destino.Name = "txt_destino";
+            this.txt_destino.Size = new System.Drawing.Size(228, 50);
+            this.txt_destino.TabIndex = 22;
+            this.txt_destino.Text = "";
+            this.txt_destino.TrailingIcon = null;
             // 
             // txt_clacificacion
             // 
@@ -2594,7 +2621,7 @@
             this.txt_clacificacion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_clacificacion.Hint = "Clacificación";
             this.txt_clacificacion.LeadingIcon = null;
-            this.txt_clacificacion.Location = new System.Drawing.Point(582, 121);
+            this.txt_clacificacion.Location = new System.Drawing.Point(582, 178);
             this.txt_clacificacion.MaxLength = 50;
             this.txt_clacificacion.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_clacificacion.Multiline = false;
@@ -2891,6 +2918,7 @@
             this.btn_cancel_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_cancel_dt_op.UseAccentColor = false;
             this.btn_cancel_dt_op.UseVisualStyleBackColor = true;
+            this.btn_cancel_dt_op.Click += new System.EventHandler(this.btn_cancel_dt_op_Click);
             // 
             // btn_delete_dt_op
             // 
@@ -2911,6 +2939,7 @@
             this.btn_delete_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_delete_dt_op.UseAccentColor = false;
             this.btn_delete_dt_op.UseVisualStyleBackColor = true;
+            this.btn_delete_dt_op.Click += new System.EventHandler(this.btn_delete_dt_op_Click);
             // 
             // btn_save_dt_op
             // 
@@ -2934,6 +2963,7 @@
             this.btn_save_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_save_dt_op.UseAccentColor = false;
             this.btn_save_dt_op.UseVisualStyleBackColor = true;
+            this.btn_save_dt_op.Click += new System.EventHandler(this.btn_save_dt_op_Click);
             // 
             // btn_edit_dt_op
             // 
@@ -2954,49 +2984,62 @@
             this.btn_edit_dt_op.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_edit_dt_op.UseAccentColor = false;
             this.btn_edit_dt_op.UseVisualStyleBackColor = true;
+            this.btn_edit_dt_op.Click += new System.EventHandler(this.btn_edit_dt_op_Click);
             // 
             // tabPage13
             // 
-            this.tabPage13.Controls.Add(this.materialButton8);
+            this.tabPage13.BackColor = System.Drawing.Color.White;
+            this.tabPage13.Controls.Add(this.radPictureBox1);
+            this.tabPage13.Controls.Add(this.btn_limpiar_detalles);
             this.tabPage13.Controls.Add(this.txt_buscar_dt_op);
-            this.tabPage13.Controls.Add(this.materialButton9);
+            this.tabPage13.Controls.Add(this.btn_buscar_detalles);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
             this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage13.Size = new System.Drawing.Size(1020, 311);
             this.tabPage13.TabIndex = 1;
             this.tabPage13.Text = "Buscar";
-            this.tabPage13.UseVisualStyleBackColor = true;
             // 
-            // materialButton8
+            // radPictureBox1
             // 
-            this.materialButton8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton8.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton8.Depth = 0;
-            this.materialButton8.HighEmphasis = true;
-            this.materialButton8.Icon = global::Tablero.Properties.Resources.filter_remove;
-            this.materialButton8.Location = new System.Drawing.Point(288, 112);
-            this.materialButton8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton8.Name = "materialButton8";
-            this.materialButton8.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton8.Size = new System.Drawing.Size(159, 36);
-            this.materialButton8.TabIndex = 14;
-            this.materialButton8.Text = "Limpiar Filtro";
-            this.materialButton8.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton8.UseAccentColor = false;
-            this.materialButton8.UseVisualStyleBackColor = true;
+            this.radPictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.radPictureBox1.Image = global::Tablero.Properties.Resources.logopicolargo_pet;
+            this.radPictureBox1.ImageAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radPictureBox1.ImageLayout = Telerik.WinControls.UI.RadImageLayout.Stretch;
+            this.radPictureBox1.Location = new System.Drawing.Point(842, 3);
+            this.radPictureBox1.Name = "radPictureBox1";
+            this.radPictureBox1.Size = new System.Drawing.Size(175, 305);
+            this.radPictureBox1.TabIndex = 15;
+            // 
+            // btn_limpiar_detalles
+            // 
+            this.btn_limpiar_detalles.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_limpiar_detalles.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_limpiar_detalles.Depth = 0;
+            this.btn_limpiar_detalles.HighEmphasis = true;
+            this.btn_limpiar_detalles.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.btn_limpiar_detalles.Location = new System.Drawing.Point(294, 64);
+            this.btn_limpiar_detalles.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_limpiar_detalles.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_limpiar_detalles.Name = "btn_limpiar_detalles";
+            this.btn_limpiar_detalles.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_limpiar_detalles.Size = new System.Drawing.Size(159, 36);
+            this.btn_limpiar_detalles.TabIndex = 14;
+            this.btn_limpiar_detalles.Text = "Limpiar Filtro";
+            this.btn_limpiar_detalles.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_limpiar_detalles.UseAccentColor = false;
+            this.btn_limpiar_detalles.UseVisualStyleBackColor = true;
+            this.btn_limpiar_detalles.Click += new System.EventHandler(this.btn_limpiar_detalles_Click);
             // 
             // txt_buscar_dt_op
             // 
             this.txt_buscar_dt_op.AnimateReadOnly = false;
             this.txt_buscar_dt_op.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_buscar_dt_op.Depth = 0;
-            this.txt_buscar_dt_op.Enabled = false;
             this.txt_buscar_dt_op.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_buscar_dt_op.Hint = "Ingresa texto...";
             this.txt_buscar_dt_op.LeadingIcon = null;
-            this.txt_buscar_dt_op.Location = new System.Drawing.Point(6, 50);
+            this.txt_buscar_dt_op.Location = new System.Drawing.Point(6, 16);
             this.txt_buscar_dt_op.MaxLength = 50;
             this.txt_buscar_dt_op.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_buscar_dt_op.Multiline = false;
@@ -3006,24 +3049,25 @@
             this.txt_buscar_dt_op.Text = "";
             this.txt_buscar_dt_op.TrailingIcon = null;
             // 
-            // materialButton9
+            // btn_buscar_detalles
             // 
-            this.materialButton9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton9.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton9.Depth = 0;
-            this.materialButton9.HighEmphasis = true;
-            this.materialButton9.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
-            this.materialButton9.Location = new System.Drawing.Point(288, 64);
-            this.materialButton9.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton9.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton9.Name = "materialButton9";
-            this.materialButton9.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton9.Size = new System.Drawing.Size(105, 36);
-            this.materialButton9.TabIndex = 11;
-            this.materialButton9.Text = "Buscar";
-            this.materialButton9.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton9.UseAccentColor = false;
-            this.materialButton9.UseVisualStyleBackColor = true;
+            this.btn_buscar_detalles.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_buscar_detalles.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_buscar_detalles.Depth = 0;
+            this.btn_buscar_detalles.HighEmphasis = true;
+            this.btn_buscar_detalles.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.btn_buscar_detalles.Location = new System.Drawing.Point(294, 16);
+            this.btn_buscar_detalles.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_buscar_detalles.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_buscar_detalles.Name = "btn_buscar_detalles";
+            this.btn_buscar_detalles.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_buscar_detalles.Size = new System.Drawing.Size(105, 36);
+            this.btn_buscar_detalles.TabIndex = 11;
+            this.btn_buscar_detalles.Text = "Buscar";
+            this.btn_buscar_detalles.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_buscar_detalles.UseAccentColor = false;
+            this.btn_buscar_detalles.UseVisualStyleBackColor = true;
+            this.btn_buscar_detalles.Click += new System.EventHandler(this.btn_buscar_detalles_Click);
             // 
             // tabPage11
             // 
@@ -3285,6 +3329,17 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
+            // radPictureBox2
+            // 
+            this.radPictureBox2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.radPictureBox2.Image = global::Tablero.Properties.Resources.logopicolargo_pet;
+            this.radPictureBox2.ImageAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radPictureBox2.ImageLayout = Telerik.WinControls.UI.RadImageLayout.Stretch;
+            this.radPictureBox2.Location = new System.Drawing.Point(577, 3);
+            this.radPictureBox2.Name = "radPictureBox2";
+            this.radPictureBox2.Size = new System.Drawing.Size(175, 305);
+            this.radPictureBox2.TabIndex = 16;
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3380,11 +3435,12 @@
             this.materialCard6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).EndInit();
             this.materialCard5.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl_detallesOP.ResumeLayout(false);
             this.tabPage12.ResumeLayout(false);
             this.tabPage12.PerformLayout();
             this.tabPage13.ResumeLayout(false);
             this.tabPage13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox1)).EndInit();
             this.tabPage11.ResumeLayout(false);
             this.materialCard4.ResumeLayout(false);
             this.materialCard4.PerformLayout();
@@ -3393,6 +3449,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_metas_polvos_calidad)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3547,7 +3604,7 @@
         private MaterialSkin.Controls.MaterialButton btn_new_calidad;
         private MaterialSkin.Controls.MaterialCard materialCard6;
         private MaterialSkin.Controls.MaterialCard materialCard5;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl_detallesOP;
         private System.Windows.Forms.TabPage tabPage12;
         private MaterialSkin.Controls.MaterialButton btn_new_dt_op;
         private MaterialSkin.Controls.MaterialTextBox txt_especificacion;
@@ -3561,9 +3618,9 @@
         private MaterialSkin.Controls.MaterialButton btn_save_dt_op;
         private MaterialSkin.Controls.MaterialButton btn_edit_dt_op;
         private System.Windows.Forms.TabPage tabPage13;
-        private MaterialSkin.Controls.MaterialButton materialButton8;
+        private MaterialSkin.Controls.MaterialButton btn_limpiar_detalles;
         private MaterialSkin.Controls.MaterialTextBox txt_buscar_dt_op;
-        private MaterialSkin.Controls.MaterialButton materialButton9;
+        private MaterialSkin.Controls.MaterialButton btn_buscar_detalles;
         private System.Windows.Forms.DataGridView dgv_detalles_op;
         private MaterialSkin.Controls.MaterialComboBox cb_Comercio;
         private MaterialSkin.Controls.MaterialTextBox txt_analisis;
@@ -3572,6 +3629,9 @@
         private MaterialSkin.Controls.MaterialTextBox txt_area_proceso;
         private MaterialSkin.Controls.MaterialTextBox txt_clacificacion;
         private MaterialSkin.Controls.MaterialTextBox txt_op_origen;
+        private MaterialSkin.Controls.MaterialTextBox txt_destino;
+        private Telerik.WinControls.UI.RadPictureBox radPictureBox1;
+        private Telerik.WinControls.UI.RadPictureBox radPictureBox2;
     }
 }
 
