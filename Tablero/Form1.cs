@@ -33,7 +33,8 @@ namespace Tablero
         private string id_global_meta_polvos = string.Empty;
         private string id_global_meta_maquinas = string.Empty;
         private string id_global_ficha = string.Empty;
-        private string id_global_meta_polvos_calidad = string.Empty;
+        private string id_global_polvos_calidad = string.Empty;
+        private string id_global_tunel_calidad = string.Empty;
         private string id_global_detalles_OP = string.Empty;
         private int id_user = 0;
         private string nivel_user = string.Empty;
@@ -269,21 +270,21 @@ namespace Tablero
             dgv_metas_maquinas.BorderStyle = BorderStyle.None;
 
             // Personalización de dgv_metas_polvos_calidad
-            dgv_metas_polvos_calidad.EnableHeadersVisualStyles = false;
-            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_polvos_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgv_polvos_calidad.EnableHeadersVisualStyles = false;
+            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
-            dgv_metas_polvos_calidad.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_polvos_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_polvos_calidad.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_polvos_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_polvos_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_polvos_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            dgv_polvos_calidad.BackgroundColor = Color.White; // Fondo blanco
+            dgv_polvos_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
+            dgv_polvos_calidad.DefaultCellStyle.ForeColor = Color.Black;
+            dgv_polvos_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv_polvos_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv_polvos_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
 
-            dgv_metas_polvos_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_polvos_calidad.RowHeadersVisible = false;
-            dgv_metas_polvos_calidad.BorderStyle = BorderStyle.None;
+            dgv_polvos_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_polvos_calidad.RowHeadersVisible = false;
+            dgv_polvos_calidad.BorderStyle = BorderStyle.None;
 
             // Personalización de dgv_detalles_op
             dgv_detalles_op.EnableHeadersVisualStyles = false;
@@ -301,6 +302,23 @@ namespace Tablero
             dgv_detalles_op.GridColor = Color.FromArgb(255, 152, 0); // Naranja
             dgv_detalles_op.RowHeadersVisible = false;
             dgv_detalles_op.BorderStyle = BorderStyle.None;
+
+            // Personalización de dgv_Tunel_calidad
+            dgv_Tunel_calidad.EnableHeadersVisualStyles = false;
+            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dgv_Tunel_calidad.BackgroundColor = Color.White; // Fondo blanco
+            dgv_Tunel_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
+            dgv_Tunel_calidad.DefaultCellStyle.ForeColor = Color.Black;
+            dgv_Tunel_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv_Tunel_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv_Tunel_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+
+            dgv_Tunel_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv_Tunel_calidad.RowHeadersVisible = false;
+            dgv_Tunel_calidad.BorderStyle = BorderStyle.None;
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -369,7 +387,8 @@ namespace Tablero
             {
                 lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-                dtp_calidad.Value = DateTime.Now;
+                dtp_polvos.Value = DateTime.Now;
+                dtp_tunel.Value = DateTime.Now;
                 // Obtener y mostrar el número de semana inicial
                 ActualizarNumeroSemana();
 
@@ -384,6 +403,8 @@ namespace Tablero
                 actualiza_polvos();
                 actualiza_polvos_calidad();
                 actualiza_detalles_OP();
+                actualiza_tunel_calidad();
+                configurar_limpieza();
             }
             if (nivel_user == "Supervisor")
             {
@@ -407,11 +428,25 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage9);
                 materialTabControl1.TabPages.Remove(tabPage10);
 
-                dtp_calidad.Value = DateTime.Now;
+                dtp_polvos.Value = DateTime.Now;
+                dtp_tunel.Value = DateTime.Now;
                 // Obtener y mostrar el número de semana inicial
                 ActualizarNumeroSemana();
                 actualiza_polvos_calidad();
+                configurar_limpieza();
             }
+        }
+
+        private void configurar_limpieza()
+        {
+            tabPage14.BackColor = Color.White;
+            tabPage15.BackColor = Color.White;
+            lbl_no_semana_polvos.BackColor = Color.White;
+            lbl_no_semana_tunel.BackColor = Color.White;
+            txt_no_semana_polvos.BackColor = Color.White;
+            txt_no_semana_tunel.BackColor = Color.White;
+            tabControl1.SelectedIndex = 0;
+            tab_limpiezas.SelectedIndex = 0;
         }
         private void actualiza_grid_users()
         {
@@ -655,15 +690,40 @@ namespace Tablero
                   ORDER BY ""Fecha"" DESC;";
 
             // Cargar los datos de la tabla Ficha en el DataGridView
-            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_metas_polvos_calidad, null);
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_polvos_calidad, null);
 
             // Configurar el DataGridView
-            dgv_metas_polvos_calidad.Columns[0].Visible = false;
+            dgv_polvos_calidad.Columns[0].Visible = false;
 
             // Configurar formato para la columna de fecha
-            if (dgv_metas_polvos_calidad.Columns["Fecha"] != null)
+            if (dgv_polvos_calidad.Columns["Fecha"] != null)
             {
-                dgv_metas_polvos_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                dgv_polvos_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            }
+        }
+        private void actualiza_tunel_calidad()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"SELECT 
+                    ""ID_Tunel"" as ""ID"", 
+                    ""Fecha"", 
+                    EXTRACT(WEEK FROM ""Fecha"") as ""No Semana"",
+                    ""Kg_merma"" as ""Kg de merma de Tunel""
+                  FROM public.""Limpieza_tunel""
+                  ORDER BY ""Fecha"" DESC;";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_Tunel_calidad, null);
+
+            // Configurar el DataGridView
+            dgv_Tunel_calidad.Columns[0].Visible = false;
+
+            // Configurar formato para la columna de fecha
+            if (dgv_Tunel_calidad.Columns["Fecha"] != null)
+            {
+                dgv_Tunel_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
         }
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
@@ -696,7 +756,6 @@ namespace Tablero
                 Txt_8.EmbeddedLabelText = "Merma Lavado de Bandas";
                 Txt_9.EmbeddedLabelText = "Personal Operativo";
                 Txt_10.EmbeddedLabelText = "Cascara y Carrete";
-                Txt_11.EmbeddedLabelText = "Merma de Túnel";
 
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
@@ -710,7 +769,6 @@ namespace Tablero
                 Txt_8.Visible = true;
                 Txt_9.Visible = true;
                 Txt_10.Visible = true;
-                Txt_11.Visible = true;
 
                 //hacer invisibles controles
 
@@ -719,6 +777,7 @@ namespace Tablero
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
+                Txt_11.Visible = false;
                 cb_lote.Visible = false;
                 cb_proceso.Visible = false;
 
@@ -4404,7 +4463,7 @@ namespace Tablero
                 {
                     int idUsuarioActual = id_user;
 
-                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text == "  :" && Mask_txt_hr2.Text == "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text) && !string.IsNullOrEmpty(Txt_11.Text))
+                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text == "  :" && Mask_txt_hr2.Text == "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text))
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -4426,7 +4485,6 @@ namespace Tablero
                         decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
                         string area = cb_Area.Text;
                         decimal meta = Convert.ToDecimal(Txt_meta.Text);
-                        decimal merma_tunel = Convert.ToDecimal(Txt_11.Text);
 
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -4436,7 +4494,7 @@ namespace Tablero
                         {
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, merma_tunel);
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0);
 
                         }
                         else
@@ -4457,10 +4515,13 @@ namespace Tablero
                             // Insertar en tabla Ficha y obtener el ID_Ficha generado
                             int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
                                 kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, merma_tunel);
+                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0);
+
+                            
 
                             if (idFicha > 0)
                             {
+
                                 // Insertar en tablas relacionadas
                                 InsertarTiemposMuertos(dbHelper, idFicha);
 
@@ -4538,6 +4599,18 @@ namespace Tablero
 
                         if (idFicha > 0)
                         {
+                            // Ahora hacer el UPDATE usando el parámetro @loteterminado
+                            string updateQuery = @"UPDATE public.""Ficha"" 
+                              SET ""Terminado_Tunel"" = true 
+                              WHERE ""Lote"" = @loteterminado;";
+
+                            NpgsqlParameter[] updateParameters = new NpgsqlParameter[]
+                            {
+                                new NpgsqlParameter("@loteterminado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = lote ?? (object)DBNull.Value }
+                            };
+
+                            int updateResult = dbHelper.ExecuteNonQuery(updateQuery, updateParameters);
+
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
 
@@ -4908,7 +4981,7 @@ namespace Tablero
                     " \"Kg_enter_proceso\" = @Kg_enter_proceso, \"kg_frescos_enter_se\" = @kg_frescos_enter_se, \"Merma_canica\" = @Merma_canica, \"Merma_podrido\" = @Merma_podrido," +
                     " \"Merma_tina\" = @Merma_tina, \"Merma_piso\" = @Merma_piso, \"Merma_canaletas\" = @Merma_canaletas, \"Merma_lavado_bandas\" = @Merma_lavado_bandas," +
                     " \"Cascara_carrete\" = @Cascara_carrete, \"Hr_inicio\" = @Hr_inicio, \"Hr_fin\" = @Hr_fin, \"Hr_programadas\" = @Hr_programadas, \"Personal_Operativo\" = @Personal_Operativo," +
-                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"Merma_Tunel\" = @Merma_Tunel, \"MetaHr\" = @MetaHr WHERE \"ID_Ficha\" = @ID_Ficha;";
+                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"MetaHr\" = @MetaHr WHERE \"ID_Ficha\" = @ID_Ficha;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -4931,7 +5004,6 @@ namespace Tablero
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
-                    new NpgsqlParameter("@Merma_Tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
                 };
@@ -5151,12 +5223,12 @@ namespace Tablero
                     ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
                     ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
                     ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""Merma_Tunel"", ""MetaHr""
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""MetaHr""
                 ) VALUES (
                     @id_user, @fecha, @turno, @lote, @op,
                     @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
                     @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
-                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @merma_tunel, @MetaHr
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @MetaHr
                 ) RETURNING ""ID_Ficha"";";
 
                 parameters = new NpgsqlParameter[]
@@ -5182,7 +5254,6 @@ namespace Tablero
                     new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@merma_tunel", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
                 };
             }
@@ -7351,7 +7422,7 @@ namespace Tablero
         {
             try
             {
-                DateTime fechaSeleccionada = dtp_calidad.Value;
+                DateTime fechaSeleccionada = dtp_polvos.Value;
 
                 // Obtener el número de semana según el calendario gregoriano
                 CultureInfo cultura = CultureInfo.CurrentCulture;
@@ -7365,7 +7436,7 @@ namespace Tablero
                 );
 
                 // Mostrar en el TextBox
-                txt_no_semana.Text = numeroSemana.ToString();
+                txt_no_semana_polvos.Text = numeroSemana.ToString();
             }
             catch (Exception ex)
             {
@@ -7381,14 +7452,14 @@ namespace Tablero
             // Permitir teclas de control (backspace, delete, etc.)
             if (char.IsControl(e.KeyChar))
             {
-                btn_cancel_calidad.Enabled = true;
+                btn_cancel_polvos.Enabled = true;
                 return;
             }
 
             // Permitir dígitos
             if (char.IsDigit(e.KeyChar))
             {
-                btn_cancel_calidad.Enabled = true;
+                btn_cancel_polvos.Enabled = true;
                 return;
             }
 
@@ -7408,7 +7479,7 @@ namespace Tablero
                     e.Handled = true;
                     return;
                 }
-                btn_cancel_calidad.Enabled = true;
+                btn_cancel_polvos.Enabled = true;
                 // Permitir el punto
                 return;
             }
@@ -7419,7 +7490,7 @@ namespace Tablero
 
         private void btn_save_calidad_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txt_merma_calidad.Text))
+            if (string.IsNullOrEmpty(txt_merma_polvos.Text))
             {
                 MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -7429,12 +7500,12 @@ namespace Tablero
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string queryInsertUpdate = string.Empty;
                 int result;
-                DateTime fecha = dtp_calidad.Value;
-                if (!string.IsNullOrEmpty(id_global_meta_polvos_calidad))
+                DateTime fecha = dtp_polvos.Value;
+                if (!string.IsNullOrEmpty(id_global_polvos_calidad))
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idCalidad = Convert.ToInt32(id_global_meta_polvos_calidad);
+                    int idCalidad = Convert.ToInt32(id_global_polvos_calidad);
 
                     queryInsertUpdate = "UPDATE public.\"Limpieza_polvos\" SET \"Fecha\" = @Fecha, \"Kg_merma\" = @Kg_merma WHERE \"ID_Limpieza\" = @ID_Limpieza;";
 
@@ -7446,7 +7517,7 @@ namespace Tablero
                         },
                         new NpgsqlParameter("@Kg_merma", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_merma_calidad.Text)
+                            Value = Convert.ToDecimal(txt_merma_polvos.Text)
                         },
                         new NpgsqlParameter("@ID_Limpieza", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -7463,7 +7534,7 @@ namespace Tablero
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
-                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_calidad.Text))
+                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_polvos.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -7471,14 +7542,14 @@ namespace Tablero
                 if (result > 0)
                 {
                     actualiza_polvos_calidad();
-                    txt_merma_calidad.Text = string.Empty;
-                    txt_no_semana.Text = string.Empty;
-                    btn_cancel_calidad.Enabled = false;
-                    btn_edit_calidad.Enabled = false;
-                    id_global_meta_polvos_calidad = string.Empty;
-                    btn_save_calidad.Enabled = false;
-                    txt_merma_calidad.Enabled = false;
-                    dtp_calidad.Enabled = false;
+                    txt_merma_polvos.Text = string.Empty;
+                    txt_no_semana_polvos.Text = string.Empty;
+                    btn_cancel_polvos.Enabled = false;
+                    btn_edit_polvos.Enabled = false;
+                    id_global_polvos_calidad = string.Empty;
+                    btn_save_polvos.Enabled = false;
+                    txt_merma_polvos.Enabled = false;
+                    dtp_polvos.Enabled = false;
                 }
             }
         }
@@ -7488,71 +7559,69 @@ namespace Tablero
             DateTime Fecha = DateTime.MinValue;
             if (e.RowIndex >= 0)
             {
-                id_global_meta_polvos_calidad = dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
-                Fecha = Convert.ToDateTime(dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[1].Value);
-                txt_merma_calidad.Text = dgv_metas_polvos_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
+                id_global_polvos_calidad = dgv_polvos_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
+                Fecha = Convert.ToDateTime(dgv_polvos_calidad.Rows[e.RowIndex].Cells[1].Value);
+                txt_merma_polvos.Text = dgv_polvos_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
 
-                dtp_calidad.Value = Fecha;
-                btn_edit_calidad.Enabled = true;
-                btn_delete_calidad.Enabled = true;
-                txt_merma_calidad.Enabled = false;
-                dtp_calidad.Enabled = false;
-                btn_save_calidad.Enabled = false;
-                btn_cancel_calidad.Enabled = false;
+                dtp_polvos.Value = Fecha;
+                btn_edit_polvos.Enabled = true;
+                btn_delete_polvos.Enabled = true;
+                txt_merma_polvos.Enabled = false;
+                dtp_polvos.Enabled = false;
+                btn_save_polvos.Enabled = false;
+                btn_cancel_polvos.Enabled = false;
             }
         }
 
         private void btn_new_calidad_Click(object sender, EventArgs e)
         {
             //habilitar controles
-            dtp_calidad.Enabled = true;
-            txt_merma_calidad.Enabled = true;
-            btn_cancel_calidad.Enabled = true;
-            btn_save_calidad.Enabled = true;
-            btn_edit_calidad.Enabled = false;
-            btn_delete_calidad.Enabled = false;
+            dtp_polvos.Enabled = true;
+            txt_merma_polvos.Enabled = true;
+            btn_cancel_polvos.Enabled = true;
+            btn_save_polvos.Enabled = true;
+            btn_edit_polvos.Enabled = false;
+            btn_delete_polvos.Enabled = false;
 
             //limpiar campos
-            txt_merma_calidad.Text = string.Empty;
-            dtp_calidad.Value = DateTime.Now;
+            txt_merma_polvos.Text = string.Empty;
+            dtp_polvos.Value = DateTime.Now;
 
             //limpiar variables globales
-            id_global_meta_polvos_calidad = string.Empty;
+            id_global_polvos_calidad = string.Empty;
 
             //enfocar
-            txt_merma_calidad.Focus();
+            txt_merma_polvos.Focus();
         }
 
         private void btn_edit_calidad_Click(object sender, EventArgs e)
         {
-            btn_edit_calidad.Enabled = false;
-            btn_save_calidad.Enabled = true;
-            btn_cancel_calidad.Enabled = true;
-            btn_delete_calidad.Enabled = false;
-            txt_merma_calidad.Enabled = true;
-            txt_merma_calidad.Focus();
+            btn_edit_polvos.Enabled = false;
+            btn_save_polvos.Enabled = true;
+            btn_cancel_polvos.Enabled = true;
+            btn_delete_polvos.Enabled = false;
+            txt_merma_polvos.Enabled = true;
+            txt_merma_polvos.Focus();
         }
 
         private void btn_cancel_calidad_Click(object sender, EventArgs e)
         {
-            btn_save_calidad.Enabled = false;
-            btn_cancel_calidad.Enabled = false;
-            btn_delete_calidad.Enabled = false;
-            dtp_calidad.Value = DateTime.Now;
-            txt_merma_calidad.Text = string.Empty;
-            btn_edit_calidad.Enabled = false;
-            id_global_meta_polvos_calidad = string.Empty;
-            txt_merma_calidad.Enabled = false;
-            dtp_calidad.Enabled = false;
+            btn_save_polvos.Enabled = false;
+            btn_cancel_polvos.Enabled = false;
+            btn_delete_polvos.Enabled = false;
+            dtp_polvos.Value = DateTime.Now;
+            txt_merma_polvos.Text = string.Empty;
+            btn_edit_polvos.Enabled = false;
+            id_global_polvos_calidad = string.Empty;
+            txt_merma_polvos.Enabled = false;
+            dtp_polvos.Enabled = false;
         }
 
         private void btn_delete_calidad_Click(object sender, EventArgs e)
         {
-            ///deshidratado
-            ///
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Merma de la tabla?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id_calidad = Convert.ToInt32(id_global_meta_polvos_calidad);
+                int id_calidad = Convert.ToInt32(id_global_polvos_calidad);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Limpieza_polvos""
@@ -7571,19 +7640,19 @@ namespace Tablero
                 {
 
                     actualiza_polvos_calidad();
-                    txt_merma_calidad.Text = string.Empty;
-                    txt_no_semana.Text = string.Empty;
-                    btn_cancel_calidad.Enabled = false;
-                    btn_edit_calidad.Enabled = false;
-                    id_global_meta_polvos_calidad = string.Empty;
-                    btn_save_calidad.Enabled = false;
-                    btn_delete_calidad.Enabled = false;
-                    txt_merma_calidad.Enabled = false;
-                    dtp_calidad.Enabled = false;
+                    txt_merma_polvos.Text = string.Empty;
+                    txt_no_semana_polvos.Text = string.Empty;
+                    btn_cancel_polvos.Enabled = false;
+                    btn_edit_polvos.Enabled = false;
+                    id_global_polvos_calidad = string.Empty;
+                    btn_save_polvos.Enabled = false;
+                    btn_delete_polvos.Enabled = false;
+                    txt_merma_polvos.Enabled = false;
+                    dtp_polvos.Enabled = false;
                 }
                 else
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar este registro", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -8015,6 +8084,333 @@ namespace Tablero
 
             // Restablecer el estado del filtro
             filtrodetallesOP = false;
+        }
+
+        private void Txt_3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var tb = (RadTextBox)sender;
+            char decimalSep = '.'; // si quieres respetar cultura: CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+
+            // Permitir backspace
+            if (e.KeyChar == '\b') return;
+
+            // Permitir un solo punto decimal
+            if (e.KeyChar == decimalSep)
+            {
+                if (tb.Text.Contains(decimalSep)) e.Handled = true;
+                return;
+            }
+
+            // Permitir solo dígitos
+            if (!char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void Txt_4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var tb = (RadTextBox)sender;
+            char decimalSep = '.'; // si quieres respetar cultura: CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+
+            // Permitir backspace
+            if (e.KeyChar == '\b') return;
+
+            // Permitir un solo punto decimal
+            if (e.KeyChar == decimalSep)
+            {
+                if (tb.Text.Contains(decimalSep)) e.Handled = true;
+                return;
+            }
+
+            // Permitir solo dígitos
+            if (!char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void Txt_5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var tb = (RadTextBox)sender;
+            char decimalSep = '.'; // si quieres respetar cultura: CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+
+            // Permitir backspace
+            if (e.KeyChar == '\b') return;
+
+            // Permitir un solo punto decimal
+            if (e.KeyChar == decimalSep)
+            {
+                if (tb.Text.Contains(decimalSep)) e.Handled = true;
+                return;
+            }
+
+            // Permitir solo dígitos
+            if (!char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void dtp_tunel_ValueChanged(object sender, EventArgs e)
+        {
+            ActualizarNumeroSemana_tunel();
+        }
+        private void ActualizarNumeroSemana_tunel()
+        {
+            try
+            {
+                DateTime fechaSeleccionada = dtp_polvos.Value;
+
+                // Obtener el número de semana según el calendario gregoriano
+                CultureInfo cultura = CultureInfo.CurrentCulture;
+                Calendar calendario = cultura.Calendar;
+
+                // Calcular el número de semana
+                int numeroSemana = calendario.GetWeekOfYear(
+                    fechaSeleccionada,
+                    cultura.DateTimeFormat.CalendarWeekRule,
+                    cultura.DateTimeFormat.FirstDayOfWeek
+                );
+
+                // Mostrar en el TextBox
+                txt_no_semana_tunel.Text = numeroSemana.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al calcular el número de semana: {ex.Message}");
+            }
+        }
+
+        private void txt_merma_tunel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            RadTextBox textBox = (RadTextBox)sender;
+            string currentText = textBox.Text;
+
+            // Permitir teclas de control (backspace, delete, etc.)
+            if (char.IsControl(e.KeyChar))
+            {
+                btn_cancel_polvos.Enabled = true;
+                return;
+            }
+
+            // Permitir dígitos
+            if (char.IsDigit(e.KeyChar))
+            {
+                btn_cancel_polvos.Enabled = true;
+                return;
+            }
+
+            // Validar el punto decimal
+            if (e.KeyChar == '.')
+            {
+                // No permitir más de un punto
+                if (currentText.Contains('.'))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // No permitir punto al inicio
+                if (currentText.Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+                btn_cancel_polvos.Enabled = true;
+                // Permitir el punto
+                return;
+            }
+
+            // Si llegó aquí, no es un carácter válido
+            e.Handled = true;
+        }
+
+        private void btn_new_tunel_Click(object sender, EventArgs e)
+        {
+            //habilitar controles
+            dtp_tunel.Enabled = true;
+            txt_merma_tunel.Enabled = true;
+            btn_cancel_tunel.Enabled = true;
+            btn_save_tunel.Enabled = true;
+            btn_edit_tunel.Enabled = false;
+            btn_delete_tunel.Enabled = false;
+
+            //limpiar campos
+            txt_merma_tunel.Text = string.Empty;
+            dtp_tunel.Value = DateTime.Now;
+
+            //limpiar variables globales
+            id_global_tunel_calidad = string.Empty;
+
+            //enfocar
+            txt_merma_tunel.Focus();
+        }
+
+        private void btn_save_tunel_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txt_merma_tunel.Text))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string queryInsertUpdate = string.Empty;
+                int result;
+                DateTime fecha = dtp_tunel.Value;
+                if (!string.IsNullOrEmpty(id_global_tunel_calidad))
+                {
+                    // actualizar
+                    // Convertir el ID a entero ANTES de crear el parámetro
+                    int idCalidad = Convert.ToInt32(id_global_tunel_calidad);
+
+                    queryInsertUpdate = "UPDATE public.\"Limpieza_tunel\" SET \"Fecha\" = @Fecha, \"Kg_merma\" = @Kg_merma WHERE \"ID_Tunel\" = @ID_Limpieza;";
+
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date)
+                        {
+                            Value = fecha
+                        },
+                        new NpgsqlParameter("@Kg_merma", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = Convert.ToDecimal(txt_merma_tunel.Text)
+                        },
+                        new NpgsqlParameter("@ID_Limpieza", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idCalidad  // variable convertida a int
+                        }
+                    };
+
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+                else
+                {
+                    // Insertar
+                    queryInsertUpdate = "INSERT INTO public.\"Limpieza_tunel\" (\"Fecha\", \"Kg_merma\") VALUES (@Fecha, @Kg_merma);";
+                    NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_tunel.Text))
+                    };
+                    result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                }
+
+                if (result > 0)
+                {
+                    actualiza_tunel_calidad();
+                    txt_merma_tunel.Text = string.Empty;
+                    txt_no_semana_tunel.Text = string.Empty;
+                    btn_cancel_tunel.Enabled = false;
+                    btn_edit_tunel.Enabled = false;
+                    id_global_tunel_calidad = string.Empty;
+                    btn_save_tunel.Enabled = false;
+                    txt_merma_tunel.Enabled = false;
+                    dtp_tunel.Enabled = false;
+                }
+            }
+        }
+
+        private void btn_edit_tunel_Click(object sender, EventArgs e)
+        {
+            btn_edit_tunel.Enabled = false;
+            btn_save_tunel.Enabled = true;
+            btn_cancel_tunel.Enabled = true;
+            btn_delete_tunel.Enabled = false;
+            txt_merma_tunel.Enabled = true;
+            txt_merma_tunel.Focus();
+        }
+
+        private void btn_delete_tunel_Click(object sender, EventArgs e)
+        {
+            if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Merma de la tabla?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                int id_calidad = Convert.ToInt32(id_global_tunel_calidad);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"DELETE FROM public.""Limpieza_tunel""
+                       WHERE ""ID_Tunel"" = @id";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id", NpgsqlTypes.NpgsqlDbType.Integer)
+                    {
+                        Value = id_calidad
+                    }
+                };
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+
+                    actualiza_tunel_calidad();
+                    txt_merma_tunel.Text = string.Empty;
+                    txt_no_semana_tunel.Text = string.Empty;
+                    btn_cancel_tunel.Enabled = false;
+                    btn_edit_tunel.Enabled = false;
+                    id_global_tunel_calidad = string.Empty;
+                    btn_save_tunel.Enabled = false;
+                    btn_delete_tunel.Enabled = false;
+                    txt_merma_tunel.Enabled = false;
+                    dtp_tunel.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar este registro", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void btn_cancel_tunel_Click(object sender, EventArgs e)
+        {
+            btn_save_tunel.Enabled = false;
+            btn_cancel_tunel.Enabled = false;
+            btn_delete_tunel.Enabled = false;
+            dtp_tunel.Value = DateTime.Now;
+            txt_merma_tunel.Text = string.Empty;
+            btn_edit_tunel.Enabled = false;
+            id_global_tunel_calidad = string.Empty;
+            txt_merma_tunel.Enabled = false;
+            dtp_tunel.Enabled = false;
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabControl1.SelectedIndex == 0) 
+            {
+                tab_limpiezas.SelectedIndex = 0;
+            }
+            if (tabControl1.SelectedIndex == 1)
+            {
+                tab_limpiezas.SelectedIndex = 1;
+            }
+        }
+
+        private void tab_limpiezas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tab_limpiezas.SelectedIndex == 0)
+            {
+                tabControl1.SelectedIndex = 0;
+            }
+            if (tab_limpiezas.SelectedIndex == 1)
+            {
+                tabControl1.SelectedIndex = 1;
+            }
+        }
+
+        private void dgv_Tunel_calidad_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DateTime Fecha = DateTime.MinValue;
+            if (e.RowIndex >= 0)
+            {
+                id_global_tunel_calidad = dgv_Tunel_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
+                Fecha = Convert.ToDateTime(dgv_Tunel_calidad.Rows[e.RowIndex].Cells[1].Value);
+                txt_merma_tunel.Text = dgv_Tunel_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                dtp_tunel.Value = Fecha;
+                btn_edit_tunel.Enabled = true;
+                btn_delete_tunel.Enabled = true;
+                txt_merma_tunel.Enabled = false;
+                dtp_tunel.Enabled = false;
+                btn_save_tunel.Enabled = false;
+                btn_cancel_tunel.Enabled = false;
+            }
         }
     }
 }
