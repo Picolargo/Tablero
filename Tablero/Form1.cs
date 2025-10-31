@@ -18,6 +18,8 @@ using System.Windows.Forms;
 using Telerik.WinControls.Svg.ExCSS;
 using Telerik.WinControls.UI;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Office.Interop.Excel;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tablero
 {
@@ -49,7 +51,7 @@ namespace Tablero
         private bool editar = false;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
-
+        //
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -68,264 +70,57 @@ namespace Tablero
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
 
 
-            // Personalización de dgv_mecanico
-            dgv_mecanico.EnableHeadersVisualStyles = false;
-            dgv_mecanico.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_mecanico.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_mecanico.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            // Personaliza todos los DataGridView de una sola línea cada uno
+            PersonalizarDataGridView(dgv_mecanico, true);
+            PersonalizarDataGridView(dgv_operativo, true);
+            PersonalizarDataGridView(dgv_users);
+            PersonalizarDataGridView(dgv_metas_des);
+            PersonalizarDataGridView(dgv_metas_emp);
+            PersonalizarDataGridView(dgv_metas_insp);
+            PersonalizarDataGridView(dgv_metas_Eva);
+            PersonalizarDataGridView(dgv_metas_Grind);
+            PersonalizarDataGridView(dgv_metas_revolturas);
+            PersonalizarDataGridView(dgv_metas_polvos);
+            PersonalizarDataGridView(dgv_metas_maquinas);
+            PersonalizarDataGridView(dgv_polvos_calidad);
+            PersonalizarDataGridView(dgv_detalles_op);
+            PersonalizarDataGridView(dgv_Tunel_calidad);
+            PersonalizarDataGridView(dgv_reporte_merma);
+        }
 
-            dgv_mecanico.BackgroundColor = Color.White; // Fondo blanco
-            dgv_mecanico.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_mecanico.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_mecanico.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_mecanico.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_mecanico.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+        private void PersonalizarDataGridView(DataGridView dgv, bool editable = false)
+        {
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
 
-            dgv_mecanico.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_mecanico.RowHeadersVisible = false;
-            dgv_mecanico.AllowUserToAddRows = true;
-            dgv_mecanico.AllowUserToDeleteRows = true;
-            dgv_mecanico.AllowUserToResizeRows = false;
-            dgv_mecanico.ReadOnly = false;
-            //dgv_mecanico.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_mecanico.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_mecanico.MultiSelect = false;
-            dgv_mecanico.BorderStyle = BorderStyle.None;
+            dgv.BackgroundColor = Color.White;
+            dgv.DefaultCellStyle.BackColor = Color.White;
+            dgv.DefaultCellStyle.ForeColor = Color.Black;
+            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
+            dgv.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Regular);
 
-            // Personalización de dgv_operativo
-            dgv_operativo.EnableHeadersVisualStyles = false;
-            dgv_operativo.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_operativo.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_operativo.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgv.GridColor = Color.FromArgb(255, 152, 0);
+            dgv.RowHeadersVisible = false;
+            dgv.BorderStyle = BorderStyle.None;
 
-            dgv_operativo.BackgroundColor = Color.White; // Fondo blanco
-            dgv_operativo.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_operativo.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_operativo.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_operativo.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_operativo.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
 
-            dgv_operativo.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_operativo.RowHeadersVisible = false;
-            dgv_operativo.AllowUserToAddRows = true;
-            dgv_operativo.AllowUserToDeleteRows = true;
-            dgv_operativo.AllowUserToResizeRows = false;
-            dgv_operativo.ReadOnly = false;
-            //dgv_operativo.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            dgv_operativo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_operativo.MultiSelect = false;
-            dgv_operativo.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_users
-            dgv_users.EnableHeadersVisualStyles = false;
-            dgv_users.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_users.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_users.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_users.BackgroundColor = Color.White; // Fondo blanco
-            dgv_users.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_users.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_users.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_users.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_users.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_users.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_users.RowHeadersVisible = false;
-            dgv_users.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas
-            dgv_metas_des.EnableHeadersVisualStyles = false;
-            dgv_metas_des.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_des.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_des.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_des.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_des.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_des.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_des.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_des.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_des.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_des.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_des.RowHeadersVisible = false;
-            dgv_metas_des.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_emp
-            dgv_metas_emp.EnableHeadersVisualStyles = false;
-            dgv_metas_emp.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_emp.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_emp.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_emp.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_emp.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_emp.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_emp.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_emp.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_emp.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_emp.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_emp.RowHeadersVisible = false;
-            dgv_metas_emp.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_insp
-            dgv_metas_insp.EnableHeadersVisualStyles = false;
-            dgv_metas_insp.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_insp.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_insp.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_insp.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_insp.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_insp.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_insp.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_insp.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_insp.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_insp.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_insp.RowHeadersVisible = false;
-            dgv_metas_insp.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_Eva
-            dgv_metas_Eva.EnableHeadersVisualStyles = false;
-            dgv_metas_Eva.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_Eva.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_Eva.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_Eva.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_Eva.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_Eva.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_Eva.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_Eva.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_Eva.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_Eva.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_Eva.RowHeadersVisible = false;
-            dgv_metas_Eva.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_Grind
-            dgv_metas_Grind.EnableHeadersVisualStyles = false;
-            dgv_metas_Grind.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_Grind.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_Grind.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_Grind.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_Grind.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_Grind.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_Grind.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_Grind.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_Grind.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_Grind.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_Grind.RowHeadersVisible = false;
-            dgv_metas_Grind.BorderStyle = BorderStyle.None;
-
-            // Personalización de Revolturas
-            dgv_metas_revolturas.EnableHeadersVisualStyles = false;
-            dgv_metas_revolturas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_revolturas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_revolturas.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_revolturas.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_revolturas.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_revolturas.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_revolturas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_revolturas.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_revolturas.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_revolturas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_revolturas.RowHeadersVisible = false;
-            dgv_metas_revolturas.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_polvos
-            dgv_metas_polvos.EnableHeadersVisualStyles = false;
-            dgv_metas_polvos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_polvos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_polvos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_polvos.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_polvos.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_polvos.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_polvos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_polvos.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_polvos.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_polvos.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_polvos.RowHeadersVisible = false;
-            dgv_metas_polvos.BorderStyle = BorderStyle.None;
-
-            // Personalización de Maquinas
-            dgv_metas_maquinas.EnableHeadersVisualStyles = false;
-            dgv_metas_maquinas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_maquinas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_metas_maquinas.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_metas_maquinas.BackgroundColor = Color.White; // Fondo blanco
-            dgv_metas_maquinas.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_metas_maquinas.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_metas_maquinas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_metas_maquinas.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_metas_maquinas.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_metas_maquinas.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_metas_maquinas.RowHeadersVisible = false;
-            dgv_metas_maquinas.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_metas_polvos_calidad
-            dgv_polvos_calidad.EnableHeadersVisualStyles = false;
-            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_polvos_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_polvos_calidad.BackgroundColor = Color.White; // Fondo blanco
-            dgv_polvos_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_polvos_calidad.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_polvos_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_polvos_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_polvos_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_polvos_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_polvos_calidad.RowHeadersVisible = false;
-            dgv_polvos_calidad.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_detalles_op
-            dgv_detalles_op.EnableHeadersVisualStyles = false;
-            dgv_detalles_op.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_detalles_op.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_detalles_op.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_detalles_op.BackgroundColor = Color.White; // Fondo blanco
-            dgv_detalles_op.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_detalles_op.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_detalles_op.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_detalles_op.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_detalles_op.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_detalles_op.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_detalles_op.RowHeadersVisible = false;
-            dgv_detalles_op.BorderStyle = BorderStyle.None;
-
-            // Personalización de dgv_Tunel_calidad
-            dgv_Tunel_calidad.EnableHeadersVisualStyles = false;
-            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv_Tunel_calidad.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgv_Tunel_calidad.BackgroundColor = Color.White; // Fondo blanco
-            dgv_Tunel_calidad.DefaultCellStyle.BackColor = Color.White; // Renglones blancos
-            dgv_Tunel_calidad.DefaultCellStyle.ForeColor = Color.Black;
-            dgv_Tunel_calidad.DefaultCellStyle.SelectionBackColor = Color.FromArgb(33, 150, 243); // Azul Material
-            dgv_Tunel_calidad.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv_Tunel_calidad.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-
-            dgv_Tunel_calidad.GridColor = Color.FromArgb(255, 152, 0); // Naranja
-            dgv_Tunel_calidad.RowHeadersVisible = false;
-            dgv_Tunel_calidad.BorderStyle = BorderStyle.None;
+            // Opcional según si quieres permitir edición
+            dgv.AllowUserToAddRows = editable;
+            dgv.AllowUserToDeleteRows = editable;
+            dgv.AllowUserToResizeRows = false;
+            dgv.ReadOnly = !editable;
         }
 
         private void dgv_mecanico_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (dgv_mecanico.CurrentCell.ColumnIndex == 0) // Primera columna
             {
-                TextBox tb = e.Control as TextBox;
+                System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
                     tb.KeyPress -= SoloNumeros_KeyPress; // Evita múltiples suscripciones
@@ -334,7 +129,7 @@ namespace Tablero
             }
             else
             {
-                TextBox tb = e.Control as TextBox;
+                System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
                     tb.KeyPress -= SoloNumeros_KeyPress; // Quita la restricción en otras columnas
@@ -355,7 +150,7 @@ namespace Tablero
         {
             if (dgv_operativo.CurrentCell.ColumnIndex == 0) // Primera columna
             {
-                TextBox tb = e.Control as TextBox;
+                System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
                     tb.KeyPress -= SoloNumeros_KeyPress; // Evita múltiples suscripciones
@@ -364,7 +159,7 @@ namespace Tablero
             }
             else
             {
-                TextBox tb = e.Control as TextBox;
+                System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
                     tb.KeyPress -= SoloNumeros_KeyPress; // Quita la restricción en otras columnas
@@ -385,10 +180,11 @@ namespace Tablero
         {
             if (nivel_user == "Administrador")
             {
-                lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-                lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
+
                 // Obtener y mostrar el número de semana inicial
                 ActualizarNumeroSemana();
 
@@ -416,8 +212,8 @@ namespace Tablero
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
                 actualiza_detalles_OP();
 
-                lbl_user_no_emp.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-                lbl_Nom.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             }
             if (nivel_user == "Calidad")
             {
@@ -725,6 +521,98 @@ namespace Tablero
             {
                 dgv_Tunel_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
+        }
+        private void actualiza_reporte_merma()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"WITH semanas AS (SELECT ""Area"", EXTRACT(WEEK FROM ""Fecha"") AS numero_semana, EXTRACT(YEAR FROM ""Fecha"") AS año,
+                                    -- Cálculo para Tunel/Sumergidor
+                                    CASE 
+                                        WHEN ""Area"" = 'Tunel/Sumergidor' THEN
+                                            SUM(""Merma_podrido"" + ""Merma_tina"" + ""Merma_piso"" + ""Merma_canaletas"" + ""Merma_lavado_bandas"") / 
+                                            NULLIF(SUM(""Kg_enter_proceso"" - ""Merma_canica""), 0)
+                                    END AS merma_tunel,
+        
+                                    -- Cálculo para Despegue (se unirá con Limpieza_tunel)
+                                    CASE 
+                                        WHEN ""Area"" = 'Despegue' THEN
+                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
+                                    END AS merma_despegue_base,
+        
+                                    -- Cálculo para otras áreas
+                                    CASE 
+                                        WHEN ""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
+                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_enter_proceso""), 0)
+                                    END AS merma_otras_areas,
+        
+                                    -- Cálculo para Polvos (se unirá con Limpieza_polvos)
+                                    CASE 
+                                        WHEN ""Area"" = 'Polvos' THEN
+                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
+                                    END AS merma_polvos_base,
+        
+                                    -- Sumas para Despegue
+                                    SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_despegue,
+                                    SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_despegue,
+        
+                                    -- Sumas para Polvos
+                                    SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_polvos,
+                                    SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_polvos
+        
+                                FROM public.""Ficha""
+                                GROUP BY ""Area"", EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                            ),
+
+                            limpieza_tunel_semanal AS (
+                                SELECT 
+                                    EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
+                                    EXTRACT(YEAR FROM ""Fecha"") AS año,
+                                    SUM(""Kg_merma"") AS kg_merma_tunel_semana
+                                FROM public.""Limpieza_tunel""
+                                GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                            ),
+
+                            limpieza_polvos_semanal AS (
+                                SELECT 
+                                    EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
+                                    EXTRACT(YEAR FROM ""Fecha"") AS año,
+                                    SUM(""Kg_merma"") AS kg_merma_polvos_semana
+                                FROM public.""Limpieza_polvos""
+                                GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                            )
+
+                            SELECT 
+                                s.""Area"",
+                                s.numero_semana as ""Numero de Semana"",
+                                s.año as ""Año"",
+                                CASE 
+                                    WHEN s.""Area"" = 'Tunel/Sumergidor' THEN
+                                        ROUND(COALESCE(s.merma_tunel, 0) * 100, 2)
+            
+                                    WHEN s.""Area"" = 'Despegue' THEN
+                                        ROUND(
+                                            COALESCE(
+                                                (s.suma_merma_despegue + COALESCE(lt.kg_merma_tunel_semana, 0)) / 
+                                                NULLIF(s.suma_kg_seco_despegue, 0), 0) * 100, 2)
+            
+                                    WHEN s.""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
+                                        ROUND(COALESCE(s.merma_otras_areas, 0) * 100, 2)
+            
+                                    WHEN s.""Area"" = 'Polvos' THEN
+                                        ROUND(COALESCE((s.suma_merma_polvos + COALESCE(lp.kg_merma_polvos_semana, 0)) / NULLIF(s.suma_kg_seco_polvos, 0), 0) * 100, 2)
+                                    ELSE 0
+                                END AS ""Porcentaje de Merma""
+    
+                            FROM semanas s
+                            LEFT JOIN limpieza_tunel_semanal lt ON s.numero_semana = lt.numero_semana AND s.año = lt.año
+                            LEFT JOIN limpieza_polvos_semanal lp ON s.numero_semana = lp.numero_semana AND s.año = lp.año
+                            WHERE s.""Area"" IS NOT NULL
+                            ORDER BY s.año, s.numero_semana, s.""Area"";";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma, null);
         }
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1545,7 +1433,7 @@ namespace Tablero
                     new NpgsqlParameter("@Usuario", txt_usuario.Text),
                     new NpgsqlParameter("@no_emp", txt_no_emp.Text)
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2145,7 +2033,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2240,7 +2128,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2330,7 +2218,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2424,7 +2312,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2518,7 +2406,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2613,7 +2501,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2704,7 +2592,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2801,7 +2689,7 @@ namespace Tablero
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
-                    DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
+                    System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -4313,7 +4201,7 @@ namespace Tablero
                             };
 
                             // Ejecutar consulta
-                            DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                            System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
                             decimal horas_prog = Convert.ToDecimal(Txt_Read_1.Text);
                             // Variable string donde guardar el resultado
                             decimal kg_seco_hr, kg_secos_meta;
@@ -4505,7 +4393,7 @@ namespace Tablero
                             {
                             new NpgsqlParameter("@Lote", lote),
                             };
-                            DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                            System.Data.DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
                             if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
                             {
                                 MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -5964,7 +5852,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -5993,7 +5881,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6017,7 +5905,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6041,7 +5929,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6083,7 +5971,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6115,7 +6003,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6139,7 +6027,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string resultado = string.Empty;
@@ -6433,7 +6321,7 @@ namespace Tablero
             };
 
             // Ejecutar consulta
-            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+            System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
             // Verificar si se encontraron resultados
             if (dt != null && dt.Rows.Count > 0)
@@ -6573,7 +6461,7 @@ namespace Tablero
                 };
 
                 // Ejecutar consulta
-                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                 // Variable string donde guardar el resultado
                 string OP = string.Empty;
@@ -6612,7 +6500,7 @@ namespace Tablero
             // Permitir solo un punto decimal
             if (e.KeyChar == '.')
             {
-                if ((sender as TextBox).Text.Contains("."))
+                if ((sender as System.Windows.Forms.TextBox).Text.Contains("."))
                 {
                     e.Handled = true; // Ya hay un punto → se bloquea
                 }
@@ -6854,7 +6742,7 @@ namespace Tablero
                     };
 
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
                     // Variables
                     string OP = string.Empty;
                     string Turno = string.Empty;
@@ -6940,7 +6828,7 @@ namespace Tablero
                     };
 
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
 
                     // Variables
                     string OP = string.Empty;
@@ -7011,7 +6899,7 @@ namespace Tablero
                     };
 
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
 
                     // Variables
                     string OP = string.Empty;
@@ -7076,7 +6964,7 @@ namespace Tablero
                         new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
                     };
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
                     // Variables
                     string OP = string.Empty;
                     string Turno = string.Empty;
@@ -7139,7 +7027,7 @@ namespace Tablero
                         new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
                     };
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
                     // Variables
                     string OP = string.Empty;
                     string Turno = string.Empty;
@@ -7206,7 +7094,7 @@ namespace Tablero
                     };
 
                     // Ejecutar consulta
-                    DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
 
                     // Variables
                     string OP = string.Empty;
@@ -7355,7 +7243,7 @@ namespace Tablero
                 new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
             };
 
-            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+            System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -7380,7 +7268,7 @@ namespace Tablero
                 new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
             };
 
-            DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+            System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -7722,7 +7610,7 @@ namespace Tablero
                 {
                     new NpgsqlParameter("@OP", txt_orden_produc.Text.ToUpper().Trim()),
                 };
-                DataTable dtCheckop = dbHelperop.ExecuteSelectQuery(queryChecop, parametersCheck);
+                System.Data.DataTable dtCheckop = dbHelperop.ExecuteSelectQuery(queryChecop, parametersCheck);
                 if (dtCheckop != null && dtCheckop.Rows.Count > 0 && Convert.ToInt32(dtCheckop.Rows[0][0]) > 0)
                 {
                     MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -8411,6 +8299,123 @@ namespace Tablero
                 btn_save_tunel.Enabled = false;
                 btn_cancel_tunel.Enabled = false;
             }
+        }
+
+        private void btn_new_report_merma_Click(object sender, EventArgs e)
+        {
+            actualiza_reporte_merma();
+            btn_clean_merma.Enabled = true;
+            btn_export_excel_merma.Enabled = true;
+        }
+
+        private void btn_clean_merma_Click(object sender, EventArgs e)
+        {
+            dgv_reporte_merma.DataSource = null;   // Desvincula cualquier origen de datos
+            dgv_reporte_merma.Rows.Clear();        // Limpia todas las filas (por si no hay DataSource)
+            dgv_reporte_merma.Columns.Clear();     // Limpia todas las columnas
+            btn_export_excel_merma.Enabled = false;
+            btn_clean_merma.Enabled = false;
+        }
+
+        private async void btn_export_excel_merma_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Mostrar el diálogo de guardar archivo en el hilo principal
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                string filePath = null;
+
+                // Mostrar el diálogo de guardado en el hilo principal
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+
+                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+                    await Task.Run(() =>
+                    {
+                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma, filePath);
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ExportarDataGridViewFiltradoAExcel(DataGridView dgv, string filePath)
+        {
+            Excel.Application excelApp = new Excel.Application();
+            excelApp.Visible = false;
+
+            Excel.Workbook workbook = excelApp.Workbooks.Add();
+            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
+
+            int colIndex = 1;
+
+            // Exportar encabezados solo para las columnas visibles
+            for (int i = 0; i < dgv.Columns.Count; i++)
+            {
+                if (dgv.Columns[i].Visible)
+                {
+                    worksheet.Cells[1, colIndex] = dgv.Columns[i].HeaderText;
+
+                    Excel.Range headerCell = worksheet.Cells[1, colIndex];
+                    headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                    headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
+                    headerCell.Font.Bold = true;
+                    headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+                    colIndex++;
+                }
+            }
+
+            int rowIndex = 2;
+
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.Visible)
+                {
+                    colIndex = 1;
+                    for (int j = 0; j < dgv.Columns.Count; j++)
+                    {
+                        if (dgv.Columns[j].Visible)
+                        {
+                            worksheet.Cells[rowIndex, colIndex] = row.Cells[j].Value?.ToString();
+                            colIndex++;
+                        }
+                    }
+                    rowIndex++;
+                }
+            }
+
+            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
+            usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+            worksheet.Columns.AutoFit();
+
+            if (filePath.EndsWith(".xlsx"))
+            {
+                workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
+            }
+            else if (filePath.EndsWith(".xls"))
+            {
+                workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
+            }
+
+            workbook.Close();
+            excelApp.Quit();
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
     }
 }

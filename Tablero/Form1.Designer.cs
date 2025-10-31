@@ -101,6 +101,9 @@
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
             this.metroTabPage10 = new MetroFramework.Controls.MetroTabPage();
             this.materialCard8 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_clean_merma = new MaterialSkin.Controls.MaterialButton();
+            this.btn_export_excel_merma = new MaterialSkin.Controls.MaterialButton();
+            this.btn_new_report_merma = new MaterialSkin.Controls.MaterialButton();
             this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
             this.dgv_reporte_merma = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -264,6 +267,7 @@
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
             this.metroTabPage10.SuspendLayout();
+            this.materialCard8.SuspendLayout();
             this.materialCard7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).BeginInit();
             this.tabPage4.SuspendLayout();
@@ -1477,15 +1481,90 @@
             // materialCard8
             // 
             this.materialCard8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard8.Controls.Add(this.btn_clean_merma);
+            this.materialCard8.Controls.Add(this.btn_export_excel_merma);
+            this.materialCard8.Controls.Add(this.btn_new_report_merma);
             this.materialCard8.Depth = 0;
             this.materialCard8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard8.Location = new System.Drawing.Point(14, 14);
+            this.materialCard8.Location = new System.Drawing.Point(0, 14);
             this.materialCard8.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard8.Name = "materialCard8";
             this.materialCard8.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard8.Size = new System.Drawing.Size(985, 191);
+            this.materialCard8.Size = new System.Drawing.Size(594, 77);
             this.materialCard8.TabIndex = 3;
+            // 
+            // btn_clean_merma
+            // 
+            this.btn_clean_merma.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_clean_merma.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_clean_merma.Depth = 0;
+            this.btn_clean_merma.Enabled = false;
+            this.btn_clean_merma.HighEmphasis = true;
+            this.btn_clean_merma.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
+            this.btn_clean_merma.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_clean_merma.ImageKey = "save_icon";
+            this.btn_clean_merma.Location = new System.Drawing.Point(400, 20);
+            this.btn_clean_merma.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_clean_merma.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_clean_merma.Name = "btn_clean_merma";
+            this.btn_clean_merma.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_clean_merma.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_merma.TabIndex = 31;
+            this.btn_clean_merma.Text = "Limpiar Tabla";
+            this.btn_clean_merma.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_clean_merma.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_clean_merma.UseAccentColor = false;
+            this.btn_clean_merma.UseVisualStyleBackColor = true;
+            this.btn_clean_merma.Click += new System.EventHandler(this.btn_clean_merma_Click);
+            // 
+            // btn_export_excel_merma
+            // 
+            this.btn_export_excel_merma.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_export_excel_merma.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_export_excel_merma.Depth = 0;
+            this.btn_export_excel_merma.Enabled = false;
+            this.btn_export_excel_merma.HighEmphasis = true;
+            this.btn_export_excel_merma.Icon = global::Tablero.Properties.Resources.excel_icon;
+            this.btn_export_excel_merma.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_export_excel_merma.ImageKey = "save_icon";
+            this.btn_export_excel_merma.Location = new System.Drawing.Point(208, 20);
+            this.btn_export_excel_merma.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_export_excel_merma.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_export_excel_merma.Name = "btn_export_excel_merma";
+            this.btn_export_excel_merma.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_export_excel_merma.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_merma.TabIndex = 30;
+            this.btn_export_excel_merma.Text = "Exportar a Excel";
+            this.btn_export_excel_merma.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_export_excel_merma.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_export_excel_merma.UseAccentColor = false;
+            this.btn_export_excel_merma.UseVisualStyleBackColor = true;
+            this.btn_export_excel_merma.Click += new System.EventHandler(this.btn_export_excel_merma_Click);
+            // 
+            // btn_new_report_merma
+            // 
+            this.btn_new_report_merma.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_report_merma.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_report_merma.Depth = 0;
+            this.btn_new_report_merma.HighEmphasis = true;
+            this.btn_new_report_merma.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
+            this.btn_new_report_merma.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_report_merma.ImageKey = "save_icon";
+            this.btn_new_report_merma.Location = new System.Drawing.Point(18, 20);
+            this.btn_new_report_merma.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_report_merma.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_report_merma.Name = "btn_new_report_merma";
+            this.btn_new_report_merma.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_report_merma.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_report_merma.TabIndex = 29;
+            this.btn_new_report_merma.Text = "Generar Reporte";
+            this.btn_new_report_merma.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_report_merma.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_report_merma.UseAccentColor = false;
+            this.btn_new_report_merma.UseVisualStyleBackColor = true;
+            this.btn_new_report_merma.Click += new System.EventHandler(this.btn_new_report_merma_Click);
             // 
             // materialCard7
             // 
@@ -1494,12 +1573,12 @@
             this.materialCard7.Depth = 0;
             this.materialCard7.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard7.Location = new System.Drawing.Point(0, 416);
+            this.materialCard7.Location = new System.Drawing.Point(0, 91);
             this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard7.Name = "materialCard7";
             this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(1674, 482);
+            this.materialCard7.Size = new System.Drawing.Size(1674, 807);
             this.materialCard7.TabIndex = 2;
             // 
             // dgv_reporte_merma
@@ -1513,7 +1592,7 @@
             this.dgv_reporte_merma.Name = "dgv_reporte_merma";
             this.dgv_reporte_merma.ReadOnly = true;
             this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma.Size = new System.Drawing.Size(1646, 454);
+            this.dgv_reporte_merma.Size = new System.Drawing.Size(1646, 779);
             this.dgv_reporte_merma.TabIndex = 7;
             // 
             // tabPage4
@@ -2990,7 +3069,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -3180,7 +3259,7 @@
             this.dtp_tunel.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_tunel.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_tunel.Location = new System.Drawing.Point(6, 77);
-            this.dtp_tunel.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_tunel.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_tunel.Name = "dtp_tunel";
             this.dtp_tunel.Size = new System.Drawing.Size(289, 35);
             this.dtp_tunel.TabIndex = 29;
@@ -3762,6 +3841,8 @@
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
             this.metroTabPage10.ResumeLayout(false);
+            this.materialCard8.ResumeLayout(false);
+            this.materialCard8.PerformLayout();
             this.materialCard7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).EndInit();
             this.tabPage4.ResumeLayout(false);
@@ -4025,6 +4106,9 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage11;
         private MetroFramework.Controls.MetroTabPage metroTabPage12;
         private System.Windows.Forms.DataGridView dgv_Tunel_calidad;
+        private MaterialSkin.Controls.MaterialButton btn_new_report_merma;
+        private MaterialSkin.Controls.MaterialButton btn_export_excel_merma;
+        private MaterialSkin.Controls.MaterialButton btn_clean_merma;
     }
 }
 

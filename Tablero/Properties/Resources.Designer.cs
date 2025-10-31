@@ -213,9 +213,39 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap excel_icon {
+            get {
+                object obj = ResourceManager.GetObject("excel_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap file_document_paper_page {
+            get {
+                object obj = ResourceManager.GetObject("file_document_paper_page", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap filter_remove {
             get {
                 object obj = ResourceManager.GetObject("filter_remove", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ic_fluent_table_dismiss_filled {
+            get {
+                object obj = ResourceManager.GetObject("ic_fluent_table_dismiss_filled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
