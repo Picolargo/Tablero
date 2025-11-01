@@ -238,7 +238,6 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -1465,7 +1464,6 @@
             // 
             // metroTabPage9
             // 
-            this.metroTabPage9.Controls.Add(this.button1);
             this.metroTabPage9.Controls.Add(this.materialCard3);
             this.metroTabPage9.Controls.Add(this.materialCard4);
             this.metroTabPage9.HorizontalScrollbarBarColor = true;
@@ -3978,16 +3976,6 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1179, 25);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4331,7 +4319,6 @@
         private Telerik.WinControls.UI.RadGridView rgv_reporte_consolidado;
         private MaterialSkin.Controls.MaterialComboBox cb_tipo_reporte;
         private MaterialSkin.Controls.MaterialComboBox cb_area_reporte;
-        private System.Windows.Forms.Button button1;
     }
 }
 

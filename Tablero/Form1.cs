@@ -8549,14 +8549,5 @@ namespace Tablero
             System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            GridViewSpreadExport spreadExporter = new GridViewSpreadExport(this.rgv_reporte_consolidado);
-            spreadExporter.ExportChildRowsGrouped = true;
-            SpreadExportRenderer exportRenderer = new SpreadExportRenderer();
-            spreadExporter.RunExport(@"..\..\exportedFile.xlsx", exportRenderer);
-        }
     }
 }
