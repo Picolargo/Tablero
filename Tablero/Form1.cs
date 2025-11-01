@@ -8422,6 +8422,8 @@ namespace Tablero
         private void btn_new_report_consolidado_Click(object sender, EventArgs e)
         {
             reporte_consolidado();
+            btn_export_excel_consolidado.Enabled = true;
+            btn_clean_consolidado.Enabled = true;
         }
         private void reporte_consolidado()
         {
@@ -8440,9 +8442,112 @@ namespace Tablero
             rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
         }
 
-        private void btn_export_excel_consolidado_Click(object sender, EventArgs e)
+        private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
         {
+            LoadingScreen.ShowLoading();
+            try
+            {
+                // Mostrar el diálogo de guardar archivo en el hilo principal
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Title = "Guardar archivo de Excel"
+                };
 
+                string filePath = null;
+
+                // Mostrar el diálogo de guardado en el hilo principal
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+
+                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+                    await Task.Run(() =>
+                    {
+                        ExportarRadGridViewFiltradoAExcel(rgv_reporte_consolidado, filePath);
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Ocultar la pantalla de cargando
+                LoadingScreen.HideLoading();
+            }
+        }
+        private void ExportarRadGridViewFiltradoAExcel(RadGridView radGridView, string filePath)
+        {
+            Excel.Application excelApp = new Excel.Application();
+            excelApp.Visible = false;
+
+            Excel.Workbook workbook = excelApp.Workbooks.Add();
+            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
+
+            int colIndex = 1;
+
+            // Exportar encabezados solo para las columnas visibles
+            foreach (GridViewDataColumn column in radGridView.Columns)
+            {
+                if (column.IsVisible)
+                {
+                    worksheet.Cells[1, colIndex] = column.HeaderText;
+
+                    Excel.Range headerCell = worksheet.Cells[1, colIndex];
+                    headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                    headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
+                    headerCell.Font.Bold = true;
+                    headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+                    colIndex++;
+                }
+            }
+
+            int rowIndex = 2;
+
+            // Exportar datos de las filas visibles
+            foreach (GridViewRowInfo row in radGridView.Rows)
+            {
+                if (row.IsVisible)
+                {
+                    colIndex = 1;
+                    foreach (GridViewDataColumn column in radGridView.Columns)
+                    {
+                        if (column.IsVisible)
+                        {
+                            var cellValue = row.Cells[column.Name].Value;
+                            worksheet.Cells[rowIndex, colIndex] = cellValue?.ToString();
+                            colIndex++;
+                        }
+                    }
+                    rowIndex++;
+                }
+            }
+
+            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
+            usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+            worksheet.Columns.AutoFit();
+
+            if (filePath.EndsWith(".xlsx"))
+            {
+                workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
+            }
+            else if (filePath.EndsWith(".xls"))
+            {
+                workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
+            }
+
+            workbook.Close();
+            excelApp.Quit();
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
     }
 }
