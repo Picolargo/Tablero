@@ -49,6 +49,7 @@
             this.txt_server.Depth = 0;
             this.txt_server.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_server.HideSelection = true;
+            this.txt_server.Hint = "Nombre de Servidor";
             this.txt_server.LeadingIcon = null;
             this.txt_server.Location = new System.Drawing.Point(97, 82);
             this.txt_server.MaxLength = 32767;
@@ -65,7 +66,6 @@
             this.txt_server.Size = new System.Drawing.Size(250, 48);
             this.txt_server.TabIndex = 1;
             this.txt_server.TabStop = false;
-            this.txt_server.Text = "Nombre de Servidor";
             this.txt_server.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_server.TrailingIcon = null;
             this.txt_server.UseSystemPasswordChar = false;
@@ -78,6 +78,7 @@
             this.txt_user.Depth = 0;
             this.txt_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_user.HideSelection = true;
+            this.txt_user.Hint = "Usuario";
             this.txt_user.LeadingIcon = null;
             this.txt_user.Location = new System.Drawing.Point(97, 152);
             this.txt_user.MaxLength = 32767;
@@ -94,7 +95,6 @@
             this.txt_user.Size = new System.Drawing.Size(250, 48);
             this.txt_user.TabIndex = 2;
             this.txt_user.TabStop = false;
-            this.txt_user.Text = "Usuario";
             this.txt_user.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_user.TrailingIcon = null;
             this.txt_user.UseSystemPasswordChar = false;
@@ -107,6 +107,7 @@
             this.txt_contrasena.Depth = 0;
             this.txt_contrasena.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_contrasena.HideSelection = true;
+            this.txt_contrasena.Hint = "Contraseña";
             this.txt_contrasena.LeadingIcon = null;
             this.txt_contrasena.Location = new System.Drawing.Point(97, 225);
             this.txt_contrasena.MaxLength = 32767;
@@ -123,7 +124,6 @@
             this.txt_contrasena.Size = new System.Drawing.Size(250, 48);
             this.txt_contrasena.TabIndex = 3;
             this.txt_contrasena.TabStop = false;
-            this.txt_contrasena.Text = "Contraseña";
             this.txt_contrasena.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_contrasena.TrailingIcon = null;
             this.txt_contrasena.UseSystemPasswordChar = false;

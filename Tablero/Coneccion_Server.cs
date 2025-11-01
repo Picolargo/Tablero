@@ -137,7 +137,7 @@ namespace Tablero
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;
 
             // Construir la cadena de conexión
-            connectionString = $"Host={var_servidor};Username={var_usuario};Password={var_password};Database=Reporteo";
+            connectionString = $"Host={var_servidor};Port=5433;Username={var_usuario};Password={var_password};Database=Reporteo";
             coneccion();
             if (bandera_coneccion)
             {
