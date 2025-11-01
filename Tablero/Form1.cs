@@ -1,24 +1,18 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
-using MetroFramework.Controls;
 using Npgsql;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Telerik.WinControls.Svg.ExCSS;
+using Telerik.WinControls;
+using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
-using static System.Net.Mime.MediaTypeNames;
-using Microsoft.Office.Interop.Excel;
+using Telerik.WinControls.UI.Export;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tablero
@@ -8319,6 +8313,7 @@ namespace Tablero
 
         private async void btn_export_excel_merma_Click(object sender, EventArgs e)
         {
+            LoadingScreen.ShowLoading();
             try
             {
                 // Mostrar el diálogo de guardar archivo en el hilo principal
@@ -8347,6 +8342,11 @@ namespace Tablero
             catch (Exception ex)
             {
                 MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Ocultar la pantalla de cargando
+                LoadingScreen.HideLoading();
             }
         }
 
@@ -8416,6 +8416,33 @@ namespace Tablero
             System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        }
+       
+
+        private void btn_new_report_consolidado_Click(object sender, EventArgs e)
+        {
+            reporte_consolidado();
+        }
+        private void reporte_consolidado()
+        {
+            string var1 = cb_area_reporte.Text;
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            string querySimple = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Area"" FROM public.""Ficha"" WHERE ""Area"" = @Area ORDER BY ""OP"" ASC;";  // ← orden ascendente
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
+                    };
+            // Cargar los datos de la tabla Usuarios en el DataGridView
+            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_consolidado, parameters);
+
+            // Configurar el DataGridView
+            rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+        }
+
+        private void btn_export_excel_consolidado_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
