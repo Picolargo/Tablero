@@ -49,6 +49,13 @@ namespace Tablero
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
+            // Configurar propiedades similares al ejemplo
+            rgv_reporte_consolidado.EnableGrouping = false;
+            rgv_reporte_consolidado.EnableHotTracking = true;
+            rgv_reporte_consolidado.ShowFilteringRow = false;
+            rgv_reporte_consolidado.EnableFiltering = true;
+            rgv_reporte_consolidado.EnableCustomFiltering = true;
+
             this.WindowState = FormWindowState.Maximized;
 
             lbl_no_emp2.Text = var_no_empledo; // Mostrar el número de empleado en el label correspondiente
@@ -8440,6 +8447,8 @@ namespace Tablero
 
             // Configurar el DataGridView
             rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+            // Limpiar el filtro al cargar nuevos datos
+            txt_filtro_report_consolidado.Clear();
         }
 
         private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
@@ -8548,6 +8557,82 @@ namespace Tablero
             System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        }
+
+        private void btn_filtro_consolidado_Click(object sender, EventArgs e)
+        {
+            txt_filtro_report_consolidado.Clear();
+        }
+
+        private void rgv_reporte_consolidado_CustomFiltering(object sender, GridViewCustomFilteringEventArgs e)
+        {
+            string textoFiltro = txt_filtro_report_consolidado.Text.Trim();
+
+            // Si no hay texto de filtro, mostrar todas las filas
+            if (string.IsNullOrEmpty(textoFiltro))
+            {
+                e.Visible = true;
+                ResetearEstiloCeldas(e);
+                return;
+            }
+
+            // Iniciar actualización para mejor rendimiento
+            rgv_reporte_consolidado.BeginUpdate();
+
+            // Por defecto ocultar la fila
+            e.Visible = false;
+
+            // Buscar en todas las celdas de la fila
+            for (int i = 0; i < e.Row.Cells.Count; i++)
+            {
+                GridViewCellInfo celda = e.Row.Cells[i];
+
+                // Verificar si la celda tiene valor
+                if (celda.Value != null)
+                {
+                    string textoCelda = celda.Value.ToString();
+
+                    // Buscar coincidencia (case-insensitive)
+                    if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    {
+                        e.Visible = true; // Mostrar la fila si hay coincidencia
+
+                        // Resaltar la celda que coincide
+                        celda.Style.CustomizeFill = true;
+                        celda.Style.DrawFill = true;
+                        celda.Style.BackColor = Color.FromArgb(201, 252, 254); // Color azul claro
+                    }
+                    else
+                    {
+                        // Resetear estilo si no coincide
+                        celda.Style.Reset();
+                    }
+                }
+                else
+                {
+                    // Resetear estilo si la celda es nula
+                    celda.Style.Reset();
+                }
+            }
+
+            rgv_reporte_consolidado.EndUpdate(false);
+        }
+        // Método auxiliar para resetear el estilo de todas las celdas
+        private void ResetearEstiloCeldas(GridViewCustomFilteringEventArgs e)
+        {
+            for (int i = 0; i < e.Row.Cells.Count; i++)
+            {
+                e.Row.Cells[i].Style.Reset();
+            }
+        }
+
+        private void txt_filtro_report_consolidado_TextChanged(object sender, EventArgs e)
+        {
+            // Refrescar el grid para aplicar el filtro
+            if (rgv_reporte_consolidado != null)
+            {
+                rgv_reporte_consolidado.MasterTemplate.Refresh();
+            }
         }
     }
 }

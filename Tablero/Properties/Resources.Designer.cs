@@ -233,6 +233,16 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap filter_filters_icon {
+            get {
+                object obj = ResourceManager.GetObject("filter_filters_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap filter_remove {
             get {
                 object obj = ResourceManager.GetObject("filter_remove", resourceCulture);

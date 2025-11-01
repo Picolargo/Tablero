@@ -124,8 +124,8 @@
   <data name="5172991_internet_lock_locked_padlock_password_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172991_internet_lock_locked_padlock_password_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="5172968_disable_eye_hidden_hide_internet_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\5172968_disable_eye_hidden_hide_internet_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="loader-14092_512" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loader-14092_512.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="filter_remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\filter_remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,6 +145,9 @@
   <data name="loading-4802_512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\loading-4802_512.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="5ecf0bf1fd9cb2672c1cbdc8_icon256.fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5ecf0bf1fd9cb2672c1cbdc8_icon256.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="5173015_eye_focus_internet_scan_security_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5173015_eye_focus_internet_scan_security_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -154,8 +157,8 @@
   <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="add_group_users_business_human" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add_group_users_business_human.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="1564535_customer_user_userphoto_account_person_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1564535_customer_user_userphoto_account_person_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="8666597_trash_2_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8666597_trash_2_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,8 +172,8 @@
   <data name="8666681_edit_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8666681_edit_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="1564535_customer_user_userphoto_account_person_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1564535_customer_user_userphoto_account_person_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add_group_users_business_human" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_group_users_business_human.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="logopicolargo_pet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logopicolargo_pet.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -178,8 +181,8 @@
   <data name="file_document_paper_page" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\file_document_paper_page.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="5ecf0bf1fd9cb2672c1cbdc8_icon256.fw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\5ecf0bf1fd9cb2672c1cbdc8_icon256.fw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="5172968_disable_eye_hidden_hide_internet_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5172968_disable_eye_hidden_hide_internet_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="49855_closed_padlock_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\49855_closed_padlock_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,7 +190,7 @@
   <data name="8666740_slash_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8666740_slash_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="loader-14092_512" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loader-14092_512.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="filter_filters_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filter_filters_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

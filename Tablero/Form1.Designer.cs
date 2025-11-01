@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -100,6 +100,9 @@
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tab_reportes = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
+            this.materialCard9 = new MaterialSkin.Controls.MaterialCard();
+            this.txt_filtro_report_consolidado = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_filtro_consolidado = new MaterialSkin.Controls.MaterialButton();
             this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
             this.cb_tipo_reporte = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_area_reporte = new MaterialSkin.Controls.MaterialComboBox();
@@ -276,6 +279,7 @@
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
+            this.materialCard9.SuspendLayout();
             this.materialCard3.SuspendLayout();
             this.materialCard4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado)).BeginInit();
@@ -1464,6 +1468,7 @@
             // 
             // metroTabPage9
             // 
+            this.metroTabPage9.Controls.Add(this.materialCard9);
             this.metroTabPage9.Controls.Add(this.materialCard3);
             this.metroTabPage9.Controls.Add(this.materialCard4);
             this.metroTabPage9.HorizontalScrollbarBarColor = true;
@@ -1477,6 +1482,64 @@
             this.metroTabPage9.VerticalScrollbarBarColor = true;
             this.metroTabPage9.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage9.VerticalScrollbarSize = 10;
+            // 
+            // materialCard9
+            // 
+            this.materialCard9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard9.Controls.Add(this.txt_filtro_report_consolidado);
+            this.materialCard9.Controls.Add(this.btn_filtro_consolidado);
+            this.materialCard9.Depth = 0;
+            this.materialCard9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard9.Location = new System.Drawing.Point(1114, 11);
+            this.materialCard9.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard9.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard9.Name = "materialCard9";
+            this.materialCard9.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard9.Size = new System.Drawing.Size(560, 77);
+            this.materialCard9.TabIndex = 6;
+            // 
+            // txt_filtro_report_consolidado
+            // 
+            this.txt_filtro_report_consolidado.AnimateReadOnly = false;
+            this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_filtro_report_consolidado.Depth = 0;
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
+            this.txt_filtro_report_consolidado.LeadingIcon = null;
+            this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(17, 12);
+            this.txt_filtro_report_consolidado.MaxLength = 50;
+            this.txt_filtro_report_consolidado.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_filtro_report_consolidado.Multiline = false;
+            this.txt_filtro_report_consolidado.Name = "txt_filtro_report_consolidado";
+            this.txt_filtro_report_consolidado.Size = new System.Drawing.Size(228, 50);
+            this.txt_filtro_report_consolidado.TabIndex = 32;
+            this.txt_filtro_report_consolidado.Text = "";
+            this.txt_filtro_report_consolidado.TrailingIcon = null;
+            this.txt_filtro_report_consolidado.TextChanged += new System.EventHandler(this.txt_filtro_report_consolidado_TextChanged);
+            // 
+            // btn_filtro_consolidado
+            // 
+            this.btn_filtro_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_filtro_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_filtro_consolidado.Depth = 0;
+            this.btn_filtro_consolidado.HighEmphasis = true;
+            this.btn_filtro_consolidado.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.btn_filtro_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_filtro_consolidado.ImageKey = "save_icon";
+            this.btn_filtro_consolidado.Location = new System.Drawing.Point(252, 19);
+            this.btn_filtro_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_filtro_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_filtro_consolidado.Name = "btn_filtro_consolidado";
+            this.btn_filtro_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_filtro_consolidado.Size = new System.Drawing.Size(107, 36);
+            this.btn_filtro_consolidado.TabIndex = 31;
+            this.btn_filtro_consolidado.Text = "Limpiar Filtro";
+            this.btn_filtro_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_filtro_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_filtro_consolidado.UseAccentColor = false;
+            this.btn_filtro_consolidado.UseVisualStyleBackColor = true;
+            this.btn_filtro_consolidado.Click += new System.EventHandler(this.btn_filtro_consolidado_Click);
             // 
             // materialCard3
             // 
@@ -1653,10 +1716,11 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 779);
             this.rgv_reporte_consolidado.TabIndex = 0;
+            this.rgv_reporte_consolidado.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_consolidado_CustomFiltering);
             // 
             // metroTabPage10
             // 
@@ -4037,6 +4101,8 @@
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
+            this.materialCard9.ResumeLayout(false);
+            this.materialCard9.PerformLayout();
             this.materialCard3.ResumeLayout(false);
             this.materialCard3.PerformLayout();
             this.materialCard4.ResumeLayout(false);
@@ -4319,6 +4385,9 @@
         private Telerik.WinControls.UI.RadGridView rgv_reporte_consolidado;
         private MaterialSkin.Controls.MaterialComboBox cb_tipo_reporte;
         private MaterialSkin.Controls.MaterialComboBox cb_area_reporte;
+        private MaterialSkin.Controls.MaterialCard materialCard9;
+        private MaterialSkin.Controls.MaterialTextBox txt_filtro_report_consolidado;
+        private MaterialSkin.Controls.MaterialButton btn_filtro_consolidado;
     }
 }
 

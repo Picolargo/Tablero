@@ -227,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\filter_filters_icon.png" />
     <None Include="Resources\loader-14092_512.gif" />
     <None Include="Resources\loading-4802_512.gif" />
     <None Include="Resources\ic_fluent_table_dismiss_filled.png" />
