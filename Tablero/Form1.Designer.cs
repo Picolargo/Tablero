@@ -100,6 +100,14 @@
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tab_reportes = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
+            this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            this.cb_tipo_reporte = new MaterialSkin.Controls.MaterialComboBox();
+            this.cb_area_reporte = new MaterialSkin.Controls.MaterialComboBox();
+            this.btn_clean_consolidado = new MaterialSkin.Controls.MaterialButton();
+            this.btn_export_excel_consolidado = new MaterialSkin.Controls.MaterialButton();
+            this.btn_new_report_consolidado = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            this.rgv_reporte_consolidado = new Telerik.WinControls.UI.RadGridView();
             this.metroTabPage10 = new MetroFramework.Controls.MetroTabPage();
             this.materialCard8 = new MaterialSkin.Controls.MaterialCard();
             this.btn_clean_merma = new MaterialSkin.Controls.MaterialButton();
@@ -230,14 +238,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
-            this.btn_clean_consolidado = new MaterialSkin.Controls.MaterialButton();
-            this.btn_export_excel_consolidado = new MaterialSkin.Controls.MaterialButton();
-            this.btn_new_report_consolidado = new MaterialSkin.Controls.MaterialButton();
-            this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
-            this.rgv_reporte_consolidado = new Telerik.WinControls.UI.RadGridView();
-            this.cb_area_reporte = new MaterialSkin.Controls.MaterialComboBox();
-            this.cb_tipo_reporte = new MaterialSkin.Controls.MaterialComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -276,6 +277,10 @@
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
+            this.materialCard3.SuspendLayout();
+            this.materialCard4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado.MasterTemplate)).BeginInit();
             this.metroTabPage10.SuspendLayout();
             this.materialCard8.SuspendLayout();
             this.materialCard7.SuspendLayout();
@@ -331,10 +336,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.materialCard3.SuspendLayout();
-            this.materialCard4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado.MasterTemplate)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1464,6 +1465,7 @@
             // 
             // metroTabPage9
             // 
+            this.metroTabPage9.Controls.Add(this.button1);
             this.metroTabPage9.Controls.Add(this.materialCard3);
             this.metroTabPage9.Controls.Add(this.materialCard4);
             this.metroTabPage9.HorizontalScrollbarBarColor = true;
@@ -1477,6 +1479,186 @@
             this.metroTabPage9.VerticalScrollbarBarColor = true;
             this.metroTabPage9.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage9.VerticalScrollbarSize = 10;
+            // 
+            // materialCard3
+            // 
+            this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard3.Controls.Add(this.cb_tipo_reporte);
+            this.materialCard3.Controls.Add(this.cb_area_reporte);
+            this.materialCard3.Controls.Add(this.btn_clean_consolidado);
+            this.materialCard3.Controls.Add(this.btn_export_excel_consolidado);
+            this.materialCard3.Controls.Add(this.btn_new_report_consolidado);
+            this.materialCard3.Depth = 0;
+            this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard3.Location = new System.Drawing.Point(0, 11);
+            this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard3.Name = "materialCard3";
+            this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard3.Size = new System.Drawing.Size(1104, 77);
+            this.materialCard3.TabIndex = 5;
+            // 
+            // cb_tipo_reporte
+            // 
+            this.cb_tipo_reporte.AutoResize = false;
+            this.cb_tipo_reporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_tipo_reporte.Depth = 0;
+            this.cb_tipo_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_tipo_reporte.DropDownHeight = 174;
+            this.cb_tipo_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_tipo_reporte.DropDownWidth = 121;
+            this.cb_tipo_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_tipo_reporte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_tipo_reporte.FormattingEnabled = true;
+            this.cb_tipo_reporte.Hint = "Selecione Reporte";
+            this.cb_tipo_reporte.IntegralHeight = false;
+            this.cb_tipo_reporte.ItemHeight = 43;
+            this.cb_tipo_reporte.Items.AddRange(new object[] {
+            "Área",
+            "Tiempo Muerto"});
+            this.cb_tipo_reporte.Location = new System.Drawing.Point(17, 13);
+            this.cb_tipo_reporte.MaxDropDownItems = 4;
+            this.cb_tipo_reporte.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_tipo_reporte.Name = "cb_tipo_reporte";
+            this.cb_tipo_reporte.Size = new System.Drawing.Size(259, 49);
+            this.cb_tipo_reporte.StartIndex = -1;
+            this.cb_tipo_reporte.TabIndex = 33;
+            // 
+            // cb_area_reporte
+            // 
+            this.cb_area_reporte.AutoResize = false;
+            this.cb_area_reporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_area_reporte.Depth = 0;
+            this.cb_area_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_area_reporte.DropDownHeight = 174;
+            this.cb_area_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_area_reporte.DropDownWidth = 121;
+            this.cb_area_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_area_reporte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_area_reporte.FormattingEnabled = true;
+            this.cb_area_reporte.Hint = "Selecione Área";
+            this.cb_area_reporte.IntegralHeight = false;
+            this.cb_area_reporte.ItemHeight = 43;
+            this.cb_area_reporte.Items.AddRange(new object[] {
+            "Tunel/Sumergidor",
+            "Despegue",
+            "Evaporado",
+            "Grind",
+            "Inspeccion",
+            "Empacado",
+            "Polvos",
+            "Revolturas",
+            "Máquinas"});
+            this.cb_area_reporte.Location = new System.Drawing.Point(282, 13);
+            this.cb_area_reporte.MaxDropDownItems = 4;
+            this.cb_area_reporte.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_area_reporte.Name = "cb_area_reporte";
+            this.cb_area_reporte.Size = new System.Drawing.Size(259, 49);
+            this.cb_area_reporte.StartIndex = -1;
+            this.cb_area_reporte.TabIndex = 32;
+            // 
+            // btn_clean_consolidado
+            // 
+            this.btn_clean_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_clean_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_clean_consolidado.Depth = 0;
+            this.btn_clean_consolidado.Enabled = false;
+            this.btn_clean_consolidado.HighEmphasis = true;
+            this.btn_clean_consolidado.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
+            this.btn_clean_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_clean_consolidado.ImageKey = "save_icon";
+            this.btn_clean_consolidado.Location = new System.Drawing.Point(930, 20);
+            this.btn_clean_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_clean_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_clean_consolidado.Name = "btn_clean_consolidado";
+            this.btn_clean_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_clean_consolidado.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_consolidado.TabIndex = 31;
+            this.btn_clean_consolidado.Text = "Limpiar Tabla";
+            this.btn_clean_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_clean_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_clean_consolidado.UseAccentColor = false;
+            this.btn_clean_consolidado.UseVisualStyleBackColor = true;
+            // 
+            // btn_export_excel_consolidado
+            // 
+            this.btn_export_excel_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_export_excel_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_export_excel_consolidado.Depth = 0;
+            this.btn_export_excel_consolidado.Enabled = false;
+            this.btn_export_excel_consolidado.HighEmphasis = true;
+            this.btn_export_excel_consolidado.Icon = global::Tablero.Properties.Resources.excel_icon;
+            this.btn_export_excel_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_export_excel_consolidado.ImageKey = "save_icon";
+            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(738, 20);
+            this.btn_export_excel_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_export_excel_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_export_excel_consolidado.Name = "btn_export_excel_consolidado";
+            this.btn_export_excel_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_export_excel_consolidado.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_consolidado.TabIndex = 30;
+            this.btn_export_excel_consolidado.Text = "Exportar a Excel";
+            this.btn_export_excel_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_export_excel_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_export_excel_consolidado.UseAccentColor = false;
+            this.btn_export_excel_consolidado.UseVisualStyleBackColor = true;
+            this.btn_export_excel_consolidado.Click += new System.EventHandler(this.btn_export_excel_consolidado_Click);
+            // 
+            // btn_new_report_consolidado
+            // 
+            this.btn_new_report_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_report_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_report_consolidado.Depth = 0;
+            this.btn_new_report_consolidado.HighEmphasis = true;
+            this.btn_new_report_consolidado.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
+            this.btn_new_report_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_report_consolidado.ImageKey = "save_icon";
+            this.btn_new_report_consolidado.Location = new System.Drawing.Point(548, 20);
+            this.btn_new_report_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_report_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_report_consolidado.Name = "btn_new_report_consolidado";
+            this.btn_new_report_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_report_consolidado.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_report_consolidado.TabIndex = 29;
+            this.btn_new_report_consolidado.Text = "Generar Reporte";
+            this.btn_new_report_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_report_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_report_consolidado.UseAccentColor = false;
+            this.btn_new_report_consolidado.UseVisualStyleBackColor = true;
+            this.btn_new_report_consolidado.Click += new System.EventHandler(this.btn_new_report_consolidado_Click);
+            // 
+            // materialCard4
+            // 
+            this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard4.Controls.Add(this.rgv_reporte_consolidado);
+            this.materialCard4.Depth = 0;
+            this.materialCard4.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard4.Location = new System.Drawing.Point(0, 91);
+            this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard4.Name = "materialCard4";
+            this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard4.Size = new System.Drawing.Size(1674, 807);
+            this.materialCard4.TabIndex = 4;
+            // 
+            // rgv_reporte_consolidado
+            // 
+            this.rgv_reporte_consolidado.AutoScroll = true;
+            this.rgv_reporte_consolidado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rgv_reporte_consolidado.Location = new System.Drawing.Point(14, 14);
+            // 
+            // 
+            // 
+            this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
+            this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
+            this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
+            this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
+            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 779);
+            this.rgv_reporte_consolidado.TabIndex = 0;
             // 
             // metroTabPage10
             // 
@@ -3085,7 +3267,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -3796,185 +3978,15 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // materialCard3
+            // button1
             // 
-            this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.materialCard3.Controls.Add(this.cb_tipo_reporte);
-            this.materialCard3.Controls.Add(this.cb_area_reporte);
-            this.materialCard3.Controls.Add(this.btn_clean_consolidado);
-            this.materialCard3.Controls.Add(this.btn_export_excel_consolidado);
-            this.materialCard3.Controls.Add(this.btn_new_report_consolidado);
-            this.materialCard3.Depth = 0;
-            this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard3.Location = new System.Drawing.Point(0, 11);
-            this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard3.Name = "materialCard3";
-            this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(1104, 77);
-            this.materialCard3.TabIndex = 5;
-            // 
-            // btn_clean_consolidado
-            // 
-            this.btn_clean_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_clean_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_clean_consolidado.Depth = 0;
-            this.btn_clean_consolidado.Enabled = false;
-            this.btn_clean_consolidado.HighEmphasis = true;
-            this.btn_clean_consolidado.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
-            this.btn_clean_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_clean_consolidado.ImageKey = "save_icon";
-            this.btn_clean_consolidado.Location = new System.Drawing.Point(930, 20);
-            this.btn_clean_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_clean_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_clean_consolidado.Name = "btn_clean_consolidado";
-            this.btn_clean_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_clean_consolidado.Size = new System.Drawing.Size(156, 36);
-            this.btn_clean_consolidado.TabIndex = 31;
-            this.btn_clean_consolidado.Text = "Limpiar Tabla";
-            this.btn_clean_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_clean_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_clean_consolidado.UseAccentColor = false;
-            this.btn_clean_consolidado.UseVisualStyleBackColor = true;
-            // 
-            // btn_export_excel_consolidado
-            // 
-            this.btn_export_excel_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_export_excel_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_export_excel_consolidado.Depth = 0;
-            this.btn_export_excel_consolidado.Enabled = false;
-            this.btn_export_excel_consolidado.HighEmphasis = true;
-            this.btn_export_excel_consolidado.Icon = global::Tablero.Properties.Resources.excel_icon;
-            this.btn_export_excel_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_export_excel_consolidado.ImageKey = "save_icon";
-            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(738, 20);
-            this.btn_export_excel_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_export_excel_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_export_excel_consolidado.Name = "btn_export_excel_consolidado";
-            this.btn_export_excel_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_export_excel_consolidado.Size = new System.Drawing.Size(184, 36);
-            this.btn_export_excel_consolidado.TabIndex = 30;
-            this.btn_export_excel_consolidado.Text = "Exportar a Excel";
-            this.btn_export_excel_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_export_excel_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_export_excel_consolidado.UseAccentColor = false;
-            this.btn_export_excel_consolidado.UseVisualStyleBackColor = true;
-            this.btn_export_excel_consolidado.Click += new System.EventHandler(this.btn_export_excel_consolidado_Click);
-            // 
-            // btn_new_report_consolidado
-            // 
-            this.btn_new_report_consolidado.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_new_report_consolidado.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_new_report_consolidado.Depth = 0;
-            this.btn_new_report_consolidado.HighEmphasis = true;
-            this.btn_new_report_consolidado.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
-            this.btn_new_report_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_new_report_consolidado.ImageKey = "save_icon";
-            this.btn_new_report_consolidado.Location = new System.Drawing.Point(548, 20);
-            this.btn_new_report_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_new_report_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_new_report_consolidado.Name = "btn_new_report_consolidado";
-            this.btn_new_report_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_new_report_consolidado.Size = new System.Drawing.Size(182, 36);
-            this.btn_new_report_consolidado.TabIndex = 29;
-            this.btn_new_report_consolidado.Text = "Generar Reporte";
-            this.btn_new_report_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_new_report_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_new_report_consolidado.UseAccentColor = false;
-            this.btn_new_report_consolidado.UseVisualStyleBackColor = true;
-            this.btn_new_report_consolidado.Click += new System.EventHandler(this.btn_new_report_consolidado_Click);
-            // 
-            // materialCard4
-            // 
-            this.materialCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard4.Controls.Add(this.rgv_reporte_consolidado);
-            this.materialCard4.Depth = 0;
-            this.materialCard4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard4.Location = new System.Drawing.Point(0, 91);
-            this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard4.Name = "materialCard4";
-            this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(1674, 807);
-            this.materialCard4.TabIndex = 4;
-            // 
-            // rgv_reporte_consolidado
-            // 
-            this.rgv_reporte_consolidado.AutoScroll = true;
-            this.rgv_reporte_consolidado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rgv_reporte_consolidado.Location = new System.Drawing.Point(14, 14);
-            // 
-            // 
-            // 
-            this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
-            this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
-            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 779);
-            this.rgv_reporte_consolidado.TabIndex = 0;
-            // 
-            // cb_area_reporte
-            // 
-            this.cb_area_reporte.AutoResize = false;
-            this.cb_area_reporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_area_reporte.Depth = 0;
-            this.cb_area_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_area_reporte.DropDownHeight = 174;
-            this.cb_area_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_area_reporte.DropDownWidth = 121;
-            this.cb_area_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_area_reporte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_area_reporte.FormattingEnabled = true;
-            this.cb_area_reporte.Hint = "Selecione Área";
-            this.cb_area_reporte.IntegralHeight = false;
-            this.cb_area_reporte.ItemHeight = 43;
-            this.cb_area_reporte.Items.AddRange(new object[] {
-            "Tunel/Sumergidor",
-            "Despegue",
-            "Evaporado",
-            "Grind",
-            "Inspeccion",
-            "Empacado",
-            "Polvos",
-            "Revolturas",
-            "Máquinas"});
-            this.cb_area_reporte.Location = new System.Drawing.Point(282, 13);
-            this.cb_area_reporte.MaxDropDownItems = 4;
-            this.cb_area_reporte.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_area_reporte.Name = "cb_area_reporte";
-            this.cb_area_reporte.Size = new System.Drawing.Size(259, 49);
-            this.cb_area_reporte.StartIndex = -1;
-            this.cb_area_reporte.TabIndex = 32;
-            // 
-            // cb_tipo_reporte
-            // 
-            this.cb_tipo_reporte.AutoResize = false;
-            this.cb_tipo_reporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_tipo_reporte.Depth = 0;
-            this.cb_tipo_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_tipo_reporte.DropDownHeight = 174;
-            this.cb_tipo_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_tipo_reporte.DropDownWidth = 121;
-            this.cb_tipo_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_tipo_reporte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_tipo_reporte.FormattingEnabled = true;
-            this.cb_tipo_reporte.Hint = "Selecione Reporte";
-            this.cb_tipo_reporte.IntegralHeight = false;
-            this.cb_tipo_reporte.ItemHeight = 43;
-            this.cb_tipo_reporte.Items.AddRange(new object[] {
-            "Área",
-            "Tiempo Muerto"});
-            this.cb_tipo_reporte.Location = new System.Drawing.Point(17, 13);
-            this.cb_tipo_reporte.MaxDropDownItems = 4;
-            this.cb_tipo_reporte.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_tipo_reporte.Name = "cb_tipo_reporte";
-            this.cb_tipo_reporte.Size = new System.Drawing.Size(259, 49);
-            this.cb_tipo_reporte.StartIndex = -1;
-            this.cb_tipo_reporte.TabIndex = 33;
+            this.button1.Location = new System.Drawing.Point(1179, 25);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form_principal
             // 
@@ -4037,6 +4049,11 @@
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
+            this.materialCard3.ResumeLayout(false);
+            this.materialCard3.PerformLayout();
+            this.materialCard4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado)).EndInit();
             this.metroTabPage10.ResumeLayout(false);
             this.materialCard8.ResumeLayout(false);
             this.materialCard8.PerformLayout();
@@ -4101,11 +4118,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.materialCard3.ResumeLayout(false);
-            this.materialCard3.PerformLayout();
-            this.materialCard4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado.MasterTemplate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4319,6 +4331,7 @@
         private Telerik.WinControls.UI.RadGridView rgv_reporte_consolidado;
         private MaterialSkin.Controls.MaterialComboBox cb_tipo_reporte;
         private MaterialSkin.Controls.MaterialComboBox cb_area_reporte;
+        private System.Windows.Forms.Button button1;
     }
 }
 

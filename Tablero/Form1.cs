@@ -8464,7 +8464,7 @@ namespace Tablero
                     // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                        ExportarRadGridViewFiltradoAExcel(rgv_reporte_consolidado, filePath);
+                       ExportarRadGridViewFiltradoAExcel(rgv_reporte_consolidado, filePath);
                     });
 
                     MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -8548,6 +8548,15 @@ namespace Tablero
             System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            GridViewSpreadExport spreadExporter = new GridViewSpreadExport(this.rgv_reporte_consolidado);
+            spreadExporter.ExportChildRowsGrouped = true;
+            SpreadExportRenderer exportRenderer = new SpreadExportRenderer();
+            spreadExporter.RunExport(@"..\..\exportedFile.xlsx", exportRenderer);
         }
     }
 }
