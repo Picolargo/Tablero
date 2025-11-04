@@ -729,12 +729,11 @@ namespace Tablero
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos Entrada a secador";
                 Txt_Read_5.EmbeddedLabelText = "Cumplimiento de Metas (%)";
-                Txt_Read_6.EmbeddedLabelText = "Kg Secos Meta";
+                //Txt_Read_6.EmbeddedLabelText = "Kg Secos Meta";
                 Txt_Read_7.EmbeddedLabelText = "Relación Fresco-Seco";
                 Txt_Read_8.EmbeddedLabelText = "FTT";
 
                 Txt_Read_5.Visible = true;
-                Txt_Read_6.Visible = true;
                 Txt_Read_7.Visible = true;
                 Txt_Read_8.Visible = true;
 
@@ -745,6 +744,7 @@ namespace Tablero
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
                 cb_proceso.Visible = false;
+                Txt_Read_6.Visible = false;
 
                 Txt_2.Enabled = false;
                 Txt_3.Enabled = false;
@@ -2735,6 +2735,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 0;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_deshidratado = dgv_metas_des.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_des.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_des.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -2747,10 +2752,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 0;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -3496,7 +3498,7 @@ namespace Tablero
         {
             if (cmb_area.SelectedIndex == 0)
             {
-                kg_seco_hr();
+                
                 if (decimal.TryParse(txt_Meta_1.Text, out decimal valor))
                 {
                     // Fórmula: (valor * 380) - (valor * 380 * 10%)
@@ -3508,6 +3510,7 @@ namespace Tablero
                 {
                     txt_Meta_2.Text = string.Empty; // Limpia si no es válido
                 }
+                kg_seco_hr();
             }
             if (cmb_area.SelectedIndex == 1 || cmb_area.SelectedIndex == 2)
             {
@@ -3585,6 +3588,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 1;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_empacado = dgv_metas_emp.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_emp.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_emp.Rows[e.RowIndex].Cells[4].Value.ToString();
@@ -3596,10 +3604,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 1;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -3614,6 +3619,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 2;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_inspec = dgv_metas_insp.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_insp.Rows[e.RowIndex].Cells[4].Value.ToString();
@@ -3625,10 +3635,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 2;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -3643,6 +3650,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 3;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_evaporado = dgv_metas_Eva.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_Eva.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_Eva.Rows[e.RowIndex].Cells[5].Value.ToString();
@@ -3654,10 +3666,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 3;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -3672,6 +3681,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 4;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_grind = dgv_metas_Grind.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_Grind.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_Grind.Rows[e.RowIndex].Cells[5].Value.ToString();
@@ -3683,10 +3697,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 4;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -4188,33 +4199,33 @@ namespace Tablero
                         // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
                         Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
 
-                        if (cb_Area.SelectedIndex == 1)
-                        {
-                            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                            string valorBuscado2 = cb_OP.Text;
-                            // Consulta para buscar donde OP = valor_buscado
-                            string query2 = "SELECT \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
+                        //if (cb_Area.SelectedIndex == 1)
+                        //{
+                        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                        //    string valorBuscado2 = cb_OP.Text;
+                        //    // Consulta para buscar donde OP = valor_buscado
+                        //    string query2 = "SELECT \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
 
-                            // Crear parámetro
-                            NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
-                            {
-                                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado2 }
-                            };
+                        //    // Crear parámetro
+                        //    NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                        //    {
+                        //        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado2 }
+                        //    };
 
-                            // Ejecutar consulta
-                            System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
-                            decimal horas_prog = Convert.ToDecimal(Txt_Read_1.Text);
-                            // Variable string donde guardar el resultado
-                            decimal kg_seco_hr, kg_secos_meta;
+                        //    // Ejecutar consulta
+                        //    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                        //    decimal horas_prog = Convert.ToDecimal(Txt_Read_1.Text);
+                        //    // Variable string donde guardar el resultado
+                        //    decimal kg_seco_hr, kg_secos_meta;
 
-                            // Verificar si se encontraron resultados
-                            if (dt2 != null && dt2.Rows.Count > 0)
-                            {
-                                kg_seco_hr = Convert.ToDecimal(dt2.Rows[0]["Kg_seco_hr"].ToString());
-                                kg_secos_meta = kg_seco_hr * horas_prog;
-                                Txt_Read_6.Text = kg_secos_meta.ToString("0.##");
-                            }
-                        }
+                        //    // Verificar si se encontraron resultados
+                        //    if (dt2 != null && dt2.Rows.Count > 0)
+                        //    {
+                        //        kg_seco_hr = Convert.ToDecimal(dt2.Rows[0]["Kg_seco_hr"].ToString());
+                        //        kg_secos_meta = kg_seco_hr * horas_prog;
+                        //        Txt_Read_6.Text = kg_secos_meta.ToString("0.##");
+                        //    }
+                        //}
 
                         // Calcular la nueva diferencia restando los minutos
                         TimeSpan diferenciaConDescuento = diferencia;
@@ -4352,7 +4363,7 @@ namespace Tablero
                 {
                     int idUsuarioActual = id_user;
 
-                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text == "  :" && Mask_txt_hr2.Text == "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text))
+                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text))
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -4460,7 +4471,7 @@ namespace Tablero
                     decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
                     string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
                     decimal PorcentCumplimiento = Convert.ToDecimal(textoPorcentCumplimiento) / 100m;
-                    decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
+                    //decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
                     decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
                     string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
                     decimal FTT = Convert.ToDecimal(textoFTT) / 100m;
@@ -4476,14 +4487,14 @@ namespace Tablero
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                            KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                            KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
                     }
                     else
                     {
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
-                            KgFueraSpec, KgResecar, PorcentCumplimiento, Kg_secos_meta, Relacion_Fresco_seco, FTT,
+                            KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
 
                         if (idFicha > 0)
@@ -4903,7 +4914,7 @@ namespace Tablero
                 queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_prod_seco"" = @Kg_prod_seco,
                                     ""Merma_kg"" = @Merma_kg_seco, ""Kg_fuera_espec"" = @Kg_fuera_spec, ""Kg_resecar"" = @Kg_resecar, ""Personal_Operativo"" = @Personal_Operativo, 
                                     ""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, ""porcent_cump_meta"" = @Porcent_cumplimiento, ""Kg_meta"" = @Kg_meta,
-                                    ""Relacion_Fr_seco"" = @Relacion_fresco_seco, ""FTT"" = @FTT, ""Hr_inicio"" = @hr_inicio, ""Hr_fin"" = @hr_fin, ""MetaHr"" = @MetaHr, ""kg_frescos_enter_se"" = @kg_frescos_enter_se 
+                                    ""Relacion_Fr_seco"" = @Relacion_fresco_seco, ""FTT"" = @FTT, ""Hr_inicio"" = @hr_inicio, ""Hr_fin"" = @hr_fin, ""MetaHr"" = @MetaHr, ""kg_frescos_enter_se"" = @kg_frescos_enter_se
                                     WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
@@ -5658,7 +5669,7 @@ namespace Tablero
             {
                 CalcularSuma();
             }
-            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_6.Text))
+            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
             {
                 porcentaje_cumplimiento_metas();
                 Ftt_metodo();
@@ -5776,7 +5787,7 @@ namespace Tablero
             {
                 CalcularSuma();
             }
-            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_6.Text))
+            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
             {
                 porcentaje_cumplimiento_metas();
                 Ftt_metodo();
@@ -5862,6 +5873,35 @@ namespace Tablero
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     resultado = dt.Rows[0]["No_box_hr"].ToString();
+                    Txt_meta.Text = resultado;
+
+                    if (!string.IsNullOrEmpty(Txt_Read_1.Text))
+                    {
+                        calcular_meta_programada();
+                    }
+                }
+            }
+            if (cb_Area.SelectedIndex == 1)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string resultado = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    resultado = dt.Rows[0]["Kg_seco_hr"].ToString();
                     Txt_meta.Text = resultado;
 
                     if (!string.IsNullOrEmpty(Txt_Read_1.Text))
@@ -6367,12 +6407,7 @@ namespace Tablero
 
         private void porcentaje_cumplimiento_metas()
         {
-            // Obtener los valores de los TextBox y convertirlos a double
-
-            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
-            //double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
-            //double kg_secos_meta = Convert.ToDouble(Txt_Read_6.Text);
-            if (double.TryParse(Txt_2.Text, out double kg_prod_seco) && double.TryParse(Txt_4.Text, out double kg_fuera_espec) && double.TryParse(Txt_Read_6.Text, out double kg_secos_meta))
+            if (double.TryParse(Txt_2.Text, out double kg_prod_seco) && double.TryParse(Txt_4.Text, out double kg_fuera_espec) && double.TryParse(Txt_Read_2.Text, out double kg_secos_meta))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
                 if (kg_secos_meta == 0)
@@ -6624,6 +6659,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 6;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_polvos = dgv_metas_polvos.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_polvos.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_polvos.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -6635,10 +6675,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 6;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -6653,6 +6690,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 5;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_revolturas = dgv_metas_revolturas.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_revolturas.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_revolturas.Rows[e.RowIndex].Cells[5].Value.ToString();
@@ -6664,10 +6706,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 5;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -6682,6 +6721,11 @@ namespace Tablero
         {
             if (e.RowIndex >= 0)
             {
+                cmb_area.Enabled = true;
+                cmb_area.SelectedIndex = 7;
+                cmb_area.Focus();
+                cmb_area.Enabled = false;
+
                 id_global_meta_maquinas = dgv_metas_maquinas.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txt_op.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[1].Value.ToString();
                 txt_Meta_1.Text = dgv_metas_maquinas.Rows[e.RowIndex].Cells[5].Value.ToString();
@@ -6692,10 +6736,7 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                cmb_area.Enabled = true;
-                cmb_area.SelectedIndex = 7;
-                cmb_area.Focus();
-                cmb_area.Enabled = false;
+                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -8435,9 +8476,112 @@ namespace Tablero
         private void reporte_consolidado()
         {
             string var1 = cb_area_reporte.Text;
+            string querySimple= string.Empty;
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
-            string querySimple = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Area"" FROM public.""Ficha"" WHERE ""Area"" = @Area ORDER BY ""OP"" ASC;";  // ← orden ascendente
+            if (var1 == "Tunel/Sumergidor")
+            {
+                querySimple = @"WITH turnos_trabajados AS (
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        COUNT(*) AS total_turnos_trabajados
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Tunel/Sumergidor'
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+),
+merma_semanal AS (
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        SUM(""Kg_merma"") AS merma_total_semanal
+    FROM public.""Limpieza_tunel""
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+)
+SELECT 
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""Lote"",
+    f.""OP"",
+    -- ... resto de columnas igual ...
+    CASE 
+        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
+        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
+        ELSE 0 
+    END AS ""Limpieza Túnel""
+FROM public.""Ficha"" f
+LEFT JOIN turnos_trabajados tt 
+    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
+    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
+LEFT JOIN merma_semanal ms 
+    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
+    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
+WHERE f.""Area"" = 'Tunel/Sumergidor'
+ORDER BY f.""OP"" ASC;";
+            }
+
+
+            if (var1 == "Despegue")
+            {
+                querySimple = @"
+                SELECT 
+                    ""Fecha"",
+                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                    ""Turno"",
+                    ""Lote"",
+                    ""OP"",
+                    ""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+                    ""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    ""Kg_prod_seco"" AS ""Kilos Producto Seco"",
+                    ""Merma_kg"" AS ""Merma(Kg)"",
+                    ""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    ""Kg_resecar"" AS ""Kg para Resecar"",
+                    ""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
+                    ""FTT""
+                FROM public.""Ficha""
+                WHERE ""Area"" = @Area
+                ORDER BY ""OP"" ASC;";
+            }
+
+            if (var1 == "Evaporado")
+            {
+                querySimple = @"
+                SELECT 
+                    ""Fecha"",
+                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                    ""Turno"",
+                    ""OP"",
+                    ""Kg_meta"" as ""Meta(Kg)"",
+                    ""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    ""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    ""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    ""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    ""Merma_kg"" AS ""Merma(Kg)"",
+                    ""porcent_aumento_hum"" as ""% Aumento de Humedad""
+                FROM public.""Ficha""
+                WHERE ""Area"" = @Area
+                ORDER BY ""OP"" ASC;";
+            }
+
+            if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado")
+            {
+                querySimple = @"
+                SELECT 
+                    ""Fecha"",
+                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                    ""Turno"",
+                    ""OP"",
+                    ""Kg_meta"" as ""Meta(Kg)"",
+                    ""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    ""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    ""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    ""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    ""Merma_kg"" AS ""Merma(Kg)""
+                FROM public.""Ficha""
+                WHERE ""Area"" = @Area
+                ORDER BY ""OP"" ASC;";
+            }
+
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
@@ -8447,6 +8591,32 @@ namespace Tablero
 
             // Configurar el DataGridView
             rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+
+            // 🔹 Formato de porcentaje para las columnas de tipo decimal
+            if (rgv_reporte_consolidado.Columns.Contains("% Cumplimiento a Metas"))
+            {
+                var colMeta = rgv_reporte_consolidado.Columns["% Cumplimiento a Metas"];
+                colMeta.DataType = typeof(decimal);
+                colMeta.FormatString = "{0:P0}"; // ejemplo: 0.85 → 85%
+                colMeta.TextAlignment = ContentAlignment.MiddleRight;
+            }
+
+            if (rgv_reporte_consolidado.Columns.Contains("FTT"))
+            {
+                var colFTT = rgv_reporte_consolidado.Columns["FTT"];
+                colFTT.DataType = typeof(decimal);
+                colFTT.FormatString = "{0:P0}";
+                colFTT.TextAlignment = ContentAlignment.MiddleRight;
+            }
+
+            if (rgv_reporte_consolidado.Columns.Contains("% Aumento de Humedad"))
+            {
+                var colFTT = rgv_reporte_consolidado.Columns["% Aumento de Humedad"];
+                colFTT.DataType = typeof(decimal);
+                colFTT.FormatString = "{0:P0}";
+                colFTT.TextAlignment = ContentAlignment.MiddleRight;
+            }
+
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_consolidado.Clear();
         }

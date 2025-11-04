@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -1532,7 +1532,7 @@
             this.btn_filtro_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_filtro_consolidado.Name = "btn_filtro_consolidado";
             this.btn_filtro_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_filtro_consolidado.Size = new System.Drawing.Size(107, 36);
+            this.btn_filtro_consolidado.Size = new System.Drawing.Size(159, 36);
             this.btn_filtro_consolidado.TabIndex = 31;
             this.btn_filtro_consolidado.Text = "Limpiar Filtro";
             this.btn_filtro_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1716,7 +1716,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition4;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 779);
             this.rgv_reporte_consolidado.TabIndex = 0;
