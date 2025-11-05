@@ -708,16 +708,29 @@ namespace Tablero
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
 
-                Txt_1.Visible = false;
+                //Txt_1.Visible = false;
 
                 //habilitar controles
                 cb_Turno.Enabled = false;
                 cb_OP.Enabled = false;
                 dtp1.Enabled = true;
 
-                cb_lote.Visible = true;
+               // cb_lote.Visible = true;
 
                 //nombrar controles
+                if (editar)
+                {
+                    Txt_1.EmbeddedLabelText = "Lote";
+                    Txt_1.Visible = true;
+                    Txt_1.Enabled = false;
+                    cb_lote.Visible = false;
+                }
+                else
+                {
+                    Txt_1.Visible = false;
+                    cb_lote.Visible = true;
+                }
+                Txt_1.EmbeddedLabelText = "Lote";
                 Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
                 Txt_3.EmbeddedLabelText = "Merma Kg Secos";
                 Txt_4.EmbeddedLabelText = "Kg Secos Fuera de Espec.";
@@ -729,7 +742,6 @@ namespace Tablero
                 Txt_Read_3.EmbeddedLabelText = "Horas Efectivas";
                 Txt_Read_4.EmbeddedLabelText = "Kg Frescos Entrada a secador";
                 Txt_Read_5.EmbeddedLabelText = "Cumplimiento de Metas (%)";
-                //Txt_Read_6.EmbeddedLabelText = "Kg Secos Meta";
                 Txt_Read_7.EmbeddedLabelText = "Relación Fresco-Seco";
                 Txt_Read_8.EmbeddedLabelText = "FTT";
 
@@ -4453,7 +4465,7 @@ namespace Tablero
             }
             if (cb_Area.SelectedIndex == 1)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && cb_lote.SelectedIndex != -1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text))
                 {
                     //Despegue
                     int idUsuarioActual = id_user;
@@ -5847,7 +5859,6 @@ namespace Tablero
 
         private void buscar_Meta_hr()
         {
-            //MessageBox.Show("entró");
             string valorBuscado = cb_OP.Text;
 
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -5860,7 +5871,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -5889,7 +5900,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -5918,7 +5929,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -5942,7 +5953,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -5966,7 +5977,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -6004,11 +6015,10 @@ namespace Tablero
                     query = "SELECT \"Meta_kg_hr_idon\" FROM public.\"Polvos\" WHERE \"OP\" = @valorBuscado;";
                 }
 
-
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -6040,7 +6050,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -6064,7 +6074,7 @@ namespace Tablero
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
                 };
 
                 // Ejecutar consulta
@@ -6574,6 +6584,51 @@ namespace Tablero
                     calcular_kg_entrada_proceso();
                 }
             }
+            if(cb_Area.SelectedIndex == 1 && editar == true)
+            {
+                string valorBuscado = Txt_1.Text;
+
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                if (!string.IsNullOrWhiteSpace(Txt_1.Text))
+                {
+                    // Consulta para buscar donde OP = valor_buscado
+                    string query = "SELECT \"OP\", \"kg_frescos_enter_se\" FROM public.\"Ficha\" WHERE \"Lote\" = @valorBuscado and \"Area\" = 'Tunel/Sumergidor';";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                    // Variable string donde guardar el resultado
+                    string OP = string.Empty;
+                    string kgFrescoEnterSecador = string.Empty;
+
+                    // Verificar si se encontraron resultados
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        OP = dt.Rows[0]["OP"].ToString();
+                        kgFrescoEnterSecador = dt.Rows[0]["kg_frescos_enter_se"].ToString();
+                        cb_OP.Enabled = true;
+                        cb_OP.Text = OP;
+                        cb_OP.Enabled = false;
+
+                        cb_Turno.Enabled = true;
+
+                        Txt_Read_4.Text = kgFrescoEnterSecador;
+                        buscar_Meta_hr();
+                    }
+                }
+                else
+                {
+                    cb_Turno.SelectedIndex = -1;
+                    cb_Turno.Enabled = false;
+                }
+            }
         }
 
         private void Txt_1_KeyPress(object sender, KeyPressEventArgs e)
@@ -6753,6 +6808,7 @@ namespace Tablero
             cb_Area.SelectedIndex = -1;
             reiniciarCampos();
             cb_Area.Focus();
+            editar = false;
         }
 
         private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -6910,9 +6966,7 @@ namespace Tablero
                     Mask_txt_hr1.Text = Hr_inicio;
                     Mask_txt_hr2.Text = Hr_fin;
                     Txt_meta.Text = MetaHr;
-                    cb_lote.Text = Lote;
-                    cb_lote.Focus();
-                    cb_lote_SelectionChangeCommitted(cb_lote, EventArgs.Empty);
+                    Txt_1.Text = Lote;
                     Txt_2.Text = Kg_prod_seco;
                     Txt_3.Text = Merma_kg;
                     Txt_4.Text = Kg_fuera_espec;
@@ -8474,6 +8528,9 @@ namespace Tablero
         {
             string var1 = cb_area_reporte.Text;
             string querySimple= string.Empty;
+            rgv_reporte_consolidado.DataSource = null;
+            rgv_reporte_consolidado.Rows.Clear();
+            rgv_reporte_consolidado.Columns.Clear();
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             if (var1 == "Tunel/Sumergidor")
             {
@@ -8531,7 +8588,7 @@ namespace Tablero
             ELSE 0 
         END AS ""Limpieza Túnel"",
         COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Total Tiempo Muerto Mecánico""
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
     FROM public.""Ficha"" f
     LEFT JOIN turnos_trabajados tt 
         ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
@@ -8549,152 +8606,238 @@ namespace Tablero
             if (var1 == "Despegue")
             {
                 querySimple = @"
-                SELECT 
-                    ""Fecha"",
-                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                    ""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""Lote"",
-                    f.""OP"",
-                    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Kg_resecar"" AS ""Kg para Resecar"",
-                    f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
-                    f.""Personal_Operativo"" as ""Personal Operativo"",
-                    ""FTT""
-                FROM public.""Ficha"" f
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                WHERE f.""Area"" = @Area
-                ORDER BY f.""OP"" ASC;";
+    WITH tiempos_muertos AS (
+        SELECT 
+            f.""OP"",
+            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+        FROM public.""Ficha"" f
+        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE f.""Area"" = 'Despegue'
+        GROUP BY f.""OP""
+    )
+    SELECT 
+        f.""Fecha"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        f.""Turno"",
+        u.""Usuario"" AS ""Empleado"",
+        f.""Lote"",
+        f.""OP"",
+        f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+        f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
+        f.""Merma_kg"" AS ""Merma(Kg)"",
+        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+        f.""Kg_resecar"" AS ""Kg para Resecar"",
+        f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
+        f.""Personal_Operativo"" as ""Personal Operativo"",
+        f.""FTT"",
+        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Usuarios"" u 
+        ON f.""ID_user"" = u.""ID_User""
+    LEFT JOIN tiempos_muertos tm 
+        ON f.""OP"" = tm.""OP""
+    WHERE f.""Area"" = @Area
+    ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Evaporado")
             {
                 querySimple = @"
-                SELECT 
-                    ""Fecha"",
-                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                    ""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""OP"",
-                    f.""Kg_meta"" as ""Meta(Kg)"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
-                    f.""Personal_Operativo"" as ""Personal Operativo""
-                FROM public.""Ficha"" f
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""    
-                WHERE f.""Area"" = @Area
-                ORDER BY f.""OP"" ASC;";
+    WITH tiempos_muertos AS (
+        SELECT 
+            f.""OP"",
+            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+        FROM public.""Ficha"" f
+        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE f.""Area"" = 'Evaporado'
+        GROUP BY f.""OP""
+    )
+    SELECT 
+        f.""Fecha"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        f.""Turno"",
+        u.""Usuario"" AS ""Empleado"",
+        f.""OP"",
+        f.""Kg_meta"" as ""Meta(Kg)"",
+        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+        f.""Merma_kg"" AS ""Merma(Kg)"",
+        f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
+        f.""Personal_Operativo"" as ""Personal Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Usuarios"" u 
+        ON f.""ID_user"" = u.""ID_User""
+    LEFT JOIN tiempos_muertos tm 
+        ON f.""OP"" = tm.""OP""
+    WHERE f.""Area"" = @Area
+    ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
             {
                 querySimple = @"
-                SELECT 
-                    ""Fecha"",
-                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                    ""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""OP"",
-                    f.""Kg_meta"" as ""Meta(Kg)"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""Personal_Operativo"" as ""Personal Operativo""
-                FROM public.""Ficha"" f
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                WHERE f.""Area"" = @Area
-                ORDER BY f.""OP"" ASC;";
+    WITH tiempos_muertos AS (
+        SELECT 
+            f.""OP"",
+            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+        FROM public.""Ficha"" f
+        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE f.""Area"" IN ('Grind', 'Inspeccion', 'Empacado', 'Revolturas')
+        GROUP BY f.""OP""
+    )
+    SELECT 
+        f.""Fecha"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        f.""Turno"",
+        u.""Usuario"" AS ""Empleado"",
+        f.""OP"",
+        f.""Kg_meta"" as ""Meta(Kg)"",
+        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+        f.""Merma_kg"" AS ""Merma(Kg)"",
+        f.""Personal_Operativo"" as ""Personal Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Usuarios"" u 
+        ON f.""ID_user"" = u.""ID_User""
+    LEFT JOIN tiempos_muertos tm 
+        ON f.""OP"" = tm.""OP""
+    WHERE f.""Area"" = @Area
+    ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Máquinas")
             {
                 querySimple = @"
-                SELECT 
-                    ""Fecha"",
-                    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                    ""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""OP"",
-                    f.""Kg_meta"" as ""Meta(Kg)"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""Personal_Operativo"" AS ""Personal Operativo"",
-                    f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
-                    f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
-                    f.""Bobina_merma"" AS ""Bobina Merma""
-                FROM public.""Ficha"" f
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                WHERE f.""Area"" = @Area
-                ORDER BY f.""OP"" ASC;";
+    WITH tiempos_muertos AS (
+        SELECT 
+            f.""OP"",
+            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+        FROM public.""Ficha"" f
+        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE f.""Area"" = 'Máquinas'
+        GROUP BY f.""OP""
+    )
+    SELECT 
+        f.""Fecha"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        f.""Turno"",
+        u.""Usuario"" AS ""Empleado"",
+        f.""OP"",
+        f.""Kg_meta"" as ""Meta(Kg)"",
+        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+        f.""Merma_kg"" AS ""Merma(Kg)"",
+        f.""Personal_Operativo"" AS ""Personal Operativo"",
+        f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
+        f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
+        f.""Bobina_merma"" AS ""Bobina Merma"",
+        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Usuarios"" u 
+        ON f.""ID_user"" = u.""ID_User""
+    LEFT JOIN tiempos_muertos tm 
+        ON f.""OP"" = tm.""OP""
+    WHERE f.""Area"" = @Area
+    ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Polvos")
             {
-                querySimple = @"WITH turnos_trabajados AS (
-                SELECT 
-                    EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                    EXTRACT(YEAR FROM ""Fecha"") AS año,
-                    COUNT(*) AS total_turnos_trabajados
-                FROM public.""Ficha""
-                WHERE ""Area"" = 'Polvos'
-                GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                ),
-                merma_semanal AS (
-                    SELECT 
-                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                        EXTRACT(YEAR FROM ""Fecha"") AS año,
-                        SUM(""Kg_merma"") AS merma_total_semanal
-                    FROM public.""Limpieza_polvos""
-                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                    )
-                SELECT 
-                    f.""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""OP"",
-                    f.""Kg_meta"" as ""Meta(Kg)"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
-                    f.""Granulo"",
-                    f.""Personal_Operativo"" as ""Personal Operativo"",
-                    CASE 
-                        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-                        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-                        ELSE 0 
-                    END AS ""Limpieza Polvos""
-                FROM public.""Ficha"" f
-                LEFT JOIN turnos_trabajados tt 
-                    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-                LEFT JOIN merma_semanal ms 
-                    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                WHERE f.""Area"" = 'Polvos'
-                ORDER BY f.""OP"" ASC;";
+                querySimple = @"
+    WITH turnos_trabajados AS (
+        SELECT 
+            EXTRACT(WEEK FROM ""Fecha"") AS semana,
+            EXTRACT(YEAR FROM ""Fecha"") AS año,
+            COUNT(*) AS total_turnos_trabajados
+        FROM public.""Ficha""
+        WHERE ""Area"" = 'Polvos'
+        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+    ),
+    merma_semanal AS (
+        SELECT 
+            EXTRACT(WEEK FROM ""Fecha"") AS semana,
+            EXTRACT(YEAR FROM ""Fecha"") AS año,
+            SUM(""Kg_merma"") AS merma_total_semanal
+        FROM public.""Limpieza_polvos""
+        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+    ),
+    tiempos_muertos AS (
+        SELECT 
+            f.""OP"",
+            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+        FROM public.""Ficha"" f
+        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE f.""Area"" = 'Polvos'
+        GROUP BY f.""OP""
+    )
+    SELECT 
+        f.""Fecha"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        f.""Turno"",
+        u.""Usuario"" AS ""Empleado"",
+        f.""OP"",
+        f.""Kg_meta"" as ""Meta(Kg)"",
+        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+        f.""Merma_kg"" AS ""Merma(Kg)"",
+        f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
+        f.""Granulo"",
+        f.""Personal_Operativo"" as ""Personal Operativo"",
+        CASE 
+            WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
+            THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
+            ELSE 0 
+        END AS ""Limpieza Polvos"",
+        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+    FROM public.""Ficha"" f
+    LEFT JOIN turnos_trabajados tt 
+        ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
+        AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
+    LEFT JOIN merma_semanal ms 
+        ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
+        AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
+    LEFT JOIN public.""Usuarios"" u 
+        ON f.""ID_user"" = u.""ID_User""
+    LEFT JOIN tiempos_muertos tm 
+        ON f.""OP"" = tm.""OP""
+    WHERE f.""Area"" = 'Polvos'
+    ORDER BY f.""OP"" ASC;";
             }
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -8709,6 +8852,11 @@ namespace Tablero
             rgv_reporte_consolidado.Columns["Fecha"].BestFit();
             rgv_reporte_consolidado.Columns["No. Semana"].BestFit();
             rgv_reporte_consolidado.Columns["Turno"].BestFit();
+            rgv_reporte_consolidado.Columns["Empleado"].BestFit();
+            rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo"].BestFit();
+            rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico"].BestFit();
+            rgv_reporte_consolidado.Columns["OP"].BestFit();
+            rgv_reporte_consolidado.Columns["Personal Operativo"].BestFit();
 
             rgv_reporte_consolidado.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
@@ -8716,6 +8864,8 @@ namespace Tablero
             rgv_reporte_consolidado.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Empleado"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Personal Operativo"].TextAlignment = ContentAlignment.MiddleCenter;
+            rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo"].TextAlignment = ContentAlignment.MiddleCenter;
+            rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico"].TextAlignment = ContentAlignment.MiddleCenter;
 
             if (var1 == "Despegue")
             {
@@ -8727,6 +8877,10 @@ namespace Tablero
                 rgv_reporte_consolidado.Columns["Kg para Resecar"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Relación Fresco-Seco"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["FTT"].TextAlignment = ContentAlignment.MiddleCenter;
+
+                rgv_reporte_consolidado.Columns["Lote"].BestFit();
+                rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
+                rgv_reporte_consolidado.Columns["FTT"].BestFit();
             }
             if (var1 == "Tunel/Sumergidor")
             {
@@ -8741,6 +8895,10 @@ namespace Tablero
                 rgv_reporte_consolidado.Columns["Merma Canaletas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Merma Lavado Bandas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Cáscara Carrete(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
+
+                rgv_reporte_consolidado.Columns["Lote"].BestFit();
+                rgv_reporte_consolidado.Columns["Canica(Kg)"].BestFit();
+                //rgv_reporte_consolidado.Columns["Canica(Kg)"].BestFit();
             }
 
             if (var1 == "Máquinas")
@@ -8749,8 +8907,19 @@ namespace Tablero
                 rgv_reporte_consolidado.Columns["Bobina Utilizada"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Bobina Merma"].TextAlignment = ContentAlignment.MiddleCenter;
             }
+            if (var1 == "Polvos")
+            {
+                rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_consolidado.Columns["Granulo"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_consolidado.Columns["Limpieza Polvos"].TextAlignment = ContentAlignment.MiddleCenter;
 
-                // 🔹 Formato de porcentaje para las columnas de tipo decimal
+                rgv_reporte_consolidado.Columns["Granulo"].BestFit();
+                rgv_reporte_consolidado.Columns["Limpieza Polvos"].BestFit();
+                rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].BestFit();
+                
+            }
+
+            // 🔹 Formato de porcentaje para las columnas de tipo decimal
             if (rgv_reporte_consolidado.Columns.Contains("% Cumplimiento a Metas"))
             {
                 var colMeta = rgv_reporte_consolidado.Columns["% Cumplimiento a Metas"];
@@ -8778,6 +8947,7 @@ namespace Tablero
             if (rgv_reporte_consolidado.Columns.Contains("Meta(Kg)"))
             {
                 rgv_reporte_consolidado.Columns["Meta(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_consolidado.Columns["Meta(Kg)"].BestFit();
             }
 
             if (rgv_reporte_consolidado.Columns.Contains("Kg Entrada(Proceso)"))
@@ -8798,6 +8968,7 @@ namespace Tablero
             if (rgv_reporte_consolidado.Columns.Contains("Merma(Kg)"))
             {
                 rgv_reporte_consolidado.Columns["Merma(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
             }
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_consolidado.Clear();
@@ -8985,6 +9156,15 @@ namespace Tablero
             {
                 rgv_reporte_consolidado.MasterTemplate.Refresh();
             }
+        }
+
+        private void btn_clean_consolidado_Click(object sender, EventArgs e)
+        {
+            rgv_reporte_consolidado.DataSource = null;
+            rgv_reporte_consolidado.Rows.Clear();
+            rgv_reporte_consolidado.Columns.Clear();
+            // Limpiar el filtro al cargar nuevos datos
+            txt_filtro_report_consolidado.Clear();
         }
     }
 }
