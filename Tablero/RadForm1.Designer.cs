@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radGridView1 = new Telerik.WinControls.UI.RadGridView();
             this.materialExpansionPanel1 = new MaterialSkin.Controls.MaterialExpansionPanel();
             this.txt_user = new MaterialSkin.Controls.MaterialTextBox2();
@@ -51,11 +51,11 @@
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
             this.radGridView1.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.ReadOnly = true;
             this.radGridView1.Size = new System.Drawing.Size(977, 618);
-            this.radGridView1.TabIndex = 0;
+            this.radGridView1.TabIndex = 4;
             this.radGridView1.ThemeName = "TelerikMetro";
             this.radGridView1.Visible = false;
             this.radGridView1.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.radGridView1_CellDoubleClick);
@@ -78,7 +78,7 @@
             this.materialExpansionPanel1.Padding = new System.Windows.Forms.Padding(24, 66, 26, 18);
             this.materialExpansionPanel1.ShowCollapseExpand = false;
             this.materialExpansionPanel1.Size = new System.Drawing.Size(518, 283);
-            this.materialExpansionPanel1.TabIndex = 0;
+            this.materialExpansionPanel1.TabIndex = 3;
             this.materialExpansionPanel1.Title = "Validación de Seguridad";
             this.materialExpansionPanel1.ValidationButtonEnable = true;
             this.materialExpansionPanel1.ValidationButtonText = "INICIAR";
@@ -108,7 +108,7 @@
             this.txt_user.ShortcutsEnabled = true;
             this.txt_user.ShowAssistiveText = true;
             this.txt_user.Size = new System.Drawing.Size(250, 64);
-            this.txt_user.TabIndex = 4;
+            this.txt_user.TabIndex = 1;
             this.txt_user.TabStop = false;
             this.txt_user.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_user.TrailingIcon = null;
