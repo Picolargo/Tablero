@@ -146,7 +146,6 @@ namespace Tablero
                 e.Handled = true;
             }
         }
-
         private void dgv_operativo_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (dgv_operativo.CurrentCell.ColumnIndex == 0) // Primera columna
@@ -1281,27 +1280,6 @@ namespace Tablero
             }
         }
 
-        //// Método que suma los valores de Txt_3 a Txt_8
-        //private void CalcularSuma()
-        //{
-        //    decimal total = 0;
-        //    decimal Kg_entrada = 0;
-        //    // Lista de los TextBox que quieres sumar
-        //    RadTextBox[] cajas = { Txt_3, Txt_4, Txt_5, Txt_6, Txt_7, Txt_8 };
-
-        //    foreach (RadTextBox txt in cajas)
-        //    {
-        //        if (decimal.TryParse(txt.Text, out decimal valor))
-        //        {
-        //            total += valor;
-        //        }
-        //    }
-        //    Kg_entrada = Txt_2.Text == string.Empty ? 0 : Convert.ToDecimal(Txt_2.Text);
-        //    decimal resultado = Kg_entrada - total;
-        //    Txt_Read_4.Text = resultado.ToString("0.00"); // puedes usar "0.##" si quieres decimales
-        //}
-
-        // 3) CalcularSuma: no usar Convert.ToDecimal directo — usar TryParse
         private void CalcularSuma()
         {
             decimal total = 0;
@@ -2760,12 +2738,9 @@ namespace Tablero
                 txt_Meta_4.Text = dgv_metas_des.Rows[e.RowIndex].Cells[5].Value.ToString();
                 txt_Meta_5.Text = dgv_metas_des.Rows[e.RowIndex].Cells[6].Value.ToString();
 
-
-
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
                 
-
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -3616,7 +3591,6 @@ namespace Tablero
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -3648,7 +3622,6 @@ namespace Tablero
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
                 
-
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -3679,7 +3652,6 @@ namespace Tablero
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
                 
-
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -3710,7 +3682,6 @@ namespace Tablero
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
                 
-
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -4210,34 +4181,6 @@ namespace Tablero
 
                         // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
                         Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
-
-                        //if (cb_Area.SelectedIndex == 1)
-                        //{
-                        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                        //    string valorBuscado2 = cb_OP.Text;
-                        //    // Consulta para buscar donde OP = valor_buscado
-                        //    string query2 = "SELECT \"Kg_seco_hr\" FROM public.\"Deshidratado\" WHERE \"OP\" = @valorBuscado;";
-
-                        //    // Crear parámetro
-                        //    NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
-                        //    {
-                        //        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado2 }
-                        //    };
-
-                        //    // Ejecutar consulta
-                        //    System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
-                        //    decimal horas_prog = Convert.ToDecimal(Txt_Read_1.Text);
-                        //    // Variable string donde guardar el resultado
-                        //    decimal kg_seco_hr, kg_secos_meta;
-
-                        //    // Verificar si se encontraron resultados
-                        //    if (dt2 != null && dt2.Rows.Count > 0)
-                        //    {
-                        //        kg_seco_hr = Convert.ToDecimal(dt2.Rows[0]["Kg_seco_hr"].ToString());
-                        //        kg_secos_meta = kg_seco_hr * horas_prog;
-                        //        Txt_Read_6.Text = kg_secos_meta.ToString("0.##");
-                        //    }
-                        //}
 
                         // Calcular la nueva diferencia restando los minutos
                         TimeSpan diferenciaConDescuento = diferencia;
@@ -8535,309 +8478,309 @@ namespace Tablero
             if (var1 == "Tunel/Sumergidor")
             {
                 querySimple = @"
-    WITH turnos_trabajados AS (
-        SELECT 
-            EXTRACT(WEEK FROM ""Fecha"") AS semana,
-            EXTRACT(YEAR FROM ""Fecha"") AS año,
-            COUNT(*) AS total_turnos_trabajados
-        FROM public.""Ficha""
-        WHERE ""Area"" = 'Tunel/Sumergidor'
-        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-    ),
-    merma_semanal AS (
-        SELECT 
-            EXTRACT(WEEK FROM ""Fecha"") AS semana,
-            EXTRACT(YEAR FROM ""Fecha"") AS año,
-            SUM(""Kg_merma"") AS merma_total_semanal
-        FROM public.""Limpieza_tunel""
-        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-    ),
-    tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" = 'Tunel/Sumergidor'
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""Lote"",
-        f.""OP"",
-        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-        f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-        f.""Merma_canica"" AS ""Canica(Kg)"",
-        f.""Merma_podrido"" AS ""Merma Podrido(Kg)"",
-        f.""Merma_tina"" AS ""Merma Tina(Kg)"",
-        f.""Merma_piso"" AS ""Merma Piso(Kg)"",
-        f.""Merma_canaletas"" AS ""Merma Canaletas(Kg)"",
-        f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
-        f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
-        f.""Personal_Operativo"" as ""Personal Operativo"",
-        CASE 
-            WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-            THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-            ELSE 0 
-        END AS ""Limpieza Túnel"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN turnos_trabajados tt 
-        ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-        AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-    LEFT JOIN merma_semanal ms 
-        ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-        AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = 'Tunel/Sumergidor'
-    ORDER BY f.""OP"" ASC;";
+                WITH turnos_trabajados AS (
+                    SELECT 
+                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                        EXTRACT(YEAR FROM ""Fecha"") AS año,
+                        COUNT(*) AS total_turnos_trabajados
+                    FROM public.""Ficha""
+                    WHERE ""Area"" = 'Tunel/Sumergidor'
+                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                ),
+                merma_semanal AS (
+                    SELECT 
+                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                        EXTRACT(YEAR FROM ""Fecha"") AS año,
+                        SUM(""Kg_merma"") AS merma_total_semanal
+                    FROM public.""Limpieza_tunel""
+                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                ),
+                tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" = 'Tunel/Sumergidor'
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""Lote"",
+                    f.""OP"",
+                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+                    f.""Merma_canica"" AS ""Canica(Kg)"",
+                    f.""Merma_podrido"" AS ""Merma Podrido(Kg)"",
+                    f.""Merma_tina"" AS ""Merma Tina(Kg)"",
+                    f.""Merma_piso"" AS ""Merma Piso(Kg)"",
+                    f.""Merma_canaletas"" AS ""Merma Canaletas(Kg)"",
+                    f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
+                    f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
+                    f.""Personal_Operativo"" as ""Personal Operativo"",
+                    CASE 
+                        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
+                        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
+                        ELSE 0 
+                    END AS ""Limpieza Túnel"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN turnos_trabajados tt 
+                    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
+                LEFT JOIN merma_semanal ms 
+                    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = 'Tunel/Sumergidor'
+                ORDER BY f.""OP"" ASC;";
             }
             if (var1 == "Despegue")
             {
                 querySimple = @"
-    WITH tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" = 'Despegue'
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""Lote"",
-        f.""OP"",
-        f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-        f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
-        f.""Merma_kg"" AS ""Merma(Kg)"",
-        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-        f.""Kg_resecar"" AS ""Kg para Resecar"",
-        f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
-        f.""Personal_Operativo"" as ""Personal Operativo"",
-        f.""FTT"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = @Area
-    ORDER BY f.""OP"" ASC;";
+                WITH tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" = 'Despegue'
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""Lote"",
+                    f.""OP"",
+                    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
+                    f.""Merma_kg"" AS ""Merma(Kg)"",
+                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    f.""Kg_resecar"" AS ""Kg para Resecar"",
+                    f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
+                    f.""Personal_Operativo"" as ""Personal Operativo"",
+                    f.""FTT"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = @Area
+                ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Evaporado")
             {
                 querySimple = @"
-    WITH tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" = 'Evaporado'
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""OP"",
-        f.""Kg_meta"" as ""Meta(Kg)"",
-        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-        f.""Merma_kg"" AS ""Merma(Kg)"",
-        f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
-        f.""Personal_Operativo"" as ""Personal Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = @Area
-    ORDER BY f.""OP"" ASC;";
+                WITH tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" = 'Evaporado'
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""OP"",
+                    f.""Kg_meta"" as ""Meta(Kg)"",
+                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    f.""Merma_kg"" AS ""Merma(Kg)"",
+                    f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
+                    f.""Personal_Operativo"" as ""Personal Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = @Area
+                ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
             {
                 querySimple = @"
-    WITH tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" IN ('Grind', 'Inspeccion', 'Empacado', 'Revolturas')
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""OP"",
-        f.""Kg_meta"" as ""Meta(Kg)"",
-        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-        f.""Merma_kg"" AS ""Merma(Kg)"",
-        f.""Personal_Operativo"" as ""Personal Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = @Area
-    ORDER BY f.""OP"" ASC;";
+                WITH tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" IN ('Grind', 'Inspeccion', 'Empacado', 'Revolturas')
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""OP"",
+                    f.""Kg_meta"" as ""Meta(Kg)"",
+                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    f.""Merma_kg"" AS ""Merma(Kg)"",
+                    f.""Personal_Operativo"" as ""Personal Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = @Area
+                ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Máquinas")
             {
                 querySimple = @"
-    WITH tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" = 'Máquinas'
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""OP"",
-        f.""Kg_meta"" as ""Meta(Kg)"",
-        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-        f.""Merma_kg"" AS ""Merma(Kg)"",
-        f.""Personal_Operativo"" AS ""Personal Operativo"",
-        f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
-        f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
-        f.""Bobina_merma"" AS ""Bobina Merma"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = @Area
-    ORDER BY f.""OP"" ASC;";
+                WITH tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" = 'Máquinas'
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""OP"",
+                    f.""Kg_meta"" as ""Meta(Kg)"",
+                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    f.""Merma_kg"" AS ""Merma(Kg)"",
+                    f.""Personal_Operativo"" AS ""Personal Operativo"",
+                    f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
+                    f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
+                    f.""Bobina_merma"" AS ""Bobina Merma"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = @Area
+                ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Polvos")
             {
                 querySimple = @"
-    WITH turnos_trabajados AS (
-        SELECT 
-            EXTRACT(WEEK FROM ""Fecha"") AS semana,
-            EXTRACT(YEAR FROM ""Fecha"") AS año,
-            COUNT(*) AS total_turnos_trabajados
-        FROM public.""Ficha""
-        WHERE ""Area"" = 'Polvos'
-        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-    ),
-    merma_semanal AS (
-        SELECT 
-            EXTRACT(WEEK FROM ""Fecha"") AS semana,
-            EXTRACT(YEAR FROM ""Fecha"") AS año,
-            SUM(""Kg_merma"") AS merma_total_semanal
-        FROM public.""Limpieza_polvos""
-        GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-    ),
-    tiempos_muertos AS (
-        SELECT 
-            f.""OP"",
-            COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-            COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        WHERE f.""Area"" = 'Polvos'
-        GROUP BY f.""OP""
-    )
-    SELECT 
-        f.""Fecha"",
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        f.""Turno"",
-        u.""Usuario"" AS ""Empleado"",
-        f.""OP"",
-        f.""Kg_meta"" as ""Meta(Kg)"",
-        f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-        f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-        f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-        f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-        f.""Merma_kg"" AS ""Merma(Kg)"",
-        f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
-        f.""Granulo"",
-        f.""Personal_Operativo"" as ""Personal Operativo"",
-        CASE 
-            WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-            THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-            ELSE 0 
-        END AS ""Limpieza Polvos"",
-        COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-        COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-    FROM public.""Ficha"" f
-    LEFT JOIN turnos_trabajados tt 
-        ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-        AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-    LEFT JOIN merma_semanal ms 
-        ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-        AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-    LEFT JOIN public.""Usuarios"" u 
-        ON f.""ID_user"" = u.""ID_User""
-    LEFT JOIN tiempos_muertos tm 
-        ON f.""OP"" = tm.""OP""
-    WHERE f.""Area"" = 'Polvos'
-    ORDER BY f.""OP"" ASC;";
+                WITH turnos_trabajados AS (
+                    SELECT 
+                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                        EXTRACT(YEAR FROM ""Fecha"") AS año,
+                        COUNT(*) AS total_turnos_trabajados
+                    FROM public.""Ficha""
+                    WHERE ""Area"" = 'Polvos'
+                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                ),
+                merma_semanal AS (
+                    SELECT 
+                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                        EXTRACT(YEAR FROM ""Fecha"") AS año,
+                        SUM(""Kg_merma"") AS merma_total_semanal
+                    FROM public.""Limpieza_polvos""
+                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+                ),
+                tiempos_muertos AS (
+                    SELECT 
+                        f.""OP"",
+                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                    FROM public.""Ficha"" f
+                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    WHERE f.""Area"" = 'Polvos'
+                    GROUP BY f.""OP""
+                )
+                SELECT 
+                    f.""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    f.""Turno"",
+                    u.""Usuario"" AS ""Empleado"",
+                    f.""OP"",
+                    f.""Kg_meta"" as ""Meta(Kg)"",
+                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+                    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
+                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+                    f.""Merma_kg"" AS ""Merma(Kg)"",
+                    f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
+                    f.""Granulo"",
+                    f.""Personal_Operativo"" as ""Personal Operativo"",
+                    CASE 
+                        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
+                        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
+                        ELSE 0 
+                    END AS ""Limpieza Polvos"",
+                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+                FROM public.""Ficha"" f
+                LEFT JOIN turnos_trabajados tt 
+                    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
+                LEFT JOIN merma_semanal ms 
+                    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
+                LEFT JOIN public.""Usuarios"" u 
+                    ON f.""ID_user"" = u.""ID_User""
+                LEFT JOIN tiempos_muertos tm 
+                    ON f.""OP"" = tm.""OP""
+                WHERE f.""Area"" = 'Polvos'
+                ORDER BY f.""OP"" ASC;";
             }
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -9012,6 +8955,7 @@ namespace Tablero
                 LoadingScreen.HideLoading();
             }
         }
+
         private void ExportarRadGridViewFiltradoAExcel(RadGridView radGridView, string filePath)
         {
             Excel.Application excelApp = new Excel.Application();
@@ -9041,10 +8985,13 @@ namespace Tablero
 
             int rowIndex = 2;
 
-            // Exportar datos de las filas visibles
-            foreach (GridViewRowInfo row in radGridView.Rows)
+            // Exportar datos de las filas visibles considerando filtros
+            // Usar ChildRows para obtener solo las filas visibles después de aplicar filtros
+            foreach (GridViewRowInfo row in radGridView.ChildRows)
             {
-                if (row.IsVisible)
+                // Verificar si la fila es visible y NO es una fila de grupo
+                // Las filas de grupo son del tipo GridViewGroupRowInfo
+                if (row.IsVisible && !(row is GridViewGroupRowInfo))
                 {
                     colIndex = 1;
                     foreach (GridViewDataColumn column in radGridView.Columns)
@@ -9060,7 +9007,13 @@ namespace Tablero
                 }
             }
 
-            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
+            // Si no se encontraron datos, mostrar mensaje
+            if (rowIndex == 2)
+            {
+                worksheet.Cells[2, 1] = "No hay datos visibles para exportar";
+            }
+
+            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[Math.Max(rowIndex - 1, 2), colIndex - 1]];
             usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
             worksheet.Columns.AutoFit();
@@ -9081,7 +9034,6 @@ namespace Tablero
             System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
-
         private void btn_filtro_consolidado_Click(object sender, EventArgs e)
         {
             txt_filtro_report_consolidado.Clear();
