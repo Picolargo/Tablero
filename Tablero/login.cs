@@ -276,14 +276,14 @@ namespace Tablero
 
         private void login_Shown(object sender, EventArgs e)
         {
+
+            //Tablero.Properties.Settings.Default.Servidor = string.Empty;
+            //Tablero.Properties.Settings.Default.Usuario = string.Empty;
+            //Tablero.Properties.Settings.Default.Contrasena = string.Empty;
+            //Tablero.Properties.Settings.Default.Save();
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;
-
-            //Tablero.Properties.Settings.Default.Servidor = string.Empty;
-            //Tablero.Properties.Settings.Default.Contrasena = string.Empty;
-            //Tablero.Properties.Settings.Default.Usuario = string.Empty;
-            //Tablero.Properties.Settings.Default.Save();
 
             if (!string.IsNullOrEmpty(var_servidor) && !string.IsNullOrEmpty(var_password) && !string.IsNullOrEmpty(var_usuario))
             {

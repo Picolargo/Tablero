@@ -8466,6 +8466,8 @@ namespace Tablero
             reporte_consolidado();
             btn_export_excel_consolidado.Enabled = true;
             btn_clean_consolidado.Enabled = true;
+            txt_filtro_report_consolidado.Enabled = true;
+            btn_filtro_consolidado.Enabled = true;
         }
         private void reporte_consolidado()
         {
@@ -8508,7 +8510,8 @@ namespace Tablero
                     WHERE f.""Area"" = 'Tunel/Sumergidor'
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8562,7 +8565,8 @@ namespace Tablero
                     WHERE f.""Area"" = 'Despegue'
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8605,7 +8609,8 @@ namespace Tablero
                     WHERE f.""Area"" = 'Evaporado'
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8646,7 +8651,8 @@ namespace Tablero
                     WHERE f.""Area"" IN ('Grind', 'Inspeccion', 'Empacado', 'Revolturas')
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8686,7 +8692,8 @@ namespace Tablero
                     WHERE f.""Area"" = 'Máquinas'
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8746,7 +8753,8 @@ namespace Tablero
                     WHERE f.""Area"" = 'Polvos'
                     GROUP BY f.""OP""
                 )
-                SELECT 
+                SELECT
+                    f.""ID_Ficha"",
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
@@ -8791,6 +8799,7 @@ namespace Tablero
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_consolidado, parameters);
 
             // Configurar el DataGridView
+            rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar la columna ID
             rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
             rgv_reporte_consolidado.Columns["Fecha"].BestFit();
             rgv_reporte_consolidado.Columns["No. Semana"].BestFit();
@@ -9112,11 +9121,40 @@ namespace Tablero
 
         private void btn_clean_consolidado_Click(object sender, EventArgs e)
         {
+            // Limpiar el DataGridView
             rgv_reporte_consolidado.DataSource = null;
             rgv_reporte_consolidado.Rows.Clear();
             rgv_reporte_consolidado.Columns.Clear();
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_consolidado.Clear();
+            // Deshabilitar botones hasta que se seleccione un reporte y área
+            btn_export_excel_consolidado.Enabled = false;
+            btn_clean_consolidado.Enabled = false;
+            txt_filtro_report_consolidado.Enabled = false;
+            btn_filtro_consolidado.Enabled = false;
+            btn_new_report_consolidado.Enabled = false;
+            cb_area_reporte.SelectedIndex = -1;
+            cb_area_reporte.Focus();
+            cb_area_reporte.Enabled = false;
+        }
+
+        private void cb_area_reporte_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cb_area_reporte.SelectedIndex != -1)
+            {
+                btn_new_report_consolidado.Enabled = true;
+            }
+        }
+
+        private void rgv_reporte_consolidado_CellDoubleClick(object sender, GridViewCellEventArgs e)
+        {
+            string id_ficha_reporte = string.Empty;
+            if (e.RowIndex >= 0)
+            {
+                id_ficha_reporte = rgv_reporte_consolidado.Rows[e.RowIndex].Cells[0].Value.ToString();
+                Tiempo_Muerto formTM = new Tiempo_Muerto(connectionString, id_ficha_reporte);
+                formTM.Show(); // Muestra el formulario principal
+            }
         }
     }
 }

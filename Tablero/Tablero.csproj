@@ -186,6 +186,12 @@
     <Compile Include="RadForm1.Designer.cs">
       <DependentUpon>RadForm1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tiempo_Muerto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tiempo_Muerto.Designer.cs">
+      <DependentUpon>Tiempo_Muerto.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Coneccion_Server.resx">
       <DependentUpon>Coneccion_Server.cs</DependentUpon>
     </EmbeddedResource>
@@ -210,6 +216,9 @@
     </Compile>
     <EmbeddedResource Include="RadForm1.resx">
       <DependentUpon>RadForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tiempo_Muerto.resx">
+      <DependentUpon>Tiempo_Muerto.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

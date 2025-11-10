@@ -126,7 +126,6 @@ namespace Tablero
         }
         private void btn_save_Click(object sender, EventArgs e)
         {
-            //Control_Activos.Properties.Settings.Default.Servidor = txt_server.Text;
             Tablero.Properties.Settings.Default.Servidor = txt_server.Text;
             Tablero.Properties.Settings.Default.Usuario = txt_user.Text;
             Tablero.Properties.Settings.Default.Contrasena = txt_contrasena.Text;

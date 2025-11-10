@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editar));
             this.radGridView1 = new Telerik.WinControls.UI.RadGridView();
             this.materialExpansionPanel1 = new MaterialSkin.Controls.MaterialExpansionPanel();
             this.txt_user = new MaterialSkin.Controls.MaterialTextBox2();
@@ -42,6 +43,7 @@
             // 
             // radGridView1
             // 
+            this.radGridView1.AutoScroll = true;
             this.radGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radGridView1.Location = new System.Drawing.Point(0, 0);
             // 
@@ -152,7 +154,9 @@
             this.ClientSize = new System.Drawing.Size(977, 618);
             this.Controls.Add(this.materialExpansionPanel1);
             this.Controls.Add(this.radGridView1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Editar";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fichas";
             this.ThemeName = "TelerikMetro";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Editar_FormClosed);
