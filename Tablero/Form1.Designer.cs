@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -115,8 +115,6 @@
             this.btn_clean_merma = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_merma = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_report_merma = new MaterialSkin.Controls.MaterialButton();
-            this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
-            this.dgv_reporte_merma = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tap_control_metas = new MetroFramework.Controls.MetroTabControl();
             this.metroContextMenu1 = new MetroFramework.Controls.MetroContextMenu(this.components);
@@ -158,8 +156,6 @@
             this.txt_OP_Search = new MaterialSkin.Controls.MaterialTextBox();
             this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
             this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
-            this.dgv_detalles_op = new System.Windows.Forms.DataGridView();
             this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_detallesOP = new System.Windows.Forms.TabControl();
             this.tabPage12 = new System.Windows.Forms.TabPage();
@@ -240,6 +236,13 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_reporte_merma = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.materialCard6 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_detalles_op = new System.Windows.Forms.DataGridView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -285,8 +288,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_consolidado.MasterTemplate)).BeginInit();
             this.metroTabPage10.SuspendLayout();
             this.materialCard8.SuspendLayout();
-            this.materialCard7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tap_control_metas.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -311,8 +312,6 @@
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPictureBox2)).BeginInit();
             this.tabPage9.SuspendLayout();
-            this.materialCard6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).BeginInit();
             this.materialCard5.SuspendLayout();
             this.tabControl_detallesOP.SuspendLayout();
             this.tabPage12.SuspendLayout();
@@ -338,6 +337,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            this.materialCard7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.materialCard6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1441,6 +1447,7 @@
             // 
             // tabPage10
             // 
+            this.tabPage10.AutoScroll = true;
             this.tabPage10.Controls.Add(this.tab_reportes);
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
@@ -1467,9 +1474,8 @@
             // 
             // metroTabPage9
             // 
-            this.metroTabPage9.Controls.Add(this.materialCard9);
-            this.metroTabPage9.Controls.Add(this.materialCard3);
-            this.metroTabPage9.Controls.Add(this.materialCard4);
+            this.metroTabPage9.Controls.Add(this.panel2);
+            this.metroTabPage9.HorizontalScrollbar = true;
             this.metroTabPage9.HorizontalScrollbarBarColor = true;
             this.metroTabPage9.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage9.HorizontalScrollbarSize = 10;
@@ -1478,6 +1484,7 @@
             this.metroTabPage9.Size = new System.Drawing.Size(1674, 898);
             this.metroTabPage9.TabIndex = 0;
             this.metroTabPage9.Text = "Reportes Consolidados";
+            this.metroTabPage9.VerticalScrollbar = true;
             this.metroTabPage9.VerticalScrollbarBarColor = true;
             this.metroTabPage9.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage9.VerticalScrollbarSize = 10;
@@ -1490,12 +1497,12 @@
             this.materialCard9.Controls.Add(this.btn_filtro_consolidado);
             this.materialCard9.Depth = 0;
             this.materialCard9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard9.Location = new System.Drawing.Point(1114, 11);
+            this.materialCard9.Location = new System.Drawing.Point(1085, 14);
             this.materialCard9.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard9.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard9.Name = "materialCard9";
             this.materialCard9.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard9.Size = new System.Drawing.Size(560, 77);
+            this.materialCard9.Size = new System.Drawing.Size(526, 77);
             this.materialCard9.TabIndex = 6;
             // 
             // txt_filtro_report_consolidado
@@ -1552,12 +1559,12 @@
             this.materialCard3.Controls.Add(this.btn_new_report_consolidado);
             this.materialCard3.Depth = 0;
             this.materialCard3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard3.Location = new System.Drawing.Point(0, 11);
+            this.materialCard3.Location = new System.Drawing.Point(14, 14);
             this.materialCard3.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard3.Name = "materialCard3";
             this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(1099, 77);
+            this.materialCard3.Size = new System.Drawing.Size(1043, 77);
             this.materialCard3.TabIndex = 5;
             // 
             // cb_area_reporte
@@ -1673,12 +1680,12 @@
             this.materialCard4.Depth = 0;
             this.materialCard4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard4.Location = new System.Drawing.Point(0, 91);
+            this.materialCard4.Location = new System.Drawing.Point(0, 119);
             this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(1674, 807);
+            this.materialCard4.Size = new System.Drawing.Size(1674, 779);
             this.materialCard4.TabIndex = 4;
             // 
             // rgv_reporte_consolidado
@@ -1693,17 +1700,17 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
-            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 779);
+            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
             this.rgv_reporte_consolidado.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.rgv_reporte_consolidado_CellDoubleClick);
             this.rgv_reporte_consolidado.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_consolidado_CustomFiltering);
             // 
             // metroTabPage10
             // 
-            this.metroTabPage10.Controls.Add(this.materialCard8);
-            this.metroTabPage10.Controls.Add(this.materialCard7);
+            this.metroTabPage10.Controls.Add(this.panel1);
+            this.metroTabPage10.HorizontalScrollbar = true;
             this.metroTabPage10.HorizontalScrollbarBarColor = true;
             this.metroTabPage10.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage10.HorizontalScrollbarSize = 10;
@@ -1712,6 +1719,7 @@
             this.metroTabPage10.Size = new System.Drawing.Size(1674, 898);
             this.metroTabPage10.TabIndex = 1;
             this.metroTabPage10.Text = "Mermas";
+            this.metroTabPage10.VerticalScrollbar = true;
             this.metroTabPage10.VerticalScrollbarBarColor = true;
             this.metroTabPage10.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage10.VerticalScrollbarSize = 10;
@@ -1725,7 +1733,7 @@
             this.materialCard8.Controls.Add(this.btn_new_report_merma);
             this.materialCard8.Depth = 0;
             this.materialCard8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard8.Location = new System.Drawing.Point(0, 11);
+            this.materialCard8.Location = new System.Drawing.Point(6, 14);
             this.materialCard8.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard8.Name = "materialCard8";
@@ -1803,35 +1811,6 @@
             this.btn_new_report_merma.UseAccentColor = false;
             this.btn_new_report_merma.UseVisualStyleBackColor = true;
             this.btn_new_report_merma.Click += new System.EventHandler(this.btn_new_report_merma_Click);
-            // 
-            // materialCard7
-            // 
-            this.materialCard7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard7.Controls.Add(this.dgv_reporte_merma);
-            this.materialCard7.Depth = 0;
-            this.materialCard7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard7.Location = new System.Drawing.Point(0, 91);
-            this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard7.Name = "materialCard7";
-            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(1674, 807);
-            this.materialCard7.TabIndex = 2;
-            // 
-            // dgv_reporte_merma
-            // 
-            this.dgv_reporte_merma.AllowUserToAddRows = false;
-            this.dgv_reporte_merma.AllowUserToDeleteRows = false;
-            this.dgv_reporte_merma.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgv_reporte_merma.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_reporte_merma.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv_reporte_merma.Location = new System.Drawing.Point(14, 14);
-            this.dgv_reporte_merma.Name = "dgv_reporte_merma";
-            this.dgv_reporte_merma.ReadOnly = true;
-            this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma.Size = new System.Drawing.Size(1646, 779);
-            this.dgv_reporte_merma.TabIndex = 7;
             // 
             // tabPage4
             // 
@@ -2549,8 +2528,7 @@
             // 
             // tabPage9
             // 
-            this.tabPage9.Controls.Add(this.materialCard6);
-            this.tabPage9.Controls.Add(this.materialCard5);
+            this.tabPage9.Controls.Add(this.panel3);
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
@@ -2558,36 +2536,6 @@
             this.tabPage9.TabIndex = 4;
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // materialCard6
-            // 
-            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard6.Controls.Add(this.dgv_detalles_op);
-            this.materialCard6.Depth = 0;
-            this.materialCard6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard6.Location = new System.Drawing.Point(0, 395);
-            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard6.Name = "materialCard6";
-            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard6.Size = new System.Drawing.Size(1682, 545);
-            this.materialCard6.TabIndex = 5;
-            // 
-            // dgv_detalles_op
-            // 
-            this.dgv_detalles_op.AllowUserToAddRows = false;
-            this.dgv_detalles_op.AllowUserToDeleteRows = false;
-            this.dgv_detalles_op.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgv_detalles_op.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_detalles_op.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv_detalles_op.Location = new System.Drawing.Point(14, 14);
-            this.dgv_detalles_op.Name = "dgv_detalles_op";
-            this.dgv_detalles_op.ReadOnly = true;
-            this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_detalles_op.Size = new System.Drawing.Size(1654, 517);
-            this.dgv_detalles_op.TabIndex = 8;
-            this.dgv_detalles_op.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_detalles_op_CellClick);
             // 
             // materialCard5
             // 
@@ -3121,6 +3069,7 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.AutoScroll = true;
             this.tabPage11.Controls.Add(this.tab_limpiezas);
             this.tabPage11.Controls.Add(this.tabControl1);
             this.tabPage11.ImageKey = "award_prize.png";
@@ -4018,6 +3967,98 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
+            // materialCard7
+            // 
+            this.materialCard7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard7.Controls.Add(this.dgv_reporte_merma);
+            this.materialCard7.Depth = 0;
+            this.materialCard7.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard7.Location = new System.Drawing.Point(0, 106);
+            this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard7.Name = "materialCard7";
+            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard7.Size = new System.Drawing.Size(1674, 792);
+            this.materialCard7.TabIndex = 2;
+            // 
+            // dgv_reporte_merma
+            // 
+            this.dgv_reporte_merma.AllowUserToAddRows = false;
+            this.dgv_reporte_merma.AllowUserToDeleteRows = false;
+            this.dgv_reporte_merma.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_reporte_merma.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_reporte_merma.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_reporte_merma.Location = new System.Drawing.Point(14, 14);
+            this.dgv_reporte_merma.Name = "dgv_reporte_merma";
+            this.dgv_reporte_merma.ReadOnly = true;
+            this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_reporte_merma.Size = new System.Drawing.Size(1646, 764);
+            this.dgv_reporte_merma.TabIndex = 7;
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.materialCard8);
+            this.panel1.Controls.Add(this.materialCard7);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1674, 898);
+            this.panel1.TabIndex = 4;
+            // 
+            // panel2
+            // 
+            this.panel2.AutoScroll = true;
+            this.panel2.Controls.Add(this.materialCard3);
+            this.panel2.Controls.Add(this.materialCard9);
+            this.panel2.Controls.Add(this.materialCard4);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1674, 898);
+            this.panel2.TabIndex = 7;
+            // 
+            // panel3
+            // 
+            this.panel3.AutoScroll = true;
+            this.panel3.Controls.Add(this.materialCard6);
+            this.panel3.Controls.Add(this.materialCard5);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1682, 940);
+            this.panel3.TabIndex = 6;
+            // 
+            // materialCard6
+            // 
+            this.materialCard6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard6.Controls.Add(this.dgv_detalles_op);
+            this.materialCard6.Depth = 0;
+            this.materialCard6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard6.Location = new System.Drawing.Point(0, 407);
+            this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard6.Name = "materialCard6";
+            this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard6.Size = new System.Drawing.Size(1682, 533);
+            this.materialCard6.TabIndex = 6;
+            // 
+            // dgv_detalles_op
+            // 
+            this.dgv_detalles_op.AllowUserToAddRows = false;
+            this.dgv_detalles_op.AllowUserToDeleteRows = false;
+            this.dgv_detalles_op.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_detalles_op.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_detalles_op.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_detalles_op.Location = new System.Drawing.Point(14, 14);
+            this.dgv_detalles_op.Name = "dgv_detalles_op";
+            this.dgv_detalles_op.ReadOnly = true;
+            this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_detalles_op.Size = new System.Drawing.Size(1654, 505);
+            this.dgv_detalles_op.TabIndex = 8;
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4089,8 +4130,6 @@
             this.metroTabPage10.ResumeLayout(false);
             this.materialCard8.ResumeLayout(false);
             this.materialCard8.PerformLayout();
-            this.materialCard7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tap_control_metas.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
@@ -4117,8 +4156,6 @@
             this.tabPage8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPictureBox2)).EndInit();
             this.tabPage9.ResumeLayout(false);
-            this.materialCard6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).EndInit();
             this.materialCard5.ResumeLayout(false);
             this.tabControl_detallesOP.ResumeLayout(false);
             this.tabPage12.ResumeLayout(false);
@@ -4150,6 +4187,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            this.materialCard7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.materialCard6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_detalles_op)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4299,7 +4343,6 @@
         private MaterialSkin.Controls.MaterialButton btn_edit_polvos;
         private System.Windows.Forms.DataGridView dgv_polvos_calidad;
         private MaterialSkin.Controls.MaterialButton btn_new_polvos;
-        private MaterialSkin.Controls.MaterialCard materialCard6;
         private MaterialSkin.Controls.MaterialCard materialCard5;
         private System.Windows.Forms.TabControl tabControl_detallesOP;
         private System.Windows.Forms.TabPage tabPage12;
@@ -4318,7 +4361,6 @@
         private MaterialSkin.Controls.MaterialButton btn_limpiar_detalles;
         private MaterialSkin.Controls.MaterialTextBox txt_buscar_dt_op;
         private MaterialSkin.Controls.MaterialButton btn_buscar_detalles;
-        private System.Windows.Forms.DataGridView dgv_detalles_op;
         private MaterialSkin.Controls.MaterialComboBox cb_Comercio;
         private MaterialSkin.Controls.MaterialTextBox txt_analisis;
         private MaterialSkin.Controls.MaterialTextBox txt_humedad;
@@ -4332,7 +4374,6 @@
         private MetroFramework.Controls.MetroTabControl tab_reportes;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;
-        private System.Windows.Forms.DataGridView dgv_reporte_merma;
         private MaterialSkin.Controls.MaterialCard materialCard8;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage14;
@@ -4347,7 +4388,6 @@
         private System.Windows.Forms.TextBox txt_no_semana_tunel;
         private MaterialSkin.Controls.MaterialButton btn_save_tunel;
         private System.Windows.Forms.Label lbl_no_semana_tunel;
-        private MaterialSkin.Controls.MaterialCard materialCard7;
         private MetroFramework.Controls.MetroTabControl tab_limpiezas;
         private MetroFramework.Controls.MetroTabPage metroTabPage11;
         private MetroFramework.Controls.MetroTabPage metroTabPage12;
@@ -4365,6 +4405,13 @@
         private MaterialSkin.Controls.MaterialCard materialCard9;
         private MaterialSkin.Controls.MaterialTextBox txt_filtro_report_consolidado;
         private MaterialSkin.Controls.MaterialButton btn_filtro_consolidado;
+        private MaterialSkin.Controls.MaterialCard materialCard7;
+        private System.Windows.Forms.DataGridView dgv_reporte_merma;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private MaterialSkin.Controls.MaterialCard materialCard6;
+        private System.Windows.Forms.DataGridView dgv_detalles_op;
     }
 }
 

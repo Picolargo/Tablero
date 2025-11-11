@@ -9134,8 +9134,6 @@ namespace Tablero
             btn_filtro_consolidado.Enabled = false;
             btn_new_report_consolidado.Enabled = false;
             cb_area_reporte.SelectedIndex = -1;
-            cb_area_reporte.Focus();
-            cb_area_reporte.Enabled = false;
         }
 
         private void cb_area_reporte_SelectedIndexChanged(object sender, EventArgs e)
