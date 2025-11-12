@@ -3,6 +3,7 @@ using MaterialSkin.Controls;
 using Npgsql;
 using System;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace Tablero
         private DateTime horaInicio;
         private DateTime horaFin;
         private bool editar = false;
+        private DataTable datosOriginales;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
         //
@@ -87,6 +89,7 @@ namespace Tablero
             PersonalizarDataGridView(dgv_detalles_op);
             PersonalizarDataGridView(dgv_Tunel_calidad);
             PersonalizarDataGridView(dgv_reporte_merma);
+            PersonalizarDataGridView(dgv_reporte_concentrado);
         }
 
         private void PersonalizarDataGridView(DataGridView dgv, bool editable = false)
@@ -9153,6 +9156,233 @@ namespace Tablero
                 Tiempo_Muerto formTM = new Tiempo_Muerto(connectionString, id_ficha_reporte);
                 formTM.Show(); // Muestra el formulario principal
             }
+        }
+
+        private void btn_new_concentrado_Click(object sender, EventArgs e)
+        {
+            actualiza_reporte_concentrado();
+            btn_clean_concentrado.Enabled = true;
+            btn_export_excel_concentrado.Enabled = true;
+            txt_filtro_report_consentrado.Enabled = true;
+            btn_filtro_consentrado.Enabled = true;
+        }
+        private void actualiza_reporte_concentrado()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"SELECT 
+    COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+    COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+    COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
+    COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
+    COALESCE(q2.""Horas Reales"", 0) AS ""Horas Reales"",
+    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
+    COALESCE(q1.""Promedio de Tiempo Muerto Operativo"", 0) AS ""Promedio de Tiempo Muerto Operativo"",
+    COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0) AS ""Promedio Tiempo Muerto Mecanico"",
+    CASE 
+        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
+            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
+        ELSE 0
+    END AS ""Kg Fresco Meta / Hras Reales"",
+    COALESCE(q3.""Kg Fresco Real"", 0) AS ""Kg Fresco Real"",
+    CASE 
+        WHEN (CASE 
+                WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
+                    ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
+                ELSE 0
+              END) > 0 THEN
+            LEAST(ROUND((COALESCE(q3.""Kg Fresco Real"", 0) / 
+                   CASE 
+                      WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
+                          ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
+                      ELSE 0
+                    END), 2), 100)
+        ELSE 0
+    END AS ""%Cumplimiento Fresco"",
+    CASE 
+        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
+            ROUND(COALESCE(d.""Kg_seco_hr"", 0) / q2.""Horas Reales"", 2)
+        ELSE 0
+    END AS ""Kg Seco Meta / Hras Reales"",
+    COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
+    COALESCE(d.""Relacion_fr_seco"", 0) AS ""Relación Fresco-Seco Meta"",
+    CASE 
+        WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
+            ROUND(COALESCE(q3.""Kg Fresco Real"", 0) / q3.""Kg Seco Real"", 2)
+        ELSE 0
+    END AS ""Relación Fresco-Seco Real"",
+    CASE 
+        WHEN (CASE 
+                WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
+                    ROUND(COALESCE(q3.""Kg Fresco Real"", 0) / q3.""Kg Seco Real"", 2)
+                ELSE 0
+              END) > 0 THEN
+            LEAST(ROUND((COALESCE(d.""Relacion_fr_seco"", 0) / 
+                   CASE 
+                      WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
+                          ROUND(COALESCE(q3.""Kg Fresco Real"", 0) / q3.""Kg Seco Real"", 2)
+                      ELSE 0
+                    END * 100), 2), 100)
+        ELSE 0
+    END AS ""% Cumplimiento Relación Fresco-Seco"",
+    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg Fuera de Especificación"",
+    CASE 
+        WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
+            ROUND(((COALESCE(q3.""Kg Seco Real"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / COALESCE(q3.""Kg Seco Real"", 0)) * 100, 2)
+        ELSE 0
+    END AS ""FTT"",
+    COALESCE(q3.""Personal Operativo Promedio"", 0)::integer AS ""Personal Operativo Promedio"",
+    COALESCE(q3.""Personal Operativo Promedio"", 0) * COALESCE(q2.""Horas Reales"", 0) AS ""Horas Hombre"",
+    CASE 
+        WHEN (COALESCE(q3.""Personal Operativo Promedio"", 0) * COALESCE(q2.""Horas Reales"", 0)) > 0 THEN
+            ROUND(COALESCE(q3.""Kg Seco Real"", 0) / (COALESCE(q3.""Personal Operativo Promedio"", 0) * COALESCE(q2.""Horas Reales"", 0)), 2)
+        ELSE 0
+    END AS ""Kg Producidos/persona"",
+    COALESCE(q2.""Kg Merma en Fresco"", 0) AS ""Kg Merma en Fresco"",
+    COALESCE(q3.""Kg Merma en Despegue"", 0) AS ""Kg Merma en Despegue""
+FROM (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        CASE EXTRACT(MONTH FROM f.""Fecha"")
+            WHEN 1 THEN 'Enero'
+            WHEN 2 THEN 'Febrero'
+            WHEN 3 THEN 'Marzo'
+            WHEN 4 THEN 'Abril'
+            WHEN 5 THEN 'Mayo'
+            WHEN 6 THEN 'Junio'
+            WHEN 7 THEN 'Julio'
+            WHEN 8 THEN 'Agosto'
+            WHEN 9 THEN 'Septiembre'
+            WHEN 10 THEN 'Octubre'
+            WHEN 11 THEN 'Noviembre'
+            WHEN 12 THEN 'Diciembre'
+        END AS ""Mes"",
+        f.""OP"",
+        ROUND(COALESCE(AVG(tmo.""Min_Detenidos""), 0)::numeric, 2) AS ""Promedio de Tiempo Muerto Operativo"",
+        ROUND(COALESCE(AVG(tmm.""Min_Detenidos""), 0)::numeric, 2) AS ""Promedio Tiempo Muerto Mecanico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+    WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+    GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(MONTH FROM f.""Fecha""), f.""OP""
+) q1
+FULL JOIN (
+    SELECT 
+        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        CASE EXTRACT(MONTH FROM ""Fecha"")
+            WHEN 1 THEN 'Enero'
+            WHEN 2 THEN 'Febrero'
+            WHEN 3 THEN 'Marzo'
+            WHEN 4 THEN 'Abril'
+            WHEN 5 THEN 'Mayo'
+            WHEN 6 THEN 'Junio'
+            WHEN 7 THEN 'Julio'
+            WHEN 8 THEN 'Agosto'
+            WHEN 9 THEN 'Septiembre'
+            WHEN 10 THEN 'Octubre'
+            WHEN 11 THEN 'Noviembre'
+            WHEN 12 THEN 'Diciembre'
+        END AS ""Mes"",
+        ""OP"",
+        SUM(""Hr_efectivas"") AS ""Horas Reales"",
+        SUM(""Hr_programadas"") AS ""Horas Programadas"",
+        SUM(""Merma_podrido"" + ""Merma_tina"" + ""Merma_piso"" + ""Merma_canaletas"" + ""Merma_lavado_bandas"") AS ""Kg Merma en Fresco""
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Tunel/Sumergidor'
+    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP""
+) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""Mes"" = q2.""Mes"" AND q1.""OP"" = q2.""OP""
+FULL JOIN (
+    SELECT 
+        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        CASE EXTRACT(MONTH FROM ""Fecha"")
+            WHEN 1 THEN 'Enero'
+            WHEN 2 THEN 'Febrero'
+            WHEN 3 THEN 'Marzo'
+            WHEN 4 THEN 'Abril'
+            WHEN 5 THEN 'Mayo'
+            WHEN 6 THEN 'Junio'
+            WHEN 7 THEN 'Julio'
+            WHEN 8 THEN 'Agosto'
+            WHEN 9 THEN 'Septiembre'
+            WHEN 10 THEN 'Octubre'
+            WHEN 11 THEN 'Noviembre'
+            WHEN 12 THEN 'Diciembre'
+        END AS ""Mes"",
+        ""OP"",
+        SUM(""kg_frescos_enter_se"") AS ""Kg Fresco Real"",
+        SUM(""Kg_prod_seco"") AS ""Kg Seco Real"",
+        SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
+        ROUND(AVG(""Personal_Operativo""))::integer AS ""Personal Operativo Promedio"",
+        SUM(""Merma_kg"") AS ""Kg Merma en Despegue""
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Despegue'
+    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP""
+) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+    AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+    AND COALESCE(q1.""Mes"", q2.""Mes"") = q3.""Mes""
+    AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, null);
+        }
+
+        private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
+        {
+            LoadingScreen.ShowLoading();
+            try
+            {
+                // Mostrar el diálogo de guardar archivo en el hilo principal
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                string filePath = null;
+
+                // Mostrar el diálogo de guardado en el hilo principal
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+
+                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+                    await Task.Run(() =>
+                    {
+                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_concentrado, filePath);
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Ocultar la pantalla de cargando
+                LoadingScreen.HideLoading();
+            }
+        }
+
+        private void btn_clean_concentrado_Click(object sender, EventArgs e)
+        {
+            dgv_reporte_concentrado.DataSource = null;   // Desvincula cualquier origen de datos
+            dgv_reporte_concentrado.Rows.Clear();        // Limpia todas las filas (por si no hay DataSource)
+            dgv_reporte_concentrado.Columns.Clear();     // Limpia todas las columnas
+            btn_export_excel_concentrado.Enabled = false;
+            btn_clean_concentrado.Enabled = false;
+        }
+
+        private void txt_filtro_report_consentrado_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
