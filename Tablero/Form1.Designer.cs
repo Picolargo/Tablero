@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -125,6 +125,18 @@
             this.materialCard11 = new MaterialSkin.Controls.MaterialCard();
             this.dgv_reporte_concentrado = new System.Windows.Forms.DataGridView();
             this.tabPage17 = new System.Windows.Forms.TabPage();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.materialCard13 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_buscar_Concen_otras = new MaterialSkin.Controls.MaterialButton();
+            this.cb_semana_concentrado_otras = new MaterialSkin.Controls.MaterialComboBox();
+            this.txt_filtro_report_consentrado_otras = new MaterialSkin.Controls.MaterialTextBox();
+            this.btn_filtro_consentrado_otras = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard14 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_clean_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
+            this.btn_export_excel_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
+            this.btn_new_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard15 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_reporte_concentrado_otras = new System.Windows.Forms.DataGridView();
             this.metroTabPage10 = new MetroFramework.Controls.MetroTabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.materialCard8 = new MaterialSkin.Controls.MaterialCard();
@@ -307,6 +319,12 @@
             this.materialCard10.SuspendLayout();
             this.materialCard11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_concentrado)).BeginInit();
+            this.tabPage17.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.materialCard13.SuspendLayout();
+            this.materialCard14.SuspendLayout();
+            this.materialCard15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_concentrado_otras)).BeginInit();
             this.metroTabPage10.SuspendLayout();
             this.panel1.SuspendLayout();
             this.materialCard8.SuspendLayout();
@@ -1486,7 +1504,7 @@
             this.tab_reportes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_reportes.Location = new System.Drawing.Point(0, 0);
             this.tab_reportes.Name = "tab_reportes";
-            this.tab_reportes.SelectedIndex = 1;
+            this.tab_reportes.SelectedIndex = 2;
             this.tab_reportes.Size = new System.Drawing.Size(1682, 940);
             this.tab_reportes.Style = MetroFramework.MetroColorStyle.Black;
             this.tab_reportes.TabIndex = 0;
@@ -1667,7 +1685,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -1732,7 +1750,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -1838,7 +1856,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -1993,11 +2011,251 @@
             // 
             // tabPage17
             // 
+            this.tabPage17.Controls.Add(this.panel5);
             this.tabPage17.Location = new System.Drawing.Point(4, 38);
             this.tabPage17.Name = "tabPage17";
             this.tabPage17.Size = new System.Drawing.Size(1674, 898);
             this.tabPage17.TabIndex = 3;
             this.tabPage17.Text = "Reporte Concentrado en Otras Áreas";
+            // 
+            // panel5
+            // 
+            this.panel5.AutoScroll = true;
+            this.panel5.Controls.Add(this.materialCard13);
+            this.panel5.Controls.Add(this.materialCard14);
+            this.panel5.Controls.Add(this.materialCard15);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(1674, 898);
+            this.panel5.TabIndex = 6;
+            // 
+            // materialCard13
+            // 
+            this.materialCard13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard13.Controls.Add(this.btn_buscar_Concen_otras);
+            this.materialCard13.Controls.Add(this.cb_semana_concentrado_otras);
+            this.materialCard13.Controls.Add(this.txt_filtro_report_consentrado_otras);
+            this.materialCard13.Controls.Add(this.btn_filtro_consentrado_otras);
+            this.materialCard13.Depth = 0;
+            this.materialCard13.Enabled = false;
+            this.materialCard13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard13.Location = new System.Drawing.Point(628, 14);
+            this.materialCard13.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard13.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard13.Name = "materialCard13";
+            this.materialCard13.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard13.Size = new System.Drawing.Size(841, 77);
+            this.materialCard13.TabIndex = 7;
+            // 
+            // btn_buscar_Concen_otras
+            // 
+            this.btn_buscar_Concen_otras.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_buscar_Concen_otras.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_buscar_Concen_otras.Depth = 0;
+            this.btn_buscar_Concen_otras.HighEmphasis = true;
+            this.btn_buscar_Concen_otras.Icon = global::Tablero.Properties.Resources._8666693_search_icon;
+            this.btn_buscar_Concen_otras.Location = new System.Drawing.Point(517, 20);
+            this.btn_buscar_Concen_otras.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_buscar_Concen_otras.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_buscar_Concen_otras.Name = "btn_buscar_Concen_otras";
+            this.btn_buscar_Concen_otras.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_buscar_Concen_otras.Size = new System.Drawing.Size(105, 36);
+            this.btn_buscar_Concen_otras.TabIndex = 34;
+            this.btn_buscar_Concen_otras.Text = "Buscar";
+            this.btn_buscar_Concen_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_buscar_Concen_otras.UseAccentColor = false;
+            this.btn_buscar_Concen_otras.UseVisualStyleBackColor = true;
+            // 
+            // cb_semana_concentrado_otras
+            // 
+            this.cb_semana_concentrado_otras.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cb_semana_concentrado_otras.AutoResize = false;
+            this.cb_semana_concentrado_otras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_semana_concentrado_otras.Depth = 0;
+            this.cb_semana_concentrado_otras.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_semana_concentrado_otras.DropDownHeight = 174;
+            this.cb_semana_concentrado_otras.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_semana_concentrado_otras.DropDownWidth = 121;
+            this.cb_semana_concentrado_otras.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_semana_concentrado_otras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_semana_concentrado_otras.FormattingEnabled = true;
+            this.cb_semana_concentrado_otras.Hint = "Selecione Semana";
+            this.cb_semana_concentrado_otras.IntegralHeight = false;
+            this.cb_semana_concentrado_otras.ItemHeight = 43;
+            this.cb_semana_concentrado_otras.Items.AddRange(new object[] {
+            "Tunel/Sumergidor",
+            "Despegue",
+            "Evaporado",
+            "Grind",
+            "Inspeccion",
+            "Empacado",
+            "Polvos",
+            "Revolturas",
+            "Máquinas"});
+            this.cb_semana_concentrado_otras.Location = new System.Drawing.Point(17, 12);
+            this.cb_semana_concentrado_otras.MaxDropDownItems = 4;
+            this.cb_semana_concentrado_otras.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_semana_concentrado_otras.Name = "cb_semana_concentrado_otras";
+            this.cb_semana_concentrado_otras.Size = new System.Drawing.Size(210, 49);
+            this.cb_semana_concentrado_otras.StartIndex = -1;
+            this.cb_semana_concentrado_otras.TabIndex = 33;
+            // 
+            // txt_filtro_report_consentrado_otras
+            // 
+            this.txt_filtro_report_consentrado_otras.AnimateReadOnly = false;
+            this.txt_filtro_report_consentrado_otras.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_filtro_report_consentrado_otras.Depth = 0;
+            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado_otras.Hint = "Ingresa texto...";
+            this.txt_filtro_report_consentrado_otras.LeadingIcon = null;
+            this.txt_filtro_report_consentrado_otras.Location = new System.Drawing.Point(268, 11);
+            this.txt_filtro_report_consentrado_otras.MaxLength = 50;
+            this.txt_filtro_report_consentrado_otras.MouseState = MaterialSkin.MouseState.OUT;
+            this.txt_filtro_report_consentrado_otras.Multiline = false;
+            this.txt_filtro_report_consentrado_otras.Name = "txt_filtro_report_consentrado_otras";
+            this.txt_filtro_report_consentrado_otras.Size = new System.Drawing.Size(228, 50);
+            this.txt_filtro_report_consentrado_otras.TabIndex = 32;
+            this.txt_filtro_report_consentrado_otras.Text = "";
+            this.txt_filtro_report_consentrado_otras.TrailingIcon = null;
+            // 
+            // btn_filtro_consentrado_otras
+            // 
+            this.btn_filtro_consentrado_otras.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_filtro_consentrado_otras.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_filtro_consentrado_otras.Depth = 0;
+            this.btn_filtro_consentrado_otras.HighEmphasis = true;
+            this.btn_filtro_consentrado_otras.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.btn_filtro_consentrado_otras.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_filtro_consentrado_otras.ImageKey = "save_icon";
+            this.btn_filtro_consentrado_otras.Location = new System.Drawing.Point(630, 20);
+            this.btn_filtro_consentrado_otras.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_filtro_consentrado_otras.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_filtro_consentrado_otras.Name = "btn_filtro_consentrado_otras";
+            this.btn_filtro_consentrado_otras.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_filtro_consentrado_otras.Size = new System.Drawing.Size(159, 36);
+            this.btn_filtro_consentrado_otras.TabIndex = 31;
+            this.btn_filtro_consentrado_otras.Text = "Limpiar Filtro";
+            this.btn_filtro_consentrado_otras.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_filtro_consentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_filtro_consentrado_otras.UseAccentColor = false;
+            this.btn_filtro_consentrado_otras.UseVisualStyleBackColor = true;
+            // 
+            // materialCard14
+            // 
+            this.materialCard14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard14.Controls.Add(this.btn_clean_concentrado_otras);
+            this.materialCard14.Controls.Add(this.btn_export_excel_concentrado_otras);
+            this.materialCard14.Controls.Add(this.btn_new_concentrado_otras);
+            this.materialCard14.Depth = 0;
+            this.materialCard14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard14.Location = new System.Drawing.Point(6, 14);
+            this.materialCard14.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard14.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard14.Name = "materialCard14";
+            this.materialCard14.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard14.Size = new System.Drawing.Size(594, 77);
+            this.materialCard14.TabIndex = 3;
+            // 
+            // btn_clean_concentrado_otras
+            // 
+            this.btn_clean_concentrado_otras.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_clean_concentrado_otras.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_clean_concentrado_otras.Depth = 0;
+            this.btn_clean_concentrado_otras.Enabled = false;
+            this.btn_clean_concentrado_otras.HighEmphasis = true;
+            this.btn_clean_concentrado_otras.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
+            this.btn_clean_concentrado_otras.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_clean_concentrado_otras.ImageKey = "save_icon";
+            this.btn_clean_concentrado_otras.Location = new System.Drawing.Point(400, 20);
+            this.btn_clean_concentrado_otras.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_clean_concentrado_otras.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_clean_concentrado_otras.Name = "btn_clean_concentrado_otras";
+            this.btn_clean_concentrado_otras.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_clean_concentrado_otras.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_concentrado_otras.TabIndex = 31;
+            this.btn_clean_concentrado_otras.Text = "Limpiar Tabla";
+            this.btn_clean_concentrado_otras.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_clean_concentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_clean_concentrado_otras.UseAccentColor = false;
+            this.btn_clean_concentrado_otras.UseVisualStyleBackColor = true;
+            // 
+            // btn_export_excel_concentrado_otras
+            // 
+            this.btn_export_excel_concentrado_otras.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_export_excel_concentrado_otras.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_export_excel_concentrado_otras.Depth = 0;
+            this.btn_export_excel_concentrado_otras.Enabled = false;
+            this.btn_export_excel_concentrado_otras.HighEmphasis = true;
+            this.btn_export_excel_concentrado_otras.Icon = global::Tablero.Properties.Resources.excel_icon;
+            this.btn_export_excel_concentrado_otras.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_export_excel_concentrado_otras.ImageKey = "save_icon";
+            this.btn_export_excel_concentrado_otras.Location = new System.Drawing.Point(208, 20);
+            this.btn_export_excel_concentrado_otras.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_export_excel_concentrado_otras.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_export_excel_concentrado_otras.Name = "btn_export_excel_concentrado_otras";
+            this.btn_export_excel_concentrado_otras.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_export_excel_concentrado_otras.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_concentrado_otras.TabIndex = 30;
+            this.btn_export_excel_concentrado_otras.Text = "Exportar a Excel";
+            this.btn_export_excel_concentrado_otras.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_export_excel_concentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_export_excel_concentrado_otras.UseAccentColor = false;
+            this.btn_export_excel_concentrado_otras.UseVisualStyleBackColor = true;
+            // 
+            // btn_new_concentrado_otras
+            // 
+            this.btn_new_concentrado_otras.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_concentrado_otras.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_concentrado_otras.Depth = 0;
+            this.btn_new_concentrado_otras.HighEmphasis = true;
+            this.btn_new_concentrado_otras.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
+            this.btn_new_concentrado_otras.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_concentrado_otras.ImageKey = "save_icon";
+            this.btn_new_concentrado_otras.Location = new System.Drawing.Point(18, 20);
+            this.btn_new_concentrado_otras.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_concentrado_otras.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_concentrado_otras.Name = "btn_new_concentrado_otras";
+            this.btn_new_concentrado_otras.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_concentrado_otras.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_concentrado_otras.TabIndex = 29;
+            this.btn_new_concentrado_otras.Text = "Generar Reporte";
+            this.btn_new_concentrado_otras.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_concentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_concentrado_otras.UseAccentColor = false;
+            this.btn_new_concentrado_otras.UseVisualStyleBackColor = true;
+            this.btn_new_concentrado_otras.Click += new System.EventHandler(this.btn_new_concentrado_otras_Click);
+            // 
+            // materialCard15
+            // 
+            this.materialCard15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard15.Controls.Add(this.dgv_reporte_concentrado_otras);
+            this.materialCard15.Depth = 0;
+            this.materialCard15.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard15.Location = new System.Drawing.Point(0, 106);
+            this.materialCard15.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard15.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard15.Name = "materialCard15";
+            this.materialCard15.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard15.Size = new System.Drawing.Size(1674, 792);
+            this.materialCard15.TabIndex = 2;
+            // 
+            // dgv_reporte_concentrado_otras
+            // 
+            this.dgv_reporte_concentrado_otras.AllowUserToAddRows = false;
+            this.dgv_reporte_concentrado_otras.AllowUserToDeleteRows = false;
+            this.dgv_reporte_concentrado_otras.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dgv_reporte_concentrado_otras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_reporte_concentrado_otras.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_reporte_concentrado_otras.Location = new System.Drawing.Point(14, 14);
+            this.dgv_reporte_concentrado_otras.Name = "dgv_reporte_concentrado_otras";
+            this.dgv_reporte_concentrado_otras.ReadOnly = true;
+            this.dgv_reporte_concentrado_otras.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_reporte_concentrado_otras.Size = new System.Drawing.Size(1646, 764);
+            this.dgv_reporte_concentrado_otras.TabIndex = 7;
             // 
             // metroTabPage10
             // 
@@ -2906,6 +3164,7 @@
             this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_detalles_op.Size = new System.Drawing.Size(1654, 505);
             this.dgv_detalles_op.TabIndex = 8;
+            this.dgv_detalles_op.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_detalles_op_CellClick);
             // 
             // materialCard5
             // 
@@ -4414,6 +4673,14 @@
             this.materialCard10.PerformLayout();
             this.materialCard11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_concentrado)).EndInit();
+            this.tabPage17.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.materialCard13.ResumeLayout(false);
+            this.materialCard13.PerformLayout();
+            this.materialCard14.ResumeLayout(false);
+            this.materialCard14.PerformLayout();
+            this.materialCard15.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_concentrado_otras)).EndInit();
             this.metroTabPage10.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.materialCard8.ResumeLayout(false);
@@ -4712,6 +4979,18 @@
         private MaterialSkin.Controls.MaterialButton btn_filtro_consentrado;
         private MaterialSkin.Controls.MaterialComboBox cb_semana_concentrado_d;
         private MaterialSkin.Controls.MaterialButton btn_buscar_Concen_Des;
+        private System.Windows.Forms.Panel panel5;
+        private MaterialSkin.Controls.MaterialCard materialCard13;
+        private MaterialSkin.Controls.MaterialButton btn_buscar_Concen_otras;
+        private MaterialSkin.Controls.MaterialComboBox cb_semana_concentrado_otras;
+        private MaterialSkin.Controls.MaterialTextBox txt_filtro_report_consentrado_otras;
+        private MaterialSkin.Controls.MaterialButton btn_filtro_consentrado_otras;
+        private MaterialSkin.Controls.MaterialCard materialCard14;
+        private MaterialSkin.Controls.MaterialButton btn_clean_concentrado_otras;
+        private MaterialSkin.Controls.MaterialButton btn_export_excel_concentrado_otras;
+        private MaterialSkin.Controls.MaterialButton btn_new_concentrado_otras;
+        private MaterialSkin.Controls.MaterialCard materialCard15;
+        private System.Windows.Forms.DataGridView dgv_reporte_concentrado_otras;
     }
 }
 

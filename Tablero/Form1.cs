@@ -45,7 +45,6 @@ namespace Tablero
         private DateTime horaInicio;
         private DateTime horaFin;
         private bool editar = false;
-        private DataTable datosOriginalesConcentrado;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
         //
@@ -1391,6 +1390,8 @@ namespace Tablero
             cb_OP.Enabled = false;
             dtp1.Enabled = false;
             txt_Tiempo_energia.Text = "0";
+            dgv_mecanico.Rows.Clear();
+            dgv_operativo.Rows.Clear();
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -7680,19 +7681,7 @@ namespace Tablero
             }
             else
             {
-                // Verificar si ya existe
-                DatabaseHelper dbHelperop = new DatabaseHelper(connectionString);
-                string queryChecop = "SELECT COUNT(*) FROM public.\"Detalles_OP\" WHERE \"Orden_Produccion\"  ILIKE @OP;";
-                NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
-                {
-                    new NpgsqlParameter("@OP", txt_orden_produc.Text.ToUpper().Trim()),
-                };
-                System.Data.DataTable dtCheckop = dbHelperop.ExecuteSelectQuery(queryChecop, parametersCheck);
-                if (dtCheckop != null && dtCheckop.Rows.Count > 0 && Convert.ToInt32(dtCheckop.Rows[0][0]) > 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                
 
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string queryInsertUpdate = string.Empty;
@@ -7772,6 +7761,19 @@ namespace Tablero
                 }
                 else
                 {
+                    // Verificar si ya existe
+                    DatabaseHelper dbHelperop = new DatabaseHelper(connectionString);
+                    string queryChecop = "SELECT COUNT(*) FROM public.\"Detalles_OP\" WHERE \"Orden_Produccion\"  ILIKE @OP;";
+                    NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
+                    {
+                    new NpgsqlParameter("@OP", txt_orden_produc.Text.ToUpper().Trim()),
+                    };
+                    System.Data.DataTable dtCheckop = dbHelperop.ExecuteSelectQuery(queryChecop, parametersCheck);
+                    if (dtCheckop != null && dtCheckop.Rows.Count > 0 && Convert.ToInt32(dtCheckop.Rows[0][0]) > 0)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                     // Insertar
                     queryInsertUpdate = "INSERT INTO public.\"Detalles_OP\" (\"Orden_Produccion\", \"Producto\", \"Medida\", \"Descripcion\", \"Especificacion\", \"Ingredientes\", \"Humedad\", \"Comercio\", \"Manzana\", \"Analisis\", \"Area_Proceso\", \"OP_Origen\", \"Destino\", \"Clasificacion\") VALUES (@Orden_Produccion, @Producto, @Medida, @Descripcion, @Especificacion, @Ingredientes, @Humedad, @Comercio, @Manzana, @Analisis, @Area_Proceso, @OP_Origen, @Destino, @Clasificacion);";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
@@ -7908,7 +7910,7 @@ namespace Tablero
             btn_save_dt_op.Enabled = true;
             btn_cancel_dt_op.Enabled = true;
             btn_delete_dt_op.Enabled = false;
-            txt_orden_produc.Enabled = true;
+            txt_orden_produc.Enabled = false;
             txt_producto.Enabled = true;
             txt_medida.Enabled = true;
             txt_descripcion.Enabled = true;
@@ -8006,33 +8008,43 @@ namespace Tablero
             dgv_detalles_op.ClearSelection();
             dgv_detalles_op.CurrentCell = null;
 
-            // Mover el CurrencyManager a una posición válida
-            CurrencyManager cm = (CurrencyManager)BindingContext[dgv_detalles_op.DataSource];
-            if (cm != null && cm.Count > 0)
-                cm.Position = -1;
-
-            bool hayFiltro = false;
-            foreach (DataGridViewRow row in dgv_detalles_op.Rows)
+            // Reiniciar completamente el CurrencyManager
+            if (dgv_detalles_op.DataSource != null)
             {
-                if (row.IsNewRow) continue;
+                CurrencyManager cm = (CurrencyManager)BindingContext[dgv_detalles_op.DataSource];
+                cm.SuspendBinding();
 
-                bool match = true;
-
-                if (!string.IsNullOrEmpty(OP))
+                bool hayFiltro = false;
+                foreach (DataGridViewRow row in dgv_detalles_op.Rows)
                 {
-                    match &= row.Cells[1].Value != null && row.Cells[1].Value.ToString().Equals(OP, StringComparison.OrdinalIgnoreCase);
+                    if (row.IsNewRow) continue;
+
+                    bool match = true;
+
+                    if (!string.IsNullOrEmpty(OP))
+                    {
+                        match &= row.Cells[1].Value != null && row.Cells[1].Value.ToString().Equals(OP, StringComparison.OrdinalIgnoreCase);
+                    }
+
+                    row.Visible = match;
+                    if (match) hayFiltro = true;
                 }
 
-                row.Visible = match;
-                if (match) hayFiltro = true;
-            }
+                cm.ResumeBinding();
 
-            filtroUsuariosActivo = hayFiltro;
+                // Mover a una posición válida después del filtrado
+                if (cm.Count > 0)
+                    cm.Position = 0;
+                else
+                    cm.Position = -1;
 
-            if (!hayFiltro)
-            {
-                MetroFramework.MetroMessageBox.Show(this, "No se encontró OP",
-                                                    "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                filtroUsuariosActivo = hayFiltro;
+
+                if (!hayFiltro)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontró OP",
+                                                        "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -9219,7 +9231,7 @@ namespace Tablero
     COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0) AS ""Promedio Tiempo Muerto Mecanico"",
     CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
-            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
+            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) * q2.""Horas Reales"", 2)
         ELSE 0
     END AS ""Kg Fresco Meta / Hras Reales"",
     COALESCE(q3.""Kg Fresco Real"", 0) AS ""Kg Fresco Real"",
@@ -9239,7 +9251,7 @@ namespace Tablero
     END AS ""%Cumplimiento Fresco"",
     CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
-            ROUND(COALESCE(d.""Kg_seco_hr"", 0) / q2.""Horas Reales"", 2)
+            ROUND(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Reales"", 2)
         ELSE 0
     END AS ""Kg Seco Meta / Hras Reales"",
     COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
@@ -9565,6 +9577,165 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        private void btn_new_concentrado_otras_Click(object sender, EventArgs e)
+        {
+            actualiza_reporte_concentrado_otras();
+            btn_clean_concentrado.Enabled = true;
+            btn_export_excel_concentrado.Enabled = true;
+            materialCard12.Enabled = true;
+        }
+        private void actualiza_reporte_concentrado_otras()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+    EXTRACT(MONTH FROM f.""Fecha"") AS Mes,
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+    f.""Area"",
+    f.""OP"",
+    SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
+    SUM(f.""Hr_efectivas"") AS ""Hr Reales"",
+    COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo Muerto Operativo"",
+    COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo Muerto Mecánico"",
+    ROUND(
+        100 - (
+            (COALESCE(SUM(tmo.""Min_Detenidos""), 0) + COALESCE(SUM(tmm.""Min_Detenidos""), 0)) / 
+            NULLIF(SUM(f.""Hr_programadas""), 0)
+        ), 
+    2) AS ""% Cumplimiento Tiempo Efectivo"",
+    ROUND(
+        CASE 
+            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+            WHEN f.""Area"" = 'Polvos' THEN 
+                CASE 
+                    WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
+                        COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                    ELSE 
+                        COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                END
+            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+            ELSE 0
+        END,
+    2) AS ""Kg Meta Hr Reales"",
+    SUM(f.""Kg_prod_term"") AS ""Kg Producidos"",
+    ROUND(
+        CASE 
+            -- Primero verificamos si el denominador es cero o NULL
+            WHEN (CASE 
+                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Polvos' THEN 
+                        CASE 
+                            WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
+                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                            ELSE 
+                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                        END
+                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                    ELSE 0
+                END) <= 0 THEN 0
+            -- Si el denominador es mayor que cero, aplicamos la fórmula
+            ELSE LEAST(
+                (SUM(f.""Kg_prod_term"") / 
+                (CASE 
+                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                    WHEN f.""Area"" = 'Polvos' THEN 
+                        CASE 
+                            WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
+                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                            ELSE 
+                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                        END
+                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                    ELSE 1
+                END)) * 100,
+                100
+            )
+        END,
+    2) AS ""% Cumplimiento de Kg Terminado"",
+    SUM(f.""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
+    ROUND(
+        CASE 
+            WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
+            ELSE LEAST(
+                ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
+                100
+            )
+        END,
+    2) AS ""FTT"",
+    ROUND(AVG(f.""Personal_Operativo""))::integer AS ""Personal"",
+    ROUND(SUM(f.""Hr_efectivas"") * ROUND(AVG(f.""Personal_Operativo""))::integer, 2) AS ""Horas Hombre"",
+    ROUND(
+        CASE 
+            WHEN (SUM(f.""Hr_efectivas"") * ROUND(AVG(f.""Personal_Operativo""))::integer) <= 0 THEN 0
+            ELSE SUM(f.""Kg_prod_term"") / (SUM(f.""Hr_efectivas"") * ROUND(AVG(f.""Personal_Operativo""))::integer)
+        END,
+    2) AS ""Kg Producidos por Persona"",
+    SUM(f.""Merma_kg"") AS ""Kg de Merma"",
+    ROUND(
+        CASE 
+            WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 0
+            ELSE (SUM(f.""Merma_kg"") / SUM(f.""Kg_prod_term"")) * 100
+        END,
+    2) AS ""% Merma vs Producido""
+FROM 
+    public.""Ficha"" f
+LEFT JOIN 
+    public.""Tiempo_Muerto_Operativo"" tmo 
+    ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+LEFT JOIN 
+    public.""Tiempo_muerto_Mecanico"" tmm 
+    ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+LEFT JOIN 
+    public.""Empacado"" e ON f.""OP"" = e.""OP""
+LEFT JOIN 
+    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+LEFT JOIN 
+    public.""Grind"" g ON f.""OP"" = g.""OP""
+LEFT JOIN 
+    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+LEFT JOIN 
+    public.""Maquinas"" m ON f.""OP"" = m.""OP""
+LEFT JOIN 
+    public.""Polvos"" p ON f.""OP"" = p.""OP""
+LEFT JOIN 
+    public.""Revolturas"" r ON f.""OP"" = r.""OP""
+WHERE 
+    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(MONTH FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha""),
+    f.""Area"",
+    f.""OP"",
+    e.""Meta_kg_hr_line"",
+    ev.""Meta_kg_hr"",
+    g.""Meta_Kg_hr"",
+    i.""Meta_kg_hr_line"",
+    m.""Meta_Kg_Hr"",
+    p.""Meta_kg_hr_hum"",
+    p.""Meta_kg_hr_idon"",
+    r.""Meta_Kg_Hr""
+ORDER BY 
+    Año, Mes, ""No de Semana"", f.""Area"", f.""OP"";";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, null);
         }
     }
 }
