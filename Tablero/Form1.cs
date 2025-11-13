@@ -38,13 +38,14 @@ namespace Tablero
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
         private bool filtrodetallesOP = false;
+        private bool filtroreporte_CD = false;
         private int filtroUsuariosActivo_OP_dgv_activo = 0;
         private string horaInicioText = string.Empty;
         private string horaFinText = string.Empty;
         private DateTime horaInicio;
         private DateTime horaFin;
         private bool editar = false;
-        private DataTable datosOriginales;
+        private DataTable datosOriginalesConcentrado;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
         //
@@ -204,6 +205,7 @@ namespace Tablero
                 actualiza_detalles_OP();
                 actualiza_tunel_calidad();
                 configurar_limpieza();
+                CargarSemanasAnioActual();
             }
             if (nivel_user == "Supervisor")
             {
@@ -235,7 +237,43 @@ namespace Tablero
                 configurar_limpieza();
             }
         }
+        private void CargarSemanasAnioActual()
+        {
+            try
+            {
+                // Limpiar el ComboBox primero
+                cb_semana_concentrado_d.Items.Clear();
 
+                // Obtener el año actual
+                int anioActual = DateTime.Now.Year;
+
+                // Obtener el número total de semanas en el año actual
+                int totalSemanas = ObtenerTotalSemanasEnAnio(anioActual);
+
+                // Agregar las semanas al ComboBox
+                for (int semana = 1; semana <= totalSemanas; semana++)
+                {
+                    cb_semana_concentrado_d.Items.Add(semana);
+                    // O también puedes agregar solo el número: cb_semana_concentrado_d.Items.Add(semana);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar semanas: {ex.Message}");
+            }
+        }
+
+        private int ObtenerTotalSemanasEnAnio(int anio)
+        {
+            // El 28 de diciembre siempre está en la última semana del año
+            DateTime ultimoDia = new DateTime(anio, 12, 28);
+
+            // Obtener el formato de semana ISO 8601
+            System.Globalization.Calendar cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
+            int ultimaSemana = cal.GetWeekOfYear(ultimoDia, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+            return ultimaSemana;
+        }
         private void configurar_limpieza()
         {
             tabPage14.BackColor = Color.White;
@@ -9163,8 +9201,7 @@ namespace Tablero
             actualiza_reporte_concentrado();
             btn_clean_concentrado.Enabled = true;
             btn_export_excel_concentrado.Enabled = true;
-            txt_filtro_report_consentrado.Enabled = true;
-            btn_filtro_consentrado.Enabled = true;
+            materialCard12.Enabled = true;
         }
         private void actualiza_reporte_concentrado()
         {
@@ -9378,11 +9415,156 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
             dgv_reporte_concentrado.Columns.Clear();     // Limpia todas las columnas
             btn_export_excel_concentrado.Enabled = false;
             btn_clean_concentrado.Enabled = false;
+            // Limpiar el campo de texto de búsqueda
+            txt_filtro_report_consentrado.Text = "";
+
+            // Limpiar la selección del ComboBox de semana
+            cb_semana_concentrado_d.SelectedIndex = -1;
+            cb_semana_concentrado_d.Focus();
+            materialCard12.Enabled = false;
         }
 
-        private void txt_filtro_report_consentrado_TextChanged(object sender, EventArgs e)
+        private void btn_buscar_Concen_Des_Click(object sender, EventArgs e)
         {
+            // Si el filtro está activo, limpiar filtro y campos de búsqueda
+            if (filtroreporte_CD)
+            {
+                // Mostrar todas las filas del DataGridView
+                foreach (DataGridViewRow row in dgv_reporte_concentrado.Rows)
+                {
+                    row.Visible = true;
+                }
 
+                // Restablecer el estado del filtro
+                filtroreporte_CD = false;
+            }
+
+            string textoBusqueda = txt_filtro_report_consentrado.Text.Trim().ToUpper();
+            string semanaSeleccionada = cb_semana_concentrado_d.SelectedItem?.ToString();
+
+            // Validar que al menos un campo de búsqueda esté lleno
+            if (string.IsNullOrEmpty(textoBusqueda) && string.IsNullOrEmpty(semanaSeleccionada))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Favor de llenar al menos un campo de búsqueda (texto o semana).",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Deseleccionar cualquier celda y fila antes de filtrar
+            dgv_reporte_concentrado.ClearSelection();
+            dgv_reporte_concentrado.CurrentCell = null;
+
+            // Mover el CurrencyManager a una posición válida
+            CurrencyManager cm = (CurrencyManager)BindingContext[dgv_reporte_concentrado.DataSource];
+            if (cm != null && cm.Count > 0)
+                cm.Position = -1;
+
+            bool hayFiltro = false;
+
+            foreach (DataGridViewRow row in dgv_reporte_concentrado.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                bool coincideTexto = false;
+                bool coincideSemana = false;
+
+                // Aplicar filtro de texto (si hay texto de búsqueda)
+                if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    // Buscar en todas las celdas de la fila
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        if (cell.Value != null &&
+                            cell.Value.ToString().ToUpper().Contains(textoBusqueda))
+                        {
+                            coincideTexto = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    // Si no hay texto de búsqueda, considerar que coincide
+                    coincideTexto = true;
+                }
+
+                // Aplicar filtro de semana (si hay semana seleccionada)
+                if (!string.IsNullOrEmpty(semanaSeleccionada))
+                {
+                    // Verificar la segunda columna (índice 1) para la semana
+                    if (row.Cells[1].Value != null &&
+                        row.Cells[1].Value.ToString().Equals(semanaSeleccionada))
+                    {
+                        coincideSemana = true;
+                    }
+                }
+                else
+                {
+                    // Si no hay semana seleccionada, considerar que coincide
+                    coincideSemana = true;
+                }
+
+                // La fila debe coincidir con ambos filtros (si están activos)
+                bool mostrarFila = coincideTexto && coincideSemana;
+
+                row.Visible = mostrarFila;
+                if (mostrarFila) hayFiltro = true;
+            }
+
+            filtroreporte_CD = hayFiltro;
+
+            if (!hayFiltro)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "No se encontraron coincidencias con los criterios de búsqueda.",
+                    "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btn_filtro_consentrado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Limpiar el campo de texto de búsqueda
+                txt_filtro_report_consentrado.Text = "";
+
+                // Limpiar la selección del ComboBox de semana
+                cb_semana_concentrado_d.SelectedIndex = -1;
+                cb_semana_concentrado_d.Focus();
+
+                // Mostrar todas las filas del DataGridView
+                foreach (DataGridViewRow row in dgv_reporte_concentrado.Rows)
+                {
+                    if (!row.IsNewRow) // Asegurarse de no ocultar la fila nueva
+                    {
+                        row.Visible = true;
+                    }
+                }
+
+                // Deseleccionar cualquier celda o fila seleccionada
+                dgv_reporte_concentrado.ClearSelection();
+                dgv_reporte_concentrado.CurrentCell = null;
+
+                // Restablecer el estado del filtro
+                filtroreporte_CD = false;
+
+                // Opcional: Restablecer la posición del CurrencyManager si usas binding
+                CurrencyManager cm = (CurrencyManager)BindingContext[dgv_reporte_concentrado.DataSource];
+                if (cm != null && cm.Count > 0)
+                {
+                    cm.Position = 0; // O -1 dependiendo de tu necesidad
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al limpiar los filtros: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }
