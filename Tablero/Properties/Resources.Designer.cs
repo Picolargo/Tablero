@@ -213,6 +213,16 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chart_graph_statistics_bar {
+            get {
+                object obj = ResourceManager.GetObject("chart_graph_statistics_bar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap excel_icon {
             get {
                 object obj = ResourceManager.GetObject("excel_icon", resourceCulture);

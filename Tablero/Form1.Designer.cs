@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -97,6 +100,9 @@
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.pnl_graficas = new System.Windows.Forms.Panel();
+            this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
+            this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.tab_reportes = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
@@ -269,6 +275,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.charview_kg_fresco = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -304,6 +311,9 @@
             this.materialCard2.SuspendLayout();
             this.materialCard1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.pnl_graficas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
@@ -382,6 +392,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1474,6 +1485,7 @@
             // tabPage2
             // 
             this.tabPage2.AutoScroll = true;
+            this.tabPage2.Controls.Add(this.pnl_graficas);
             this.tabPage2.ImageKey = "chart_graph_statistics_bar";
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
@@ -1482,6 +1494,50 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // pnl_graficas
+            // 
+            this.pnl_graficas.AutoScroll = true;
+            this.pnl_graficas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnl_graficas.Controls.Add(this.charview_kg_fresco);
+            this.pnl_graficas.Controls.Add(this.bnt_graficar);
+            this.pnl_graficas.Controls.Add(this.lista_semanas);
+            this.pnl_graficas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl_graficas.Location = new System.Drawing.Point(3, 3);
+            this.pnl_graficas.Name = "pnl_graficas";
+            this.pnl_graficas.Size = new System.Drawing.Size(1676, 934);
+            this.pnl_graficas.TabIndex = 0;
+            // 
+            // bnt_graficar
+            // 
+            this.bnt_graficar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.bnt_graficar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.bnt_graficar.Depth = 0;
+            this.bnt_graficar.HighEmphasis = true;
+            this.bnt_graficar.Icon = global::Tablero.Properties.Resources.chart_graph_statistics_bar;
+            this.bnt_graficar.ImageList = this.imageList1;
+            this.bnt_graficar.Location = new System.Drawing.Point(42, 376);
+            this.bnt_graficar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.bnt_graficar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.bnt_graficar.Name = "bnt_graficar";
+            this.bnt_graficar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.bnt_graficar.Size = new System.Drawing.Size(119, 36);
+            this.bnt_graficar.TabIndex = 35;
+            this.bnt_graficar.Text = "Graficar";
+            this.bnt_graficar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.bnt_graficar.UseAccentColor = false;
+            this.bnt_graficar.UseVisualStyleBackColor = true;
+            this.bnt_graficar.Click += new System.EventHandler(this.bnt_graficar_Click);
+            // 
+            // lista_semanas
+            // 
+            this.lista_semanas.Location = new System.Drawing.Point(20, 49);
+            this.lista_semanas.MultiSelect = true;
+            this.lista_semanas.Name = "lista_semanas";
+            this.lista_semanas.ShowCheckBoxes = true;
+            this.lista_semanas.ShowColumnHeaders = false;
+            this.lista_semanas.Size = new System.Drawing.Size(204, 259);
+            this.lista_semanas.TabIndex = 1;
             // 
             // tabPage10
             // 
@@ -2067,6 +2123,7 @@
             this.btn_buscar_Concen_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_buscar_Concen_otras.UseAccentColor = false;
             this.btn_buscar_Concen_otras.UseVisualStyleBackColor = true;
+            this.btn_buscar_Concen_otras.Click += new System.EventHandler(this.btn_buscar_Concen_otras_Click);
             // 
             // cb_semana_concentrado_otras
             // 
@@ -2084,16 +2141,6 @@
             this.cb_semana_concentrado_otras.Hint = "Selecione Semana";
             this.cb_semana_concentrado_otras.IntegralHeight = false;
             this.cb_semana_concentrado_otras.ItemHeight = 43;
-            this.cb_semana_concentrado_otras.Items.AddRange(new object[] {
-            "Tunel/Sumergidor",
-            "Despegue",
-            "Evaporado",
-            "Grind",
-            "Inspeccion",
-            "Empacado",
-            "Polvos",
-            "Revolturas",
-            "Máquinas"});
             this.cb_semana_concentrado_otras.Location = new System.Drawing.Point(17, 12);
             this.cb_semana_concentrado_otras.MaxDropDownItems = 4;
             this.cb_semana_concentrado_otras.MouseState = MaterialSkin.MouseState.OUT;
@@ -2141,6 +2188,7 @@
             this.btn_filtro_consentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_filtro_consentrado_otras.UseAccentColor = false;
             this.btn_filtro_consentrado_otras.UseVisualStyleBackColor = true;
+            this.btn_filtro_consentrado_otras.Click += new System.EventHandler(this.btn_filtro_consentrado_otras_Click);
             // 
             // materialCard14
             // 
@@ -2181,6 +2229,7 @@
             this.btn_clean_concentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_clean_concentrado_otras.UseAccentColor = false;
             this.btn_clean_concentrado_otras.UseVisualStyleBackColor = true;
+            this.btn_clean_concentrado_otras.Click += new System.EventHandler(this.btn_clean_concentrado_otras_Click);
             // 
             // btn_export_excel_concentrado_otras
             // 
@@ -2204,6 +2253,7 @@
             this.btn_export_excel_concentrado_otras.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_export_excel_concentrado_otras.UseAccentColor = false;
             this.btn_export_excel_concentrado_otras.UseVisualStyleBackColor = true;
+            this.btn_export_excel_concentrado_otras.Click += new System.EventHandler(this.btn_export_excel_concentrado_otras_Click);
             // 
             // btn_new_concentrado_otras
             // 
@@ -4596,6 +4646,22 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
+            // charview_kg_fresco
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.charview_kg_fresco.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.charview_kg_fresco.Legends.Add(legend1);
+            this.charview_kg_fresco.Location = new System.Drawing.Point(526, 61);
+            this.charview_kg_fresco.Name = "charview_kg_fresco";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.charview_kg_fresco.Series.Add(series1);
+            this.charview_kg_fresco.Size = new System.Drawing.Size(675, 411);
+            this.charview_kg_fresco.TabIndex = 36;
+            this.charview_kg_fresco.Text = "chart1";
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4654,6 +4720,10 @@
             this.materialCard1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.pnl_graficas.ResumeLayout(false);
+            this.pnl_graficas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
@@ -4747,6 +4817,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4991,6 +5062,10 @@
         private MaterialSkin.Controls.MaterialButton btn_new_concentrado_otras;
         private MaterialSkin.Controls.MaterialCard materialCard15;
         private System.Windows.Forms.DataGridView dgv_reporte_concentrado_otras;
+        private System.Windows.Forms.Panel pnl_graficas;
+        private Telerik.WinControls.UI.RadListView lista_semanas;
+        private MaterialSkin.Controls.MaterialButton bnt_graficar;
+        private System.Windows.Forms.DataVisualization.Charting.Chart charview_kg_fresco;
     }
 }
 

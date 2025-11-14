@@ -2,6 +2,7 @@
 using MaterialSkin.Controls;
 using Npgsql;
 using System;
+using System.Collections.Generic; // ¡Agrega esta línea!
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -10,6 +11,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using Telerik.Charting;
 using Telerik.WinControls;
 using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
@@ -39,6 +42,7 @@ namespace Tablero
         private bool filtroUsuariosActivo_OP = false;
         private bool filtrodetallesOP = false;
         private bool filtroreporte_CD = false;
+        private bool filtroreporte_CO = false;
         private int filtroUsuariosActivo_OP_dgv_activo = 0;
         private string horaInicioText = string.Empty;
         private string horaFinText = string.Empty;
@@ -90,6 +94,7 @@ namespace Tablero
             PersonalizarDataGridView(dgv_Tunel_calidad);
             PersonalizarDataGridView(dgv_reporte_merma);
             PersonalizarDataGridView(dgv_reporte_concentrado);
+            PersonalizarDataGridView(dgv_reporte_concentrado_otras                                                                                                                     );
         }
 
         private void PersonalizarDataGridView(DataGridView dgv, bool editable = false)
@@ -242,6 +247,7 @@ namespace Tablero
             {
                 // Limpiar el ComboBox primero
                 cb_semana_concentrado_d.Items.Clear();
+                cb_semana_concentrado_otras.Items.Clear();
 
                 // Obtener el año actual
                 int anioActual = DateTime.Now.Year;
@@ -253,7 +259,9 @@ namespace Tablero
                 for (int semana = 1; semana <= totalSemanas; semana++)
                 {
                     cb_semana_concentrado_d.Items.Add(semana);
-                    // O también puedes agregar solo el número: cb_semana_concentrado_d.Items.Add(semana);
+                    cb_semana_concentrado_otras.Items.Add(semana);
+                    // Agregar al RadListView
+                    lista_semanas.Items.Add(semana.ToString());
                 }
             }
             catch (Exception ex)
@@ -9582,19 +9590,18 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
         private void btn_new_concentrado_otras_Click(object sender, EventArgs e)
         {
             actualiza_reporte_concentrado_otras();
-            btn_clean_concentrado.Enabled = true;
-            btn_export_excel_concentrado.Enabled = true;
-            materialCard12.Enabled = true;
+            btn_clean_concentrado_otras.Enabled = true;
+            btn_export_excel_concentrado_otras.Enabled = true;
+            materialCard13.Enabled = true;
         }
         private void actualiza_reporte_concentrado_otras()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
             string querySimple = @"SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-    EXTRACT(MONTH FROM f.""Fecha"") AS Mes,
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+    EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. de Semana"",
+    EXTRACT(MONTH FROM f.""Fecha"") AS ""Mes"",
     f.""Area"",
     f.""OP"",
     SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
@@ -9732,10 +9739,376 @@ GROUP BY
     p.""Meta_kg_hr_idon"",
     r.""Meta_Kg_Hr""
 ORDER BY 
-    Año, Mes, ""No de Semana"", f.""Area"", f.""OP"";";
+    ""Año"", ""Mes"", ""No. de Semana"", f.""Area"", f.""OP"";";
 
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, null);
+        }
+
+        private async void btn_export_excel_concentrado_otras_Click(object sender, EventArgs e)
+        {
+            LoadingScreen.ShowLoading();
+            try
+            {
+                // Mostrar el diálogo de guardar archivo en el hilo principal
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                string filePath = null;
+
+                // Mostrar el diálogo de guardado en el hilo principal
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+
+                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+                    await Task.Run(() =>
+                    {
+                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_concentrado_otras, filePath);
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Ocultar la pantalla de cargando
+                LoadingScreen.HideLoading();
+            }
+        }
+
+        private void btn_clean_concentrado_otras_Click(object sender, EventArgs e)
+        {
+            dgv_reporte_concentrado_otras.DataSource = null;   // Desvincula cualquier origen de datos
+            dgv_reporte_concentrado_otras.Rows.Clear();        // Limpia todas las filas (por si no hay DataSource)
+            dgv_reporte_concentrado_otras.Columns.Clear();     // Limpia todas las columnas
+            btn_export_excel_concentrado_otras.Enabled = false;
+            btn_clean_concentrado_otras.Enabled = false;
+            // Limpiar el campo de texto de búsqueda
+            txt_filtro_report_consentrado_otras.Text = "";
+
+            // Limpiar la selección del ComboBox de semana
+            cb_semana_concentrado_otras.SelectedIndex = -1;
+            cb_semana_concentrado_otras.Focus();
+            materialCard13.Enabled = false;
+        }
+
+        private void btn_buscar_Concen_otras_Click(object sender, EventArgs e)
+        {
+            // Si el filtro está activo, limpiar filtro y campos de búsqueda
+            if (filtroreporte_CO)
+            {
+                // Mostrar todas las filas del DataGridView
+                foreach (DataGridViewRow row in dgv_reporte_concentrado_otras.Rows)
+                {
+                    row.Visible = true;
+                }
+
+                // Restablecer el estado del filtro
+                filtroreporte_CO = false;
+            }
+
+            string textoBusqueda = txt_filtro_report_consentrado_otras.Text.Trim().ToUpper();
+            string semanaSeleccionada = cb_semana_concentrado_otras.SelectedItem?.ToString();
+
+            // Validar que al menos un campo de búsqueda esté lleno
+            if (string.IsNullOrEmpty(textoBusqueda) && string.IsNullOrEmpty(semanaSeleccionada))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Favor de llenar al menos un campo de búsqueda (texto o semana).",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Deseleccionar cualquier celda y fila antes de filtrar
+            dgv_reporte_concentrado_otras.ClearSelection();
+            dgv_reporte_concentrado_otras.CurrentCell = null;
+
+            // Mover el CurrencyManager a una posición válida
+            CurrencyManager cm = (CurrencyManager)BindingContext[dgv_reporte_concentrado_otras.DataSource];
+            if (cm != null && cm.Count > 0)
+                cm.Position = -1;
+
+            bool hayFiltro = false;
+
+            foreach (DataGridViewRow row in dgv_reporte_concentrado_otras.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                bool coincideTexto = false;
+                bool coincideSemana = false;
+
+                // Aplicar filtro de texto (si hay texto de búsqueda)
+                if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    // Buscar en todas las celdas de la fila
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        if (cell.Value != null &&
+                            cell.Value.ToString().ToUpper().Contains(textoBusqueda))
+                        {
+                            coincideTexto = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    // Si no hay texto de búsqueda, considerar que coincide
+                    coincideTexto = true;
+                }
+
+                // Aplicar filtro de semana (si hay semana seleccionada)
+                if (!string.IsNullOrEmpty(semanaSeleccionada))
+                {
+                    // Verificar la segunda columna (índice 1) para la semana
+                    if (row.Cells[1].Value != null &&
+                        row.Cells[1].Value.ToString().Equals(semanaSeleccionada))
+                    {
+                        coincideSemana = true;
+                    }
+                }
+                else
+                {
+                    // Si no hay semana seleccionada, considerar que coincide
+                    coincideSemana = true;
+                }
+
+                // La fila debe coincidir con ambos filtros (si están activos)
+                bool mostrarFila = coincideTexto && coincideSemana;
+
+                row.Visible = mostrarFila;
+                if (mostrarFila) hayFiltro = true;
+            }
+
+            filtroreporte_CO = hayFiltro;
+
+            if (!hayFiltro)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "No se encontraron coincidencias con los criterios de búsqueda.",
+                    "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btn_filtro_consentrado_otras_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Limpiar el campo de texto de búsqueda
+                txt_filtro_report_consentrado_otras.Text = "";
+
+                // Limpiar la selección del ComboBox de semana
+                cb_semana_concentrado_otras.SelectedIndex = -1;
+                cb_semana_concentrado_otras.Focus();
+
+                // Mostrar todas las filas del DataGridView
+                foreach (DataGridViewRow row in dgv_reporte_concentrado_otras.Rows)
+                {
+                    if (!row.IsNewRow) // Asegurarse de no ocultar la fila nueva
+                    {
+                        row.Visible = true;
+                    }
+                }
+
+                // Deseleccionar cualquier celda o fila seleccionada
+                dgv_reporte_concentrado_otras.ClearSelection();
+                dgv_reporte_concentrado_otras.CurrentCell = null;
+
+                // Restablecer el estado del filtro
+                filtroreporte_CO = false;
+
+                // Opcional: Restablecer la posición del CurrencyManager si usas binding
+                CurrencyManager cm = (CurrencyManager)BindingContext[dgv_reporte_concentrado_otras.DataSource];
+                if (cm != null && cm.Count > 0)
+                {
+                    cm.Position = 0; // O -1 dependiendo de tu necesidad
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al limpiar los filtros: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void bnt_graficar_Click(object sender, EventArgs e)
+        {
+            var seleccionados = lista_semanas.CheckedItems;
+
+            if (seleccionados.Count == 0)
+            {
+                MessageBox.Show("No hay semanas seleccionadas.");
+                return;
+            }
+
+            // Crear lista de semanas seleccionadas
+            var semanasSeleccionadas = new List<string>();
+            foreach (ListViewDataItem item in seleccionados)
+            {
+                semanasSeleccionadas.Add(item.Text);
+            }
+
+            // Llamar al método para graficar
+            GraficarKgFresco(semanasSeleccionadas);
+        }
+        private void GraficarKgFresco(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                SUM(""Hr_programadas"" * d.""Kg_fresco_hr"") AS ""Suma_Kg_Fresco_Meta_por_Hr_programadas"",
+                SUM(""Hr_efectivas"" * d.""Kg_fresco_hr"") AS ""Kg_Fresco_Meta_por_Hr_Reales"",
+                SUM(kg_frescos_enter_se) AS ""Kg_Fresco_Real""
+            FROM 
+                public.""Ficha"" f
+            INNER JOIN 
+                public.""Deshidratado"" d ON f.""OP"" = d.""OP""
+            WHERE 
+                f.""Area"" = 'Tunel/Sumergidor'
+                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+            GROUP BY 
+                EXTRACT(WEEK FROM ""Fecha"")
+            ORDER BY 
+                semana";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart
+                ConfigurarChart();
+
+                // Limpiar series existentes
+                charview_kg_fresco.Series.Clear();
+
+                // Crear series
+                // Serie 1: Meta Programada (Barras)
+                Series serieMetaProgramada = new Series("Meta Programada");
+                serieMetaProgramada.ChartType = SeriesChartType.Column;
+                serieMetaProgramada.Color = Color.FromArgb(255, 128, 0); // Naranja
+                serieMetaProgramada.IsValueShownAsLabel = true;
+                serieMetaProgramada.LabelFormat = "N0";
+                serieMetaProgramada["DrawingStyle"] = "Cylinder";
+
+                // Serie 2: Meta Reales (Barras)
+                Series serieMetaReales = new Series("Meta Reales");
+                serieMetaReales.ChartType = SeriesChartType.Column;
+                serieMetaReales.Color = Color.FromArgb(0, 112, 192); // Azul
+                serieMetaReales.IsValueShownAsLabel = true;
+                serieMetaReales.LabelFormat = "N0";
+                serieMetaReales["DrawingStyle"] = "Cylinder";
+
+                // Serie 3: Real (Línea)
+                Series serieReal = new Series("Real");
+                serieReal.ChartType = SeriesChartType.Line;
+                serieReal.Color = Color.Red;
+                serieReal.BorderWidth = 3;
+                serieReal.MarkerStyle = MarkerStyle.Circle;
+                serieReal.MarkerSize = 8;
+                serieReal.MarkerColor = Color.Red;
+                serieReal.IsValueShownAsLabel = true;
+                serieReal.LabelFormat = "N0";
+
+                // Llenar las series con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["semana"]}";
+                    double metaProgramada = Convert.ToDouble(row["Suma_Kg_Fresco_Meta_por_Hr_programadas"]);
+                    double metaReales = Convert.ToDouble(row["Kg_Fresco_Meta_por_Hr_Reales"]);
+                    double real = Convert.ToDouble(row["Kg_Fresco_Real"]);
+
+                    // Agregar puntos a las series
+                    serieMetaProgramada.Points.AddXY(semana, metaProgramada);
+                    serieMetaReales.Points.AddXY(semana, metaReales);
+                    serieReal.Points.AddXY(semana, real);
+                }
+
+                // Agregar series al chart (el orden importa para la superposición)
+                charview_kg_fresco.Series.Add(serieReal);    // Línea primero (atrás)
+                charview_kg_fresco.Series.Add(serieMetaProgramada); // Barras después
+                charview_kg_fresco.Series.Add(serieMetaReales);     // Barras después
+
+                // Actualizar el chart
+                charview_kg_fresco.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar: {ex.Message}\n\nDetalle: {ex.StackTrace}");
+            }
+        }
+
+        private void ConfigurarChart()
+        {
+            // Limpiar el chart
+            charview_kg_fresco.Series.Clear();
+            charview_kg_fresco.ChartAreas.Clear();
+            charview_kg_fresco.Titles.Clear();
+            charview_kg_fresco.Legends.Clear();
+
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("ChartArea1");
+
+            // Configurar ejes
+            chartArea.AxisX.Title = "Semanas";
+            chartArea.AxisX.TitleFont = new Font("Arial", 10, FontStyle.Bold);
+            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 9);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+
+            chartArea.AxisY.Title = "Kilogramos";
+            chartArea.AxisY.TitleFont = new Font("Arial", 10, FontStyle.Bold);
+            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 9);
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.Enabled = true;
+
+            // Configurar para que las barras estén una al lado de la otra
+            chartArea.AxisX.Interval = 1;
+
+            // Agregar área al chart
+            charview_kg_fresco.ChartAreas.Add(chartArea);
+
+            // Configurar título
+            Title title = new Title();
+            title.Text = "Kilogramos en Fresco que ingresan a túnel\nComparación Meta programada / Meta de horas reales trabajadas / Real ingresado a túnel";
+            title.Font = new Font("Arial", 12, FontStyle.Bold);
+            title.Alignment = ContentAlignment.TopCenter;
+            charview_kg_fresco.Titles.Add(title);
+
+            // Configurar leyenda
+            Legend legend = new Legend();
+            legend.Title = "Leyenda";
+            legend.TitleFont = new Font("Arial", 10, FontStyle.Bold);
+            legend.Font = new Font("Arial", 9);
+            legend.Docking = Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            charview_kg_fresco.Legends.Add(legend);
+
+            // Configuración general del chart
+            charview_kg_fresco.Palette = ChartColorPalette.None;
         }
     }
 }
