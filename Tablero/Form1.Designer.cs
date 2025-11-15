@@ -32,8 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -4650,15 +4648,9 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.charview_kg_fresco.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.charview_kg_fresco.Legends.Add(legend1);
-            this.charview_kg_fresco.Location = new System.Drawing.Point(526, 61);
+            this.charview_kg_fresco.Location = new System.Drawing.Point(340, 26);
             this.charview_kg_fresco.Name = "charview_kg_fresco";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.charview_kg_fresco.Series.Add(series1);
-            this.charview_kg_fresco.Size = new System.Drawing.Size(675, 411);
+            this.charview_kg_fresco.Size = new System.Drawing.Size(957, 629);
             this.charview_kg_fresco.TabIndex = 36;
             this.charview_kg_fresco.Text = "chart1";
             // 

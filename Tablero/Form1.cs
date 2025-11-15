@@ -9999,38 +9999,64 @@ ORDER BY
                 }
 
                 // Configurar el chart
-                ConfigurarChart();
+                ConfigurarChartModerno();
 
                 // Limpiar series existentes
                 charview_kg_fresco.Series.Clear();
 
-                // Crear series
+                // Crear series con diseño moderno y etiquetas visibles
                 // Serie 1: Meta Programada (Barras)
                 Series serieMetaProgramada = new Series("Meta Programada");
                 serieMetaProgramada.ChartType = SeriesChartType.Column;
-                serieMetaProgramada.Color = Color.FromArgb(255, 128, 0); // Naranja
+                serieMetaProgramada.Color = Color.FromArgb(74, 134, 232); // Azul moderno
                 serieMetaProgramada.IsValueShownAsLabel = true;
                 serieMetaProgramada.LabelFormat = "N0";
-                serieMetaProgramada["DrawingStyle"] = "Cylinder";
+                serieMetaProgramada.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieMetaProgramada.LabelForeColor = Color.Black; // Blanco para contraste con azul
+                serieMetaProgramada.BackSecondaryColor = Color.FromArgb(45, 95, 175);
+                serieMetaProgramada.BackGradientStyle = GradientStyle.DiagonalRight;
+                serieMetaProgramada.BorderColor = Color.FromArgb(45, 95, 175);
+                serieMetaProgramada.BorderWidth = 1;
+                serieMetaProgramada.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieMetaProgramada.ShadowOffset = 2;
+                serieMetaProgramada.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
 
                 // Serie 2: Meta Reales (Barras)
                 Series serieMetaReales = new Series("Meta Reales");
                 serieMetaReales.ChartType = SeriesChartType.Column;
-                serieMetaReales.Color = Color.FromArgb(0, 112, 192); // Azul
+                serieMetaReales.Color = Color.FromArgb(46, 204, 113); // Verde moderno
                 serieMetaReales.IsValueShownAsLabel = true;
                 serieMetaReales.LabelFormat = "N0";
-                serieMetaReales["DrawingStyle"] = "Cylinder";
+                serieMetaReales.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieMetaReales.LabelForeColor = Color.Black; // Blanco para contraste con verde
+                serieMetaReales.BackSecondaryColor = Color.FromArgb(35, 155, 86);
+                serieMetaReales.BackGradientStyle = GradientStyle.DiagonalRight;
+                serieMetaReales.BorderColor = Color.FromArgb(35, 155, 86);
+                serieMetaReales.BorderWidth = 1;
+                serieMetaReales.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieMetaReales.ShadowOffset = 2;
+                serieMetaReales.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
 
-                // Serie 3: Real (Línea)
+                // Serie 3: Real (Línea con puntos modernos)
                 Series serieReal = new Series("Real");
                 serieReal.ChartType = SeriesChartType.Line;
-                serieReal.Color = Color.Red;
-                serieReal.BorderWidth = 3;
+                serieReal.Color = Color.FromArgb(231, 76, 60); // Rojo moderno
+                serieReal.BorderWidth = 4;
+                serieReal.BorderDashStyle = ChartDashStyle.Solid;
                 serieReal.MarkerStyle = MarkerStyle.Circle;
-                serieReal.MarkerSize = 8;
-                serieReal.MarkerColor = Color.Red;
+                serieReal.MarkerSize = 14; // Más grande
+                serieReal.MarkerColor = Color.FromArgb(231, 76, 60);
+                serieReal.MarkerBorderColor = Color.White;
+                serieReal.MarkerBorderWidth = 3; // Borde más grueso
                 serieReal.IsValueShownAsLabel = true;
                 serieReal.LabelFormat = "N0";
+                serieReal.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieReal.LabelForeColor = Color.FromArgb(231, 76, 60); // Rojo para contraste
+                serieReal.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
+                serieReal.LabelBorderColor = Color.FromArgb(231, 76, 60);
+                serieReal.LabelBorderWidth = 1;
+                serieReal.ShadowColor = Color.FromArgb(150, 50, 40);
+                serieReal.ShadowOffset = 1;
 
                 // Llenar las series con datos
                 foreach (DataRow row in datos.Rows)
@@ -10041,15 +10067,30 @@ ORDER BY
                     double real = Convert.ToDouble(row["Kg_Fresco_Real"]);
 
                     // Agregar puntos a las series
-                    serieMetaProgramada.Points.AddXY(semana, metaProgramada);
+                    int pointIndex = serieMetaProgramada.Points.AddXY(semana, metaProgramada);
                     serieMetaReales.Points.AddXY(semana, metaReales);
                     serieReal.Points.AddXY(semana, real);
+
+                    // Configurar etiquetas para mejor visibilidad
+                    serieMetaProgramada.Points[pointIndex].LabelBackColor = Color.Transparent;
+                    serieMetaReales.Points[pointIndex].LabelBackColor = Color.Transparent;
                 }
 
-                // Agregar series al chart (el orden importa para la superposición)
-                charview_kg_fresco.Series.Add(serieReal);    // Línea primero (atrás)
-                charview_kg_fresco.Series.Add(serieMetaProgramada); // Barras después
-                charview_kg_fresco.Series.Add(serieMetaReales);     // Barras después
+                // Agregar series al chart
+                charview_kg_fresco.Series.Add(serieMetaProgramada);
+                charview_kg_fresco.Series.Add(serieMetaReales);
+                charview_kg_fresco.Series.Add(serieReal);
+
+                // Configurar el ancho y separación de las barras (más grandes)
+                foreach (var series in charview_kg_fresco.Series)
+                {
+                    if (series.ChartType == SeriesChartType.Column)
+                    {
+                        series["PointWidth"] = "0.8"; // Barras más anchas
+                        series["DrawSideBySide"] = "True";
+                        series["PixelPointWidth"] = "50"; // Ancho fijo más grande
+                    }
+                }
 
                 // Actualizar el chart
                 charview_kg_fresco.Invalidate();
@@ -10057,11 +10098,11 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar: {ex.Message}\n\nDetalle: {ex.StackTrace}");
+                MessageBox.Show($"Error al graficar: {ex.Message}");
             }
         }
 
-        private void ConfigurarChart()
+        private void ConfigurarChartModerno()
         {
             // Limpiar el chart
             charview_kg_fresco.Series.Clear();
@@ -10069,46 +10110,111 @@ ORDER BY
             charview_kg_fresco.Titles.Clear();
             charview_kg_fresco.Legends.Clear();
 
-            // Crear área de chart
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("ChartArea1");
+            // Crear área de chart moderna
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("MainArea");
 
-            // Configurar ejes
-            chartArea.AxisX.Title = "Semanas";
-            chartArea.AxisX.TitleFont = new Font("Arial", 10, FontStyle.Bold);
-            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 9);
+            // Fondo moderno - Más claro para mejor contraste
+            chartArea.BackColor = Color.FromArgb(255, 255, 255); // Blanco puro
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold); // Más grande
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
             chartArea.AxisX.MajorGrid.Enabled = false;
-
-            chartArea.AxisY.Title = "Kilogramos";
-            chartArea.AxisY.TitleFont = new Font("Arial", 10, FontStyle.Bold);
-            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 9);
-            chartArea.AxisY.LabelStyle.Format = "N0";
-            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
-            chartArea.AxisY.MajorGrid.Enabled = true;
-
-            // Configurar para que las barras estén una al lado de la otra
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
             chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+            chartArea.AxisX.IsMarksNextToAxis = true;
+
+            // Configurar eje Y moderno
+            chartArea.AxisY.Title = "KILOGRAMOS";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold); // Más grande
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar intervalos del eje Y
+            chartArea.AxisY.Interval = 50000;
+            chartArea.AxisY.Minimum = 0;
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5; // Margen izquierdo
+            chartArea.Position.Y = 15; // Margen superior (más espacio para títulos)
+            chartArea.Position.Width = 90; // Ancho del área
+            chartArea.Position.Height = 70; // Alto del área
 
             // Agregar área al chart
             charview_kg_fresco.ChartAreas.Add(chartArea);
 
-            // Configurar título
-            Title title = new Title();
-            title.Text = "Kilogramos en Fresco que ingresan a túnel\nComparación Meta programada / Meta de horas reales trabajadas / Real ingresado a túnel";
-            title.Font = new Font("Arial", 12, FontStyle.Bold);
-            title.Alignment = ContentAlignment.TopCenter;
-            charview_kg_fresco.Titles.Add(title);
+            // Configurar título principal moderno
+            Title mainTitle = new Title();
+            mainTitle.Text = "KILOGRAMOS EN FRESCO - ANÁLISIS DE TÚNEL";
+            mainTitle.Font = new Font("Segoe UI", 18, FontStyle.Bold); // Más grande
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            charview_kg_fresco.Titles.Add(mainTitle);
 
-            // Configurar leyenda
+            // Configurar subtítulo moderno
+            Title subTitle = new Title();
+            subTitle.Text = "Comparación: Meta Programada vs Meta Reales vs Real Ingresado";
+            subTitle.Font = new Font("Segoe UI", 12, FontStyle.Italic); // Más grande
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            charview_kg_fresco.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna con mejor contraste
             Legend legend = new Legend();
-            legend.Title = "Leyenda";
-            legend.TitleFont = new Font("Arial", 10, FontStyle.Bold);
-            legend.Font = new Font("Arial", 9);
+            legend.Title = "LEYENDA";
+            legend.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold); // Más grande
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            legend.ForeColor = Color.FromArgb(52, 73, 94); // Texto oscuro para buen contraste
             legend.Docking = Docking.Bottom;
             legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250); // Fondo claro
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 40; // Más espacio entre items
+            legend.TableStyle = LegendTableStyle.Tall;
             charview_kg_fresco.Legends.Add(legend);
 
-            // Configuración general del chart
-            charview_kg_fresco.Palette = ChartColorPalette.None;
+            // Configuración general del chart moderna
+            charview_kg_fresco.BackColor = Color.White;
+            charview_kg_fresco.BorderlineColor = Color.FromArgb(200, 200, 200);
+            charview_kg_fresco.BorderlineWidth = 2;
+            charview_kg_fresco.BorderlineDashStyle = ChartDashStyle.Solid;
+            charview_kg_fresco.Padding = new Padding(20); // Más padding
+            charview_kg_fresco.BackGradientStyle = GradientStyle.TopBottom;
+            charview_kg_fresco.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            charview_kg_fresco.AntiAliasing = AntiAliasingStyles.All;
+            charview_kg_fresco.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+            charview_kg_fresco.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
     }
 }
