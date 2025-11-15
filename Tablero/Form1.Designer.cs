@@ -30,8 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -99,6 +100,7 @@
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.pnl_graficas = new System.Windows.Forms.Panel();
+            this.charview_kg_fresco = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
@@ -273,7 +275,10 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.charview_kg_fresco = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabgraficas = new System.Windows.Forms.TabControl();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.charview_kg_seco = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -311,6 +316,7 @@
             this.menuStrip1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.pnl_graficas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
@@ -390,7 +396,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).BeginInit();
+            this.tabgraficas.SuspendLayout();
+            this.tabPage18.SuspendLayout();
+            this.tabPage19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1497,7 +1506,7 @@
             // 
             this.pnl_graficas.AutoScroll = true;
             this.pnl_graficas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnl_graficas.Controls.Add(this.charview_kg_fresco);
+            this.pnl_graficas.Controls.Add(this.tabgraficas);
             this.pnl_graficas.Controls.Add(this.bnt_graficar);
             this.pnl_graficas.Controls.Add(this.lista_semanas);
             this.pnl_graficas.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1505,6 +1514,17 @@
             this.pnl_graficas.Name = "pnl_graficas";
             this.pnl_graficas.Size = new System.Drawing.Size(1676, 934);
             this.pnl_graficas.TabIndex = 0;
+            // 
+            // charview_kg_fresco
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.charview_kg_fresco.ChartAreas.Add(chartArea1);
+            this.charview_kg_fresco.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_kg_fresco.Location = new System.Drawing.Point(3, 3);
+            this.charview_kg_fresco.Name = "charview_kg_fresco";
+            this.charview_kg_fresco.Size = new System.Drawing.Size(1344, 900);
+            this.charview_kg_fresco.TabIndex = 36;
+            this.charview_kg_fresco.Text = "chart1";
             // 
             // bnt_graficar
             // 
@@ -4644,15 +4664,50 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // charview_kg_fresco
+            // tabgraficas
             // 
-            chartArea1.Name = "ChartArea1";
-            this.charview_kg_fresco.ChartAreas.Add(chartArea1);
-            this.charview_kg_fresco.Location = new System.Drawing.Point(340, 26);
-            this.charview_kg_fresco.Name = "charview_kg_fresco";
-            this.charview_kg_fresco.Size = new System.Drawing.Size(957, 629);
-            this.charview_kg_fresco.TabIndex = 36;
-            this.charview_kg_fresco.Text = "chart1";
+            this.tabgraficas.Controls.Add(this.tabPage18);
+            this.tabgraficas.Controls.Add(this.tabPage19);
+            this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
+            this.tabgraficas.Location = new System.Drawing.Point(316, 0);
+            this.tabgraficas.Name = "tabgraficas";
+            this.tabgraficas.SelectedIndex = 0;
+            this.tabgraficas.Size = new System.Drawing.Size(1358, 932);
+            this.tabgraficas.TabIndex = 37;
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.AutoScroll = true;
+            this.tabPage18.Controls.Add(this.charview_kg_fresco);
+            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage18.Size = new System.Drawing.Size(1350, 906);
+            this.tabPage18.TabIndex = 0;
+            this.tabPage18.Text = "Kg Fresco";
+            this.tabPage18.UseVisualStyleBackColor = true;
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.Controls.Add(this.charview_kg_seco);
+            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage19.Size = new System.Drawing.Size(1350, 906);
+            this.tabPage19.TabIndex = 1;
+            this.tabPage19.Text = "Kg Seco";
+            this.tabPage19.UseVisualStyleBackColor = true;
+            // 
+            // charview_kg_seco
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.charview_kg_seco.ChartAreas.Add(chartArea2);
+            this.charview_kg_seco.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_kg_seco.Location = new System.Drawing.Point(3, 3);
+            this.charview_kg_seco.Name = "charview_kg_seco";
+            this.charview_kg_seco.Size = new System.Drawing.Size(1344, 900);
+            this.charview_kg_seco.TabIndex = 37;
+            this.charview_kg_seco.Text = "chart1";
             // 
             // Form_principal
             // 
@@ -4715,6 +4770,7 @@
             this.tabPage2.ResumeLayout(false);
             this.pnl_graficas.ResumeLayout(false);
             this.pnl_graficas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
@@ -4809,7 +4865,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
+            this.tabgraficas.ResumeLayout(false);
+            this.tabPage18.ResumeLayout(false);
+            this.tabPage19.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5058,6 +5117,10 @@
         private Telerik.WinControls.UI.RadListView lista_semanas;
         private MaterialSkin.Controls.MaterialButton bnt_graficar;
         private System.Windows.Forms.DataVisualization.Charting.Chart charview_kg_fresco;
+        private System.Windows.Forms.TabControl tabgraficas;
+        private System.Windows.Forms.TabPage tabPage18;
+        private System.Windows.Forms.TabPage tabPage19;
+        private System.Windows.Forms.DataVisualization.Charting.Chart charview_kg_seco;
     }
 }
 

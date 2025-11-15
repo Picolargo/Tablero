@@ -10163,7 +10163,7 @@ ORDER BY
 
             // Configurar título principal moderno
             Title mainTitle = new Title();
-            mainTitle.Text = "KILOGRAMOS EN FRESCO - ANÁLISIS DE TÚNEL";
+            mainTitle.Text = "Kilogramos en Fresco que Ingresan a Túnel";
             mainTitle.Font = new Font("Segoe UI", 18, FontStyle.Bold); // Más grande
             mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
             mainTitle.Alignment = ContentAlignment.TopCenter;
@@ -10173,7 +10173,7 @@ ORDER BY
 
             // Configurar subtítulo moderno
             Title subTitle = new Title();
-            subTitle.Text = "Comparación: Meta Programada vs Meta Reales vs Real Ingresado";
+            subTitle.Text = "Comparación Meta Programada / Meta de Horas Reales Trabajadas / Real Ingresado a Túnel";
             subTitle.Font = new Font("Segoe UI", 12, FontStyle.Italic); // Más grande
             subTitle.ForeColor = Color.FromArgb(127, 140, 141);
             subTitle.Alignment = ContentAlignment.TopCenter;
