@@ -31,8 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -100,7 +102,11 @@
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.pnl_graficas = new System.Windows.Forms.Panel();
+            this.tabgraficas = new System.Windows.Forms.TabControl();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
             this.charview_kg_fresco = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.charview_kg_seco = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
@@ -275,10 +281,10 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabgraficas = new System.Windows.Forms.TabControl();
-            this.tabPage18 = new System.Windows.Forms.TabPage();
-            this.tabPage19 = new System.Windows.Forms.TabPage();
-            this.charview_kg_seco = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage20 = new System.Windows.Forms.TabPage();
+            this.charview_ftt_deshidratado = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage21 = new System.Windows.Forms.TabPage();
+            this.charview_ftt_demas_areas = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -316,7 +322,11 @@
             this.menuStrip1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.pnl_graficas.SuspendLayout();
+            this.tabgraficas.SuspendLayout();
+            this.tabPage18.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).BeginInit();
+            this.tabPage19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.tab_reportes.SuspendLayout();
@@ -396,10 +406,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.tabgraficas.SuspendLayout();
-            this.tabPage18.SuspendLayout();
-            this.tabPage19.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).BeginInit();
+            this.tabPage20.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).BeginInit();
+            this.tabPage21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1515,6 +1525,31 @@
             this.pnl_graficas.Size = new System.Drawing.Size(1676, 934);
             this.pnl_graficas.TabIndex = 0;
             // 
+            // tabgraficas
+            // 
+            this.tabgraficas.Controls.Add(this.tabPage18);
+            this.tabgraficas.Controls.Add(this.tabPage19);
+            this.tabgraficas.Controls.Add(this.tabPage20);
+            this.tabgraficas.Controls.Add(this.tabPage21);
+            this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
+            this.tabgraficas.Location = new System.Drawing.Point(145, 0);
+            this.tabgraficas.Name = "tabgraficas";
+            this.tabgraficas.SelectedIndex = 0;
+            this.tabgraficas.Size = new System.Drawing.Size(1529, 932);
+            this.tabgraficas.TabIndex = 37;
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.AutoScroll = true;
+            this.tabPage18.Controls.Add(this.charview_kg_fresco);
+            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage18.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage18.TabIndex = 0;
+            this.tabPage18.Text = "Kg Fresco";
+            this.tabPage18.UseVisualStyleBackColor = true;
+            // 
             // charview_kg_fresco
             // 
             chartArea1.Name = "ChartArea1";
@@ -1522,9 +1557,31 @@
             this.charview_kg_fresco.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_kg_fresco.Location = new System.Drawing.Point(3, 3);
             this.charview_kg_fresco.Name = "charview_kg_fresco";
-            this.charview_kg_fresco.Size = new System.Drawing.Size(1344, 900);
+            this.charview_kg_fresco.Size = new System.Drawing.Size(1515, 900);
             this.charview_kg_fresco.TabIndex = 36;
             this.charview_kg_fresco.Text = "chart1";
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.Controls.Add(this.charview_kg_seco);
+            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage19.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage19.TabIndex = 1;
+            this.tabPage19.Text = "Kg Seco";
+            this.tabPage19.UseVisualStyleBackColor = true;
+            // 
+            // charview_kg_seco
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.charview_kg_seco.ChartAreas.Add(chartArea2);
+            this.charview_kg_seco.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_kg_seco.Location = new System.Drawing.Point(3, 3);
+            this.charview_kg_seco.Name = "charview_kg_seco";
+            this.charview_kg_seco.Size = new System.Drawing.Size(1515, 900);
+            this.charview_kg_seco.TabIndex = 37;
+            this.charview_kg_seco.Text = "chart1";
             // 
             // bnt_graficar
             // 
@@ -1534,7 +1591,7 @@
             this.bnt_graficar.HighEmphasis = true;
             this.bnt_graficar.Icon = global::Tablero.Properties.Resources.chart_graph_statistics_bar;
             this.bnt_graficar.ImageList = this.imageList1;
-            this.bnt_graficar.Location = new System.Drawing.Point(42, 376);
+            this.bnt_graficar.Location = new System.Drawing.Point(19, 401);
             this.bnt_graficar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.bnt_graficar.MouseState = MaterialSkin.MouseState.HOVER;
             this.bnt_graficar.Name = "bnt_graficar";
@@ -1549,12 +1606,12 @@
             // 
             // lista_semanas
             // 
-            this.lista_semanas.Location = new System.Drawing.Point(20, 49);
+            this.lista_semanas.Location = new System.Drawing.Point(19, 22);
             this.lista_semanas.MultiSelect = true;
             this.lista_semanas.Name = "lista_semanas";
             this.lista_semanas.ShowCheckBoxes = true;
             this.lista_semanas.ShowColumnHeaders = false;
-            this.lista_semanas.Size = new System.Drawing.Size(204, 259);
+            this.lista_semanas.Size = new System.Drawing.Size(119, 370);
             this.lista_semanas.TabIndex = 1;
             // 
             // tabPage10
@@ -1578,7 +1635,7 @@
             this.tab_reportes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_reportes.Location = new System.Drawing.Point(0, 0);
             this.tab_reportes.Name = "tab_reportes";
-            this.tab_reportes.SelectedIndex = 2;
+            this.tab_reportes.SelectedIndex = 1;
             this.tab_reportes.Size = new System.Drawing.Size(1682, 940);
             this.tab_reportes.Style = MetroFramework.MetroColorStyle.Black;
             this.tab_reportes.TabIndex = 0;
@@ -1930,7 +1987,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -4664,50 +4721,47 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // tabgraficas
+            // tabPage20
             // 
-            this.tabgraficas.Controls.Add(this.tabPage18);
-            this.tabgraficas.Controls.Add(this.tabPage19);
-            this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tabgraficas.Location = new System.Drawing.Point(316, 0);
-            this.tabgraficas.Name = "tabgraficas";
-            this.tabgraficas.SelectedIndex = 0;
-            this.tabgraficas.Size = new System.Drawing.Size(1358, 932);
-            this.tabgraficas.TabIndex = 37;
+            this.tabPage20.Controls.Add(this.charview_ftt_deshidratado);
+            this.tabPage20.Location = new System.Drawing.Point(4, 22);
+            this.tabPage20.Name = "tabPage20";
+            this.tabPage20.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage20.TabIndex = 2;
+            this.tabPage20.Text = "FTT Deshidratado";
+            this.tabPage20.UseVisualStyleBackColor = true;
             // 
-            // tabPage18
+            // charview_ftt_deshidratado
             // 
-            this.tabPage18.AutoScroll = true;
-            this.tabPage18.Controls.Add(this.charview_kg_fresco);
-            this.tabPage18.Location = new System.Drawing.Point(4, 22);
-            this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage18.Size = new System.Drawing.Size(1350, 906);
-            this.tabPage18.TabIndex = 0;
-            this.tabPage18.Text = "Kg Fresco";
-            this.tabPage18.UseVisualStyleBackColor = true;
+            chartArea3.Name = "ChartArea1";
+            this.charview_ftt_deshidratado.ChartAreas.Add(chartArea3);
+            this.charview_ftt_deshidratado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_ftt_deshidratado.Location = new System.Drawing.Point(0, 0);
+            this.charview_ftt_deshidratado.Name = "charview_ftt_deshidratado";
+            this.charview_ftt_deshidratado.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_deshidratado.TabIndex = 38;
+            this.charview_ftt_deshidratado.Text = "chart1";
             // 
-            // tabPage19
+            // tabPage21
             // 
-            this.tabPage19.Controls.Add(this.charview_kg_seco);
-            this.tabPage19.Location = new System.Drawing.Point(4, 22);
-            this.tabPage19.Name = "tabPage19";
-            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage19.Size = new System.Drawing.Size(1350, 906);
-            this.tabPage19.TabIndex = 1;
-            this.tabPage19.Text = "Kg Seco";
-            this.tabPage19.UseVisualStyleBackColor = true;
+            this.tabPage21.Controls.Add(this.charview_ftt_demas_areas);
+            this.tabPage21.Location = new System.Drawing.Point(4, 22);
+            this.tabPage21.Name = "tabPage21";
+            this.tabPage21.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage21.TabIndex = 3;
+            this.tabPage21.Text = "FTT DEMÁS ÁREAS";
+            this.tabPage21.UseVisualStyleBackColor = true;
             // 
-            // charview_kg_seco
+            // charview_ftt_demas_areas
             // 
-            chartArea2.Name = "ChartArea1";
-            this.charview_kg_seco.ChartAreas.Add(chartArea2);
-            this.charview_kg_seco.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.charview_kg_seco.Location = new System.Drawing.Point(3, 3);
-            this.charview_kg_seco.Name = "charview_kg_seco";
-            this.charview_kg_seco.Size = new System.Drawing.Size(1344, 900);
-            this.charview_kg_seco.TabIndex = 37;
-            this.charview_kg_seco.Text = "chart1";
+            chartArea4.Name = "ChartArea1";
+            this.charview_ftt_demas_areas.ChartAreas.Add(chartArea4);
+            this.charview_ftt_demas_areas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_ftt_demas_areas.Location = new System.Drawing.Point(0, 0);
+            this.charview_ftt_demas_areas.Name = "charview_ftt_demas_areas";
+            this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_demas_areas.TabIndex = 39;
+            this.charview_ftt_demas_areas.Text = "chart1";
             // 
             // Form_principal
             // 
@@ -4721,7 +4775,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form_principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = " ";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
@@ -4770,7 +4823,11 @@
             this.tabPage2.ResumeLayout(false);
             this.pnl_graficas.ResumeLayout(false);
             this.pnl_graficas.PerformLayout();
+            this.tabgraficas.ResumeLayout(false);
+            this.tabPage18.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
+            this.tabPage19.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tab_reportes.ResumeLayout(false);
@@ -4865,10 +4922,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.tabgraficas.ResumeLayout(false);
-            this.tabPage18.ResumeLayout(false);
-            this.tabPage19.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).EndInit();
+            this.tabPage20.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).EndInit();
+            this.tabPage21.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5121,6 +5178,10 @@
         private System.Windows.Forms.TabPage tabPage18;
         private System.Windows.Forms.TabPage tabPage19;
         private System.Windows.Forms.DataVisualization.Charting.Chart charview_kg_seco;
+        private System.Windows.Forms.TabPage tabPage20;
+        private System.Windows.Forms.DataVisualization.Charting.Chart charview_ftt_deshidratado;
+        private System.Windows.Forms.TabPage tabPage21;
+        private System.Windows.Forms.DataVisualization.Charting.Chart charview_ftt_demas_areas;
     }
 }
 

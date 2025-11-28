@@ -241,6 +241,7 @@ namespace Tablero
                 configurar_limpieza();
             }
         }
+        
         private void CargarSemanasAnioActual()
         {
             try
@@ -9959,9 +9960,462 @@ ORDER BY
             {
                 semanasSeleccionadas.Add(item.Text);
             }
+            if (tabgraficas.SelectedIndex == 0)
+            {
+                // Llamar al método para graficar
+                GraficarKgFresco(semanasSeleccionadas);
+            }
+            if (tabgraficas.SelectedIndex == 1)
+            {
+                // Llamar al método para graficar
+                GraficarKgSeco(semanasSeleccionadas);
+            }
+            if (tabgraficas.SelectedIndex == 2)
+            {
+                // Llamar al método para graficar
+                GraficarFTT(semanasSeleccionadas);
+            }
+            if (tabgraficas.SelectedIndex == 3)
+            {
+                // Llamar al método para graficar
+                GraficarFTTOtrasAreas(semanasSeleccionadas);
+            }
+        }
+        private void GraficarFTTOtrasAreas(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            // Llamar al método para graficar
-            GraficarKgFresco(semanasSeleccionadas);
+                string query = @"
+            WITH FTT_Por_Area AS (
+                SELECT 
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+                    f.""Area"",
+                    CASE 
+                        WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
+                        ELSE LEAST(
+                            ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
+                            100
+                        )
+                    END AS ""FTT""
+                FROM 
+                    public.""Ficha"" f
+                WHERE 
+                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                GROUP BY 
+                    EXTRACT(WEEK FROM f.""Fecha""),
+                    f.""Area""
+            )
+            SELECT 
+                ""No_Semana"",
+                ROUND(AVG(""FTT""), 2) AS ""FTT_Promedio""
+            FROM 
+                FTT_Por_Area
+            GROUP BY 
+                ""No_Semana""
+            ORDER BY 
+                ""No_Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos FTT para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart FTT
+                ConfigurarChartFTTOtrasAreas();
+
+                // Limpiar series existentes
+                charview_ftt_demas_areas.Series.Clear();
+
+                // Crear serie única para el FTT promedio
+                Series serieFTTPromedio = new Series("FTT Promedio");
+                serieFTTPromedio.ChartType = SeriesChartType.Line;
+                serieFTTPromedio.Color = Color.FromArgb(74, 134, 232); // Azul corporativo
+                serieFTTPromedio.BorderWidth = 5;
+                serieFTTPromedio.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                serieFTTPromedio.MarkerStyle = MarkerStyle.Circle;
+                serieFTTPromedio.MarkerSize = 16;
+                serieFTTPromedio.MarkerColor = Color.FromArgb(74, 134, 232);
+                serieFTTPromedio.MarkerBorderColor = Color.White;
+                serieFTTPromedio.MarkerBorderWidth = 3;
+                serieFTTPromedio.IsValueShownAsLabel = true;
+                serieFTTPromedio.LabelFormat = "N1" + "%";
+                serieFTTPromedio.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+                serieFTTPromedio.LabelForeColor = Color.White;
+                serieFTTPromedio.LabelBackColor = Color.FromArgb(74, 134, 232);
+                serieFTTPromedio.LabelBorderColor = Color.FromArgb(45, 95, 175);
+                serieFTTPromedio.LabelBorderWidth = 2;
+                serieFTTPromedio.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieFTTPromedio.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double fttPromedio = Convert.ToDouble(row["FTT_Promedio"]);
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieFTTPromedio.Points.AddXY(semana, fttPromedio);
+                    serieFTTPromedio.Points[pointIndex].Label = fttPromedio.ToString("N1") + "%";
+                }
+
+                // Agregar serie al chart
+                charview_ftt_demas_areas.Series.Add(serieFTTPromedio);
+
+                // Actualizar el chart
+                charview_ftt_demas_areas.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar FTT promedio otras áreas: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartFTTOtrasAreas()
+        {
+            // Limpiar el chart
+            charview_ftt_demas_areas.Series.Clear();
+            charview_ftt_demas_areas.ChartAreas.Clear();
+            charview_ftt_demas_areas.Titles.Clear();
+            charview_ftt_demas_areas.Legends.Clear();
+
+            // Crear área de chart moderna para FTT
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("FTTOtrasAreas");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para porcentajes
+            chartArea.AxisY.Title = "% FTT";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            //// Línea horizontal en 90% para referencia (umbral de calidad)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(255, 235, 235);
+            //stripLine.BorderColor = Color.FromArgb(231, 76, 60);
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 90;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 90%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(231, 76, 60);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            charview_ftt_demas_areas.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% FTT PROMEDIO OTRAS ÁREAS - ANÁLISIS SEMANAL";
+            mainTitle.Font = new Font("Segoe UI", 18, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            charview_ftt_demas_areas.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "First Time Through - Promedio de todas las áreas de producción";
+            subTitle.Font = new Font("Segoe UI", 12, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            charview_ftt_demas_areas.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Title = "INDICADOR";
+            legend.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 40;
+            charview_ftt_demas_areas.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            charview_ftt_demas_areas.BackColor = Color.White;
+            charview_ftt_demas_areas.BorderlineColor = Color.FromArgb(200, 200, 200);
+            charview_ftt_demas_areas.BorderlineWidth = 2;
+            charview_ftt_demas_areas.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            charview_ftt_demas_areas.Padding = new Padding(20);
+            charview_ftt_demas_areas.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            charview_ftt_demas_areas.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            charview_ftt_demas_areas.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            charview_ftt_demas_areas.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            charview_ftt_demas_areas.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
+        }
+        private void GraficarFTT(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+                CASE 
+                    WHEN SUM(f.""Kg_prod_seco"") > 0 THEN
+                        ROUND(((SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_seco"")) * 100, 2)
+                    ELSE 0
+                END AS ""FTT""
+            FROM public.""Ficha"" f
+            WHERE f.""Area"" = 'Despegue'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+            ORDER BY ""No_Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos FTT para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart FTT
+                ConfigurarChartFTT();
+
+                // Limpiar series existentes
+                charview_ftt_deshidratado.Series.Clear();
+
+                // Crear serie principal de FTT (Línea moderna)
+                Series serieFTT = new Series("% FTT");
+                serieFTT.ChartType = SeriesChartType.Line;
+                serieFTT.Color = Color.FromArgb(74, 134, 232); // Azul corporativo consistente
+                serieFTT.BorderWidth = 5; // Línea más gruesa y prominente
+                serieFTT.BorderDashStyle = ChartDashStyle.Solid;
+                serieFTT.MarkerStyle = MarkerStyle.Circle;
+                serieFTT.MarkerSize = 16; // Marcadores grandes
+                serieFTT.MarkerColor = Color.FromArgb(74, 134, 232);
+                serieFTT.MarkerBorderColor = Color.White;
+                serieFTT.MarkerBorderWidth = 3;
+                serieFTT.IsValueShownAsLabel = true;
+                serieFTT.LabelFormat = "N1" + "%"; // Formato con un decimal y símbolo %
+                serieFTT.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+                serieFTT.LabelForeColor = Color.White;
+                serieFTT.LabelBackColor = Color.FromArgb(74, 134, 232); // Fondo azul para etiquetas
+                serieFTT.LabelBorderColor = Color.FromArgb(45, 95, 175);
+                serieFTT.LabelBorderWidth = 2;
+                serieFTT.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieFTT.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double fttValue = Convert.ToDouble(row["FTT"]);
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieFTT.Points.AddXY(semana, fttValue);
+
+                    // Configurar etiqueta específica para este punto
+                    serieFTT.Points[pointIndex].Label = fttValue.ToString("N1") + "%";
+                }
+
+                // Agregar serie al chart
+                charview_ftt_deshidratado.Series.Add(serieFTT);
+
+                // Actualizar el chart
+                charview_ftt_deshidratado.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar FTT: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartFTT()
+        {
+            // Limpiar el chart
+            charview_ftt_deshidratado.Series.Clear();
+            charview_ftt_deshidratado.ChartAreas.Clear();
+            charview_ftt_deshidratado.Titles.Clear();
+            charview_ftt_deshidratado.Legends.Clear();
+
+            // Crear área de chart moderna para FTT
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("FTTArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para porcentajes
+            chartArea.AxisY.Title = "% FTT";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20; // Intervalos de 20%
+
+
+            //// Línea horizontal en 90% para referencia (umbral de calidad)
+            //StripLine stripLine = new StripLine();
+            //stripLine.BackColor = Color.FromArgb(255, 235, 235); // Fondo rojo claro
+            //stripLine.BorderColor = Color.FromArgb(231, 76, 60); // Borde rojo
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 90;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 90%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(231, 76, 60);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            charview_ftt_deshidratado.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            Title mainTitle = new Title();
+            mainTitle.Text = "% FTT DESHIDRATADO - ANÁLISIS SEMANAL";
+            mainTitle.Font = new Font("Segoe UI", 18, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            charview_ftt_deshidratado.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            Title subTitle = new Title();
+            subTitle.Text = "First Time Through";
+            subTitle.Font = new Font("Segoe UI", 12, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            charview_ftt_deshidratado.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna
+            Legend legend = new Legend();
+            legend.Title = "INDICADOR";
+            legend.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 40;
+            charview_ftt_deshidratado.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            charview_ftt_deshidratado.BackColor = Color.White;
+            charview_ftt_deshidratado.BorderlineColor = Color.FromArgb(200, 200, 200);
+            charview_ftt_deshidratado.BorderlineWidth = 2;
+            charview_ftt_deshidratado.BorderlineDashStyle = ChartDashStyle.Solid;
+            charview_ftt_deshidratado.Padding = new Padding(20);
+            charview_ftt_deshidratado.BackGradientStyle = GradientStyle.TopBottom;
+            charview_ftt_deshidratado.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            charview_ftt_deshidratado.AntiAliasing = AntiAliasingStyles.All;
+            charview_ftt_deshidratado.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+            charview_ftt_deshidratado.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
         private void GraficarKgFresco(List<string> semanasSeleccionadas)
         {
@@ -10148,8 +10602,10 @@ ORDER BY
             chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
 
             // Configurar intervalos del eje Y
-            chartArea.AxisY.Interval = 50000;
+            chartArea.AxisY.Interval = Double.NaN;
+            chartArea.AxisY.Maximum = Double.NaN;
             chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
 
             // Hacer el área de gráfico más grande
             chartArea.Position.Auto = false;
@@ -10212,6 +10668,261 @@ ORDER BY
             charview_kg_fresco.AntiAliasing = AntiAliasingStyles.All;
             charview_kg_fresco.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
             charview_kg_fresco.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
+        }
+        private void GraficarKgSeco(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                EXTRACT(WEEK FROM ""Fecha"") AS semana,
+                SUM(""Hr_programadas"" * d.""Kg_seco_hr"") AS ""Suma_Kg_Seco_Meta_por_Hr_programadas"",
+                SUM(""Hr_efectivas"" * d.""Kg_seco_hr"") AS ""Kg_Seco_Meta_por_Hr_Reales"",
+                SUM(""Kg_prod_seco"") AS ""Kg_Seco_Real""
+            FROM 
+                public.""Ficha"" f
+            INNER JOIN 
+                public.""Deshidratado"" d ON f.""OP"" = d.""OP""
+            WHERE 
+                f.""Area"" = 'Despegue'
+                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+            GROUP BY 
+                EXTRACT(WEEK FROM ""Fecha"")
+            ORDER BY 
+                semana";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart
+                ConfigurarChartModernoSeco();
+
+                // Limpiar series existentes
+                charview_kg_seco.Series.Clear();
+
+                // Crear series con diseño moderno y etiquetas visibles
+                // Serie 1: Meta Programada (Barras)
+                Series serieMetaProgramada = new Series("Meta Programada");
+                serieMetaProgramada.ChartType = SeriesChartType.Column;
+                serieMetaProgramada.Color = Color.FromArgb(74, 134, 232); // Azul moderno
+                serieMetaProgramada.IsValueShownAsLabel = true;
+                serieMetaProgramada.LabelFormat = "N0";
+                serieMetaProgramada.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieMetaProgramada.LabelForeColor = Color.Black; // Blanco para contraste con azul
+                serieMetaProgramada.BackSecondaryColor = Color.FromArgb(45, 95, 175);
+                serieMetaProgramada.BackGradientStyle = GradientStyle.DiagonalRight;
+                serieMetaProgramada.BorderColor = Color.FromArgb(45, 95, 175);
+                serieMetaProgramada.BorderWidth = 1;
+                serieMetaProgramada.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieMetaProgramada.ShadowOffset = 2;
+                serieMetaProgramada.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
+
+                // Serie 2: Meta Reales (Barras)
+                Series serieMetaReales = new Series("Meta Reales");
+                serieMetaReales.ChartType = SeriesChartType.Column;
+                serieMetaReales.Color = Color.FromArgb(46, 204, 113); // Verde moderno
+                serieMetaReales.IsValueShownAsLabel = true;
+                serieMetaReales.LabelFormat = "N0";
+                serieMetaReales.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieMetaReales.LabelForeColor = Color.Black; // Blanco para contraste con verde
+                serieMetaReales.BackSecondaryColor = Color.FromArgb(35, 155, 86);
+                serieMetaReales.BackGradientStyle = GradientStyle.DiagonalRight;
+                serieMetaReales.BorderColor = Color.FromArgb(35, 155, 86);
+                serieMetaReales.BorderWidth = 1;
+                serieMetaReales.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieMetaReales.ShadowOffset = 2;
+                serieMetaReales.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
+
+                // Serie 3: Real (Línea con puntos modernos)
+                Series serieReal = new Series("Real");
+                serieReal.ChartType = SeriesChartType.Line;
+                serieReal.Color = Color.FromArgb(231, 76, 60); // Rojo moderno
+                serieReal.BorderWidth = 4;
+                serieReal.BorderDashStyle = ChartDashStyle.Solid;
+                serieReal.MarkerStyle = MarkerStyle.Circle;
+                serieReal.MarkerSize = 14; // Más grande
+                serieReal.MarkerColor = Color.FromArgb(231, 76, 60);
+                serieReal.MarkerBorderColor = Color.White;
+                serieReal.MarkerBorderWidth = 3; // Borde más grueso
+                serieReal.IsValueShownAsLabel = true;
+                serieReal.LabelFormat = "N0";
+                serieReal.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                serieReal.LabelForeColor = Color.FromArgb(231, 76, 60); // Rojo para contraste
+                serieReal.LabelBackColor = Color.White; // Fondo blanco para mejor legibilidad
+                serieReal.LabelBorderColor = Color.FromArgb(231, 76, 60);
+                serieReal.LabelBorderWidth = 1;
+                serieReal.ShadowColor = Color.FromArgb(150, 50, 40);
+                serieReal.ShadowOffset = 1;
+
+                // Llenar las series con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["semana"]}";
+                    double metaProgramada = Convert.ToDouble(row["Suma_Kg_Seco_Meta_por_Hr_programadas"]);
+                    double metaReales = Convert.ToDouble(row["Kg_Seco_Meta_por_Hr_Reales"]);
+                    double real = Convert.ToDouble(row["Kg_Seco_Real"]);
+
+                    // Agregar puntos a las series
+                    int pointIndex = serieMetaProgramada.Points.AddXY(semana, metaProgramada);
+                    serieMetaReales.Points.AddXY(semana, metaReales);
+                    serieReal.Points.AddXY(semana, real);
+
+                    // Configurar etiquetas para mejor visibilidad
+                    serieMetaProgramada.Points[pointIndex].LabelBackColor = Color.Transparent;
+                    serieMetaReales.Points[pointIndex].LabelBackColor = Color.Transparent;
+                }
+
+                // Agregar series al chart
+                charview_kg_seco.Series.Add(serieMetaProgramada);
+                charview_kg_seco.Series.Add(serieMetaReales);
+                charview_kg_seco.Series.Add(serieReal);
+
+                // Configurar el ancho y separación de las barras (más grandes)
+                foreach (var series in charview_kg_seco.Series)
+                {
+                    if (series.ChartType == SeriesChartType.Column)
+                    {
+                        series["PointWidth"] = "0.8"; // Barras más anchas
+                        series["DrawSideBySide"] = "True";
+                        series["PixelPointWidth"] = "50"; // Ancho fijo más grande
+                    }
+                }
+
+                // Actualizar el chart
+                charview_kg_seco.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartModernoSeco()
+        {
+            // Limpiar el chart
+            charview_kg_seco.Series.Clear();
+            charview_kg_seco.ChartAreas.Clear();
+            charview_kg_seco.Titles.Clear();
+            charview_kg_seco.Legends.Clear();
+
+            // Crear área de chart moderna
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("MainArea");
+
+            // Fondo moderno - Más claro para mejor contraste
+            chartArea.BackColor = Color.FromArgb(255, 255, 255); // Blanco puro
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold); // Más grande
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+            chartArea.AxisX.IsMarksNextToAxis = true;
+
+            // Configurar eje Y moderno
+            chartArea.AxisY.Title = "KILOGRAMOS";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold); // Más grande
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar intervalos del eje Y
+            chartArea.AxisY.Interval = Double.NaN;
+            chartArea.AxisY.Maximum = Double.NaN;
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5; // Margen izquierdo
+            chartArea.Position.Y = 15; // Margen superior (más espacio para títulos)
+            chartArea.Position.Width = 90; // Ancho del área
+            chartArea.Position.Height = 70; // Alto del área
+
+            // Agregar área al chart
+            charview_kg_seco.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            Title mainTitle = new Title();
+            mainTitle.Text = "Kilogramos en Secos en Deshidratador";
+            mainTitle.Font = new Font("Segoe UI", 18, FontStyle.Bold); // Más grande
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            charview_kg_seco.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            Title subTitle = new Title();
+            subTitle.Text = "Comparativo entre Meta según hras programadas / Meta según hras reales trabajadas / Producido";
+            subTitle.Font = new Font("Segoe UI", 12, FontStyle.Italic); // Más grande
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            charview_kg_seco.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna con mejor contraste
+            Legend legend = new Legend();
+            legend.Title = "LEYENDA";
+            legend.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold); // Más grande
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 10, FontStyle.Regular); // Más grande
+            legend.ForeColor = Color.FromArgb(52, 73, 94); // Texto oscuro para buen contraste
+            legend.Docking = Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250); // Fondo claro
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 40; // Más espacio entre items
+            legend.TableStyle = LegendTableStyle.Tall;
+            charview_kg_seco.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            charview_kg_seco.BackColor = Color.White;
+            charview_kg_seco.BorderlineColor = Color.FromArgb(200, 200, 200);
+            charview_kg_seco.BorderlineWidth = 2;
+            charview_kg_seco.BorderlineDashStyle = ChartDashStyle.Solid;
+            charview_kg_seco.Padding = new Padding(20); // Más padding
+            charview_kg_seco.BackGradientStyle = GradientStyle.TopBottom;
+            charview_kg_seco.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            charview_kg_seco.AntiAliasing = AntiAliasingStyles.All;
+            charview_kg_seco.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+            charview_kg_seco.IsSoftShadows = true;
 
             // Suavizado adicional
             chartArea.Area3DStyle.Enable3D = false;

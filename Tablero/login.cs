@@ -175,6 +175,10 @@ namespace Tablero
 
         private void btn_iniciar_Click(object sender, EventArgs e)
         {
+            //Tablero.Properties.Settings.Default.Servidor = string.Empty;
+            //Tablero.Properties.Settings.Default.Usuario = string.Empty;
+            //Tablero.Properties.Settings.Default.Contrasena = string.Empty;
+            //Tablero.Properties.Settings.Default.Save();
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;

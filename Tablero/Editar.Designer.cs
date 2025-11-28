@@ -73,13 +73,13 @@
             this.materialExpansionPanel1.ExpandHeight = 283;
             this.materialExpansionPanel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.materialExpansionPanel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialExpansionPanel1.Location = new System.Drawing.Point(236, 124);
+            this.materialExpansionPanel1.Location = new System.Drawing.Point(235, 185);
             this.materialExpansionPanel1.Margin = new System.Windows.Forms.Padding(16);
             this.materialExpansionPanel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialExpansionPanel1.Name = "materialExpansionPanel1";
             this.materialExpansionPanel1.Padding = new System.Windows.Forms.Padding(24, 66, 26, 18);
             this.materialExpansionPanel1.ShowCollapseExpand = false;
-            this.materialExpansionPanel1.Size = new System.Drawing.Size(518, 283);
+            this.materialExpansionPanel1.Size = new System.Drawing.Size(514, 283);
             this.materialExpansionPanel1.TabIndex = 3;
             this.materialExpansionPanel1.Title = "Validación de Seguridad";
             this.materialExpansionPanel1.ValidationButtonEnable = true;
@@ -151,6 +151,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(977, 618);
             this.Controls.Add(this.materialExpansionPanel1);
             this.Controls.Add(this.radGridView1);
