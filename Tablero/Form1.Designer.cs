@@ -32,9 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -107,10 +108,14 @@
             this.charview_kg_fresco = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage19 = new System.Windows.Forms.TabPage();
             this.charview_kg_seco = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage20 = new System.Windows.Forms.TabPage();
+            this.charview_ftt_deshidratado = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage21 = new System.Windows.Forms.TabPage();
+            this.charview_ftt_demas_areas = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.tab_reportes = new MetroFramework.Controls.MetroTabControl();
+            this.tap_control_Reportes = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
@@ -157,6 +162,14 @@
             this.btn_new_report_merma = new MaterialSkin.Controls.MaterialButton();
             this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
             this.dgv_reporte_merma = new System.Windows.Forms.DataGridView();
+            this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.materialCard16 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_clean_merma_S = new MaterialSkin.Controls.MaterialButton();
+            this.btn_export_excel_merma_S = new MaterialSkin.Controls.MaterialButton();
+            this.btn_new_report_merma_S = new MaterialSkin.Controls.MaterialButton();
+            this.materialCard17 = new MaterialSkin.Controls.MaterialCard();
+            this.dgv_reporte_merma_S = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tap_control_metas = new MetroFramework.Controls.MetroTabControl();
             this.metroContextMenu1 = new MetroFramework.Controls.MetroContextMenu(this.components);
@@ -281,10 +294,8 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabPage20 = new System.Windows.Forms.TabPage();
-            this.charview_ftt_deshidratado = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tabPage21 = new System.Windows.Forms.TabPage();
-            this.charview_ftt_demas_areas = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage23 = new System.Windows.Forms.TabPage();
+            this.chartMermaSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -327,9 +338,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).BeginInit();
             this.tabPage19.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).BeginInit();
+            this.tabPage20.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).BeginInit();
+            this.tabPage21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
-            this.tab_reportes.SuspendLayout();
+            this.tap_control_Reportes.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
             this.panel2.SuspendLayout();
             this.materialCard3.SuspendLayout();
@@ -354,6 +369,11 @@
             this.materialCard8.SuspendLayout();
             this.materialCard7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).BeginInit();
+            this.tabPage22.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.materialCard16.SuspendLayout();
+            this.materialCard17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma_S)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tap_control_metas.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -406,10 +426,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.tabPage20.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).BeginInit();
-            this.tabPage21.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).BeginInit();
+            this.tabPage23.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1531,6 +1549,7 @@
             this.tabgraficas.Controls.Add(this.tabPage19);
             this.tabgraficas.Controls.Add(this.tabPage20);
             this.tabgraficas.Controls.Add(this.tabPage21);
+            this.tabgraficas.Controls.Add(this.tabPage23);
             this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
             this.tabgraficas.Location = new System.Drawing.Point(145, 0);
             this.tabgraficas.Name = "tabgraficas";
@@ -1583,6 +1602,48 @@
             this.charview_kg_seco.TabIndex = 37;
             this.charview_kg_seco.Text = "chart1";
             // 
+            // tabPage20
+            // 
+            this.tabPage20.Controls.Add(this.charview_ftt_deshidratado);
+            this.tabPage20.Location = new System.Drawing.Point(4, 22);
+            this.tabPage20.Name = "tabPage20";
+            this.tabPage20.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage20.TabIndex = 2;
+            this.tabPage20.Text = "FTT Deshidratado";
+            this.tabPage20.UseVisualStyleBackColor = true;
+            // 
+            // charview_ftt_deshidratado
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.charview_ftt_deshidratado.ChartAreas.Add(chartArea3);
+            this.charview_ftt_deshidratado.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_ftt_deshidratado.Location = new System.Drawing.Point(0, 0);
+            this.charview_ftt_deshidratado.Name = "charview_ftt_deshidratado";
+            this.charview_ftt_deshidratado.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_deshidratado.TabIndex = 38;
+            this.charview_ftt_deshidratado.Text = "chart1";
+            // 
+            // tabPage21
+            // 
+            this.tabPage21.Controls.Add(this.charview_ftt_demas_areas);
+            this.tabPage21.Location = new System.Drawing.Point(4, 22);
+            this.tabPage21.Name = "tabPage21";
+            this.tabPage21.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage21.TabIndex = 3;
+            this.tabPage21.Text = "FTT DEMÁS ÁREAS";
+            this.tabPage21.UseVisualStyleBackColor = true;
+            // 
+            // charview_ftt_demas_areas
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.charview_ftt_demas_areas.ChartAreas.Add(chartArea4);
+            this.charview_ftt_demas_areas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charview_ftt_demas_areas.Location = new System.Drawing.Point(0, 0);
+            this.charview_ftt_demas_areas.Name = "charview_ftt_demas_areas";
+            this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_demas_areas.TabIndex = 39;
+            this.charview_ftt_demas_areas.Text = "chart1";
+            // 
             // bnt_graficar
             // 
             this.bnt_graficar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -1617,7 +1678,7 @@
             // tabPage10
             // 
             this.tabPage10.AutoScroll = true;
-            this.tabPage10.Controls.Add(this.tab_reportes);
+            this.tabPage10.Controls.Add(this.tap_control_Reportes);
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
@@ -1626,22 +1687,23 @@
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
-            // tab_reportes
+            // tap_control_Reportes
             // 
-            this.tab_reportes.Controls.Add(this.metroTabPage9);
-            this.tab_reportes.Controls.Add(this.tabPage16);
-            this.tab_reportes.Controls.Add(this.tabPage17);
-            this.tab_reportes.Controls.Add(this.metroTabPage10);
-            this.tab_reportes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tab_reportes.Location = new System.Drawing.Point(0, 0);
-            this.tab_reportes.Name = "tab_reportes";
-            this.tab_reportes.SelectedIndex = 1;
-            this.tab_reportes.Size = new System.Drawing.Size(1682, 940);
-            this.tab_reportes.Style = MetroFramework.MetroColorStyle.Black;
-            this.tab_reportes.TabIndex = 0;
-            this.tab_reportes.UseCustomForeColor = true;
-            this.tab_reportes.UseSelectable = true;
-            this.tab_reportes.UseStyleColors = true;
+            this.tap_control_Reportes.Controls.Add(this.metroTabPage9);
+            this.tap_control_Reportes.Controls.Add(this.tabPage16);
+            this.tap_control_Reportes.Controls.Add(this.tabPage17);
+            this.tap_control_Reportes.Controls.Add(this.metroTabPage10);
+            this.tap_control_Reportes.Controls.Add(this.tabPage22);
+            this.tap_control_Reportes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tap_control_Reportes.Location = new System.Drawing.Point(0, 0);
+            this.tap_control_Reportes.Name = "tap_control_Reportes";
+            this.tap_control_Reportes.SelectedIndex = 4;
+            this.tap_control_Reportes.Size = new System.Drawing.Size(1682, 940);
+            this.tap_control_Reportes.Style = MetroFramework.MetroColorStyle.Black;
+            this.tap_control_Reportes.TabIndex = 0;
+            this.tap_control_Reportes.UseCustomForeColor = true;
+            this.tap_control_Reportes.UseSelectable = true;
+            this.tap_control_Reportes.UseStyleColors = true;
             // 
             // metroTabPage9
             // 
@@ -1816,7 +1878,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -1987,7 +2049,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -2229,7 +2291,7 @@
             this.txt_filtro_report_consentrado_otras.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado_otras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado_otras.Depth = 0;
-            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado_otras.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado_otras.LeadingIcon = null;
             this.txt_filtro_report_consentrado_otras.Location = new System.Drawing.Point(268, 11);
@@ -2392,7 +2454,7 @@
             this.metroTabPage10.Name = "metroTabPage10";
             this.metroTabPage10.Size = new System.Drawing.Size(1674, 898);
             this.metroTabPage10.TabIndex = 1;
-            this.metroTabPage10.Text = "Mermas";
+            this.metroTabPage10.Text = "Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
             this.metroTabPage10.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage10.VerticalScrollbarSize = 0;
@@ -2524,6 +2586,143 @@
             this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_reporte_merma.Size = new System.Drawing.Size(1646, 764);
             this.dgv_reporte_merma.TabIndex = 7;
+            // 
+            // tabPage22
+            // 
+            this.tabPage22.Controls.Add(this.panel6);
+            this.tabPage22.Location = new System.Drawing.Point(4, 38);
+            this.tabPage22.Name = "tabPage22";
+            this.tabPage22.Size = new System.Drawing.Size(1674, 898);
+            this.tabPage22.TabIndex = 4;
+            this.tabPage22.Text = "Mermas por Supervisor";
+            // 
+            // panel6
+            // 
+            this.panel6.AutoScroll = true;
+            this.panel6.Controls.Add(this.materialCard16);
+            this.panel6.Controls.Add(this.materialCard17);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(0, 0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(1674, 898);
+            this.panel6.TabIndex = 5;
+            // 
+            // materialCard16
+            // 
+            this.materialCard16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard16.Controls.Add(this.btn_clean_merma_S);
+            this.materialCard16.Controls.Add(this.btn_export_excel_merma_S);
+            this.materialCard16.Controls.Add(this.btn_new_report_merma_S);
+            this.materialCard16.Depth = 0;
+            this.materialCard16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard16.Location = new System.Drawing.Point(6, 14);
+            this.materialCard16.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard16.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard16.Name = "materialCard16";
+            this.materialCard16.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard16.Size = new System.Drawing.Size(594, 77);
+            this.materialCard16.TabIndex = 3;
+            // 
+            // btn_clean_merma_S
+            // 
+            this.btn_clean_merma_S.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_clean_merma_S.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_clean_merma_S.Depth = 0;
+            this.btn_clean_merma_S.Enabled = false;
+            this.btn_clean_merma_S.HighEmphasis = true;
+            this.btn_clean_merma_S.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
+            this.btn_clean_merma_S.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_clean_merma_S.ImageKey = "save_icon";
+            this.btn_clean_merma_S.Location = new System.Drawing.Point(400, 20);
+            this.btn_clean_merma_S.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_clean_merma_S.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_clean_merma_S.Name = "btn_clean_merma_S";
+            this.btn_clean_merma_S.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_clean_merma_S.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_merma_S.TabIndex = 31;
+            this.btn_clean_merma_S.Text = "Limpiar Tabla";
+            this.btn_clean_merma_S.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_clean_merma_S.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_clean_merma_S.UseAccentColor = false;
+            this.btn_clean_merma_S.UseVisualStyleBackColor = true;
+            this.btn_clean_merma_S.Click += new System.EventHandler(this.btn_clean_merma_T_Click);
+            // 
+            // btn_export_excel_merma_S
+            // 
+            this.btn_export_excel_merma_S.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_export_excel_merma_S.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_export_excel_merma_S.Depth = 0;
+            this.btn_export_excel_merma_S.Enabled = false;
+            this.btn_export_excel_merma_S.HighEmphasis = true;
+            this.btn_export_excel_merma_S.Icon = global::Tablero.Properties.Resources.excel_icon;
+            this.btn_export_excel_merma_S.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_export_excel_merma_S.ImageKey = "save_icon";
+            this.btn_export_excel_merma_S.Location = new System.Drawing.Point(208, 20);
+            this.btn_export_excel_merma_S.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_export_excel_merma_S.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_export_excel_merma_S.Name = "btn_export_excel_merma_S";
+            this.btn_export_excel_merma_S.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_export_excel_merma_S.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_merma_S.TabIndex = 30;
+            this.btn_export_excel_merma_S.Text = "Exportar a Excel";
+            this.btn_export_excel_merma_S.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_export_excel_merma_S.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_export_excel_merma_S.UseAccentColor = false;
+            this.btn_export_excel_merma_S.UseVisualStyleBackColor = true;
+            this.btn_export_excel_merma_S.Click += new System.EventHandler(this.btn_export_excel_merma_T_Click);
+            // 
+            // btn_new_report_merma_S
+            // 
+            this.btn_new_report_merma_S.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_new_report_merma_S.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_new_report_merma_S.Depth = 0;
+            this.btn_new_report_merma_S.HighEmphasis = true;
+            this.btn_new_report_merma_S.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
+            this.btn_new_report_merma_S.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_new_report_merma_S.ImageKey = "save_icon";
+            this.btn_new_report_merma_S.Location = new System.Drawing.Point(18, 20);
+            this.btn_new_report_merma_S.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_new_report_merma_S.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_new_report_merma_S.Name = "btn_new_report_merma_S";
+            this.btn_new_report_merma_S.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_new_report_merma_S.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_report_merma_S.TabIndex = 29;
+            this.btn_new_report_merma_S.Text = "Generar Reporte";
+            this.btn_new_report_merma_S.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_new_report_merma_S.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_new_report_merma_S.UseAccentColor = false;
+            this.btn_new_report_merma_S.UseVisualStyleBackColor = true;
+            this.btn_new_report_merma_S.Click += new System.EventHandler(this.btn_new_report_merma_T_Click);
+            // 
+            // materialCard17
+            // 
+            this.materialCard17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard17.Controls.Add(this.dgv_reporte_merma_S);
+            this.materialCard17.Depth = 0;
+            this.materialCard17.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.materialCard17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard17.Location = new System.Drawing.Point(0, 106);
+            this.materialCard17.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard17.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard17.Name = "materialCard17";
+            this.materialCard17.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard17.Size = new System.Drawing.Size(1674, 792);
+            this.materialCard17.TabIndex = 2;
+            // 
+            // dgv_reporte_merma_S
+            // 
+            this.dgv_reporte_merma_S.AllowUserToAddRows = false;
+            this.dgv_reporte_merma_S.AllowUserToDeleteRows = false;
+            this.dgv_reporte_merma_S.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_reporte_merma_S.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_reporte_merma_S.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_reporte_merma_S.Location = new System.Drawing.Point(14, 14);
+            this.dgv_reporte_merma_S.Name = "dgv_reporte_merma_S";
+            this.dgv_reporte_merma_S.ReadOnly = true;
+            this.dgv_reporte_merma_S.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_reporte_merma_S.Size = new System.Drawing.Size(1646, 764);
+            this.dgv_reporte_merma_S.TabIndex = 7;
             // 
             // tabPage4
             // 
@@ -4010,7 +4209,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -4721,47 +4920,26 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // tabPage20
+            // tabPage23
             // 
-            this.tabPage20.Controls.Add(this.charview_ftt_deshidratado);
-            this.tabPage20.Location = new System.Drawing.Point(4, 22);
-            this.tabPage20.Name = "tabPage20";
-            this.tabPage20.Size = new System.Drawing.Size(1521, 906);
-            this.tabPage20.TabIndex = 2;
-            this.tabPage20.Text = "FTT Deshidratado";
-            this.tabPage20.UseVisualStyleBackColor = true;
+            this.tabPage23.Controls.Add(this.chartMermaSupervisor);
+            this.tabPage23.Location = new System.Drawing.Point(4, 22);
+            this.tabPage23.Name = "tabPage23";
+            this.tabPage23.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage23.TabIndex = 4;
+            this.tabPage23.Text = "Mermas por Supervisor";
+            this.tabPage23.UseVisualStyleBackColor = true;
             // 
-            // charview_ftt_deshidratado
+            // chartMermaSupervisor
             // 
-            chartArea3.Name = "ChartArea1";
-            this.charview_ftt_deshidratado.ChartAreas.Add(chartArea3);
-            this.charview_ftt_deshidratado.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.charview_ftt_deshidratado.Location = new System.Drawing.Point(0, 0);
-            this.charview_ftt_deshidratado.Name = "charview_ftt_deshidratado";
-            this.charview_ftt_deshidratado.Size = new System.Drawing.Size(1521, 906);
-            this.charview_ftt_deshidratado.TabIndex = 38;
-            this.charview_ftt_deshidratado.Text = "chart1";
-            // 
-            // tabPage21
-            // 
-            this.tabPage21.Controls.Add(this.charview_ftt_demas_areas);
-            this.tabPage21.Location = new System.Drawing.Point(4, 22);
-            this.tabPage21.Name = "tabPage21";
-            this.tabPage21.Size = new System.Drawing.Size(1521, 906);
-            this.tabPage21.TabIndex = 3;
-            this.tabPage21.Text = "FTT DEMÁS ÁREAS";
-            this.tabPage21.UseVisualStyleBackColor = true;
-            // 
-            // charview_ftt_demas_areas
-            // 
-            chartArea4.Name = "ChartArea1";
-            this.charview_ftt_demas_areas.ChartAreas.Add(chartArea4);
-            this.charview_ftt_demas_areas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.charview_ftt_demas_areas.Location = new System.Drawing.Point(0, 0);
-            this.charview_ftt_demas_areas.Name = "charview_ftt_demas_areas";
-            this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 906);
-            this.charview_ftt_demas_areas.TabIndex = 39;
-            this.charview_ftt_demas_areas.Text = "chart1";
+            chartArea5.Name = "ChartArea1";
+            this.chartMermaSupervisor.ChartAreas.Add(chartArea5);
+            this.chartMermaSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartMermaSupervisor.Location = new System.Drawing.Point(0, 0);
+            this.chartMermaSupervisor.Name = "chartMermaSupervisor";
+            this.chartMermaSupervisor.Size = new System.Drawing.Size(1521, 906);
+            this.chartMermaSupervisor.TabIndex = 37;
+            this.chartMermaSupervisor.Text = "chart1";
             // 
             // Form_principal
             // 
@@ -4828,9 +5006,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
             this.tabPage19.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_seco)).EndInit();
+            this.tabPage20.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).EndInit();
+            this.tabPage21.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
-            this.tab_reportes.ResumeLayout(false);
+            this.tap_control_Reportes.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.materialCard3.ResumeLayout(false);
@@ -4862,6 +5044,12 @@
             this.materialCard8.PerformLayout();
             this.materialCard7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma)).EndInit();
+            this.tabPage22.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            this.materialCard16.ResumeLayout(false);
+            this.materialCard16.PerformLayout();
+            this.materialCard17.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_reporte_merma_S)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tap_control_metas.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
@@ -4922,10 +5110,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.tabPage20.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).EndInit();
-            this.tabPage21.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).EndInit();
+            this.tabPage23.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5103,7 +5289,7 @@
         private MaterialSkin.Controls.MaterialTextBox txt_destino;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox1;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox2;
-        private MetroFramework.Controls.MetroTabControl tab_reportes;
+        private MetroFramework.Controls.MetroTabControl tap_control_Reportes;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;
         private MaterialSkin.Controls.MaterialCard materialCard8;
@@ -5182,6 +5368,16 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart charview_ftt_deshidratado;
         private System.Windows.Forms.TabPage tabPage21;
         private System.Windows.Forms.DataVisualization.Charting.Chart charview_ftt_demas_areas;
+        private System.Windows.Forms.TabPage tabPage22;
+        private System.Windows.Forms.Panel panel6;
+        private MaterialSkin.Controls.MaterialCard materialCard16;
+        private MaterialSkin.Controls.MaterialButton btn_clean_merma_S;
+        private MaterialSkin.Controls.MaterialButton btn_export_excel_merma_S;
+        private MaterialSkin.Controls.MaterialButton btn_new_report_merma_S;
+        private MaterialSkin.Controls.MaterialCard materialCard17;
+        private System.Windows.Forms.DataGridView dgv_reporte_merma_S;
+        private System.Windows.Forms.TabPage tabPage23;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartMermaSupervisor;
     }
 }
 

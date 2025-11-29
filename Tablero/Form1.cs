@@ -94,7 +94,8 @@ namespace Tablero
             PersonalizarDataGridView(dgv_Tunel_calidad);
             PersonalizarDataGridView(dgv_reporte_merma);
             PersonalizarDataGridView(dgv_reporte_concentrado);
-            PersonalizarDataGridView(dgv_reporte_concentrado_otras                                                                                                                     );
+            PersonalizarDataGridView(dgv_reporte_concentrado_otras);
+            PersonalizarDataGridView(dgv_reporte_merma_S);
         }
 
         private void PersonalizarDataGridView(DataGridView dgv, bool editable = false)
@@ -226,12 +227,16 @@ namespace Tablero
             }
             if (nivel_user == "Calidad")
             {
+                // Ocultar las pestañas no necesarias para el usuario de calidad
                 materialTabControl1.TabPages.Remove(tabPage1);
                 materialTabControl1.TabPages.Remove(tabPage2);
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage9);
-                materialTabControl1.TabPages.Remove(tabPage10);
+
+                tap_control_Reportes.TabPages.Remove(metroTabPage9);
+                tap_control_Reportes.TabPages.Remove(tabPage16);
+                tap_control_Reportes.TabPages.Remove(tabPage17);
 
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
@@ -575,7 +580,6 @@ namespace Tablero
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
             string querySimple = @"WITH semanas AS (SELECT ""Area"", EXTRACT(WEEK FROM ""Fecha"") AS numero_semana, EXTRACT(YEAR FROM ""Fecha"") AS año,
                                     -- Cálculo para Tunel/Sumergidor
                                     CASE 
@@ -662,6 +666,40 @@ namespace Tablero
 
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma, null);
+        }
+        private void actualiza_reporte_merma_S()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
+            string querySimple = @"WITH merma_usuario AS (
+    SELECT 
+        u.""Usuario"" as ""Nombre_Usuario"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
+        EXTRACT(YEAR FROM f.""Fecha"") AS año,
+        SUM(
+            CASE 
+                WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
+                    f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
+                ELSE f.""Merma_kg""
+            END
+        ) AS total_merma_kg
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE f.""Area"" IS NOT NULL
+    GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
+)
+
+SELECT 
+    ""Nombre_Usuario"" AS ""Supervisor"",
+    numero_semana as ""Numero de Semana"",
+    año as ""Año"",
+    COALESCE(total_merma_kg, 0) as ""Merma(Kg)""
+FROM merma_usuario
+ORDER BY año, numero_semana, ""Nombre_Usuario"";";
+
+            // Cargar los datos de la tabla Ficha en el DataGridView
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma_S, null);
         }
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -9980,6 +10018,318 @@ ORDER BY
                 // Llamar al método para graficar
                 GraficarFTTOtrasAreas(semanasSeleccionadas);
             }
+            if (tabgraficas.SelectedIndex == 4)
+            {
+                // Llamar al método para graficar
+                GraficarMermaPorSupervisor(semanasSeleccionadas);
+            }
+        }
+        private void GraficarMermaPorSupervisor(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para KG de merma por Supervisor
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            WITH merma_usuario AS (
+                SELECT 
+                    u.""Usuario"" as ""Nombre_Usuario"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
+                    EXTRACT(YEAR FROM f.""Fecha"") AS año,
+                    SUM(
+                        CASE 
+                            WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
+                                f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
+                            ELSE f.""Merma_kg""
+                        END
+                    ) AS total_merma_kg
+                FROM public.""Ficha"" f
+                INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+                WHERE f.""Area"" IS NOT NULL
+                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
+            )
+
+            SELECT 
+                ""Nombre_Usuario"" AS ""Supervisor"",
+                numero_semana as ""No_Semana"",
+                año as ""Año"",
+                COALESCE(total_merma_kg, 0) as ""Merma_Kg""
+            FROM merma_usuario
+            ORDER BY año, numero_semana, ""Nombre_Usuario""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos de merma por supervisor para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart de merma por supervisor
+                ConfigurarChartMermaSupervisor();
+
+                // Limpiar series existentes
+                chartMermaSupervisor.Series.Clear();
+
+                // Obtener lista única de supervisores para crear series
+                var supervisoresUnicos = datos.AsEnumerable()
+                    .Select(row => row["Supervisor"].ToString())
+                    .Distinct()
+                    .OrderBy(supervisor => supervisor)
+                    .ToList();
+
+                // Si hay muchos supervisores, mostrar advertencia
+                if (supervisoresUnicos.Count > 20)
+                {
+                    MessageBox.Show($"Se encontraron {supervisoresUnicos.Count} supervisores. La gráfica puede ser difícil de leer. Considere filtrar por menos semanas.",
+                                  "Muchos supervisores", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                // Crear series de barras para cada supervisor con colores armoniosos
+                for (int i = 0; i < supervisoresUnicos.Count; i++)
+                {
+                    string supervisor = supervisoresUnicos[i];
+                    Color color = GenerateHarmoniousColor(i, supervisoresUnicos.Count);
+
+                    Series serieSupervisor = new Series(supervisor);
+                    serieSupervisor.ChartType = SeriesChartType.Column;
+                    serieSupervisor.Color = color;
+                    serieSupervisor.BackSecondaryColor = GetDarkerColor(color);
+                    serieSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.DiagonalRight;
+                    serieSupervisor.BorderColor = GetDarkerColor(color, 60);
+                    serieSupervisor.BorderWidth = 1;
+                    serieSupervisor.IsValueShownAsLabel = true;
+                    serieSupervisor.LabelFormat = "N0"; // Formato sin decimales para KG
+                    serieSupervisor.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                    serieSupervisor.LabelForeColor = Color.White;
+                    serieSupervisor.LabelBackColor = Color.FromArgb(180, 0, 0, 0); // Fondo negro semitransparente
+                    serieSupervisor.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                    serieSupervisor.LabelBorderWidth = 1;
+                    serieSupervisor.ShadowColor = Color.FromArgb(30, 30, 30);
+                    serieSupervisor.ShadowOffset = 2;
+                    serieSupervisor["PointWidth"] = "0.6";
+                    serieSupervisor["DrawSideBySide"] = "True";
+
+                    // Filtrar datos para este supervisor y agregar puntos
+                    var datosSupervisor = datos.AsEnumerable()
+                        .Where(row => row["Supervisor"].ToString() == supervisor)
+                        .OrderBy(row => Convert.ToInt32(row["No_Semana"]))
+                        .ToList();
+
+                    foreach (DataRow row in datosSupervisor)
+                    {
+                        string semana = $"Sem {row["No_Semana"]}";
+                        double kgMerma = Convert.ToDouble(row["Merma_Kg"]);
+
+                        int pointIndex = serieSupervisor.Points.AddXY(semana, kgMerma);
+
+                        // Configurar etiqueta individual para mejor control
+                        System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieSupervisor.Points[pointIndex];
+                        point.Label = kgMerma.ToString("N0") + " kg";
+                        point.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                        point.LabelForeColor = Color.White;
+                        point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                        point.LabelBorderWidth = 1;
+                        point.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+                    }
+
+                    // Agregar serie al chart
+                    chartMermaSupervisor.Series.Add(serieSupervisor);
+                }
+
+                // Actualizar el chart
+                chartMermaSupervisor.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar merma por supervisor: {ex.Message}");
+            }
+        }
+
+        // Método para generar colores armoniosos usando una paleta predefinida escalable
+        private Color GenerateHarmoniousColor(int index, int totalColors)
+        {
+            // Paleta base de colores armoniosos (colores terciarios y análogos)
+            Color[] basePalette = new Color[]
+            {
+        Color.FromArgb(74, 134, 232),   // Azul principal
+        Color.FromArgb(46, 204, 113),   // Verde
+        Color.FromArgb(155, 89, 182),   // Púrpura
+        Color.FromArgb(241, 196, 15),   // Amarillo dorado
+        Color.FromArgb(230, 126, 34),   // Naranja
+        Color.FromArgb(231, 76, 60),    // Rojo coral
+        Color.FromArgb(52, 152, 219),   // Azul claro
+        Color.FromArgb(26, 188, 156),   // Turquesa
+        Color.FromArgb(149, 165, 166),  // Gris plata
+        Color.FromArgb(52, 73, 94),     // Azul oscuro
+        Color.FromArgb(106, 90, 205),   // Slate blue
+        Color.FromArgb(205, 92, 92),    // Indian red
+        Color.FromArgb(60, 179, 113),   // Medium sea green
+        Color.FromArgb(123, 104, 238),  // Medium slate blue
+        Color.FromArgb(255, 165, 0)     // Naranja oscuro
+            };
+
+            // Si tenemos menos colores que la paleta base, usar la paleta directamente
+            if (totalColors <= basePalette.Length)
+            {
+                return basePalette[index % basePalette.Length];
+            }
+            else
+            {
+                // Para más colores, generar variaciones de la paleta base
+                Color baseColor = basePalette[index % basePalette.Length];
+                int variation = index / basePalette.Length;
+
+                // Crear variaciones más claras u oscuras
+                return AdjustColorBrightness(baseColor, 1.0f - (variation * 0.15f));
+            }
+        }
+
+        // Método para ajustar el brillo de un color manteniendo la armonía
+        private Color AdjustColorBrightness(Color color, float factor)
+        {
+            int r = (int)Math.Min(255, Math.Max(0, color.R * factor));
+            int g = (int)Math.Min(255, Math.Max(0, color.G * factor));
+            int b = (int)Math.Min(255, Math.Max(0, color.B * factor));
+
+            return Color.FromArgb(r, g, b);
+        }
+
+        // Método auxiliar para obtener colores más oscuros sin valores negativos
+        private Color GetDarkerColor(Color baseColor, int darkenAmount = 40)
+        {
+            int r = Math.Max(0, baseColor.R - darkenAmount);
+            int g = Math.Max(0, baseColor.G - darkenAmount);
+            int b = Math.Max(0, baseColor.B - darkenAmount);
+
+            return Color.FromArgb(r, g, b);
+        }
+
+        private void ConfigurarChartMermaSupervisor()
+        {
+            // Limpiar el chart
+            chartMermaSupervisor.Series.Clear();
+            chartMermaSupervisor.ChartAreas.Clear();
+            chartMermaSupervisor.Titles.Clear();
+            chartMermaSupervisor.Legends.Clear();
+
+            // Crear área de chart moderna para merma por supervisor
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("MermaSupervisorArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+            chartArea.AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont |
+                                               System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels;
+
+            // Configurar eje Y moderno para KILOGRAMOS
+            chartArea.AxisY.Title = "KILOGRAMOS DE MERMA";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "N0"; // Formato sin decimales para KG
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y automáticamente según los datos
+            chartArea.AxisY.Minimum = 0;
+
+            // Ajustar posición del área de gráfico para dejar espacio para la leyenda abajo
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 8; // Un poco más de margen izquierdo
+            chartArea.Position.Y = 12; // Menos espacio arriba para la leyenda
+            chartArea.Position.Width = 85; // Un poco menos de ancho
+            chartArea.Position.Height = 65; // Menos alto para la leyenda
+
+            // Agregar área al chart
+            chartMermaSupervisor.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "KILOGRAMOS DE MERMA POR SUPERVISOR - ANÁLISIS SEMANAL";
+            mainTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold); // Un poco más pequeño
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            chartMermaSupervisor.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Comparativo de merma generada por cada supervisor";
+            subTitle.Font = new Font("Segoe UI", 10, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            chartMermaSupervisor.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna SIEMPRE EN LA PARTE INFERIOR
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaSupervisores";
+            legend.Title = "SUPERVISORES";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 15;
+            legend.MaximumAutoSize = 25; // Altura máxima de la leyenda
+            legend.Position.Auto = false;
+            legend.Position.X = 5;
+            legend.Position.Y = 85; // Posición fija en la parte inferior
+            legend.Position.Width = 90;
+            legend.Position.Height = 15;
+
+            chartMermaSupervisor.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            chartMermaSupervisor.BackColor = Color.White;
+            chartMermaSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
+            chartMermaSupervisor.BorderlineWidth = 2;
+            chartMermaSupervisor.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            chartMermaSupervisor.Padding = new Padding(15); // Menos padding para más espacio
+            chartMermaSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartMermaSupervisor.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            chartMermaSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            chartMermaSupervisor.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            chartMermaSupervisor.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
         private void GraficarFTTOtrasAreas(List<string> semanasSeleccionadas)
         {
@@ -10926,6 +11276,61 @@ ORDER BY
 
             // Suavizado adicional
             chartArea.Area3DStyle.Enable3D = false;
+        }
+
+        private void btn_new_report_merma_T_Click(object sender, EventArgs e)
+        {
+            actualiza_reporte_merma_S();
+            btn_clean_merma_S.Enabled = true;
+            btn_export_excel_merma_S.Enabled = true;
+        }
+
+        private async void btn_export_excel_merma_T_Click(object sender, EventArgs e)
+        {
+            LoadingScreen.ShowLoading();
+            try
+            {
+                // Mostrar el diálogo de guardar archivo en el hilo principal
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                string filePath = null;
+
+                // Mostrar el diálogo de guardado en el hilo principal
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+
+                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+                    await Task.Run(() =>
+                    {
+                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma_S, filePath);
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Ocultar la pantalla de cargando
+                LoadingScreen.HideLoading();
+            }
+        }
+
+        private void btn_clean_merma_T_Click(object sender, EventArgs e)
+        {
+            dgv_reporte_merma_S.DataSource = null;   // Desvincula cualquier origen de datos
+            dgv_reporte_merma_S.Rows.Clear();        // Limpia todas las filas (por si no hay DataSource)
+            dgv_reporte_merma_S.Columns.Clear();     // Limpia todas las columnas
+            btn_export_excel_merma_S.Enabled = false;
+            btn_clean_merma_S.Enabled = false;
         }
     }
 }
