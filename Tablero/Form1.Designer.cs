@@ -34,8 +34,8 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -93,6 +93,7 @@
             this.cb_Area = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_OP = new MaterialSkin.Controls.MaterialComboBox();
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
+            this.btnEnviar = new MaterialSkin.Controls.MaterialButton();
             this.lbl_Nom = new System.Windows.Forms.Label();
             this.lbl_user_no_emp = new System.Windows.Forms.Label();
             this.lbl_nom2 = new MaterialSkin.Controls.MaterialLabel();
@@ -112,6 +113,8 @@
             this.charview_ftt_deshidratado = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage21 = new System.Windows.Forms.TabPage();
             this.charview_ftt_demas_areas = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage23 = new System.Windows.Forms.TabPage();
+            this.chartMermaSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
@@ -294,8 +297,11 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabPage23 = new System.Windows.Forms.TabPage();
-            this.chartMermaSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.materialCard18 = new MaterialSkin.Controls.MaterialCard();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radSeparator1 = new Telerik.WinControls.UI.RadSeparator();
+            this.Txt_server_Smtp = new MaterialSkin.Controls.MaterialTextBox2();
+            this.Txt_Remitente = new MaterialSkin.Controls.MaterialTextBox2();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -342,6 +348,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).BeginInit();
             this.tabPage21.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).BeginInit();
+            this.tabPage23.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.tap_control_Reportes.SuspendLayout();
@@ -426,8 +434,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.tabPage23.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).BeginInit();
+            this.materialCard18.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1424,6 +1432,7 @@
             // materialCard1
             // 
             this.materialCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard1.Controls.Add(this.btnEnviar);
             this.materialCard1.Controls.Add(this.lbl_Nom);
             this.materialCard1.Controls.Add(this.lbl_user_no_emp);
             this.materialCard1.Controls.Add(this.lbl_nom2);
@@ -1437,6 +1446,28 @@
             this.materialCard1.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard1.Size = new System.Drawing.Size(752, 78);
             this.materialCard1.TabIndex = 1;
+            // 
+            // btnEnviar
+            // 
+            this.btnEnviar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnEnviar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnEnviar.Depth = 0;
+            this.btnEnviar.HighEmphasis = true;
+            this.btnEnviar.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btnEnviar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEnviar.Location = new System.Drawing.Point(562, 22);
+            this.btnEnviar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnEnviar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnEnviar.Name = "btnEnviar";
+            this.btnEnviar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnEnviar.Size = new System.Drawing.Size(101, 36);
+            this.btnEnviar.TabIndex = 10;
+            this.btnEnviar.Text = "Enviar";
+            this.btnEnviar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEnviar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnEnviar.UseAccentColor = false;
+            this.btnEnviar.UseVisualStyleBackColor = true;
+            this.btnEnviar.Click += new System.EventHandler(this.btnEnviar_Click);
             // 
             // lbl_Nom
             // 
@@ -1643,6 +1674,27 @@
             this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 906);
             this.charview_ftt_demas_areas.TabIndex = 39;
             this.charview_ftt_demas_areas.Text = "chart1";
+            // 
+            // tabPage23
+            // 
+            this.tabPage23.Controls.Add(this.chartMermaSupervisor);
+            this.tabPage23.Location = new System.Drawing.Point(4, 22);
+            this.tabPage23.Name = "tabPage23";
+            this.tabPage23.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage23.TabIndex = 4;
+            this.tabPage23.Text = "Mermas por Supervisor";
+            this.tabPage23.UseVisualStyleBackColor = true;
+            // 
+            // chartMermaSupervisor
+            // 
+            chartArea5.Name = "ChartArea1";
+            this.chartMermaSupervisor.ChartAreas.Add(chartArea5);
+            this.chartMermaSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartMermaSupervisor.Location = new System.Drawing.Point(0, 0);
+            this.chartMermaSupervisor.Name = "chartMermaSupervisor";
+            this.chartMermaSupervisor.Size = new System.Drawing.Size(1521, 906);
+            this.chartMermaSupervisor.TabIndex = 37;
+            this.chartMermaSupervisor.Text = "chart1";
             // 
             // bnt_graficar
             // 
@@ -1878,7 +1930,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -4209,7 +4261,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -4509,14 +4561,15 @@
             // tabPage3
             // 
             this.tabPage3.AutoScroll = true;
+            this.tabPage3.Controls.Add(this.materialCard18);
             this.tabPage3.Controls.Add(this.materialCardtab_users);
             this.tabPage3.Controls.Add(this.materialCard_users);
-            this.tabPage3.ImageKey = "group_users_people";
+            this.tabPage3.ImageKey = "gear_fill";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1682, 940);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Usuarios";
+            this.tabPage3.Text = "Configuración";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // materialCardtab_users
@@ -4920,26 +4973,101 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // tabPage23
+            // materialCard18
             // 
-            this.tabPage23.Controls.Add(this.chartMermaSupervisor);
-            this.tabPage23.Location = new System.Drawing.Point(4, 22);
-            this.tabPage23.Name = "tabPage23";
-            this.tabPage23.Size = new System.Drawing.Size(1521, 906);
-            this.tabPage23.TabIndex = 4;
-            this.tabPage23.Text = "Mermas por Supervisor";
-            this.tabPage23.UseVisualStyleBackColor = true;
+            this.materialCard18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard18.Controls.Add(this.Txt_Remitente);
+            this.materialCard18.Controls.Add(this.Txt_server_Smtp);
+            this.materialCard18.Controls.Add(this.radSeparator1);
+            this.materialCard18.Controls.Add(this.label1);
+            this.materialCard18.Depth = 0;
+            this.materialCard18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard18.Location = new System.Drawing.Point(591, 14);
+            this.materialCard18.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard18.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard18.Name = "materialCard18";
+            this.materialCard18.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard18.Size = new System.Drawing.Size(746, 365);
+            this.materialCard18.TabIndex = 2;
             // 
-            // chartMermaSupervisor
+            // label1
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chartMermaSupervisor.ChartAreas.Add(chartArea5);
-            this.chartMermaSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chartMermaSupervisor.Location = new System.Drawing.Point(0, 0);
-            this.chartMermaSupervisor.Name = "chartMermaSupervisor";
-            this.chartMermaSupervisor.Size = new System.Drawing.Size(1521, 906);
-            this.chartMermaSupervisor.TabIndex = 37;
-            this.chartMermaSupervisor.Text = "chart1";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(17, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(366, 20);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Configuración de envío de correo electrónico";
+            // 
+            // radSeparator1
+            // 
+            this.radSeparator1.Location = new System.Drawing.Point(21, 37);
+            this.radSeparator1.Name = "radSeparator1";
+            this.radSeparator1.Size = new System.Drawing.Size(600, 4);
+            this.radSeparator1.TabIndex = 10;
+            // 
+            // Txt_server_Smtp
+            // 
+            this.Txt_server_Smtp.AnimateReadOnly = false;
+            this.Txt_server_Smtp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_server_Smtp.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_server_Smtp.Depth = 0;
+            this.Txt_server_Smtp.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_server_Smtp.HelperText = "Ingresa el servidor SMTP";
+            this.Txt_server_Smtp.HideSelection = true;
+            this.Txt_server_Smtp.Hint = "Servidor SMTP";
+            this.Txt_server_Smtp.LeadingIcon = null;
+            this.Txt_server_Smtp.Location = new System.Drawing.Point(21, 64);
+            this.Txt_server_Smtp.MaxLength = 32767;
+            this.Txt_server_Smtp.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_server_Smtp.Name = "Txt_server_Smtp";
+            this.Txt_server_Smtp.PasswordChar = '\0';
+            this.Txt_server_Smtp.PrefixSuffixText = null;
+            this.Txt_server_Smtp.ReadOnly = false;
+            this.Txt_server_Smtp.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Txt_server_Smtp.SelectedText = "";
+            this.Txt_server_Smtp.SelectionLength = 0;
+            this.Txt_server_Smtp.SelectionStart = 0;
+            this.Txt_server_Smtp.ShortcutsEnabled = true;
+            this.Txt_server_Smtp.ShowAssistiveText = true;
+            this.Txt_server_Smtp.Size = new System.Drawing.Size(250, 64);
+            this.Txt_server_Smtp.TabIndex = 11;
+            this.Txt_server_Smtp.TabStop = false;
+            this.Txt_server_Smtp.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_server_Smtp.TrailingIcon = null;
+            this.Txt_server_Smtp.UseSystemPasswordChar = false;
+            // 
+            // Txt_Remitente
+            // 
+            this.Txt_Remitente.AnimateReadOnly = false;
+            this.Txt_Remitente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_Remitente.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_Remitente.Depth = 0;
+            this.Txt_Remitente.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_Remitente.HelperText = "Ingresa el correo remitente";
+            this.Txt_Remitente.HideSelection = true;
+            this.Txt_Remitente.Hint = "Remitente";
+            this.Txt_Remitente.LeadingIcon = null;
+            this.Txt_Remitente.Location = new System.Drawing.Point(21, 134);
+            this.Txt_Remitente.MaxLength = 32767;
+            this.Txt_Remitente.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Remitente.Name = "Txt_Remitente";
+            this.Txt_Remitente.PasswordChar = '\0';
+            this.Txt_Remitente.PrefixSuffixText = null;
+            this.Txt_Remitente.ReadOnly = false;
+            this.Txt_Remitente.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Txt_Remitente.SelectedText = "";
+            this.Txt_Remitente.SelectionLength = 0;
+            this.Txt_Remitente.SelectionStart = 0;
+            this.Txt_Remitente.ShortcutsEnabled = true;
+            this.Txt_Remitente.ShowAssistiveText = true;
+            this.Txt_Remitente.Size = new System.Drawing.Size(250, 64);
+            this.Txt_Remitente.TabIndex = 12;
+            this.Txt_Remitente.TabStop = false;
+            this.Txt_Remitente.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_Remitente.TrailingIcon = null;
+            this.Txt_Remitente.UseSystemPasswordChar = false;
             // 
             // Form_principal
             // 
@@ -5010,6 +5138,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_deshidratado)).EndInit();
             this.tabPage21.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.charview_ftt_demas_areas)).EndInit();
+            this.tabPage23.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tap_control_Reportes.ResumeLayout(false);
@@ -5110,8 +5240,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.tabPage23.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chartMermaSupervisor)).EndInit();
+            this.materialCard18.ResumeLayout(false);
+            this.materialCard18.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5378,6 +5509,12 @@
         private System.Windows.Forms.DataGridView dgv_reporte_merma_S;
         private System.Windows.Forms.TabPage tabPage23;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMermaSupervisor;
+        private MaterialSkin.Controls.MaterialButton btnEnviar;
+        private MaterialSkin.Controls.MaterialCard materialCard18;
+        private System.Windows.Forms.Label label1;
+        private Telerik.WinControls.UI.RadSeparator radSeparator1;
+        private MaterialSkin.Controls.MaterialTextBox2 Txt_server_Smtp;
+        private MaterialSkin.Controls.MaterialTextBox2 Txt_Remitente;
     }
 }
 

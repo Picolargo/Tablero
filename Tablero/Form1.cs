@@ -18,6 +18,8 @@ using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Export;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Net;
+using System.Net.Mail;
 
 namespace Tablero
 {
@@ -11331,6 +11333,125 @@ ORDER BY
             dgv_reporte_merma_S.Columns.Clear();     // Limpia todas las columnas
             btn_export_excel_merma_S.Enabled = false;
             btn_clean_merma_S.Enabled = false;
+        }
+
+        private void btnEnviar_Click(object sender, EventArgs e)
+        {
+            string Variable_nombre = "ramon"; string variable_num = "1234"; string Variableturno = "1"; string variableInicioturno = "08:00"; string variableFinturno = "16:00"; DateTime fecha = DateTime.Parse("2024-06-20");
+            string VariableArea = "Producción"; string variableOP = "OP5678"; string fecha_formateada = fecha.ToString("dd/MM/yyyy");
+
+            string Valor1 = "125";
+            string Valor2 = "320";
+            string Valor3 = "98";
+
+            // Crear lista de valores
+            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("Valor 1", Valor1),
+                new KeyValuePair<string, string>("Valor 2", Valor2),
+                new KeyValuePair<string, string>("Valor 3", Valor3)
+            };
+
+            string tablaGenerada = GenerarTablaValores(valores);
+            try
+            {
+                string cuerpoHtml = $@"
+<html>
+<body style='font-family: Arial; font-size: 14px; color: #333;'>
+
+    <div style='border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #f7f7f7;'>
+        
+        <h2 style='color: #2c3e50;'>Reporte del Sistema Tablero</h2>
+
+        <p>
+            Estimado equipo,<br><br>
+            El sistema <strong>Tablero</strong> informa que el supervisor 
+            <strong>{Variable_nombre}</strong>, con número de empleado 
+            <strong>{variable_num}</strong> y correspondiente al turno 
+            <strong>{Variableturno}</strong>, inició su turno a las 
+            <strong>{variableInicioturno}</strong> y lo concluyó a las 
+            <strong>{variableFinturno}</strong>, el día 
+            <strong>{fecha_formateada}</strong>.
+        </p>
+
+        <p>
+            Durante el turno, se registró información en el área 
+            <strong>{VariableArea}</strong>, correspondiente al OP 
+            <strong>{variableOP}</strong>. Los valores capturados fueron los siguientes:
+        </p>
+
+        {tablaGenerada}
+
+        <br>
+
+        <p>
+            Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+        </p>
+
+        <p style='margin-top: 20px;'>
+            Atentamente,<br>
+            <strong>Sistema Tablero</strong><br>
+            Departamento de Sistemas
+        </p>
+
+    </div>
+
+</body>
+</html>";
+
+
+                // Configuración del correo
+                MailMessage correo = new MailMessage();
+                correo.From = new MailAddress("productosregionales@picolargo.com");
+                string destinatarios = "mttosistemas@picolargo.com, fruticultorapicolargo@gmail.com";
+
+                foreach (var mail in destinatarios.Split(','))
+                {
+                    correo.To.Add(mail.Trim());
+                }
+                correo.Subject = "Reporte Automático del Sistema Tablero";
+                correo.Body = cuerpoHtml;
+                correo.IsBodyHtml = true;
+
+
+                // Configuración del servidor SMTP de Office365
+                SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
+                smtp.Credentials = new NetworkCredential(
+                    "productosregionales@picolargo.com",
+                    "Picolargo1234"
+                );
+                smtp.EnableSsl = true;  // Office365 requiere STARTTLS
+
+                smtp.Send(correo);
+
+                MessageBox.Show("Correo enviado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+        public string GenerarTablaValores(List<KeyValuePair<string, string>> valores)
+        {
+            string tabla = @"
+        <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+            <tr style='background: #e9ecef;'>
+                <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Concepto</th>
+                <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Valor</th>
+            </tr>";
+
+            foreach (var item in valores)
+            {
+                tabla += $@"
+            <tr>
+                <td style='border: 1px solid #ccc; padding: 8px;'>{item.Key}</td>
+                <td style='border: 1px solid #ccc; padding: 8px;'>{item.Value}</td>
+            </tr>";
+            }
+
+            tabla += "</table>";
+
+            return tabla;
         }
     }
 }
