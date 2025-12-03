@@ -6,8 +6,11 @@ using System.Collections.Generic; // ¡Agrega esta línea!
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,8 +21,6 @@ using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Export;
 using Excel = Microsoft.Office.Interop.Excel;
-using System.Net;
-using System.Net.Mail;
 
 namespace Tablero
 {
@@ -53,7 +54,25 @@ namespace Tablero
         private bool editar = false;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
-        //
+        // Variables para la animación de las imágenes
+        private Image image1;
+        private Image image2;
+        private Image image3;
+        private bool showingImage3 = false;
+        private float transitionProgress = 0f;
+        private const float TransitionSpeed = 0.1f;
+        private bool mostrarPassword = false;
+        private bool isHovering = false;
+        private Timer animationTimer;
+        // Fin de variables para la animación de las imágenes
+        // Variables para el envío de correos
+        private string servidor_smtp = string.Empty;
+        private string RemitenteEMail = string.Empty;
+        private string PasswordEmail = string.Empty;
+        private int PuertoSMTP = 0;
+        private string DestinatariosEmail = string.Empty;
+        private bool SSLCheck = false;
+        // Fin de variables para el envío de correos
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -98,6 +117,99 @@ namespace Tablero
             PersonalizarDataGridView(dgv_reporte_concentrado);
             PersonalizarDataGridView(dgv_reporte_concentrado_otras);
             PersonalizarDataGridView(dgv_reporte_merma_S);
+            InitializeAnimation();// Inicializa el temporizador de animación
+            // Asegúrate de cargar tus imágenes desde los recursos
+            image1 = Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon;
+            image2 = Properties.Resources._5173015_eye_focus_internet_scan_security_icon;
+            image3 = Properties.Resources._5172950_business_eye_focus_internet_security_icon;
+        }
+        //Animacion de boton mostrar contraseña
+        private void InitializeAnimation()
+        {
+            animationTimer = new Timer
+            {
+                Interval = 16 // ~60 FPS
+            };
+            animationTimer.Tick += AnimationTimer_Tick;
+            animationTimer.Start();
+        }
+        private void AnimationTimer_Tick(object sender, EventArgs e)
+        {
+            if (isHovering)
+            {
+                transitionProgress += TransitionSpeed;
+                if (transitionProgress > 1f) transitionProgress = 1f;
+            }
+            else
+            {
+                transitionProgress -= TransitionSpeed;
+                if (transitionProgress < 0f) transitionProgress = 0f;
+            }
+
+            if (showingImage3)
+            {
+                // Animación entre imagen2 e imagen3
+                if (transitionProgress > 0f && transitionProgress < 1f)
+                {
+                    pictureBox4.Image = BlendImages(image3, image2, transitionProgress);
+                }
+                else if (transitionProgress <= 0f)
+                {
+                    pictureBox4.Image = image3;
+                }
+                else if (transitionProgress >= 1f)
+                {
+                    pictureBox4.Image = image2;
+                }
+            }
+            else
+            {
+                // Animación entre imagen1 e imagen2
+                if (transitionProgress > 0f && transitionProgress < 1f)
+                {
+                    pictureBox4.Image = BlendImages(image1, image2, transitionProgress);
+                }
+                else if (transitionProgress <= 0f)
+                {
+                    pictureBox4.Image = image1;
+                }
+                else if (transitionProgress >= 1f)
+                {
+                    pictureBox4.Image = image2;
+                }
+            }
+        }
+
+        private Bitmap BlendImages(Image img1, Image img2, float blendFactor)
+        {
+            if (img1 == null || img2 == null) return null;
+
+            Bitmap bmp = new Bitmap(img1.Width, img1.Height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // Primero dibujar la imagen1 con opacidad decreciente
+                ColorMatrix cm1 = new ColorMatrix();
+                cm1.Matrix33 = 1 - blendFactor; // Opacidad
+                ImageAttributes ia1 = new ImageAttributes();
+                ia1.SetColorMatrix(cm1);
+
+                g.DrawImage(img1,
+                    new Rectangle(0, 0, img1.Width, img1.Height),
+                    0, 0, img1.Width, img1.Height,
+                    GraphicsUnit.Pixel, ia1);
+
+                // Luego dibujar la imagen2 con opacidad creciente
+                ColorMatrix cm2 = new ColorMatrix();
+                cm2.Matrix33 = blendFactor; // Opacidad
+                ImageAttributes ia2 = new ImageAttributes();
+                ia2.SetColorMatrix(cm2);
+
+                g.DrawImage(img2,
+                    new Rectangle(0, 0, img2.Width, img2.Height),
+                    0, 0, img2.Width, img2.Height,
+                    GraphicsUnit.Pixel, ia2);
+            }
+            return bmp;
         }
 
         private void PersonalizarDataGridView(DataGridView dgv, bool editable = false)
@@ -213,6 +325,8 @@ namespace Tablero
                 actualiza_tunel_calidad();
                 configurar_limpieza();
                 CargarSemanasAnioActual();
+                emaildatos();
+                email_varibles();
             }
             if (nivel_user == "Supervisor")
             {
@@ -223,6 +337,7 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage11);
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
                 actualiza_detalles_OP();
+                email_varibles();
 
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -248,7 +363,27 @@ namespace Tablero
                 configurar_limpieza();
             }
         }
-        
+        private void emaildatos() 
+        {
+            if (!string.IsNullOrEmpty(Tablero.Properties.Settings.Default.ServerSMTP)) 
+            {
+                Txt_server_Smtp.Text = Tablero.Properties.Settings.Default.ServerSMTP;
+                Txt_Remitente.Text = Tablero.Properties.Settings.Default.RemitenteEMail;
+                Txt_Password_SMTP.Text = Tablero.Properties.Settings.Default.PasswordEmail;
+                TxtPuerto.Text = Tablero.Properties.Settings.Default.PuertoSMTP.ToString();
+                Check_ssl.Checked = Tablero.Properties.Settings.Default.SSLCheck;
+                Txt_Destinatarios.Text = Tablero.Properties.Settings.Default.DestinatariosEmail;
+            }
+        }
+        private void email_varibles()
+        {
+            servidor_smtp = Tablero.Properties.Settings.Default.ServerSMTP;
+            RemitenteEMail = Tablero.Properties.Settings.Default.RemitenteEMail;
+            PasswordEmail = Tablero.Properties.Settings.Default.PasswordEmail;
+            PuertoSMTP = Tablero.Properties.Settings.Default.PuertoSMTP;
+            SSLCheck = Tablero.Properties.Settings.Default.SSLCheck;
+            DestinatariosEmail = Tablero.Properties.Settings.Default.DestinatariosEmail;
+        }
         private void CargarSemanasAnioActual()
         {
             try
@@ -4903,6 +5038,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                                         "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+            }
+            if (string.IsNullOrEmpty(Tablero.Properties.Settings.Default.ServerSMTP))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Complete la configuración SMTP antes de enviar el correo electronico. Solo el Administrador puede realizar esta configuración.", "SMTP pendiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
         }
 
@@ -11452,6 +11592,228 @@ ORDER BY
             tabla += "</table>";
 
             return tabla;
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+            // Alternar entre image1 e image3 con cada clic
+            showingImage3 = !showingImage3;
+
+            // Reiniciar la animación
+            transitionProgress = 0f;
+
+            // Forzar una actualización inmediata
+            if (showingImage3 || !(mostrarPassword))
+            {
+                pictureBox4.Image = image3;
+                // Mostrar contraseña
+                Txt_Password_SMTP.PasswordChar = '\0'; // Esto quita el carácter de ocultamiento
+                mostrarPassword = true;
+            }
+            else
+            {
+                pictureBox4.Image = image1;
+                // Ocultar contraseña
+                Txt_Password_SMTP.PasswordChar = '*';
+                mostrarPassword = false;
+            }
+        }
+
+        private void pictureBox4_MouseEnter(object sender, EventArgs e)
+        {
+            isHovering = true;
+        }
+
+        private void pictureBox4_MouseLeave(object sender, EventArgs e)
+        {
+            isHovering = false;
+        }
+
+        private void Txt_Destinatarios_Enter(object sender, EventArgs e)
+        {
+            lbl_text_asistive.ForeColor = Color.FromArgb(59, 140, 255);
+            lbl_text_asistive.Visible = true;
+        }
+
+        private void Txt_Destinatarios_Leave(object sender, EventArgs e)
+        {
+            lbl_text_asistive.Visible = true;
+        }
+
+        private void Txt_Remitente_TextChanged(object sender, EventArgs e)
+        {
+            ValidarCorreoRemitente();
+        }
+        private bool ValidarCorreoRemitente()
+        {
+            string email = Txt_Remitente.Text.Trim();
+
+            // Regex simple y confiable para validar correos
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            if (Regex.IsMatch(email, pattern))
+            {
+                errorProvider1.SetError(Txt_Remitente, ""); // Sin error
+                return true;
+            }
+            else
+            {
+                errorProvider1.SetError(Txt_Remitente, "Ingrese un único correo válido.");
+                return false;
+            }
+        }
+
+        private void btn_save_settings_email_Click(object sender, EventArgs e)
+        {
+            if (!ValidarCorreoRemitente())
+            {
+                return;
+            }
+            ValidarDestinatarios();
+            if (!string.IsNullOrEmpty(errorProvider1.GetError(Txt_Destinatarios)))
+            {
+                return;
+            }
+            if(string.IsNullOrEmpty(Txt_server_Smtp.Text)||string.IsNullOrEmpty(Txt_Password_SMTP.Text)||string.IsNullOrEmpty(TxtPuerto.Text))
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            Tablero.Properties.Settings.Default.ServerSMTP = Txt_server_Smtp.Text;
+            Tablero.Properties.Settings.Default.RemitenteEMail = Txt_Remitente.Text;
+            Tablero.Properties.Settings.Default.PasswordEmail = Txt_Password_SMTP.Text;
+            Tablero.Properties.Settings.Default.PuertoSMTP = Convert.ToInt32(TxtPuerto.Text);
+            Tablero.Properties.Settings.Default.SSLCheck = Check_ssl.Checked;
+            Tablero.Properties.Settings.Default.DestinatariosEmail = Txt_Destinatarios.Text;
+            Tablero.Properties.Settings.Default.Save();
+            email_varibles();
+            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                    "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void Txt_Destinatarios_TextChanged(object sender, EventArgs e)
+        {
+            ValidarDestinatarios();
+        }
+        private void ValidarDestinatarios()
+        {
+            string input = Txt_Destinatarios.Text.Trim();
+
+            // Si está vacío, mostrar error
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                errorProvider1.SetError(Txt_Destinatarios, "Ingrese uno o varios correos.");
+                return;
+            }
+
+            // Separar por comas
+            string[] correos = input.Split(',');
+
+            // Expresión regular para validar correo electrónico
+            string patron = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            foreach (string correo in correos)
+            {
+                string c = correo.Trim();
+
+                // Validación individual
+                if (!System.Text.RegularExpressions.Regex.IsMatch(c, patron))
+                {
+                    errorProvider1.SetError(Txt_Destinatarios, "Formato de correo inválido en la lista.");
+                    return;
+                }
+            }
+
+            // Si todo está bien, limpiar error
+            errorProvider1.SetError(Txt_Destinatarios, "");
+        }
+
+        private void TxtPuerto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo números y la tecla Backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true; // Bloquea la tecla
+            }
+        }
+
+        private void btn_prueba_Click(object sender, EventArgs e)
+        {
+            //servidor_smtp
+            //RemitenteEMail
+            //PasswordEmail
+            //PuertoSMTP
+            //SSLCheck
+            //DestinatariosEmail
+
+            // Validar que la configuración esté completa
+            if (string.IsNullOrWhiteSpace(servidor_smtp) ||
+                string.IsNullOrWhiteSpace(RemitenteEMail) ||
+                string.IsNullOrWhiteSpace(PasswordEmail) ||
+                PuertoSMTP == 0)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "SMTP sin configurar.",
+                    "SMTP pendiente",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+            // Enviar correo de prueba
+            try
+            {
+                string cuerpoHtml = $@"
+        <html>
+        <body style='font-family: Arial; font-size: 14px; color: #333;'>
+            <p>Este es un correo de prueba enviado desde el sistema <b>Tablero</b>.</p>
+            <p>La conexión SMTP se ha verificado correctamente.</p>
+            <br>
+            <p style='color: #888;'>Mensaje generado automáticamente, favor de no responder.</p>
+        </body>
+        </html>";
+
+
+                // Configuración del correo
+                MailMessage correo = new MailMessage();
+                correo.From = new MailAddress(RemitenteEMail);
+                string destinatarios = DestinatariosEmail;
+
+                foreach (var mail in destinatarios.Split(','))
+                {
+                    correo.To.Add(mail.Trim());
+                }
+                correo.Subject = "Prueba de conexión SMTP - Sistema Tablero";
+                correo.Body = cuerpoHtml;
+                correo.IsBodyHtml = true;
+
+
+                // Configuración del servidor SMTP de Office365
+                SmtpClient smtp = new SmtpClient(servidor_smtp, PuertoSMTP);
+                smtp.Credentials = new NetworkCredential(
+                    RemitenteEMail,
+                    PasswordEmail
+                );
+                smtp.EnableSsl = SSLCheck;  // Office365 requiere STARTTLS
+
+                smtp.Send(correo);
+
+                MetroFramework.MetroMessageBox.Show(this,
+                    "El correo de prueba se envió correctamente.",
+                    "Prueba exitosa",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Error al enviar el correo de prueba:\n" + ex.Message,
+                    "Error SMTP",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            // Fin del envío de correo de prueba
         }
     }
 }

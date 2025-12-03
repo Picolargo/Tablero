@@ -31,7 +31,7 @@ namespace Tablero
             InitializeComponent();
             InitializeAnimation();// Inicializa el temporizador de animación
             // Asegúrate de cargar tus imágenes desde los recursos
-            image1 = Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon; // Reemplaza con tus imágenes reales
+            image1 = Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon;
             image2 = Properties.Resources._5173015_eye_focus_internet_scan_security_icon;
             image3 = Properties.Resources._5172950_business_eye_focus_internet_security_icon;
         }

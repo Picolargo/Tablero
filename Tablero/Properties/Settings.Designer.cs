@@ -58,5 +58,77 @@ namespace Tablero.Properties {
                 this["Contrasena"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerSMTP {
+            get {
+                return ((string)(this["ServerSMTP"]));
+            }
+            set {
+                this["ServerSMTP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RemitenteEMail {
+            get {
+                return ((string)(this["RemitenteEMail"]));
+            }
+            set {
+                this["RemitenteEMail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PasswordEmail {
+            get {
+                return ((string)(this["PasswordEmail"]));
+            }
+            set {
+                this["PasswordEmail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PuertoSMTP {
+            get {
+                return ((int)(this["PuertoSMTP"]));
+            }
+            set {
+                this["PuertoSMTP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SSLCheck {
+            get {
+                return ((bool)(this["SSLCheck"]));
+            }
+            set {
+                this["SSLCheck"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DestinatariosEmail {
+            get {
+                return ((string)(this["DestinatariosEmail"]));
+            }
+            set {
+                this["DestinatariosEmail"] = value;
+            }
+        }
     }
 }

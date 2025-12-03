@@ -274,6 +274,19 @@
             this.btn_save_tunel = new MaterialSkin.Controls.MaterialButton();
             this.lbl_no_semana_tunel = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.materialCard18 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_prueba = new MaterialSkin.Controls.MaterialButton();
+            this.TxtPuerto = new MaterialSkin.Controls.MaterialTextBox2();
+            this.btn_save_settings_email = new MaterialSkin.Controls.MaterialButton();
+            this.lbl_text_asistive = new System.Windows.Forms.Label();
+            this.Txt_Destinatarios = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
+            this.Check_ssl = new MaterialSkin.Controls.MaterialCheckbox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.Txt_Password_SMTP = new MaterialSkin.Controls.MaterialTextBox2();
+            this.Txt_Remitente = new MaterialSkin.Controls.MaterialTextBox2();
+            this.Txt_server_Smtp = new MaterialSkin.Controls.MaterialTextBox2();
+            this.radSeparator1 = new Telerik.WinControls.UI.RadSeparator();
+            this.label1 = new System.Windows.Forms.Label();
             this.materialCardtab_users = new MaterialSkin.Controls.MaterialCard();
             this.tabControl_usuarios = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -297,11 +310,6 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.materialCard18 = new MaterialSkin.Controls.MaterialCard();
-            this.label1 = new System.Windows.Forms.Label();
-            this.radSeparator1 = new Telerik.WinControls.UI.RadSeparator();
-            this.Txt_server_Smtp = new MaterialSkin.Controls.MaterialTextBox2();
-            this.Txt_Remitente = new MaterialSkin.Controls.MaterialTextBox2();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -426,6 +434,9 @@
             this.tabPage15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_merma_tunel)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.materialCard18.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).BeginInit();
             this.materialCardtab_users.SuspendLayout();
             this.tabControl_usuarios.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -434,8 +445,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.materialCard18.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -4572,6 +4581,289 @@
             this.tabPage3.Text = "Configuración";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // materialCard18
+            // 
+            this.materialCard18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard18.Controls.Add(this.btn_prueba);
+            this.materialCard18.Controls.Add(this.TxtPuerto);
+            this.materialCard18.Controls.Add(this.btn_save_settings_email);
+            this.materialCard18.Controls.Add(this.lbl_text_asistive);
+            this.materialCard18.Controls.Add(this.Txt_Destinatarios);
+            this.materialCard18.Controls.Add(this.Check_ssl);
+            this.materialCard18.Controls.Add(this.pictureBox4);
+            this.materialCard18.Controls.Add(this.Txt_Password_SMTP);
+            this.materialCard18.Controls.Add(this.Txt_Remitente);
+            this.materialCard18.Controls.Add(this.Txt_server_Smtp);
+            this.materialCard18.Controls.Add(this.radSeparator1);
+            this.materialCard18.Controls.Add(this.label1);
+            this.materialCard18.Depth = 0;
+            this.materialCard18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard18.Location = new System.Drawing.Point(591, 14);
+            this.materialCard18.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard18.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard18.Name = "materialCard18";
+            this.materialCard18.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard18.Size = new System.Drawing.Size(651, 365);
+            this.materialCard18.TabIndex = 2;
+            // 
+            // btn_prueba
+            // 
+            this.btn_prueba.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_prueba.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_prueba.Depth = 0;
+            this.btn_prueba.HighEmphasis = true;
+            this.btn_prueba.Icon = global::Tablero.Properties.Resources.checklist_6619102;
+            this.btn_prueba.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_prueba.Location = new System.Drawing.Point(516, 311);
+            this.btn_prueba.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_prueba.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_prueba.Name = "btn_prueba";
+            this.btn_prueba.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_prueba.Size = new System.Drawing.Size(105, 36);
+            this.btn_prueba.TabIndex = 23;
+            this.btn_prueba.Text = "Prueba";
+            this.btn_prueba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_prueba.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_prueba.UseAccentColor = false;
+            this.btn_prueba.UseVisualStyleBackColor = true;
+            this.btn_prueba.Click += new System.EventHandler(this.btn_prueba_Click);
+            // 
+            // TxtPuerto
+            // 
+            this.TxtPuerto.AnimateReadOnly = false;
+            this.TxtPuerto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.TxtPuerto.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.TxtPuerto.Depth = 0;
+            this.TxtPuerto.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.TxtPuerto.HelperText = "Ingresa el puerto SMTP";
+            this.TxtPuerto.HideSelection = true;
+            this.TxtPuerto.Hint = "Puerto SMTP";
+            this.TxtPuerto.LeadingIcon = null;
+            this.TxtPuerto.Location = new System.Drawing.Point(371, 51);
+            this.TxtPuerto.MaxLength = 32767;
+            this.TxtPuerto.MouseState = MaterialSkin.MouseState.OUT;
+            this.TxtPuerto.Name = "TxtPuerto";
+            this.TxtPuerto.PasswordChar = '\0';
+            this.TxtPuerto.PrefixSuffixText = null;
+            this.TxtPuerto.ReadOnly = false;
+            this.TxtPuerto.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TxtPuerto.SelectedText = "";
+            this.TxtPuerto.SelectionLength = 0;
+            this.TxtPuerto.SelectionStart = 0;
+            this.TxtPuerto.ShortcutsEnabled = true;
+            this.TxtPuerto.ShowAssistiveText = true;
+            this.TxtPuerto.Size = new System.Drawing.Size(250, 64);
+            this.TxtPuerto.TabIndex = 22;
+            this.TxtPuerto.TabStop = false;
+            this.TxtPuerto.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TxtPuerto.TrailingIcon = null;
+            this.TxtPuerto.UseSystemPasswordChar = false;
+            this.TxtPuerto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtPuerto_KeyPress);
+            // 
+            // btn_save_settings_email
+            // 
+            this.btn_save_settings_email.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_save_settings_email.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_save_settings_email.Depth = 0;
+            this.btn_save_settings_email.HighEmphasis = true;
+            this.btn_save_settings_email.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.btn_save_settings_email.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_save_settings_email.ImageKey = "save_icon";
+            this.btn_save_settings_email.Location = new System.Drawing.Point(371, 311);
+            this.btn_save_settings_email.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_save_settings_email.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_save_settings_email.Name = "btn_save_settings_email";
+            this.btn_save_settings_email.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_save_settings_email.Size = new System.Drawing.Size(116, 36);
+            this.btn_save_settings_email.TabIndex = 21;
+            this.btn_save_settings_email.Text = "Guardar";
+            this.btn_save_settings_email.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_save_settings_email.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_save_settings_email.UseAccentColor = false;
+            this.btn_save_settings_email.UseVisualStyleBackColor = true;
+            this.btn_save_settings_email.Click += new System.EventHandler(this.btn_save_settings_email_Click);
+            // 
+            // lbl_text_asistive
+            // 
+            this.lbl_text_asistive.AutoSize = true;
+            this.lbl_text_asistive.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_text_asistive.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(140)))), ((int)(((byte)(255)))));
+            this.lbl_text_asistive.Location = new System.Drawing.Point(368, 256);
+            this.lbl_text_asistive.Name = "lbl_text_asistive";
+            this.lbl_text_asistive.Size = new System.Drawing.Size(228, 16);
+            this.lbl_text_asistive.TabIndex = 20;
+            this.lbl_text_asistive.Text = "Destinatarios separados por comas";
+            this.lbl_text_asistive.Visible = false;
+            // 
+            // Txt_Destinatarios
+            // 
+            this.Txt_Destinatarios.AnimateReadOnly = false;
+            this.Txt_Destinatarios.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_Destinatarios.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_Destinatarios.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.Txt_Destinatarios.Depth = 0;
+            this.Txt_Destinatarios.HideSelection = true;
+            this.Txt_Destinatarios.Hint = "Correos Destinatarios";
+            this.Txt_Destinatarios.Location = new System.Drawing.Point(371, 134);
+            this.Txt_Destinatarios.MaxLength = 32767;
+            this.Txt_Destinatarios.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Destinatarios.Name = "Txt_Destinatarios";
+            this.Txt_Destinatarios.PasswordChar = '\0';
+            this.Txt_Destinatarios.ReadOnly = false;
+            this.Txt_Destinatarios.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.Txt_Destinatarios.SelectedText = "";
+            this.Txt_Destinatarios.SelectionLength = 0;
+            this.Txt_Destinatarios.SelectionStart = 0;
+            this.Txt_Destinatarios.ShortcutsEnabled = true;
+            this.Txt_Destinatarios.Size = new System.Drawing.Size(250, 119);
+            this.Txt_Destinatarios.TabIndex = 19;
+            this.Txt_Destinatarios.TabStop = false;
+            this.Txt_Destinatarios.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_Destinatarios.UseSystemPasswordChar = false;
+            this.Txt_Destinatarios.Enter += new System.EventHandler(this.Txt_Destinatarios_Enter);
+            this.Txt_Destinatarios.Leave += new System.EventHandler(this.Txt_Destinatarios_Leave);
+            this.Txt_Destinatarios.TextChanged += new System.EventHandler(this.Txt_Destinatarios_TextChanged);
+            // 
+            // Check_ssl
+            // 
+            this.Check_ssl.AutoSize = true;
+            this.Check_ssl.Depth = 0;
+            this.Check_ssl.Location = new System.Drawing.Point(21, 271);
+            this.Check_ssl.Margin = new System.Windows.Forms.Padding(0);
+            this.Check_ssl.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.Check_ssl.MouseState = MaterialSkin.MouseState.HOVER;
+            this.Check_ssl.Name = "Check_ssl";
+            this.Check_ssl.ReadOnly = false;
+            this.Check_ssl.Ripple = true;
+            this.Check_ssl.Size = new System.Drawing.Size(128, 37);
+            this.Check_ssl.TabIndex = 16;
+            this.Check_ssl.Text = "Habilitar SSL";
+            this.Check_ssl.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = global::Tablero.Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon;
+            this.pictureBox4.Location = new System.Drawing.Point(277, 204);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(50, 48);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 14;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
+            this.pictureBox4.MouseEnter += new System.EventHandler(this.pictureBox4_MouseEnter);
+            this.pictureBox4.MouseLeave += new System.EventHandler(this.pictureBox4_MouseLeave);
+            // 
+            // Txt_Password_SMTP
+            // 
+            this.Txt_Password_SMTP.AnimateReadOnly = false;
+            this.Txt_Password_SMTP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_Password_SMTP.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_Password_SMTP.Depth = 0;
+            this.Txt_Password_SMTP.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_Password_SMTP.HelperText = "Contraseña del correo remitente";
+            this.Txt_Password_SMTP.HideSelection = true;
+            this.Txt_Password_SMTP.Hint = "Contraseña";
+            this.Txt_Password_SMTP.LeadingIcon = null;
+            this.Txt_Password_SMTP.Location = new System.Drawing.Point(21, 204);
+            this.Txt_Password_SMTP.MaxLength = 32767;
+            this.Txt_Password_SMTP.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Password_SMTP.Name = "Txt_Password_SMTP";
+            this.Txt_Password_SMTP.PasswordChar = '*';
+            this.Txt_Password_SMTP.PrefixSuffixText = null;
+            this.Txt_Password_SMTP.ReadOnly = false;
+            this.Txt_Password_SMTP.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Txt_Password_SMTP.SelectedText = "";
+            this.Txt_Password_SMTP.SelectionLength = 0;
+            this.Txt_Password_SMTP.SelectionStart = 0;
+            this.Txt_Password_SMTP.ShortcutsEnabled = true;
+            this.Txt_Password_SMTP.ShowAssistiveText = true;
+            this.Txt_Password_SMTP.Size = new System.Drawing.Size(250, 64);
+            this.Txt_Password_SMTP.TabIndex = 13;
+            this.Txt_Password_SMTP.TabStop = false;
+            this.Txt_Password_SMTP.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_Password_SMTP.TrailingIcon = null;
+            this.Txt_Password_SMTP.UseSystemPasswordChar = false;
+            // 
+            // Txt_Remitente
+            // 
+            this.Txt_Remitente.AnimateReadOnly = false;
+            this.Txt_Remitente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_Remitente.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_Remitente.Depth = 0;
+            this.Txt_Remitente.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_Remitente.HelperText = "Ingresa el correo remitente";
+            this.Txt_Remitente.HideSelection = true;
+            this.Txt_Remitente.Hint = "Remitente";
+            this.Txt_Remitente.LeadingIcon = null;
+            this.Txt_Remitente.Location = new System.Drawing.Point(21, 134);
+            this.Txt_Remitente.MaxLength = 32767;
+            this.Txt_Remitente.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_Remitente.Name = "Txt_Remitente";
+            this.Txt_Remitente.PasswordChar = '\0';
+            this.Txt_Remitente.PrefixSuffixText = null;
+            this.Txt_Remitente.ReadOnly = false;
+            this.Txt_Remitente.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Txt_Remitente.SelectedText = "";
+            this.Txt_Remitente.SelectionLength = 0;
+            this.Txt_Remitente.SelectionStart = 0;
+            this.Txt_Remitente.ShortcutsEnabled = true;
+            this.Txt_Remitente.ShowAssistiveText = true;
+            this.Txt_Remitente.Size = new System.Drawing.Size(250, 64);
+            this.Txt_Remitente.TabIndex = 12;
+            this.Txt_Remitente.TabStop = false;
+            this.Txt_Remitente.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_Remitente.TrailingIcon = null;
+            this.Txt_Remitente.UseSystemPasswordChar = false;
+            this.Txt_Remitente.TextChanged += new System.EventHandler(this.Txt_Remitente_TextChanged);
+            // 
+            // Txt_server_Smtp
+            // 
+            this.Txt_server_Smtp.AnimateReadOnly = false;
+            this.Txt_server_Smtp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Txt_server_Smtp.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.Txt_server_Smtp.Depth = 0;
+            this.Txt_server_Smtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.Txt_server_Smtp.HelperText = "Ingresa el servidor SMTP";
+            this.Txt_server_Smtp.HideSelection = true;
+            this.Txt_server_Smtp.Hint = "Servidor SMTP";
+            this.Txt_server_Smtp.LeadingIcon = null;
+            this.Txt_server_Smtp.Location = new System.Drawing.Point(21, 64);
+            this.Txt_server_Smtp.MaxLength = 32767;
+            this.Txt_server_Smtp.MouseState = MaterialSkin.MouseState.OUT;
+            this.Txt_server_Smtp.Name = "Txt_server_Smtp";
+            this.Txt_server_Smtp.PasswordChar = '\0';
+            this.Txt_server_Smtp.PrefixSuffixText = null;
+            this.Txt_server_Smtp.ReadOnly = false;
+            this.Txt_server_Smtp.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Txt_server_Smtp.SelectedText = "";
+            this.Txt_server_Smtp.SelectionLength = 0;
+            this.Txt_server_Smtp.SelectionStart = 0;
+            this.Txt_server_Smtp.ShortcutsEnabled = true;
+            this.Txt_server_Smtp.ShowAssistiveText = true;
+            this.Txt_server_Smtp.Size = new System.Drawing.Size(250, 64);
+            this.Txt_server_Smtp.TabIndex = 11;
+            this.Txt_server_Smtp.TabStop = false;
+            this.Txt_server_Smtp.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.Txt_server_Smtp.TrailingIcon = null;
+            this.Txt_server_Smtp.UseSystemPasswordChar = false;
+            // 
+            // radSeparator1
+            // 
+            this.radSeparator1.Location = new System.Drawing.Point(21, 37);
+            this.radSeparator1.Name = "radSeparator1";
+            this.radSeparator1.Size = new System.Drawing.Size(600, 4);
+            this.radSeparator1.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(17, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(366, 20);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Configuración de envío de correo electrónico";
+            // 
             // materialCardtab_users
             // 
             this.materialCardtab_users.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -4973,102 +5265,6 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // materialCard18
-            // 
-            this.materialCard18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard18.Controls.Add(this.Txt_Remitente);
-            this.materialCard18.Controls.Add(this.Txt_server_Smtp);
-            this.materialCard18.Controls.Add(this.radSeparator1);
-            this.materialCard18.Controls.Add(this.label1);
-            this.materialCard18.Depth = 0;
-            this.materialCard18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard18.Location = new System.Drawing.Point(591, 14);
-            this.materialCard18.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard18.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard18.Name = "materialCard18";
-            this.materialCard18.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard18.Size = new System.Drawing.Size(746, 365);
-            this.materialCard18.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(17, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(366, 20);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Configuración de envío de correo electrónico";
-            // 
-            // radSeparator1
-            // 
-            this.radSeparator1.Location = new System.Drawing.Point(21, 37);
-            this.radSeparator1.Name = "radSeparator1";
-            this.radSeparator1.Size = new System.Drawing.Size(600, 4);
-            this.radSeparator1.TabIndex = 10;
-            // 
-            // Txt_server_Smtp
-            // 
-            this.Txt_server_Smtp.AnimateReadOnly = false;
-            this.Txt_server_Smtp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Txt_server_Smtp.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
-            this.Txt_server_Smtp.Depth = 0;
-            this.Txt_server_Smtp.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.Txt_server_Smtp.HelperText = "Ingresa el servidor SMTP";
-            this.Txt_server_Smtp.HideSelection = true;
-            this.Txt_server_Smtp.Hint = "Servidor SMTP";
-            this.Txt_server_Smtp.LeadingIcon = null;
-            this.Txt_server_Smtp.Location = new System.Drawing.Point(21, 64);
-            this.Txt_server_Smtp.MaxLength = 32767;
-            this.Txt_server_Smtp.MouseState = MaterialSkin.MouseState.OUT;
-            this.Txt_server_Smtp.Name = "Txt_server_Smtp";
-            this.Txt_server_Smtp.PasswordChar = '\0';
-            this.Txt_server_Smtp.PrefixSuffixText = null;
-            this.Txt_server_Smtp.ReadOnly = false;
-            this.Txt_server_Smtp.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Txt_server_Smtp.SelectedText = "";
-            this.Txt_server_Smtp.SelectionLength = 0;
-            this.Txt_server_Smtp.SelectionStart = 0;
-            this.Txt_server_Smtp.ShortcutsEnabled = true;
-            this.Txt_server_Smtp.ShowAssistiveText = true;
-            this.Txt_server_Smtp.Size = new System.Drawing.Size(250, 64);
-            this.Txt_server_Smtp.TabIndex = 11;
-            this.Txt_server_Smtp.TabStop = false;
-            this.Txt_server_Smtp.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.Txt_server_Smtp.TrailingIcon = null;
-            this.Txt_server_Smtp.UseSystemPasswordChar = false;
-            // 
-            // Txt_Remitente
-            // 
-            this.Txt_Remitente.AnimateReadOnly = false;
-            this.Txt_Remitente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Txt_Remitente.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
-            this.Txt_Remitente.Depth = 0;
-            this.Txt_Remitente.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.Txt_Remitente.HelperText = "Ingresa el correo remitente";
-            this.Txt_Remitente.HideSelection = true;
-            this.Txt_Remitente.Hint = "Remitente";
-            this.Txt_Remitente.LeadingIcon = null;
-            this.Txt_Remitente.Location = new System.Drawing.Point(21, 134);
-            this.Txt_Remitente.MaxLength = 32767;
-            this.Txt_Remitente.MouseState = MaterialSkin.MouseState.OUT;
-            this.Txt_Remitente.Name = "Txt_Remitente";
-            this.Txt_Remitente.PasswordChar = '\0';
-            this.Txt_Remitente.PrefixSuffixText = null;
-            this.Txt_Remitente.ReadOnly = false;
-            this.Txt_Remitente.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Txt_Remitente.SelectedText = "";
-            this.Txt_Remitente.SelectionLength = 0;
-            this.Txt_Remitente.SelectionStart = 0;
-            this.Txt_Remitente.ShortcutsEnabled = true;
-            this.Txt_Remitente.ShowAssistiveText = true;
-            this.Txt_Remitente.Size = new System.Drawing.Size(250, 64);
-            this.Txt_Remitente.TabIndex = 12;
-            this.Txt_Remitente.TabStop = false;
-            this.Txt_Remitente.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.Txt_Remitente.TrailingIcon = null;
-            this.Txt_Remitente.UseSystemPasswordChar = false;
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5230,6 +5426,10 @@
             this.tabPage15.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_merma_tunel)).EndInit();
             this.tabPage3.ResumeLayout(false);
+            this.materialCard18.ResumeLayout(false);
+            this.materialCard18.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).EndInit();
             this.materialCardtab_users.ResumeLayout(false);
             this.tabControl_usuarios.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
@@ -5240,9 +5440,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.materialCard18.ResumeLayout(false);
-            this.materialCard18.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radSeparator1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5515,6 +5712,14 @@
         private Telerik.WinControls.UI.RadSeparator radSeparator1;
         private MaterialSkin.Controls.MaterialTextBox2 Txt_server_Smtp;
         private MaterialSkin.Controls.MaterialTextBox2 Txt_Remitente;
+        private MaterialSkin.Controls.MaterialTextBox2 Txt_Password_SMTP;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private MaterialSkin.Controls.MaterialCheckbox Check_ssl;
+        private MaterialSkin.Controls.MaterialMultiLineTextBox2 Txt_Destinatarios;
+        private System.Windows.Forms.Label lbl_text_asistive;
+        private MaterialSkin.Controls.MaterialButton btn_save_settings_email;
+        private MaterialSkin.Controls.MaterialTextBox2 TxtPuerto;
+        private MaterialSkin.Controls.MaterialButton btn_prueba;
     }
 }
 
