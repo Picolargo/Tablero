@@ -20,6 +20,8 @@ using Telerik.WinControls;
 using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Export;
+using Telerik.WinForms.Documents.Model.Notes;
+using static System.Net.WebRequestMethods;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tablero
@@ -1574,8 +1576,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_OP.Enabled = false;
             dtp1.Enabled = false;
             txt_Tiempo_energia.Text = "0";
-            dgv_mecanico.Rows.Clear();
-            dgv_operativo.Rows.Clear();
+            if (dgv_mecanico.DataSource is DataTable dt1)
+                dt1.Rows.Clear();
+
+            if (dgv_operativo.DataSource is DataTable dt2)
+                dt2.Rows.Clear();
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -4537,6 +4542,22 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            string Variable_nombre = lbl_no_emp2.Text;
+            string variable_num = lbl_nom2.Text;
+            string cuerpoHtml1 = $@"
+                <html>
+                <body style='font-family: Arial; font-size: 14px; color: #333;'>
+
+                    <div style='border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #f7f7f7;'>
+
+                        <h2 style='color: #2c3e50;'>Reporte del Sistema Tablero</h2>
+
+                        <p>
+                            Estimado equipo,<br><br>
+                            El sistema <strong>Tablero</strong> informa que el supervisor 
+                            <strong>{Variable_nombre}</strong>, con número de empleado 
+                            <strong>{variable_num}</strong> y correspondiente al turno ";
+
             ////TUNEL/ SUMERGIDOR
             if (cb_Area.SelectedIndex == 0)
             {
@@ -4570,13 +4591,69 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                         TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                        string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                         if (editar)
                         {
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
                             mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0);
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Kg Entrada (Proceso)", kgEnterProceso.ToString()),
+                                new KeyValuePair<string, string>("Kg Frescos de Entrada a secador", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Kg Canica", mermaCanica.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Podrido", mermaPodrido.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Tina", mermaTina.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Piso", mermaPiso.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Canaletas", mermaCanaletas.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Lavado de Bandas", mermaLavadoBandas.ToString()),
+                                new KeyValuePair<string, string>("Kg Cáscara de Carrete", cascaraCarrete.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", personal_Op.ToString()),
+                                new KeyValuePair<string, string>("Horas Programadas", hr_pro.ToString()),
+                                new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
+                            };
 
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
                         }
                         else
                         {
@@ -4606,6 +4683,61 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 // Insertar en tablas relacionadas
                                 InsertarTiemposMuertos(dbHelper, idFicha);
 
+                                //enviar correo
+                                //Crear lista de valores
+                                List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                                {
+                                    new KeyValuePair<string, string>("Lote", lote),
+                                    new KeyValuePair<string, string>("Kg Entrada (Proceso)", kgEnterProceso.ToString()),
+                                    new KeyValuePair<string, string>("Kg Frescos de Entrada a secador", kgFrescosEnterSe.ToString()),
+                                    new KeyValuePair<string, string>("Kg Canica", mermaCanica.ToString()),
+                                    new KeyValuePair<string, string>("Kg Merma Podrido", mermaPodrido.ToString()),
+                                    new KeyValuePair<string, string>("Kg Merma Tina", mermaTina.ToString()),
+                                    new KeyValuePair<string, string>("Kg Merma Piso", mermaPiso.ToString()),
+                                    new KeyValuePair<string, string>("Kg Merma Canaletas", mermaCanaletas.ToString()),
+                                    new KeyValuePair<string, string>("Kg Merma Lavado de Bandas", mermaLavadoBandas.ToString()),
+                                    new KeyValuePair<string, string>("Kg Cáscara de Carrete", cascaraCarrete.ToString()),
+                                    new KeyValuePair<string, string>("Personal Operativo", personal_Op.ToString()),
+                                    new KeyValuePair<string, string>("Horas Programadas", hr_pro.ToString()),
+                                    new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
+                                    new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
+                                };
+
+                                string tablaGenerada = GenerarTablaValores(valores);
+                                string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+                                cuerpoHtml1 += cuerpoHtml2;
+                                conf_email(cuerpoHtml1);
+                                //fin correo
                                 MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                     "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 cb_Area.SelectedIndex = -1;
@@ -4660,6 +4792,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
                     string lote = cb_lote.Text;
                     decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -4670,6 +4803,61 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Kilos Producto Seco", KgProdSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Secos", MermaKgSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraSpec.ToString()),
+                                new KeyValuePair<string, string>("Kg para Resecar", KgResecar.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Kg Frescos Entrada a secador", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Cumplimiento de Metas (%)", textoPorcentCumplimiento),
+                                new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
+                                new KeyValuePair<string, string>("FTT", FTT.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -4677,6 +4865,61 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Kilos Producto Seco", KgProdSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg Merma Secos", MermaKgSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraSpec.ToString()),
+                                new KeyValuePair<string, string>("Kg para Resecar", KgResecar.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Kg Frescos Entrada a secador", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Cumplimiento de Metas (%)", textoPorcentCumplimiento),
+                                new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
+                                new KeyValuePair<string, string>("FTT", FTT.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
 
                         if (idFicha > 0)
                         {
@@ -4742,12 +4985,66 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Aumento por humedad (%)", Porcent_Aumento_Hume.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -4760,6 +5057,59 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Aumento por humedad (%)", Porcent_Aumento_Hume.ToString())
+                            };
+
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
 
                             MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                 "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -4806,13 +5156,65 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
-
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -4824,6 +5226,58 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
                             MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                 "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             cb_Area.SelectedIndex = -1;
@@ -4870,12 +5324,65 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -4887,6 +5394,58 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
                             MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                 "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             cb_Area.SelectedIndex = -1;
@@ -4934,12 +5493,67 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Polvo de colector", polvo_colector.ToString()),
+                                new KeyValuePair<string, string>("Granulo", Granulo.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -4952,6 +5566,60 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Polvo de colector", polvo_colector.ToString()),
+                                new KeyValuePair<string, string>("Granulo", Granulo.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                            };
+
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
 
                             MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                 "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -5002,12 +5670,69 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
                     decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
                     decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, bobina_merma);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Piezas Producidas", Pz_producidas.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Bobina Kg Entrada", bobina_entrada.ToString()),
+                                new KeyValuePair<string, string>("Bobina Utilizada", bobina_utilizada.ToString()),
+                                new KeyValuePair<string, string>("Bobina Merma", bobina_merma.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
+                            };
+
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
                     }
                     else
                     {
@@ -5019,6 +5744,61 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Piezas Producidas", Pz_producidas.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Bobina Kg Entrada", bobina_entrada.ToString()),
+                                new KeyValuePair<string, string>("Bobina Utilizada", bobina_utilizada.ToString()),
+                                new KeyValuePair<string, string>("Bobina Merma", bobina_merma.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
+                            };
+
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                    </p>
+
+                                    {tablaGenerada}
+
+                                    <br>
+
+                                    <p>
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
                             MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                                 "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             cb_Area.SelectedIndex = -1;
@@ -9420,7 +10200,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
     COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0) AS ""Promedio Tiempo Muerto Mecanico"",
     CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
-            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) * q2.""Horas Reales"", 2)
+            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
         ELSE 0
     END AS ""Kg Fresco Meta / Hras Reales"",
     COALESCE(q3.""Kg Fresco Real"", 0) AS ""Kg Fresco Real"",
@@ -9438,11 +10218,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     END), 2), 100)
         ELSE 0
     END AS ""%Cumplimiento Fresco"",
+	CASE 
+        WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 THEN
+            ROUND(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Programadas"", 2)
+        ELSE 0
+    END AS ""Kg Seco Meta / Hras Programadas"",
     CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
             ROUND(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Reales"", 2)
         ELSE 0
     END AS ""Kg Seco Meta / Hras Reales"",
+	CASE 
+        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
+            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0))/(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Programadas""),2)*100
+        ELSE 0
+    END AS ""% Cumplimiento a Planeación"",
     COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
     COALESCE(d.""Relacion_fr_seco"", 0) AS ""Relación Fresco-Seco Meta"",
     CASE 
@@ -9855,7 +10645,7 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
                 100
             )
         END,
-    2) AS ""% Cumplimiento de Kg Terminado"",
+    2) AS ""% Cumplimiento"",
     SUM(f.""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
     ROUND(
         CASE 
@@ -10165,6 +10955,583 @@ ORDER BY
                 // Llamar al método para graficar
                 GraficarMermaPorSupervisor(semanasSeleccionadas);
             }
+            if (tabgraficas.SelectedIndex == 5)
+            {
+                // Llamar al método para graficar
+                GraficarCumplimientoPlaneacion(semanasSeleccionadas);
+            }
+            if (tabgraficas.SelectedIndex == 6)
+            {
+                // Llamar al método para graficar
+                GraficarCumplimientoKgTerminado(semanasSeleccionadas);
+            }
+        }
+        private void GraficarCumplimientoKgTerminado(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                Año,
+                ""No de Semana"" AS ""No_Semana"",
+                ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
+            FROM (
+                SELECT 
+                    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+                    f.""Area"",
+                    f.""OP"",
+                    ROUND(
+                        CASE 
+                            -- Primero verificamos si el denominador es cero o NULL
+                            WHEN (CASE 
+                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Polvos' THEN 
+                                        CASE 
+                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                            ELSE 
+                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                        END
+                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    ELSE 0
+                                END) <= 0 THEN 0
+                            -- Si el denominador es mayor que cero, aplicamos la fórmula
+                            ELSE LEAST(
+                                (SUM(f.""Kg_prod_term"") / 
+                                (CASE 
+                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    WHEN f.""Area"" = 'Polvos' THEN 
+                                        CASE 
+                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                            ELSE 
+                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                        END
+                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                    ELSE 1
+                                END)) * 100,
+                                100
+                            )
+                        END,
+                    2) AS ""% Cumplimiento""
+                FROM 
+                    public.""Ficha"" f
+                LEFT JOIN 
+                    public.""Empacado"" e ON f.""OP"" = e.""OP""
+                LEFT JOIN 
+                    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+                LEFT JOIN 
+                    public.""Grind"" g ON f.""OP"" = g.""OP""
+                LEFT JOIN 
+                    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+                LEFT JOIN 
+                    public.""Maquinas"" m ON f.""OP"" = m.""OP""
+                LEFT JOIN 
+                    public.""Polvos"" p ON f.""OP"" = p.""OP""
+                LEFT JOIN 
+                    public.""Revolturas"" r ON f.""OP"" = r.""OP""
+                WHERE 
+                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                GROUP BY 
+                    EXTRACT(YEAR FROM f.""Fecha""),
+                    EXTRACT(WEEK FROM f.""Fecha""),
+                    f.""Area"",
+                    f.""OP"",
+                    e.""Meta_kg_hr_line"",
+                    ev.""Meta_kg_hr"",
+                    g.""Meta_Kg_hr"",
+                    i.""Meta_kg_hr_line"",
+                    m.""Meta_Kg_Hr"",
+                    p.""Meta_kg_hr_hum"",
+                    p.""Meta_kg_hr_idon"",
+                    r.""Meta_Kg_Hr""
+            ) AS subconsulta
+            GROUP BY 
+                Año, ""No de Semana""
+            ORDER BY 
+                Año, ""No de Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos de cumplimiento de Kg terminado para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento Kg terminado
+                ConfigurarChartCumplimientoKgTerminado();
+
+                // Limpiar series existentes
+                ChartCumplimientoKgTerminado.Series.Clear();
+
+                // Crear serie única para el % de cumplimiento de Kg terminado
+                Series serieCumplimiento = new Series("% Cumplimiento");
+                serieCumplimiento.ChartType = SeriesChartType.Line;
+                serieCumplimiento.Color = Color.FromArgb(46, 204, 113); // Verde corporativo
+                serieCumplimiento.BorderWidth = 4;
+                serieCumplimiento.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                serieCumplimiento.MarkerStyle = MarkerStyle.Circle;
+                serieCumplimiento.MarkerSize = 12;
+                serieCumplimiento.MarkerColor = Color.FromArgb(46, 204, 113);
+                serieCumplimiento.MarkerBorderColor = Color.White;
+                serieCumplimiento.MarkerBorderWidth = 2;
+                serieCumplimiento.IsValueShownAsLabel = true;
+                serieCumplimiento.LabelFormat = "N1"; // Formato con un decimal
+                serieCumplimiento.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                serieCumplimiento.LabelForeColor = Color.White;
+                serieCumplimiento.LabelBackColor = Color.FromArgb(180, 0, 0, 0); // Fondo negro semitransparente
+                serieCumplimiento.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                serieCumplimiento.LabelBorderWidth = 1;
+                serieCumplimiento.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieCumplimiento.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
+
+                    // Configurar etiqueta individual con símbolo % y fondo
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieCumplimiento.Points[pointIndex];
+                    point.Label = cumplimiento.ToString("N1") + "%";
+                    point.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                    point.LabelForeColor = Color.White;
+                    point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                    point.LabelBorderWidth = 1;
+                    point.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                }
+
+                // Agregar serie al chart
+                ChartCumplimientoKgTerminado.Series.Add(serieCumplimiento);
+
+                // Actualizar el chart
+                ChartCumplimientoKgTerminado.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar cumplimiento de Kg terminado: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartCumplimientoKgTerminado()
+        {
+            // Limpiar el chart
+            ChartCumplimientoKgTerminado.Series.Clear();
+            ChartCumplimientoKgTerminado.ChartAreas.Clear();
+            ChartCumplimientoKgTerminado.Titles.Clear();
+            ChartCumplimientoKgTerminado.Legends.Clear();
+
+            // Crear área de chart moderna para cumplimiento Kg terminado
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoKgTerminadoArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para PORCENTAJES
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea horizontal en 95% para referencia (objetivo de cumplimiento de producción)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 255, 240); // Fondo verde claro
+            //stripLine.BorderColor = Color.FromArgb(46, 204, 113); // Borde verde
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 95;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 95%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoKgTerminado.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO - OTRAS ÁREAS";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoKgTerminado.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Promedio Semanal de Cumplimiento";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoKgTerminado.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna en la parte inferior
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoKgTerminado";
+            legend.Title = "INDICADOR";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 30;
+            legend.Position.Auto = false;
+            legend.Position.X = 5;
+            legend.Position.Y = 85;
+            legend.Position.Width = 90;
+            legend.Position.Height = 10;
+
+            ChartCumplimientoKgTerminado.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            ChartCumplimientoKgTerminado.BackColor = Color.White;
+            ChartCumplimientoKgTerminado.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoKgTerminado.BorderlineWidth = 2;
+            ChartCumplimientoKgTerminado.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoKgTerminado.Padding = new Padding(20);
+            ChartCumplimientoKgTerminado.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoKgTerminado.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            ChartCumplimientoKgTerminado.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoKgTerminado.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoKgTerminado.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
+        }
+        private void GraficarCumplimientoPlaneacion(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento a Planeación
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                ""Año"",
+                ""No. Semana"" AS ""No_Semana"",
+                ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Cumplimiento""
+            FROM (
+                SELECT 
+                    COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+                    COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+                    COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
+                    COALESCE(q2.""Horas Reales"", 0) AS ""Horas_Reales"",
+                    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
+                    COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
+                    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
+                    CASE 
+                        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 AND (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) > 0 THEN
+                            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+                        ELSE 0
+                    END AS ""% Cumplimiento a Planeación""
+                FROM (
+                    SELECT 
+                        EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+                        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                        f.""OP""
+                    FROM public.""Ficha"" f
+                    WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+                    GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
+                ) q1
+                FULL JOIN (
+                    SELECT 
+                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                        ""OP"",
+                        SUM(""Hr_efectivas"") AS ""Horas Reales"",
+                        SUM(""Hr_programadas"") AS ""Horas Programadas""
+                    FROM public.""Ficha""
+                    WHERE ""Area"" = 'Tunel/Sumergidor'
+                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+                ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
+                FULL JOIN (
+                    SELECT 
+                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                        ""OP"",
+                        SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
+                    FROM public.""Ficha""
+                    WHERE ""Area"" = 'Despegue'
+                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+                ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+                    AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+                    AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+                LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+            ) AS subconsulta
+            WHERE ""% Cumplimiento a Planeación"" > 0
+                AND ""No. Semana"" IN (" + semanasParam + @")
+            GROUP BY ""Año"", ""No. Semana""
+            ORDER BY ""Año"", ""No. Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos de cumplimiento a planeación para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento
+                ConfigurarChartCumplimiento();
+
+                // Limpiar series existentes
+                ChartCumplimientoDes.Series.Clear();
+
+                // Crear serie única para el % de cumplimiento
+                Series serieCumplimiento = new Series("% Cumplimiento");
+                serieCumplimiento.ChartType = SeriesChartType.Line;
+                serieCumplimiento.Color = Color.FromArgb(74, 134, 232); // Azul corporativo
+                serieCumplimiento.BorderWidth = 4;
+                serieCumplimiento.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                serieCumplimiento.MarkerStyle = MarkerStyle.Circle;
+                serieCumplimiento.MarkerSize = 12;
+                serieCumplimiento.MarkerColor = Color.FromArgb(74, 134, 232);
+                serieCumplimiento.MarkerBorderColor = Color.White;
+                serieCumplimiento.MarkerBorderWidth = 2;
+                serieCumplimiento.IsValueShownAsLabel = true;
+                serieCumplimiento.LabelFormat = "N1"; // Formato con un decimal
+                serieCumplimiento.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                serieCumplimiento.LabelForeColor = Color.White;
+                serieCumplimiento.LabelBackColor = Color.FromArgb(180, 0, 0, 0); // Fondo negro semitransparente
+                serieCumplimiento.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                serieCumplimiento.LabelBorderWidth = 1;
+                serieCumplimiento.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieCumplimiento.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento"]);
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
+
+                    // Configurar etiqueta individual con símbolo % y fondo
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieCumplimiento.Points[pointIndex];
+                    point.Label = cumplimiento.ToString("N1") + "%";
+                    point.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                    point.LabelForeColor = Color.White;
+                    point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                    point.LabelBorderWidth = 1;
+                    point.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                }
+
+                // Agregar serie al chart
+                ChartCumplimientoDes.Series.Add(serieCumplimiento);
+
+                // Actualizar el chart
+                ChartCumplimientoDes.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar cumplimiento a planeación: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartCumplimiento()
+        {
+            // Limpiar el chart
+            ChartCumplimientoDes.Series.Clear();
+            ChartCumplimientoDes.ChartAreas.Clear();
+            ChartCumplimientoDes.Titles.Clear();
+            ChartCumplimientoDes.Legends.Clear();
+
+            // Crear área de chart moderna para cumplimiento
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para PORCENTAJES
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            //// Línea horizontal en 90% para referencia (objetivo de cumplimiento)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 245, 255); // Fondo azul claro
+            //stripLine.BorderColor = Color.FromArgb(74, 134, 232); // Borde azul
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 90;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 90%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(74, 134, 232);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoDes.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO A PLANEACIÓN EN DESHIDRATADO";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoDes.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Promedio Semanal de Cumplimiento a Planeación - Deshidratado";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoDes.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna en la parte inferior
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimiento";
+            legend.Title = "INDICADOR";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 30;
+            legend.Position.Auto = false;
+            legend.Position.X = 5;
+            legend.Position.Y = 85;
+            legend.Position.Width = 90;
+            legend.Position.Height = 10;
+
+            ChartCumplimientoDes.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            ChartCumplimientoDes.BackColor = Color.White;
+            ChartCumplimientoDes.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoDes.BorderlineWidth = 2;
+            ChartCumplimientoDes.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoDes.Padding = new Padding(20);
+            ChartCumplimientoDes.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoDes.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            ChartCumplimientoDes.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoDes.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoDes.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
         private void GraficarMermaPorSupervisor(List<string> semanasSeleccionadas)
         {
@@ -11474,76 +12841,20 @@ ORDER BY
             btn_export_excel_merma_S.Enabled = false;
             btn_clean_merma_S.Enabled = false;
         }
-
-        private void btnEnviar_Click(object sender, EventArgs e)
+        private void conf_email(string cuerpoHtml) 
         {
-            string Variable_nombre = "ramon"; string variable_num = "1234"; string Variableturno = "1"; string variableInicioturno = "08:00"; string variableFinturno = "16:00"; DateTime fecha = DateTime.Parse("2024-06-20");
-            string VariableArea = "Producción"; string variableOP = "OP5678"; string fecha_formateada = fecha.ToString("dd/MM/yyyy");
-
-            string Valor1 = "125";
-            string Valor2 = "320";
-            string Valor3 = "98";
-
-            // Crear lista de valores
-            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("Valor 1", Valor1),
-                new KeyValuePair<string, string>("Valor 2", Valor2),
-                new KeyValuePair<string, string>("Valor 3", Valor3)
-            };
-
-            string tablaGenerada = GenerarTablaValores(valores);
             try
             {
-                string cuerpoHtml = $@"
-<html>
-<body style='font-family: Arial; font-size: 14px; color: #333;'>
-
-    <div style='border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #f7f7f7;'>
-        
-        <h2 style='color: #2c3e50;'>Reporte del Sistema Tablero</h2>
-
-        <p>
-            Estimado equipo,<br><br>
-            El sistema <strong>Tablero</strong> informa que el supervisor 
-            <strong>{Variable_nombre}</strong>, con número de empleado 
-            <strong>{variable_num}</strong> y correspondiente al turno 
-            <strong>{Variableturno}</strong>, inició su turno a las 
-            <strong>{variableInicioturno}</strong> y lo concluyó a las 
-            <strong>{variableFinturno}</strong>, el día 
-            <strong>{fecha_formateada}</strong>.
-        </p>
-
-        <p>
-            Durante el turno, se registró información en el área 
-            <strong>{VariableArea}</strong>, correspondiente al OP 
-            <strong>{variableOP}</strong>. Los valores capturados fueron los siguientes:
-        </p>
-
-        {tablaGenerada}
-
-        <br>
-
-        <p>
-            Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
-        </p>
-
-        <p style='margin-top: 20px;'>
-            Atentamente,<br>
-            <strong>Sistema Tablero</strong><br>
-            Departamento de Sistemas
-        </p>
-
-    </div>
-
-</body>
-</html>";
-
-
+                //servidor_smtp
+                //RemitenteEMail
+                //PasswordEmail
+                //PuertoSMTP
+                //SSLCheck
+                //DestinatariosEmail
                 // Configuración del correo
                 MailMessage correo = new MailMessage();
-                correo.From = new MailAddress("productosregionales@picolargo.com");
-                string destinatarios = "mttosistemas@picolargo.com, fruticultorapicolargo@gmail.com";
+                correo.From = new MailAddress(RemitenteEMail);
+                string destinatarios = DestinatariosEmail;
 
                 foreach (var mail in destinatarios.Split(','))
                 {
@@ -11555,20 +12866,18 @@ ORDER BY
 
 
                 // Configuración del servidor SMTP de Office365
-                SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
+                SmtpClient smtp = new SmtpClient(servidor_smtp, PuertoSMTP);
                 smtp.Credentials = new NetworkCredential(
-                    "productosregionales@picolargo.com",
-                    "Picolargo1234"
+                    RemitenteEMail,
+                    PasswordEmail
                 );
                 smtp.EnableSsl = true;  // Office365 requiere STARTTLS
-
                 smtp.Send(correo);
-
-                MessageBox.Show("Correo enviado correctamente.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MetroFramework.MetroMessageBox.Show(this, "Error: " + ex.Message,
+                                                            "Error al enviar el correo electrónico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         public string GenerarTablaValores(List<KeyValuePair<string, string>> valores)
