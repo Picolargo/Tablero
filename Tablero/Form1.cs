@@ -10943,7 +10943,12 @@ ORDER BY
 
             if (seleccionados.Count == 0)
             {
-                MessageBox.Show("No hay semanas seleccionadas.");
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Favor de seleccionar una o varias semanas de la lista para continuar.",
+                    "No hay semanas seleccionadas.",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
 
@@ -10990,7 +10995,265 @@ ORDER BY
                 case 12:
                     GraficarCumplimientoTiempoEfectivo(semanasSeleccionadas);
                     break;
+                case 13:
+                    GraficarCumplimientoTiempoEfectivoOtrasAreas(semanasSeleccionadas);
+                    break;
             }
+        }
+        private void GraficarCumplimientoTiempoEfectivoOtrasAreas(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento Tiempo Efectivo - Otras Áreas
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+                ROUND(
+                    AVG(
+                        100 - (
+                            (COALESCE(tmo_daily.total_min_detenidos, 0) + COALESCE(tmm_daily.total_min_detenidos, 0)) / 
+                            NULLIF(f.""Hr_programadas"", 0)
+                        )
+                    ),
+                2) AS ""Promedio_Cumplimiento_Tiempo_Efectivo""
+            FROM 
+                public.""Ficha"" f
+            LEFT JOIN (
+                SELECT 
+                    ""ID_Ficha"",
+                    SUM(""Min_Detenidos"") AS total_min_detenidos
+                FROM 
+                    public.""Tiempo_Muerto_Operativo""
+                GROUP BY 
+                    ""ID_Ficha""
+            ) tmo_daily ON f.""ID_Ficha"" = tmo_daily.""ID_Ficha""
+            LEFT JOIN (
+                SELECT 
+                    ""ID_Ficha"",
+                    SUM(""Min_Detenidos"") AS total_min_detenidos
+                FROM 
+                    public.""Tiempo_muerto_Mecanico""
+                GROUP BY 
+                    ""ID_Ficha""
+            ) tmm_daily ON f.""ID_Ficha"" = tmm_daily.""ID_Ficha""
+            WHERE 
+                f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+                AND f.""Hr_programadas"" > 0
+                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+            GROUP BY 
+                EXTRACT(YEAR FROM f.""Fecha""),
+                EXTRACT(WEEK FROM f.""Fecha"")
+            ORDER BY 
+                ""Año"", ""No_Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos de cumplimiento de tiempo efectivo para otras áreas en las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento tiempo efectivo - otras áreas
+                ConfigurarChartCumplimientoTiempoEfectivoOtrasAreas();
+
+                // Limpiar series existentes
+                ChartCumplimientoTiempoEfectivoOtrasAreas.Series.Clear();
+
+                // Crear serie única para el % de cumplimiento tiempo efectivo
+                Series serieCumplimiento = new Series("% Cumplimiento Tiempo Efectivo");
+                serieCumplimiento.ChartType = SeriesChartType.Line;
+                serieCumplimiento.Color = Color.FromArgb(26, 188, 156); // Turquesa vibrante
+                serieCumplimiento.BorderWidth = 4;
+                serieCumplimiento.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                serieCumplimiento.MarkerStyle = MarkerStyle.Circle;
+                serieCumplimiento.MarkerSize = 12;
+                serieCumplimiento.MarkerColor = Color.FromArgb(26, 188, 156);
+                serieCumplimiento.MarkerBorderColor = Color.White;
+                serieCumplimiento.MarkerBorderWidth = 2;
+                serieCumplimiento.IsValueShownAsLabel = true;
+                serieCumplimiento.LabelFormat = "N1"; // Formato con un decimal
+                serieCumplimiento.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                serieCumplimiento.LabelForeColor = Color.White;
+                serieCumplimiento.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                serieCumplimiento.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                serieCumplimiento.LabelBorderWidth = 1;
+                serieCumplimiento.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieCumplimiento.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Tiempo_Efectivo"]);
+
+                    // Validar que el valor esté en rango 0-100
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
+
+                    // Configurar etiqueta individual con símbolo % y fondo
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieCumplimiento.Points[pointIndex];
+                    point.Label = cumplimiento.ToString("N1") + "%";
+                    point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
+                    point.LabelForeColor = Color.White;
+                    point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                    point.LabelBorderWidth = 1;
+                    point.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                }
+
+                // Agregar serie al chart
+                ChartCumplimientoTiempoEfectivoOtrasAreas.Series.Add(serieCumplimiento);
+
+                // Actualizar el chart
+                ChartCumplimientoTiempoEfectivoOtrasAreas.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de tiempo efectivo para otras áreas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ConfigurarChartCumplimientoTiempoEfectivoOtrasAreas()
+        {
+            // Limpiar el chart
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Series.Clear();
+            ChartCumplimientoTiempoEfectivoOtrasAreas.ChartAreas.Clear();
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Titles.Clear();
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Legends.Clear();
+
+            // Crear área de chart moderna para cumplimiento tiempo efectivo - otras áreas
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoTiempoEfectivoOtrasAreasArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para PORCENTAJES
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea horizontal en 88% para referencia (objetivo de tiempo efectivo para otras áreas)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 255, 248); // Fondo turquesa claro
+            //stripLine.BorderColor = Color.FromArgb(26, 188, 156); // Borde turquesa
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 88;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 88%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(26, 188, 156);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoTiempoEfectivoOtrasAreas.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO DE TIEMPO EFECTIVO - PRODUCCIÓN";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Promedio Semanal de Tiempo Efectivo de Producción -Todas las Áreas excluyendo Tunel/Sumergidor y Despegue";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna en la parte inferior
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoTiempoEfectivoOtrasAreas";
+            legend.Title = "INDICADOR";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 30;
+            legend.Position.Auto = false;
+            legend.Position.X = 5;
+            legend.Position.Y = 85;
+            legend.Position.Width = 90;
+            legend.Position.Height = 10;
+
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BackColor = Color.White;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BorderlineWidth = 2;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.Padding = new Padding(20);
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            ChartCumplimientoTiempoEfectivoOtrasAreas.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoTiempoEfectivoOtrasAreas.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
         private void GraficarCumplimientoTiempoEfectivo(List<string> semanasSeleccionadas)
         {
@@ -11096,7 +11359,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento de tiempo efectivo: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de tiempo efectivo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -11466,7 +11729,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento general semanal: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento general semanal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -11811,7 +12074,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento de Kg terminado mensual por supervisor: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de Kg terminado mensual por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -12088,7 +12351,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento de Kg terminado por supervisor para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de Kg terminado por supervisor para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -12181,7 +12444,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento de Kg terminado por supervisor: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de Kg terminado por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -12446,7 +12709,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento a planeación mensual por supervisor.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento a planeación mensual por supervisor.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -12540,7 +12803,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento a planeación mensual por supervisor: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento a planeación mensual por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -12869,7 +13132,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento a planeación por supervisor: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento a planeación por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -13112,7 +13375,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento de Kg terminado para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de Kg terminado para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -13171,7 +13434,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento de Kg terminado: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de Kg terminado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -13379,7 +13642,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento a planeación para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento a planeación para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -13438,7 +13701,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar cumplimiento a planeación: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento a planeación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -13616,7 +13879,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de merma por supervisor para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de merma por supervisor para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -13636,7 +13899,7 @@ ORDER BY
                 // Si hay muchos supervisores, mostrar advertencia
                 if (supervisoresUnicos.Count > 20)
                 {
-                    MessageBox.Show($"Se encontraron {supervisoresUnicos.Count} supervisores. La gráfica puede ser difícil de leer. Considere filtrar por menos semanas.",
+                    MetroFramework.MetroMessageBox.Show(this,$"Se encontraron {supervisoresUnicos.Count} supervisores. La gráfica puede ser difícil de leer. Considere filtrar por menos semanas.",
                                   "Muchos supervisores", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
@@ -13698,7 +13961,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar merma por supervisor: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar merma por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -13926,7 +14189,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos FTT para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos FTT para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -15165,6 +15428,25 @@ ORDER BY
                 );
             }
             // Fin del envío de correo de prueba
+        }
+
+        private void tabgraficas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabgraficas.SelectedTab != null)
+            {
+                int tabIndex = tabgraficas.SelectedIndex;
+
+                // Si el tab activo es 8 o 10 (índices basados en 0), deshabilitar lista_semanas
+                // Si usas nombres de tabs, verifica con: tabgraficas.SelectedTab.Name
+                if (tabIndex == 8 || tabIndex == 10)
+                {
+                    lista_semanas.Enabled = false;
+                }
+                else
+                {
+                    lista_semanas.Enabled = true;
+                }
+            }
         }
     }
 }
