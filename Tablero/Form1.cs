@@ -6432,7 +6432,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value)/60;
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_muerto_Mecanico"" (
@@ -6458,7 +6458,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value);
+                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value)/60;
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_Muerto_Operativo"" (
@@ -6482,7 +6482,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text);
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text)/60;
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Comida"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -6503,7 +6503,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text);
+                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text)/60;
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Energia"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -10199,6 +10199,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
     COALESCE(q1.""Promedio de Tiempo Muerto Operativo"", 0) AS ""Promedio de Tiempo Muerto Operativo"",
     COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0) AS ""Promedio Tiempo Muerto Mecanico"",
     CASE 
+        WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 THEN
+            ROUND(100 - (((COALESCE(q1.""Promedio de Tiempo Muerto Operativo"", 0) + COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0)) / COALESCE(q2.""Horas Programadas"", 0)) * 100), 2)
+        ELSE 0
+    END AS ""%Cumplimiento Tiempo Efectivo"",
+    CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
             ROUND(COALESCE(d.""Kg_fresco_hr"", 0) / q2.""Horas Reales"", 2)
         ELSE 0
@@ -10218,7 +10223,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     END), 2), 100)
         ELSE 0
     END AS ""%Cumplimiento Fresco"",
-	CASE 
+    CASE 
         WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 THEN
             ROUND(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Programadas"", 2)
         ELSE 0
@@ -10228,9 +10233,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ROUND(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Reales"", 2)
         ELSE 0
     END AS ""Kg Seco Meta / Hras Reales"",
-	CASE 
+    CASE 
         WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
-            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0))/(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Programadas""),2)*100
+            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0))/(COALESCE(d.""Kg_seco_hr"", 0) * q2.""Horas Programadas""), 2) * 100
         ELSE 0
     END AS ""% Cumplimiento a Planeación"",
     COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
@@ -10979,7 +10984,380 @@ ORDER BY
                 case 9:
                     GraficarCumplimientoKgTerminadoPorSupervisor(semanasSeleccionadas);
                     break;
+                case 11: // Nueva pestaña para cumplimiento general semanal
+                    GraficarCumplimientoGeneralSemanal(semanasSeleccionadas);
+                    break;
             }
+        }
+        private void GraficarCumplimientoGeneralSemanal(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento General Semanal
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"
+            SELECT 
+                Año,
+                ""No de Semana"" AS ""No_Semana"",
+                ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_General""
+            FROM (
+                -- Primera consulta: Todas las áreas EXCEPTO Tunel/Sumergidor y Despegue
+                SELECT 
+                    Año,
+                    ""No de Semana"",
+                    ""% Cumplimiento""
+                FROM (
+                    SELECT 
+                        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+                        EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+                        f.""Area"",
+                        f.""OP"",
+                        ROUND(
+                            CASE 
+                                -- Primero verificamos si el denominador es cero o NULL
+                                WHEN (CASE 
+                                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Polvos' THEN 
+                                            CASE 
+                                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                                ELSE 
+                                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                            END
+                                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        ELSE 0
+                                    END) <= 0 THEN 0
+                                -- Si el denominador es mayor que cero, aplicamos la fórmula
+                                ELSE LEAST(
+                                    (SUM(f.""Kg_prod_term"") / 
+                                    (CASE 
+                                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        WHEN f.""Area"" = 'Polvos' THEN 
+                                            CASE 
+                                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                                ELSE 
+                                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                            END
+                                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                                        ELSE 1
+                                    END)) * 100,
+                                    100
+                                )
+                            END,
+                        2) AS ""% Cumplimiento""
+                    FROM 
+                        public.""Ficha"" f
+                    LEFT JOIN 
+                        public.""Tiempo_Muerto_Operativo"" tmo 
+                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                    LEFT JOIN 
+                        public.""Tiempo_muerto_Mecanico"" tmm 
+                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                    LEFT JOIN 
+                        public.""Empacado"" e ON f.""OP"" = e.""OP""
+                    LEFT JOIN 
+                        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+                    LEFT JOIN 
+                        public.""Grind"" g ON f.""OP"" = g.""OP""
+                    LEFT JOIN 
+                        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+                    LEFT JOIN 
+                        public.""Maquinas"" m ON f.""OP"" = m.""OP""
+                    LEFT JOIN 
+                        public.""Polvos"" p ON f.""OP"" = p.""OP""
+                    LEFT JOIN 
+                        public.""Revolturas"" r ON f.""OP"" = r.""OP""
+                    WHERE 
+                        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+                        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                    GROUP BY 
+                        EXTRACT(YEAR FROM f.""Fecha""),
+                        EXTRACT(WEEK FROM f.""Fecha""),
+                        f.""Area"",
+                        f.""OP"",
+                        e.""Meta_kg_hr_line"",
+                        ev.""Meta_kg_hr"",
+                        g.""Meta_Kg_hr"",
+                        i.""Meta_kg_hr_line"",
+                        m.""Meta_Kg_Hr"",
+                        p.""Meta_kg_hr_hum"",
+                        p.""Meta_kg_hr_idon"",
+                        r.""Meta_Kg_Hr""
+                ) AS subconsulta1
+                
+                UNION ALL
+                
+                -- Segunda consulta: Solo áreas Tunel/Sumergidor y Despegue
+                SELECT 
+                    ""Año"" AS Año,
+                    ""No. Semana"" AS ""No de Semana"",
+                    ""% Cumplimiento a Planeación"" AS ""% Cumplimiento""
+                FROM (
+                    SELECT 
+                        COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+                        COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+                        COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
+                        COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
+                        COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
+                        CASE 
+                            WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
+                                ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+                            ELSE 0
+                        END AS ""% Cumplimiento a Planeación""
+                    FROM (
+                        SELECT 
+                            EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+                            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                            f.""OP""
+                        FROM public.""Ficha"" f
+                        WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+                            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                        GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
+                    ) q1
+                    FULL JOIN (
+                        SELECT 
+                            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                            ""OP"",
+                            SUM(""Hr_programadas"") AS ""Horas Programadas""
+                        FROM public.""Ficha""
+                        WHERE ""Area"" = 'Tunel/Sumergidor'
+                            AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+                        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+                    ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
+                    FULL JOIN (
+                        SELECT 
+                            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                            ""OP"",
+                            SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
+                        FROM public.""Ficha""
+                        WHERE ""Area"" = 'Despegue'
+                            AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+                        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+                    ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+                        AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+                        AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+                    LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+                ) AS subconsulta2
+                WHERE ""% Cumplimiento a Planeación"" > 0
+            ) AS todas_las_areas
+            GROUP BY 
+                Año, ""No de Semana""
+            ORDER BY 
+                Año, ""No de Semana""";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron datos de cumplimiento general semanal para las semanas seleccionadas.");
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento general semanal
+                ConfigurarChartCumplimientoGeneralSemanal();
+
+                // Limpiar series existentes
+                ChartCumplimientoGeneralSemanal.Series.Clear();
+
+                // Crear serie única para el % de cumplimiento general
+                Series serieCumplimiento = new Series("% Cumplimiento General");
+                serieCumplimiento.ChartType = SeriesChartType.Line;
+                serieCumplimiento.Color = Color.FromArgb(52, 152, 219); // Azul vibrante
+                serieCumplimiento.BorderWidth = 4;
+                serieCumplimiento.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+                serieCumplimiento.MarkerStyle = MarkerStyle.Circle;
+                serieCumplimiento.MarkerSize = 12;
+                serieCumplimiento.MarkerColor = Color.FromArgb(52, 152, 219);
+                serieCumplimiento.MarkerBorderColor = Color.White;
+                serieCumplimiento.MarkerBorderWidth = 2;
+                serieCumplimiento.IsValueShownAsLabel = true;
+                serieCumplimiento.LabelFormat = "N1"; // Formato con un decimal
+                serieCumplimiento.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                serieCumplimiento.LabelForeColor = Color.White;
+                serieCumplimiento.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                serieCumplimiento.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                serieCumplimiento.LabelBorderWidth = 1;
+                serieCumplimiento.ShadowColor = Color.FromArgb(30, 30, 30);
+                serieCumplimiento.ShadowOffset = 2;
+
+                // Llenar la serie con datos
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_General"]);
+
+                    // Agregar punto a la serie
+                    int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
+
+                    // Configurar etiqueta individual con símbolo % y fondo
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieCumplimiento.Points[pointIndex];
+                    point.Label = cumplimiento.ToString("N1") + "%";
+                    point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
+                    point.LabelForeColor = Color.White;
+                    point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                    point.LabelBorderWidth = 1;
+                    point.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                }
+
+                // Agregar serie al chart
+                ChartCumplimientoGeneralSemanal.Series.Add(serieCumplimiento);
+
+                // Actualizar el chart
+                ChartCumplimientoGeneralSemanal.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al graficar cumplimiento general semanal: {ex.Message}");
+            }
+        }
+
+        private void ConfigurarChartCumplimientoGeneralSemanal()
+        {
+            // Limpiar el chart
+            ChartCumplimientoGeneralSemanal.Series.Clear();
+            ChartCumplimientoGeneralSemanal.ChartAreas.Clear();
+            ChartCumplimientoGeneralSemanal.Titles.Clear();
+            ChartCumplimientoGeneralSemanal.Legends.Clear();
+
+            // Crear área de chart moderna para cumplimiento general semanal
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoGeneralSemanalArea");
+
+            // Fondo moderno consistente
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 3;
+
+            // Configurar eje X moderno
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y moderno para PORCENTAJES
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+
+            // Configurar eje Y para porcentajes (0% - 100%)
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            //// Línea horizontal en 92.5% para referencia (promedio entre 90% planeación y 95% producción)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(240, 248, 255); // Fondo azul muy claro
+            //stripLine.BorderColor = Color.FromArgb(52, 152, 219); // Borde azul vibrante
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 92.5;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo General 92.5%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(52, 152, 219);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Hacer el área de gráfico más grande
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 90;
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoGeneralSemanal.ChartAreas.Add(chartArea);
+
+            // Configurar título principal moderno
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO GENERAL SEMANAL";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoGeneralSemanal.Titles.Add(mainTitle);
+
+            // Configurar subtítulo moderno
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Promedio Semanal de Cumplimiento General - Contempla todas las áreas de producción";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoGeneralSemanal.Titles.Add(subTitle);
+
+            // Configurar leyenda moderna en la parte inferior
+            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoGeneral";
+            legend.Title = "INDICADOR GENERAL";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+            legend.IsEquallySpacedItems = true;
+            legend.ItemColumnSpacing = 30;
+            legend.Position.Auto = false;
+            legend.Position.X = 5;
+            legend.Position.Y = 85;
+            legend.Position.Width = 90;
+            legend.Position.Height = 10;
+
+            ChartCumplimientoGeneralSemanal.Legends.Add(legend);
+
+            // Configuración general del chart moderna
+            ChartCumplimientoGeneralSemanal.BackColor = Color.White;
+            ChartCumplimientoGeneralSemanal.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoGeneralSemanal.BorderlineWidth = 2;
+            ChartCumplimientoGeneralSemanal.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoGeneralSemanal.Padding = new Padding(20);
+            ChartCumplimientoGeneralSemanal.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoGeneralSemanal.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing para máxima calidad
+            ChartCumplimientoGeneralSemanal.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoGeneralSemanal.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoGeneralSemanal.IsSoftShadows = true;
+
+            // Suavizado adicional
+            chartArea.Area3DStyle.Enable3D = false;
         }
         private void GraficarCumplimientoKgTerminadoMensualPorSupervisor()
         {

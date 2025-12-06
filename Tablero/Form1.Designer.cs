@@ -39,9 +39,10 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -128,6 +129,10 @@
             this.ChartCumplimientoPlaneacionSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage27 = new System.Windows.Forms.TabPage();
             this.ChartCumplimientoPlaneacionMensual = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage28 = new System.Windows.Forms.TabPage();
+            this.ChartCumplimientoKgTerminadoSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage29 = new System.Windows.Forms.TabPage();
+            this.ChartCumplimientoKgTerminadoMensualSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
@@ -323,10 +328,9 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabPage28 = new System.Windows.Forms.TabPage();
-            this.ChartCumplimientoKgTerminadoSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tabPage29 = new System.Windows.Forms.TabPage();
-            this.ChartCumplimientoKgTerminadoMensualSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage30 = new System.Windows.Forms.TabPage();
+            this.ChartCumplimientoGeneralSemanal = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.materialCard19 = new MaterialSkin.Controls.MaterialCard();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -383,6 +387,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoPlaneacionSupervisor)).BeginInit();
             this.tabPage27.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoPlaneacionMensual)).BeginInit();
+            this.tabPage28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoSupervisor)).BeginInit();
+            this.tabPage29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoMensualSupervisor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.tap_control_Reportes.SuspendLayout();
@@ -470,10 +478,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.tabPage28.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoSupervisor)).BeginInit();
-            this.tabPage29.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoMensualSupervisor)).BeginInit();
+            this.tabPage30.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoGeneralSemanal)).BeginInit();
+            this.materialCard19.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1580,9 +1587,8 @@
             // 
             this.pnl_graficas.AutoScroll = true;
             this.pnl_graficas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnl_graficas.Controls.Add(this.materialCard19);
             this.pnl_graficas.Controls.Add(this.tabgraficas);
-            this.pnl_graficas.Controls.Add(this.bnt_graficar);
-            this.pnl_graficas.Controls.Add(this.lista_semanas);
             this.pnl_graficas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_graficas.Location = new System.Drawing.Point(3, 3);
             this.pnl_graficas.Name = "pnl_graficas";
@@ -1602,22 +1608,24 @@
             this.tabgraficas.Controls.Add(this.tabPage27);
             this.tabgraficas.Controls.Add(this.tabPage28);
             this.tabgraficas.Controls.Add(this.tabPage29);
+            this.tabgraficas.Controls.Add(this.tabPage30);
             this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
             this.tabgraficas.HotTrack = true;
-            this.tabgraficas.Location = new System.Drawing.Point(145, 0);
+            this.tabgraficas.Location = new System.Drawing.Point(183, 0);
             this.tabgraficas.Name = "tabgraficas";
+            this.tabgraficas.Padding = new System.Drawing.Point(10, 7);
             this.tabgraficas.SelectedIndex = 0;
-            this.tabgraficas.Size = new System.Drawing.Size(1529, 932);
+            this.tabgraficas.Size = new System.Drawing.Size(1529, 915);
             this.tabgraficas.TabIndex = 37;
             // 
             // tabPage18
             // 
             this.tabPage18.AutoScroll = true;
             this.tabPage18.Controls.Add(this.charview_kg_fresco);
-            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Location = new System.Drawing.Point(4, 30);
             this.tabPage18.Name = "tabPage18";
             this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage18.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage18.Size = new System.Drawing.Size(1521, 898);
             this.tabPage18.TabIndex = 0;
             this.tabPage18.Text = "Kg Fresco";
             this.tabPage18.UseVisualStyleBackColor = true;
@@ -1629,17 +1637,17 @@
             this.charview_kg_fresco.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_kg_fresco.Location = new System.Drawing.Point(3, 3);
             this.charview_kg_fresco.Name = "charview_kg_fresco";
-            this.charview_kg_fresco.Size = new System.Drawing.Size(1515, 900);
+            this.charview_kg_fresco.Size = new System.Drawing.Size(1515, 892);
             this.charview_kg_fresco.TabIndex = 36;
             this.charview_kg_fresco.Text = "chart1";
             // 
             // tabPage19
             // 
             this.tabPage19.Controls.Add(this.charview_kg_seco);
-            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Location = new System.Drawing.Point(4, 30);
             this.tabPage19.Name = "tabPage19";
             this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage19.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage19.Size = new System.Drawing.Size(1521, 898);
             this.tabPage19.TabIndex = 1;
             this.tabPage19.Text = "Kg Seco";
             this.tabPage19.UseVisualStyleBackColor = true;
@@ -1651,16 +1659,16 @@
             this.charview_kg_seco.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_kg_seco.Location = new System.Drawing.Point(3, 3);
             this.charview_kg_seco.Name = "charview_kg_seco";
-            this.charview_kg_seco.Size = new System.Drawing.Size(1515, 900);
+            this.charview_kg_seco.Size = new System.Drawing.Size(1515, 892);
             this.charview_kg_seco.TabIndex = 37;
             this.charview_kg_seco.Text = "chart1";
             // 
             // tabPage20
             // 
             this.tabPage20.Controls.Add(this.charview_ftt_deshidratado);
-            this.tabPage20.Location = new System.Drawing.Point(4, 22);
+            this.tabPage20.Location = new System.Drawing.Point(4, 30);
             this.tabPage20.Name = "tabPage20";
-            this.tabPage20.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage20.Size = new System.Drawing.Size(1521, 898);
             this.tabPage20.TabIndex = 2;
             this.tabPage20.Text = "FTT Deshidratado";
             this.tabPage20.UseVisualStyleBackColor = true;
@@ -1672,16 +1680,16 @@
             this.charview_ftt_deshidratado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_ftt_deshidratado.Location = new System.Drawing.Point(0, 0);
             this.charview_ftt_deshidratado.Name = "charview_ftt_deshidratado";
-            this.charview_ftt_deshidratado.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_deshidratado.Size = new System.Drawing.Size(1521, 898);
             this.charview_ftt_deshidratado.TabIndex = 38;
             this.charview_ftt_deshidratado.Text = "chart1";
             // 
             // tabPage21
             // 
             this.tabPage21.Controls.Add(this.charview_ftt_demas_areas);
-            this.tabPage21.Location = new System.Drawing.Point(4, 22);
+            this.tabPage21.Location = new System.Drawing.Point(4, 30);
             this.tabPage21.Name = "tabPage21";
-            this.tabPage21.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage21.Size = new System.Drawing.Size(1521, 898);
             this.tabPage21.TabIndex = 3;
             this.tabPage21.Text = "FTT DEMÁS ÁREAS";
             this.tabPage21.UseVisualStyleBackColor = true;
@@ -1693,16 +1701,16 @@
             this.charview_ftt_demas_areas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_ftt_demas_areas.Location = new System.Drawing.Point(0, 0);
             this.charview_ftt_demas_areas.Name = "charview_ftt_demas_areas";
-            this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 906);
+            this.charview_ftt_demas_areas.Size = new System.Drawing.Size(1521, 898);
             this.charview_ftt_demas_areas.TabIndex = 39;
             this.charview_ftt_demas_areas.Text = "chart1";
             // 
             // tabPage23
             // 
             this.tabPage23.Controls.Add(this.chartMermaSupervisor);
-            this.tabPage23.Location = new System.Drawing.Point(4, 22);
+            this.tabPage23.Location = new System.Drawing.Point(4, 30);
             this.tabPage23.Name = "tabPage23";
-            this.tabPage23.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage23.Size = new System.Drawing.Size(1521, 898);
             this.tabPage23.TabIndex = 4;
             this.tabPage23.Text = "Mermas por Supervisor";
             this.tabPage23.UseVisualStyleBackColor = true;
@@ -1714,16 +1722,16 @@
             this.chartMermaSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartMermaSupervisor.Location = new System.Drawing.Point(0, 0);
             this.chartMermaSupervisor.Name = "chartMermaSupervisor";
-            this.chartMermaSupervisor.Size = new System.Drawing.Size(1521, 906);
+            this.chartMermaSupervisor.Size = new System.Drawing.Size(1521, 898);
             this.chartMermaSupervisor.TabIndex = 37;
             this.chartMermaSupervisor.Text = "chart1";
             // 
             // tabPage24
             // 
             this.tabPage24.Controls.Add(this.ChartCumplimientoDes);
-            this.tabPage24.Location = new System.Drawing.Point(4, 22);
+            this.tabPage24.Location = new System.Drawing.Point(4, 30);
             this.tabPage24.Name = "tabPage24";
-            this.tabPage24.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage24.Size = new System.Drawing.Size(1521, 898);
             this.tabPage24.TabIndex = 5;
             this.tabPage24.Text = "Cumplimiento a Planeación(Deshidratado)";
             this.tabPage24.UseVisualStyleBackColor = true;
@@ -1735,16 +1743,16 @@
             this.ChartCumplimientoDes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoDes.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoDes.Name = "ChartCumplimientoDes";
-            this.ChartCumplimientoDes.Size = new System.Drawing.Size(1521, 906);
+            this.ChartCumplimientoDes.Size = new System.Drawing.Size(1521, 898);
             this.ChartCumplimientoDes.TabIndex = 38;
             this.ChartCumplimientoDes.Text = "chart1";
             // 
             // tabPage25
             // 
             this.tabPage25.Controls.Add(this.ChartCumplimientoKgTerminado);
-            this.tabPage25.Location = new System.Drawing.Point(4, 22);
+            this.tabPage25.Location = new System.Drawing.Point(4, 30);
             this.tabPage25.Name = "tabPage25";
-            this.tabPage25.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage25.Size = new System.Drawing.Size(1521, 881);
             this.tabPage25.TabIndex = 6;
             this.tabPage25.Text = "Cumplimiento a Planeación(Otras Áreas)";
             this.tabPage25.UseVisualStyleBackColor = true;
@@ -1756,16 +1764,16 @@
             this.ChartCumplimientoKgTerminado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoKgTerminado.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoKgTerminado.Name = "ChartCumplimientoKgTerminado";
-            this.ChartCumplimientoKgTerminado.Size = new System.Drawing.Size(1521, 906);
+            this.ChartCumplimientoKgTerminado.Size = new System.Drawing.Size(1521, 881);
             this.ChartCumplimientoKgTerminado.TabIndex = 39;
             this.ChartCumplimientoKgTerminado.Text = "chart1";
             // 
             // tabPage26
             // 
             this.tabPage26.Controls.Add(this.ChartCumplimientoPlaneacionSupervisor);
-            this.tabPage26.Location = new System.Drawing.Point(4, 22);
+            this.tabPage26.Location = new System.Drawing.Point(4, 30);
             this.tabPage26.Name = "tabPage26";
-            this.tabPage26.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage26.Size = new System.Drawing.Size(1521, 898);
             this.tabPage26.TabIndex = 7;
             this.tabPage26.Text = "Cumplimiento a Planeación(Deshidratado) Semanal";
             this.tabPage26.UseVisualStyleBackColor = true;
@@ -1777,16 +1785,16 @@
             this.ChartCumplimientoPlaneacionSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoPlaneacionSupervisor.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoPlaneacionSupervisor.Name = "ChartCumplimientoPlaneacionSupervisor";
-            this.ChartCumplimientoPlaneacionSupervisor.Size = new System.Drawing.Size(1521, 906);
+            this.ChartCumplimientoPlaneacionSupervisor.Size = new System.Drawing.Size(1521, 898);
             this.ChartCumplimientoPlaneacionSupervisor.TabIndex = 40;
             this.ChartCumplimientoPlaneacionSupervisor.Text = "chart1";
             // 
             // tabPage27
             // 
             this.tabPage27.Controls.Add(this.ChartCumplimientoPlaneacionMensual);
-            this.tabPage27.Location = new System.Drawing.Point(4, 22);
+            this.tabPage27.Location = new System.Drawing.Point(4, 30);
             this.tabPage27.Name = "tabPage27";
-            this.tabPage27.Size = new System.Drawing.Size(1521, 906);
+            this.tabPage27.Size = new System.Drawing.Size(1521, 898);
             this.tabPage27.TabIndex = 8;
             this.tabPage27.Text = "Cumplimiento a Planeación(Deshidratado) Mensual";
             this.tabPage27.UseVisualStyleBackColor = true;
@@ -1798,9 +1806,51 @@
             this.ChartCumplimientoPlaneacionMensual.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoPlaneacionMensual.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoPlaneacionMensual.Name = "ChartCumplimientoPlaneacionMensual";
-            this.ChartCumplimientoPlaneacionMensual.Size = new System.Drawing.Size(1521, 906);
+            this.ChartCumplimientoPlaneacionMensual.Size = new System.Drawing.Size(1521, 898);
             this.ChartCumplimientoPlaneacionMensual.TabIndex = 41;
             this.ChartCumplimientoPlaneacionMensual.Text = "chart1";
+            // 
+            // tabPage28
+            // 
+            this.tabPage28.Controls.Add(this.ChartCumplimientoKgTerminadoSupervisor);
+            this.tabPage28.Location = new System.Drawing.Point(4, 30);
+            this.tabPage28.Name = "tabPage28";
+            this.tabPage28.Size = new System.Drawing.Size(1521, 898);
+            this.tabPage28.TabIndex = 9;
+            this.tabPage28.Text = "Cumplimiento a Planeación(Otras Áreas) Semanal";
+            this.tabPage28.UseVisualStyleBackColor = true;
+            // 
+            // ChartCumplimientoKgTerminadoSupervisor
+            // 
+            chartArea10.Name = "ChartArea1";
+            this.ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Add(chartArea10);
+            this.ChartCumplimientoKgTerminadoSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChartCumplimientoKgTerminadoSupervisor.Location = new System.Drawing.Point(0, 0);
+            this.ChartCumplimientoKgTerminadoSupervisor.Name = "ChartCumplimientoKgTerminadoSupervisor";
+            this.ChartCumplimientoKgTerminadoSupervisor.Size = new System.Drawing.Size(1521, 898);
+            this.ChartCumplimientoKgTerminadoSupervisor.TabIndex = 42;
+            this.ChartCumplimientoKgTerminadoSupervisor.Text = "chart1";
+            // 
+            // tabPage29
+            // 
+            this.tabPage29.Controls.Add(this.ChartCumplimientoKgTerminadoMensualSupervisor);
+            this.tabPage29.Location = new System.Drawing.Point(4, 30);
+            this.tabPage29.Name = "tabPage29";
+            this.tabPage29.Size = new System.Drawing.Size(1521, 898);
+            this.tabPage29.TabIndex = 10;
+            this.tabPage29.Text = "Cumplimiento a Planeación(Otras Áreas) Mensual";
+            this.tabPage29.UseVisualStyleBackColor = true;
+            // 
+            // ChartCumplimientoKgTerminadoMensualSupervisor
+            // 
+            chartArea11.Name = "ChartArea1";
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Add(chartArea11);
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.Location = new System.Drawing.Point(0, 0);
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.Name = "ChartCumplimientoKgTerminadoMensualSupervisor";
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.Size = new System.Drawing.Size(1521, 898);
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.TabIndex = 43;
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.Text = "chart1";
             // 
             // bnt_graficar
             // 
@@ -1810,7 +1860,7 @@
             this.bnt_graficar.HighEmphasis = true;
             this.bnt_graficar.Icon = global::Tablero.Properties.Resources.chart_graph_statistics_bar;
             this.bnt_graficar.ImageList = this.imageList1;
-            this.bnt_graficar.Location = new System.Drawing.Point(19, 401);
+            this.bnt_graficar.Location = new System.Drawing.Point(28, 20);
             this.bnt_graficar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.bnt_graficar.MouseState = MaterialSkin.MouseState.HOVER;
             this.bnt_graficar.Name = "bnt_graficar";
@@ -1825,12 +1875,12 @@
             // 
             // lista_semanas
             // 
-            this.lista_semanas.Location = new System.Drawing.Point(19, 22);
+            this.lista_semanas.Location = new System.Drawing.Point(17, 65);
             this.lista_semanas.MultiSelect = true;
             this.lista_semanas.Name = "lista_semanas";
             this.lista_semanas.ShowCheckBoxes = true;
             this.lista_semanas.ShowColumnHeaders = false;
-            this.lista_semanas.Size = new System.Drawing.Size(119, 370);
+            this.lista_semanas.Size = new System.Drawing.Size(149, 833);
             this.lista_semanas.TabIndex = 1;
             // 
             // tabPage10
@@ -5362,47 +5412,41 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // tabPage28
+            // tabPage30
             // 
-            this.tabPage28.Controls.Add(this.ChartCumplimientoKgTerminadoSupervisor);
-            this.tabPage28.Location = new System.Drawing.Point(4, 22);
-            this.tabPage28.Name = "tabPage28";
-            this.tabPage28.Size = new System.Drawing.Size(1521, 906);
-            this.tabPage28.TabIndex = 9;
-            this.tabPage28.Text = "Cumplimiento a Planeación(Otras Áreas) Semanal";
-            this.tabPage28.UseVisualStyleBackColor = true;
+            this.tabPage30.Controls.Add(this.ChartCumplimientoGeneralSemanal);
+            this.tabPage30.Location = new System.Drawing.Point(4, 30);
+            this.tabPage30.Name = "tabPage30";
+            this.tabPage30.Size = new System.Drawing.Size(1521, 881);
+            this.tabPage30.TabIndex = 0;
+            this.tabPage30.Text = "Cumplimiento a Planeación General";
             // 
-            // ChartCumplimientoKgTerminadoSupervisor
+            // ChartCumplimientoGeneralSemanal
             // 
-            chartArea10.Name = "ChartArea1";
-            this.ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Add(chartArea10);
-            this.ChartCumplimientoKgTerminadoSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ChartCumplimientoKgTerminadoSupervisor.Location = new System.Drawing.Point(0, 0);
-            this.ChartCumplimientoKgTerminadoSupervisor.Name = "ChartCumplimientoKgTerminadoSupervisor";
-            this.ChartCumplimientoKgTerminadoSupervisor.Size = new System.Drawing.Size(1521, 906);
-            this.ChartCumplimientoKgTerminadoSupervisor.TabIndex = 42;
-            this.ChartCumplimientoKgTerminadoSupervisor.Text = "chart1";
+            chartArea12.Name = "ChartArea1";
+            this.ChartCumplimientoGeneralSemanal.ChartAreas.Add(chartArea12);
+            this.ChartCumplimientoGeneralSemanal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChartCumplimientoGeneralSemanal.Location = new System.Drawing.Point(0, 0);
+            this.ChartCumplimientoGeneralSemanal.Name = "ChartCumplimientoGeneralSemanal";
+            this.ChartCumplimientoGeneralSemanal.Size = new System.Drawing.Size(1521, 881);
+            this.ChartCumplimientoGeneralSemanal.TabIndex = 44;
+            this.ChartCumplimientoGeneralSemanal.Text = "chart1";
             // 
-            // tabPage29
+            // materialCard19
             // 
-            this.tabPage29.Controls.Add(this.ChartCumplimientoKgTerminadoMensualSupervisor);
-            this.tabPage29.Location = new System.Drawing.Point(4, 22);
-            this.tabPage29.Name = "tabPage29";
-            this.tabPage29.Size = new System.Drawing.Size(1521, 906);
-            this.tabPage29.TabIndex = 10;
-            this.tabPage29.Text = "Cumplimiento a Planeación(Otras Áreas) Mensual";
-            this.tabPage29.UseVisualStyleBackColor = true;
-            // 
-            // ChartCumplimientoKgTerminadoMensualSupervisor
-            // 
-            chartArea11.Name = "ChartArea1";
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Add(chartArea11);
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.Location = new System.Drawing.Point(0, 0);
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.Name = "ChartCumplimientoKgTerminadoMensualSupervisor";
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.Size = new System.Drawing.Size(1521, 906);
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.TabIndex = 43;
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.Text = "chart1";
+            this.materialCard19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard19.Controls.Add(this.bnt_graficar);
+            this.materialCard19.Controls.Add(this.lista_semanas);
+            this.materialCard19.Depth = 0;
+            this.materialCard19.Dock = System.Windows.Forms.DockStyle.Left;
+            this.materialCard19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard19.Location = new System.Drawing.Point(0, 0);
+            this.materialCard19.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard19.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard19.Name = "materialCard19";
+            this.materialCard19.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard19.Size = new System.Drawing.Size(183, 915);
+            this.materialCard19.TabIndex = 38;
             // 
             // Form_principal
             // 
@@ -5463,7 +5507,6 @@
             this.menuStrip1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.pnl_graficas.ResumeLayout(false);
-            this.pnl_graficas.PerformLayout();
             this.tabgraficas.ResumeLayout(false);
             this.tabPage18.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.charview_kg_fresco)).EndInit();
@@ -5483,6 +5526,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoPlaneacionSupervisor)).EndInit();
             this.tabPage27.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoPlaneacionMensual)).EndInit();
+            this.tabPage28.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoSupervisor)).EndInit();
+            this.tabPage29.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoMensualSupervisor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tap_control_Reportes.ResumeLayout(false);
@@ -5587,10 +5634,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.tabPage28.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoSupervisor)).EndInit();
-            this.tabPage29.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoKgTerminadoMensualSupervisor)).EndInit();
+            this.tabPage30.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoGeneralSemanal)).EndInit();
+            this.materialCard19.ResumeLayout(false);
+            this.materialCard19.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -5882,6 +5929,9 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoKgTerminadoSupervisor;
         private System.Windows.Forms.TabPage tabPage29;
         private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoKgTerminadoMensualSupervisor;
+        private System.Windows.Forms.TabPage tabPage30;
+        private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoGeneralSemanal;
+        private MaterialSkin.Controls.MaterialCard materialCard19;
     }
 }
 
