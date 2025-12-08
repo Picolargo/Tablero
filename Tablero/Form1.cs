@@ -411,7 +411,7 @@ namespace Tablero
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar semanas: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar semanas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1577,10 +1577,22 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             dtp1.Enabled = false;
             txt_Tiempo_energia.Text = "0";
             if (dgv_mecanico.DataSource is DataTable dt1)
+            {
                 dt1.Rows.Clear();
+            }else
+            {
+                dgv_mecanico.Rows.Clear();
+            }
 
             if (dgv_operativo.DataSource is DataTable dt2)
+            {
                 dt2.Rows.Clear();
+            }
+            else 
+            {                 
+                dgv_operativo.Rows.Clear(); 
+            }
+                
         }
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -8227,7 +8239,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar tiempos muertos: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar tiempos muertos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -8375,7 +8387,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al calcular el número de semana: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al calcular el número de semana: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -9118,7 +9130,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al calcular el número de semana: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al calcular el número de semana: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -11055,7 +11067,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento de tiempo efectivo para otras áreas en las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de tiempo efectivo para otras áreas en las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -11300,7 +11312,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento de tiempo efectivo para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de tiempo efectivo para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -11670,7 +11682,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento general semanal para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento general semanal para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -11980,7 +11992,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento de Kg terminado mensual por supervisor.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de Kg terminado mensual por supervisor.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -13039,7 +13051,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos de cumplimiento a planeación por supervisor para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento a planeación por supervisor para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -14240,7 +14252,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar FTT promedio otras áreas: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar FTT promedio otras áreas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -14397,7 +14409,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos FTT para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos FTT para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -14450,7 +14462,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar FTT: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar FTT: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -14612,7 +14624,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -14716,7 +14728,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -14867,7 +14879,7 @@ ORDER BY
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron datos para las semanas seleccionadas.");
+                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -14971,7 +14983,7 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al graficar: {ex.Message}");
+                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -150,15 +150,44 @@ namespace Tablero
         }
 
         // Validación de usuario corregida para PostgreSQL
-        public bool ValidateUser(string usuario, string password)
+        //public bool ValidateUser(string usuario, string password)
+        //{
+        //    // Consulta corregida con comillas para nombres de columnas con mayúsculas
+        //    string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
+        //                   WHERE ""Usuario"" ILIKE @usuario AND ""Password"" = @password";
+
+        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //    {
+        //        new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario },
+        //        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+        //    };
+
+        //    try
+        //    {
+        //        DataTable result = ExecuteSelectQuery(query, parameters);
+        //        if (result != null && result.Rows.Count > 0)
+        //        {
+        //            return Convert.ToInt32(result.Rows[0][0]) > 0;
+        //        }
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error al validar usuario: " + ex.Message);
+        //        return false;
+        //    }
+        //}
+        // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
+        public bool ValidateUser(string identificador, string password)
         {
-            // Consulta corregida con comillas para nombres de columnas con mayúsculas
+            // Consulta que acepta tanto Usuario como No_Empleado
             string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-                           WHERE ""Usuario"" ILIKE @usuario AND ""Password"" = @password";
+                   WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+                   AND ""Password"" = @password";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario },
+                new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
                 new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
             };
 
@@ -179,14 +208,22 @@ namespace Tablero
         }
 
         // Método adicional para obtener información completa del usuario
-        public DataRow GetUserInfo(string usuario)
+        public DataRow GetUserInfo(string identificador)
         {
-            string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" 
-                           FROM public.""Usuarios"" WHERE ""Usuario"" ILIKE @usuario";
+            //string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" 
+            //               FROM public.""Usuarios"" WHERE ""Usuario"" ILIKE @usuario";
+
+            //NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            //{
+            //    new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario }
+            //};
+
+            string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" FROM public.""Usuarios"" 
+                   WHERE ""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario }
+                new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
             };
 
             try
@@ -231,36 +268,6 @@ namespace Tablero
                 MessageBox.Show($"Error al cargar ComboBox: {ex.Message}");
             }
         }
-
-
-        //public void LoadDataIntoComboBox(out bool bande_consulta, string query, ComboBox comboBox, string displayMember, string valueMember, NpgsqlParameter[] parameters = null)
-        //{
-        //    bande_consulta = false; // Inicializar
-
-        //    try
-        //    {
-        //        DataTable dataTable = ExecuteSelectQuery(query, parameters);
-
-        //        if (dataTable != null && dataTable.Rows.Count > 0)
-        //        {
-        //            comboBox.DataSource = dataTable;
-        //            comboBox.DisplayMember = displayMember;
-        //            comboBox.ValueMember = valueMember;
-        //            comboBox.SelectedIndex = -1;
-        //            bande_consulta = true;
-        //        }
-        //        else
-        //        {
-        //            comboBox.DataSource = null;
-        //            comboBox.Items.Clear();
-        //            comboBox.Text = "No hay datos disponibles";
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Error al cargar ComboBox: {ex.Message}");
-        //    }
-        //}
 
         // Método auxiliar para determinar tipos de datos
         private NpgsqlTypes.NpgsqlDbType GetNpgsqlDbType(object value)

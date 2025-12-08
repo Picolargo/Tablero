@@ -211,10 +211,11 @@ namespace Tablero
                     int idUser = Convert.ToInt32(userInfo["ID_User"]);
                     string nivel = userInfo["Nivel"].ToString();
                     string noEmpleado = userInfo["No_Empleado"].ToString();
+                    string nomEmpleado = userInfo["Usuario"].ToString();
 
                     // Usuario válido
                     this.Visible = false;
-                    Form_principal principal = new Form_principal(noEmpleado, txt_user_name.Text, idUser, nivel, connectionString);
+                    Form_principal principal = new Form_principal(noEmpleado, nomEmpleado, idUser, nivel, connectionString);
                     principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
                     principal.Show(); // Muestra el formulario principal
                     // Guardar en sesión o usar esta información
