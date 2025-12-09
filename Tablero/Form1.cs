@@ -54,6 +54,7 @@ namespace Tablero
         private DateTime horaInicio;
         private DateTime horaFin;
         private bool editar = false;
+        private bool borrar = false;
         //variable para la conexión a la base de datos
         string connectionString = string.Empty;
         // Variables para la animación de las imágenes
@@ -362,6 +363,7 @@ namespace Tablero
                 // Obtener y mostrar el número de semana inicial
                 ActualizarNumeroSemana();
                 actualiza_polvos_calidad();
+                actualiza_tunel_calidad();
                 configurar_limpieza();
             }
         }
@@ -7780,7 +7782,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             editar = true;
-            Editar Editar_ficha = new Editar(connectionString, editar);
+            borrar = false;
+            Editar Editar_ficha = new Editar(connectionString, editar, borrar);
             // Suscripción al evento con los dos parámetros
             Editar_ficha.FichaSeleccionada += (id_global, area) =>
             {
@@ -10933,22 +10936,40 @@ ORDER BY
 
         private void bnt_graficar_Click(object sender, EventArgs e)
         {// Verificar si estamos en pestañas que NO requieren semanas seleccionadas (8 y 10)
-            int[] pestañasSinSemanas = { 8, 10 };
+            //int[] pestañasSinSemanas = { 8, 10 };
+            string[] pestañasSinSemanas = { "tabPage27", "tabPage29" };
+            // Obtener la pestaña seleccionada
+            string tabSeleccionado = tabgraficas.SelectedTab.Name;
 
-            if (pestañasSinSemanas.Contains(tabgraficas.SelectedIndex))
+            if (pestañasSinSemanas.Contains(tabSeleccionado))
             {
                 // Pestañas que no necesitan semanas seleccionadas
-                switch (tabgraficas.SelectedIndex)
+                switch (tabSeleccionado)
                 {
-                    case 8: // Cumplimiento planeación mensual por supervisor
+                    case "tabPage27":
                         GraficarCumplimientoPlaneacionMensualPorSupervisor();
                         break;
-                    case 10: // Nueva pestaña para cumplimiento Kg terminado mensual por supervisor
+                    case "tabPage29":
                         GraficarCumplimientoKgTerminadoMensualPorSupervisor();
                         break;
                 }
                 return;
             }
+
+            //if (pestañasSinSemanas.Contains(tabgraficas.SelectedIndex))
+            //{
+            //    // Pestañas que no necesitan semanas seleccionadas
+            //    switch (tabgraficas.SelectedIndex)
+            //    {
+            //        case 8: // Cumplimiento planeación mensual por supervisor
+            //            GraficarCumplimientoPlaneacionMensualPorSupervisor();
+            //            break;
+            //        case 10: // Nueva pestaña para cumplimiento Kg terminado mensual por supervisor
+            //            GraficarCumplimientoKgTerminadoMensualPorSupervisor();
+            //            break;
+            //    }
+            //    return;
+            //}
 
             // Para TODAS LAS DEMÁS pestañas, validar semanas seleccionadas
             var seleccionados = lista_semanas.CheckedItems;
@@ -10972,42 +10993,42 @@ ORDER BY
             }
 
             // Llamar al método correspondiente según la pestaña seleccionada
-            switch (tabgraficas.SelectedIndex)
+            switch (tabSeleccionado)
             {
-                case 0:
+                case "tabPage18":
                     GraficarKgFresco(semanasSeleccionadas);
                     break;
-                case 1:
+                case "tabPage19":
                     GraficarKgSeco(semanasSeleccionadas);
                     break;
-                case 2:
+                case "tabPage20":
                     GraficarFTT(semanasSeleccionadas);
                     break;
-                case 3:
+                case "tabPage21":
                     GraficarFTTOtrasAreas(semanasSeleccionadas);
                     break;
-                case 4:
+                case "tabPage23":
                     GraficarMermaPorSupervisor(semanasSeleccionadas);
                     break;
-                case 5:
+                case "tabPage24":
                     GraficarCumplimientoPlaneacion(semanasSeleccionadas);
                     break;
-                case 6:
+                case "tabPage25":
                     GraficarCumplimientoKgTerminado(semanasSeleccionadas);
                     break;
-                case 7:
+                case "tabPage26":
                     GraficarCumplimientoPlaneacionPorSupervisor(semanasSeleccionadas);
                     break;
-                case 9:
+                case "tabPage28":
                     GraficarCumplimientoKgTerminadoPorSupervisor(semanasSeleccionadas);
                     break;
-                case 11:
+                case "tabPage30":
                     GraficarCumplimientoGeneralSemanal(semanasSeleccionadas);
                     break;
-                case 12:
+                case "tabPage31":
                     GraficarCumplimientoTiempoEfectivo(semanasSeleccionadas);
                     break;
-                case 13:
+                case "tabPage32":
                     GraficarCumplimientoTiempoEfectivoOtrasAreas(semanasSeleccionadas);
                     break;
             }
@@ -15459,6 +15480,19 @@ ORDER BY
                     lista_semanas.Enabled = true;
                 }
             }
+        }
+
+        private void borrarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editar = false;
+            borrar = true;
+            Editar Editar_ficha = new Editar(connectionString, editar, borrar);
+            // Suscripción al evento con los dos parámetros
+            Editar_ficha.FichaSeleccionada += (id_global, area) =>
+            {
+            };
+
+            Editar_ficha.Show();
         }
     }
 }

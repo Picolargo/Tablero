@@ -1,4 +1,5 @@
 ﻿using MaterialSkin.Controls;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
 using Telerik.WinControls.UI;
+using Telerik.WinForms.Documents.Model.Notes;
 
 namespace Tablero
 {
@@ -19,10 +21,14 @@ namespace Tablero
         public event Action<string, string> FichaSeleccionada;
         // 🔹 Bandera interna para saber si se hizo doble clic
         private bool fichaSeleccionada = false;
-        public Editar(string connectionString, bool tipo)
+        private bool editar;
+        private bool borrar;
+        public Editar(string connectionString, bool Editar, bool Borrar)
         {
             InitializeComponent();
             this.connectionString = connectionString;
+            editar = Editar;
+            borrar = Borrar;
             materialExpansionPanel1.SaveClick += MaterialExpansionPanel1_OnActionButtonClick;
             materialExpansionPanel1.CancelClick += MaterialExpansionPanel1_OnCancelButtonClick;
         }
@@ -101,19 +107,50 @@ namespace Tablero
 
         private void radGridView1_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (editar && !borrar)
             {
-                string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                string area = radGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                if (e.RowIndex >= 0)
+                {
+                    string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                    string area = radGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
 
-                // 🔹 Marca que sí se seleccionó una ficha
-                fichaSeleccionada = true;
+                    // 🔹 Marca que sí se seleccionó una ficha
+                    fichaSeleccionada = true;
 
-                // 🔹 Dispara el evento
-                FichaSeleccionada?.Invoke(id_global, area);
+                    // 🔹 Dispara el evento
+                    FichaSeleccionada?.Invoke(id_global, area);
 
-                // 🔹 Cierra el formulario
-                this.Close();
+                    // 🔹 Cierra el formulario
+                    this.Close();
+                }
+            }
+            else if (!editar && borrar)
+            {
+                if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Ficha?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (e.RowIndex >= 0)
+                    {
+                        DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                        string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                        // Verificar si ya existe
+                        string queryChecklote = @"ROLLBACK;
+                                            BEGIN;
+                                            DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
+                                            DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
+                                            DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
+                                            DELETE FROM ""Tiempo_muerto_Mecanico"" WHERE ""ID_Ficha"" = @ID_Valor;
+                                            DELETE FROM ""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                                            COMMIT;";
+                        NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
+                        {
+                            new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                        };
+                        DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+                        FichaSeleccionada?.Invoke(null, null);
+                        // 🔹 Cierra el formulario
+                        this.Close();
+                    }
+                }   
             }
         }
 
