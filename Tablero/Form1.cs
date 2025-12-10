@@ -20,6 +20,7 @@ using Telerik.WinControls;
 using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Export;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using Telerik.WinForms.Documents.Model.Notes;
 using static System.Net.WebRequestMethods;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -330,15 +331,27 @@ namespace Tablero
                 CargarSemanasAnioActual();
                 emaildatos();
                 email_varibles();
+                ActualizarAnioReportes();
             }
             if (nivel_user == "Supervisor")
             {
-                materialTabControl1.TabPages.Remove(tabPage2);
+                // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage10);
                 materialTabControl1.TabPages.Remove(tabPage11);
+
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
+
+                tabgraficas.TabPages.Remove(tabPage18);
+                tabgraficas.TabPages.Remove(tabPage19);
+                tabgraficas.TabPages.Remove(tabPage20);
+                tabgraficas.TabPages.Remove(tabPage21);
+                tabgraficas.TabPages.Remove(tabPage23);
+                tabgraficas.TabPages.Remove(tabPage31);
+                tabgraficas.TabPages.Remove(tabPage32);
+                ActualizarAnioReportes();
+                CargarSemanasAnioActual();
                 actualiza_detalles_OP();
                 email_varibles();
 
@@ -349,7 +362,6 @@ namespace Tablero
             {
                 // Ocultar las pestañas no necesarias para el usuario de calidad
                 materialTabControl1.TabPages.Remove(tabPage1);
-                materialTabControl1.TabPages.Remove(tabPage2);
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage9);
@@ -358,14 +370,42 @@ namespace Tablero
                 tap_control_Reportes.TabPages.Remove(tabPage16);
                 tap_control_Reportes.TabPages.Remove(tabPage17);
 
+                tabgraficas.TabPages.Remove(tabPage18);
+                tabgraficas.TabPages.Remove(tabPage19);
+                tabgraficas.TabPages.Remove(tabPage20);
+                tabgraficas.TabPages.Remove(tabPage21);
+                tabgraficas.TabPages.Remove(tabPage24);
+                tabgraficas.TabPages.Remove(tabPage25);
+                tabgraficas.TabPages.Remove(tabPage26);
+                tabgraficas.TabPages.Remove(tabPage27);
+                tabgraficas.TabPages.Remove(tabPage28);
+                tabgraficas.TabPages.Remove(tabPage29);
+                tabgraficas.TabPages.Remove(tabPage30
+                    );
+                tabgraficas.TabPages.Remove(tabPage31);
+                tabgraficas.TabPages.Remove(tabPage32);
+
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
                 // Obtener y mostrar el número de semana inicial
+                ActualizarAnioReportes();
+                CargarSemanasAnioActual();
                 ActualizarNumeroSemana();
                 actualiza_polvos_calidad();
                 actualiza_tunel_calidad();
                 configurar_limpieza();
             }
+        }
+        private void ActualizarAnioReportes()
+        {
+            // Cargar combobox OP
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_grafica, "Año", null);
+            CB_Anio_grafica.SelectedIndex = 0;
+            CB_Anio_grafica.Focus();
+            cb_Area.Focus();
         }
         private void emaildatos() 
         {
@@ -942,8 +982,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cb_OP.Enabled = false;
                 dtp1.Enabled = true;
 
-               // cb_lote.Visible = true;
-
                 //nombrar controles
                 if (editar)
                 {
@@ -1013,7 +1051,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
 
                 // Cargar combobox lote
-
                 query = "SELECT \"ID_Ficha\", \"Lote\" FROM public.\"Ficha\" WHERE \"Terminado_Tunel\" = false and \"Area\" = 'Tunel/Sumergidor' ORDER BY \"Lote\";";
                 dbHelper.LoadDataIntoComboBox(query, cb_lote, "Lote", "ID_Ficha");
             }
@@ -1633,7 +1670,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idUsuario = Convert.ToInt32(id_global_users);
+                    int idUsuario = System.Convert.ToInt32(id_global_users);
 
                     queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel WHERE \"ID_User\" = @ID_usuario;";
 
@@ -1670,7 +1707,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@no_emp", txt_no_emp.Text)
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2222,7 +2259,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_deshidratado);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_deshidratado);
 
                     queryInsertUpdate = "UPDATE public.\"Deshidratado\" SET \"OP\" = @OP, \"No_box_hr\" = @no_box_hr, \"Kg_fresco_hr\" = @kg_f_h, \"Relacion_fr_seco\" = @relacion_fs, \"Kg_seco_hr\" = @kg_s_h, \"Personal_idoneo\" = @personal_i WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2234,23 +2271,23 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@no_box_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@kg_f_h", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@relacion_fs", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@kg_s_h", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_4.Text)
                         },
                         new NpgsqlParameter("@personal_i", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_5.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_5.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2270,7 +2307,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2280,11 +2317,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@No_box_h", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Kg_f_h", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Relacion_f_s", Convert.ToDecimal(txt_Meta_3.Text)),
-                    new NpgsqlParameter("@kg_s_h", Convert.ToDecimal(txt_Meta_4.Text)),
-                    new NpgsqlParameter("@Personal_i", Convert.ToDecimal(txt_Meta_5.Text))
+                    new NpgsqlParameter("@No_box_h", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Kg_f_h", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Relacion_f_s", System.Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@kg_s_h", System.Convert.ToDecimal(txt_Meta_4.Text)),
+                    new NpgsqlParameter("@Personal_i", System.Convert.ToDecimal(txt_Meta_5.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2325,7 +2362,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_empacado);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_empacado);
 
                     queryInsertUpdate = "UPDATE public.\"Empacado\" SET \"OP\" = @OP, \"Personal_idoneo\" = @Personal_I, \"Kg_person_hr\" = @Kg_p_hr, \"Meta_kg_hr_line\" = @Meta_kg_hr_line WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2337,15 +2374,15 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Kg_p_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr_line", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2365,7 +2402,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2375,9 +2412,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Kg_person_hr", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr_line", Convert.ToDecimal(txt_Meta_3.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Kg_person_hr", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr_line", System.Convert.ToDecimal(txt_Meta_3.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2416,7 +2453,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_inspec);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_inspec);
 
                     queryInsertUpdate = "UPDATE public.\"Inspeccion\" SET \"OP\" = @OP, \"Personal_idoneo\" = @Personal_I, \"Kg_person_hr\" = @Kg_p_hr, \"Meta_kg_hr_line\" = @Meta_kg_hr_line WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2428,15 +2465,15 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Kg_p_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr_line", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2455,7 +2492,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2465,9 +2502,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Kg_person_hr", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr_line", Convert.ToDecimal(txt_Meta_3.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Kg_person_hr", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr_line", System.Convert.ToDecimal(txt_Meta_3.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2506,7 +2543,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_evaporado);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_evaporado);
 
                     queryInsertUpdate = "UPDATE public.\"Evaporado\" SET \"OP\" = @OP, \"Personal_idoneo\" = @Personal_I, \"Capacidad_trompos\" = @Capacidad_T, \"Cantidad_trompos\" = @Cantidad_T, \"Meta_kg_hr\" = @Meta_kg_hr WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2518,19 +2555,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Capacidad_T", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Cantidad_T", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_4.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2549,7 +2586,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2559,10 +2596,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Capacidad_trompos", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Cantidad_trompos", Convert.ToDecimal(txt_Meta_3.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr", Convert.ToDecimal(txt_Meta_4.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Capacidad_trompos", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Cantidad_trompos", System.Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr", System.Convert.ToDecimal(txt_Meta_4.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2600,7 +2637,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_grind);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_grind);
 
                     queryInsertUpdate = "UPDATE public.\"Grind\" SET \"OP\" = @OP, \"Personal_Idoneo\" = @Personal_I, \"Capacidad_Molino\" = @Capacidad_m, \"Cantidad_molinos\" = @Cantidad_m, \"Meta_Kg_hr\" = @Meta_kg_hr WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2612,19 +2649,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Capacidad_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Cantidad_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_4.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2643,7 +2680,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2653,10 +2690,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Capacidad_m", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Cantidad_m", Convert.ToDecimal(txt_Meta_3.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr", Convert.ToDecimal(txt_Meta_4.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Capacidad_m", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Cantidad_m", System.Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr", System.Convert.ToDecimal(txt_Meta_4.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2695,7 +2732,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_revolturas);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_revolturas);
 
                     queryInsertUpdate = "UPDATE public.\"Revolturas\" SET \"OP\" = @OP, \"Personal_Idoneo\" = @Personal_I, \"Cap_Trompo_machin\" = @Cap_Trompo_m, \"Canti_Trompo_machin\" = @Cantidad_Trompo_m, \"Meta_Kg_Hr\" = @Meta_kg_hr WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2707,19 +2744,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Cap_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Cantidad_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_4.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2738,7 +2775,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2748,10 +2785,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Capacidad_Trompo_m", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Cantidad_Trompo_m", Convert.ToDecimal(txt_Meta_3.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr", Convert.ToDecimal(txt_Meta_4.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Capacidad_Trompo_m", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Cantidad_Trompo_m", System.Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr", System.Convert.ToDecimal(txt_Meta_4.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2790,7 +2827,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_polvos);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_polvos);
 
                     queryInsertUpdate = "UPDATE public.\"Polvos\" SET \"OP\" = @OP, \"Personal_Idoneo\" = @Personal_I, \"Meta_kg_hr_hum\" = @Meta_kg_hr_hum, \"Meta_kg_hr_idon\" = @Meta_kg_hr_idon WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2802,15 +2839,15 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr_hum", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr_idon", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2829,7 +2866,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2839,9 +2876,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr_hum", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr_idon", Convert.ToDecimal(txt_Meta_3.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr_hum", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr_idon", System.Convert.ToDecimal(txt_Meta_3.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -2879,7 +2916,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idmeta = Convert.ToInt32(id_global_meta_maquinas);
+                    int idmeta = System.Convert.ToInt32(id_global_meta_maquinas);
 
                     queryInsertUpdate = "UPDATE public.\"Maquinas\" SET \"OP\" = @OP, \"Personal_Idoneo\" = @Personal_I, \"Cap_Trompo_machin\" = @Cap_Trompo_m, \"Canti_Trompo_machin\" = @Cantidad_Trompo_m, \"Meta_Kg_Hr\" = @Meta_kg_hr, \"Kg_pz\" = @Kg_pz WHERE \"ID_OP\" = @ID_OP;";
 
@@ -2891,23 +2928,23 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Personal_I", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_1.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_1.Text)
                         },
                         new NpgsqlParameter("@Cap_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_2.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_2.Text)
                         },
                         new NpgsqlParameter("@Cantidad_Trompo_m", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_3.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_3.Text)
                         },
                         new NpgsqlParameter("@Meta_kg_hr", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_4.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_4.Text)
                         },
                         new NpgsqlParameter("@Kg_pz", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_Meta_5.Text)
+                            Value = System.Convert.ToDecimal(txt_Meta_5.Text)
                         },
                         new NpgsqlParameter("@ID_OP", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -2926,7 +2963,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckmeta, parametersCheck);
-                    if (dtCheck != null && dtCheck.Rows.Count > 0 && Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+                    if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -2936,11 +2973,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                     new NpgsqlParameter("@OP", txt_op.Text.ToUpper().Trim()),
-                    new NpgsqlParameter("@Personal_I", Convert.ToDecimal(txt_Meta_1.Text)),
-                    new NpgsqlParameter("@Capacidad_Trompo_m", Convert.ToDecimal(txt_Meta_2.Text)),
-                    new NpgsqlParameter("@Cantidad_Trompo_m", Convert.ToDecimal(txt_Meta_3.Text)),
-                    new NpgsqlParameter("@Meta_kg_hr", Convert.ToDecimal(txt_Meta_4.Text)),
-                    new NpgsqlParameter("@Kg_pz", Convert.ToDecimal(txt_Meta_5.Text))
+                    new NpgsqlParameter("@Personal_I", System.Convert.ToDecimal(txt_Meta_1.Text)),
+                    new NpgsqlParameter("@Capacidad_Trompo_m", System.Convert.ToDecimal(txt_Meta_2.Text)),
+                    new NpgsqlParameter("@Cantidad_Trompo_m", System.Convert.ToDecimal(txt_Meta_3.Text)),
+                    new NpgsqlParameter("@Meta_kg_hr", System.Convert.ToDecimal(txt_Meta_4.Text)),
+                    new NpgsqlParameter("@Kg_pz", System.Convert.ToDecimal(txt_Meta_5.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -3334,7 +3371,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este usuario?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id_user = Convert.ToInt32(id_global_users);
+                int id_user = System.Convert.ToInt32(id_global_users);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Usuarios""
@@ -3381,7 +3418,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 0 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Deshidratado?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_deshidratado);
+                int id_OP = System.Convert.ToInt32(id_global_meta_deshidratado);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Deshidratado""
@@ -3426,7 +3463,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 1 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Empacado?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_empacado);
+                int id_OP = System.Convert.ToInt32(id_global_meta_empacado);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Empacado""
@@ -3469,7 +3506,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 2 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Inspección?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_inspec);
+                int id_OP = System.Convert.ToInt32(id_global_meta_inspec);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Inspeccion""
@@ -3512,7 +3549,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 3 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Evaporado?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_evaporado);
+                int id_OP = System.Convert.ToInt32(id_global_meta_evaporado);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Evaporado""
@@ -3555,7 +3592,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 4 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Grind?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_grind);
+                int id_OP = System.Convert.ToInt32(id_global_meta_grind);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Grind""
@@ -3598,7 +3635,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 5 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Revolturas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_revolturas);
+                int id_OP = System.Convert.ToInt32(id_global_meta_revolturas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Revolturas""
@@ -3641,7 +3678,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 5 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Revolturas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_revolturas);
+                int id_OP = System.Convert.ToInt32(id_global_meta_revolturas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Polvos""
@@ -3684,7 +3721,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             ///
             if (cmb_area.SelectedIndex == 7 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Maquinas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
-                int id_OP = Convert.ToInt32(id_global_meta_maquinas);
+                int id_OP = System.Convert.ToInt32(id_global_meta_maquinas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Maquinas""
@@ -4583,24 +4620,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                        int turno = Convert.ToInt32(cb_Turno.Text);
+                        int turno = System.Convert.ToInt32(cb_Turno.Text);
                         string lote = Txt_1.Text;
                         string op = cb_OP.Text;
-                        decimal kgEnterProceso = Convert.ToDecimal(Txt_2.Text);
-                        decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
-                        decimal mermaCanica = Convert.ToDecimal(Txt_3.Text);
-                        decimal mermaPodrido = Convert.ToDecimal(Txt_4.Text);
-                        decimal mermaTina = Convert.ToDecimal(Txt_5.Text);
-                        decimal mermaPiso = Convert.ToDecimal(Txt_6.Text);
-                        decimal mermaCanaletas = Convert.ToDecimal(Txt_7.Text);
-                        decimal mermaLavadoBandas = Convert.ToDecimal(Txt_8.Text);
-                        decimal cascaraCarrete = Convert.ToDecimal(Txt_10.Text);
-                        int personal_Op = Convert.ToInt32(Txt_9.Text);
-                        decimal hr_pro = Convert.ToDecimal(Txt_Read_1.Text);
-                        decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                        decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                        decimal kgEnterProceso = System.Convert.ToDecimal(Txt_2.Text);
+                        decimal kgFrescosEnterSe = System.Convert.ToDecimal(Txt_Read_4.Text);
+                        decimal mermaCanica = System.Convert.ToDecimal(Txt_3.Text);
+                        decimal mermaPodrido = System.Convert.ToDecimal(Txt_4.Text);
+                        decimal mermaTina = System.Convert.ToDecimal(Txt_5.Text);
+                        decimal mermaPiso = System.Convert.ToDecimal(Txt_6.Text);
+                        decimal mermaCanaletas = System.Convert.ToDecimal(Txt_7.Text);
+                        decimal mermaLavadoBandas = System.Convert.ToDecimal(Txt_8.Text);
+                        decimal cascaraCarrete = System.Convert.ToDecimal(Txt_10.Text);
+                        int personal_Op = System.Convert.ToInt32(Txt_9.Text);
+                        decimal hr_pro = System.Convert.ToDecimal(Txt_Read_1.Text);
+                        decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
+                        decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                         string area = cb_Area.Text;
-                        decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                        decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
 
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -4678,7 +4715,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             new NpgsqlParameter("@Lote", lote),
                             };
                             System.Data.DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-                            if (dtLote != null && dtLote.Rows.Count > 0 && Convert.ToInt32(dtLote.Rows[0][0]) > 0)
+                            if (dtLote != null && dtLote.Rows.Count > 0 && System.Convert.ToInt32(dtLote.Rows[0][0]) > 0)
                             {
                                 MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 return;
@@ -4786,26 +4823,26 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal KgProdSeco = Convert.ToDecimal(Txt_2.Text);
-                    decimal MermaKgSeco = Convert.ToDecimal(Txt_3.Text);
-                    decimal KgFueraSpec = Convert.ToDecimal(Txt_4.Text);
-                    decimal KgResecar = Convert.ToDecimal(Txt_5.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_6.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal KgProdSeco = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal MermaKgSeco = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal KgFueraSpec = System.Convert.ToDecimal(Txt_4.Text);
+                    decimal KgResecar = System.Convert.ToDecimal(Txt_5.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_6.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
                     string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
-                    decimal PorcentCumplimiento = Convert.ToDecimal(textoPorcentCumplimiento) / 100m;
-                    //decimal Kg_secos_meta = Convert.ToDecimal(Txt_Read_6.Text);
-                    decimal Relacion_Fresco_seco = Convert.ToDecimal(Txt_Read_7.Text);
+                    decimal PorcentCumplimiento = System.Convert.ToDecimal(textoPorcentCumplimiento) / 100m;
+                    //decimal Kg_secos_meta = System.Convert.ToDecimal(Txt_Read_6.Text);
+                    decimal Relacion_Fresco_seco = System.Convert.ToDecimal(Txt_Read_7.Text);
                     string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
-                    decimal FTT = Convert.ToDecimal(textoFTT) / 100m;
+                    decimal FTT = System.Convert.ToDecimal(textoFTT) / 100m;
                     string area = cb_Area.Text;
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string lote = cb_lote.Text;
-                    decimal kgFrescosEnterSe = Convert.ToDecimal(Txt_Read_4.Text);
+                    decimal kgFrescosEnterSe = System.Convert.ToDecimal(Txt_Read_4.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
@@ -4980,25 +5017,25 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                     string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
                     string textoPorcent_Aumento_Hume = Txt_Read_5.Text.Replace("%", "").Trim();
                     string area = cb_Area.Text;
-                    decimal Porcent_Aumento_Hume = Convert.ToDecimal(textoPorcent_Aumento_Hume) / 100m;
+                    decimal Porcent_Aumento_Hume = System.Convert.ToDecimal(textoPorcent_Aumento_Hume) / 100m;
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
@@ -5153,23 +5190,23 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                     string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
@@ -5320,24 +5357,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                     string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
                     string proceso = cb_proceso.Text;
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
@@ -5488,25 +5525,25 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                     string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                    decimal KgEntrada = Convert.ToDecimal(Txt_1.Text);
-                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
-                    decimal polvo_colector = Convert.ToDecimal(Txt_6.Text);
-                    decimal Granulo = Convert.ToDecimal(Txt_7.Text);
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal polvo_colector = System.Convert.ToDecimal(Txt_6.Text);
+                    decimal Granulo = System.Convert.ToDecimal(Txt_7.Text);
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
@@ -5663,27 +5700,27 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int idUsuarioActual = id_user;
                     // Obtener datos de los TextBox
                     DateTime fecha = dtp1.Value; // Tu MetroDateTime
-                    int turno = Convert.ToInt32(cb_Turno.Text);
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
                     string op = cb_OP.Text;
-                    decimal meta_kg = Convert.ToDecimal(Txt_Read_2.Text);
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                     string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
-                    decimal Porcent_Logrado = Convert.ToDecimal(textoPorcent_Logrado) / 100m;
-                    decimal Pz_producidas = Convert.ToDecimal(Txt_1.Text);
-                    decimal KgProductoTerminado = Convert.ToDecimal(Txt_2.Text);
-                    decimal KgFueraEspec = Convert.ToDecimal(Txt_3.Text);
-                    decimal Merma = Convert.ToDecimal(Txt_4.Text);
-                    int PersonalOpe = Convert.ToInt32(Txt_5.Text);
-                    decimal hr_programadas = Convert.ToDecimal(Txt_Read_1.Text);
-                    decimal hr_efec = Convert.ToDecimal(Txt_Read_3.Text);
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal Pz_producidas = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
                     string area = cb_Area.Text;
-                    decimal kg_entrada = Convert.ToDecimal(Txt_Read_5.Text);
-                    decimal bobina_entrada = Convert.ToDecimal(Txt_6.Text);
-                    decimal bobina_utilizada = Convert.ToDecimal(Txt_7.Text);
-                    decimal bobina_merma = Convert.ToDecimal(Txt_8.Text);
-                    decimal meta = Convert.ToDecimal(Txt_meta.Text);
+                    decimal kg_entrada = System.Convert.ToDecimal(Txt_Read_5.Text);
+                    decimal bobina_entrada = System.Convert.ToDecimal(Txt_6.Text);
+                    decimal bobina_utilizada = System.Convert.ToDecimal(Txt_7.Text);
+                    decimal bobina_merma = System.Convert.ToDecimal(Txt_8.Text);
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     if (editar)
@@ -5852,7 +5889,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             string queryInsertUpdate = string.Empty;
             int result = 0;
             // Convertir el ID a entero ANTES de crear el parámetro
-            int idFicha = Convert.ToInt32(id_global_ficha);
+            int idFicha = System.Convert.ToInt32(id_global_ficha);
             if (cb_Area.SelectedIndex == 0)
             {
                 // actualizar
@@ -6355,7 +6392,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         }
         private void UpdateTiemposMuertosMecanicos(DatabaseHelper dbHelper)
         {
-            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            int id_ficha_int = System.Convert.ToInt32(id_global_ficha);
 
             // Primero eliminamos todos los registros existentes para esta ficha
             string deleteQuery = @"DELETE FROM public.""Tiempo_muerto_Mecanico""
@@ -6372,7 +6409,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         }
         private void UpdateTiemposMuertosOperativos(DatabaseHelper dbHelper)
         {
-            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            int id_ficha_int = System.Convert.ToInt32(id_global_ficha);
 
             // Primero eliminamos todos los registros existentes para esta ficha
             string deleteQuery = @"DELETE FROM public.""Tiempo_Muerto_Operativo"" 
@@ -6390,10 +6427,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         }
         private void UpdateTiempoMuertoComida(DatabaseHelper dbHelper)
         {
-            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            int id_ficha_int = System.Convert.ToInt32(id_global_ficha);
             if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text);
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_comida.Text);
 
                 string query = @"UPDATE public.""Tiempo_Muerto_Comida"" SET ""Minutos_Detenidos"" = @minutos_detenidos WHERE ""ID_Ficha"" = @id_ficha;";
 
@@ -6408,10 +6445,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         }
         private void UpdateTiempoMuertoEnergia(DatabaseHelper dbHelper)
         {
-            int id_ficha_int = Convert.ToInt32(id_global_ficha);
+            int id_ficha_int = System.Convert.ToInt32(id_global_ficha);
             if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text);
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_energia.Text);
 
                 string query = @"UPDATE public.""Tiempo_Muerto_Energia"" SET ""Minutos_Detenidos"" = @minutos_detenidos WHERE ""ID_Ficha"" = @id_ficha;";
 
@@ -6446,7 +6483,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value)/60;
+                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value)/60;
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_muerto_Mecanico"" (
@@ -6472,7 +6509,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = Convert.ToDecimal(row.Cells[0].Value)/60;
+                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value)/60;
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_Muerto_Operativo"" (
@@ -6496,7 +6533,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_comida.Text)/60;
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_comida.Text)/60;
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Comida"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -6517,7 +6554,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
             {
-                decimal minutosDetenidos = Convert.ToDecimal(txt_Tiempo_energia.Text)/60;
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_energia.Text)/60;
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Energia"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -7271,9 +7308,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            //double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
-            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
-            //double kg_fuera_espec = Convert.ToDouble(Txt_3.Text);
+            //double meta_kg = System.Convert.ToDouble(Txt_Read_2.Text);
+            //double Kg_Prod_Terminado = System.Convert.ToDouble(Txt_2.Text);
+            //double kg_fuera_espec = System.Convert.ToDouble(Txt_3.Text);
             if (double.TryParse(Txt_Read_2.Text, out double meta_kg) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado) && double.TryParse(Txt_3.Text, out double kg_fuera_espec))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
@@ -7300,8 +7337,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            //double meta_kg = Convert.ToDouble(Txt_Read_2.Text);
-            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            //double meta_kg = System.Convert.ToDouble(Txt_Read_2.Text);
+            //double Kg_Prod_Terminado = System.Convert.ToDouble(Txt_2.Text);
             if (double.TryParse(Txt_Read_2.Text, out double meta_kg) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
@@ -7346,9 +7383,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (dt != null && dt.Rows.Count > 0)
             {
                 kg_pz_string = dt.Rows[0]["Kg_pz"].ToString();
-                kg_pz = Convert.ToDecimal(kg_pz_string);
+                kg_pz = System.Convert.ToDecimal(kg_pz_string);
             }
-            pz_producidas = Convert.ToDecimal(Txt_1.Text);
+            pz_producidas = System.Convert.ToDecimal(Txt_1.Text);
             resultado = pz_producidas * kg_pz;
 
             Txt_Read_5.Text = resultado.ToString();
@@ -7358,8 +7395,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            //double Kg_entrada = Convert.ToDouble(Txt_1.Text);
-            //double Kg_Prod_Terminado = Convert.ToDouble(Txt_2.Text);
+            //double Kg_entrada = System.Convert.ToDouble(Txt_1.Text);
+            //double Kg_Prod_Terminado = System.Convert.ToDouble(Txt_2.Text);
             if (double.TryParse(Txt_1.Text, out double Kg_entrada) && double.TryParse(Txt_2.Text, out double Kg_Prod_Terminado))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
@@ -7412,8 +7449,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
-            //double kg_fuera_espec = Convert.ToDouble(Txt_4.Text);
+            //double kg_prod_seco = System.Convert.ToDouble(Txt_2.Text);
+            //double kg_fuera_espec = System.Convert.ToDouble(Txt_4.Text);
             if (double.TryParse(Txt_2.Text, out double kg_prod_seco) && double.TryParse(Txt_4.Text, out double kg_fuera_espec))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
@@ -7440,8 +7477,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             // Obtener los valores de los TextBox y convertirlos a double
 
-            //double kg_frescos_enter_sec = Convert.ToDouble(Txt_Read_4.Text);
-            //double kg_prod_seco = Convert.ToDouble(Txt_2.Text);
+            //double kg_frescos_enter_sec = System.Convert.ToDouble(Txt_Read_4.Text);
+            //double kg_prod_seco = System.Convert.ToDouble(Txt_2.Text);
             if (double.TryParse(Txt_Read_4.Text, out double kg_frescos_enter_sec) && double.TryParse(Txt_2.Text, out double kg_prod_seco))
             {
                 // Verificar que P2 no sea cero para evitar división por cero
@@ -7805,7 +7842,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
 
                     // Ejecutar consulta
@@ -7833,7 +7870,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -7888,7 +7925,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
 
                     // Ejecutar consulta
@@ -7912,7 +7949,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -7957,7 +7994,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
 
                     // Ejecutar consulta
@@ -7981,7 +8018,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -8023,7 +8060,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
                     // Ejecutar consulta
                     System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
@@ -8044,7 +8081,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -8086,7 +8123,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
                     // Ejecutar consulta
                     System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
@@ -8108,7 +8145,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
                         Turno = dt2.Rows[0]["Turno"].ToString();
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                         Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -8152,7 +8189,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id_global) }
+                        new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
                     };
 
                     // Ejecutar consulta
@@ -8177,7 +8214,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
-                        Fecha = Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+                        Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
                         Turno = dt2.Rows[0]["Turno"].ToString();
                         OP = dt2.Rows[0]["OP"].ToString();
                         MetaHr = dt2.Rows[0]["MetaHr"].ToString();
@@ -8261,7 +8298,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
             };
 
             dbHelper.LoadDataIntoDataGridView(query, dgv_mecanico, parameters);
@@ -8284,7 +8321,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
             };
 
             dbHelper.LoadDataIntoDataGridView(query, dgv_operativo, parameters);
@@ -8302,7 +8339,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
             };
 
             System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
@@ -8327,7 +8364,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = Convert.ToInt32(id) }
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
             };
 
             System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
@@ -8455,7 +8492,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idCalidad = Convert.ToInt32(id_global_polvos_calidad);
+                    int idCalidad = System.Convert.ToInt32(id_global_polvos_calidad);
 
                     queryInsertUpdate = "UPDATE public.\"Limpieza_polvos\" SET \"Fecha\" = @Fecha, \"Kg_merma\" = @Kg_merma WHERE \"ID_Limpieza\" = @ID_Limpieza;";
 
@@ -8467,7 +8504,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Kg_merma", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_merma_polvos.Text)
+                            Value = System.Convert.ToDecimal(txt_merma_polvos.Text)
                         },
                         new NpgsqlParameter("@ID_Limpieza", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -8484,7 +8521,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
-                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_polvos.Text))
+                        new NpgsqlParameter("@Kg_merma", System.Convert.ToDecimal(txt_merma_polvos.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -8510,7 +8547,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (e.RowIndex >= 0)
             {
                 id_global_polvos_calidad = dgv_polvos_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
-                Fecha = Convert.ToDateTime(dgv_polvos_calidad.Rows[e.RowIndex].Cells[1].Value);
+                Fecha = System.Convert.ToDateTime(dgv_polvos_calidad.Rows[e.RowIndex].Cells[1].Value);
                 txt_merma_polvos.Text = dgv_polvos_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
 
                 dtp_polvos.Value = Fecha;
@@ -8571,7 +8608,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Merma de la tabla?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id_calidad = Convert.ToInt32(id_global_polvos_calidad);
+                int id_calidad = System.Convert.ToInt32(id_global_polvos_calidad);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Limpieza_polvos""
@@ -8674,7 +8711,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int id = Convert.ToInt32(id_global_detalles_OP);
+                    int id = System.Convert.ToInt32(id_global_detalles_OP);
 
                     queryInsertUpdate = "UPDATE public.\"Detalles_OP\" SET \"Orden_Produccion\" = @Orden_Produccion, \"Producto\" = @Producto, \"Medida\" = @Medida, \"Descripcion\" = @Descripcion, \"Especificacion\" = @Especificacion, \"Ingredientes\" = @Ingredientes, \"Humedad\" = @Humedad, \"Comercio\" = @Comercio, \"Manzana\" = @Manzana, \"Analisis\" = @Analisis, \"Area_Proceso\" = @Area_Proceso, \"OP_Origen\" = @OP_Origen, \"Destino\" = @Destino, \"Clasificacion\" = @Clasificacion WHERE \"ID_Dt_OP\" = @ID;";
 
@@ -8753,7 +8790,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@OP", txt_orden_produc.Text.ToUpper().Trim()),
                     };
                     System.Data.DataTable dtCheckop = dbHelperop.ExecuteSelectQuery(queryChecop, parametersCheck);
-                    if (dtCheckop != null && dtCheckop.Rows.Count > 0 && Convert.ToInt32(dtCheckop.Rows[0][0]) > 0)
+                    if (dtCheckop != null && dtCheckop.Rows.Count > 0 && System.Convert.ToInt32(dtCheckop.Rows[0][0]) > 0)
                     {
                         MetroFramework.MetroMessageBox.Show(this, "El OP ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -8915,7 +8952,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Orden de Producción?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id_OP = Convert.ToInt32(id_global_detalles_OP);
+                int id_OP = System.Convert.ToInt32(id_global_detalles_OP);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Detalles_OP""
@@ -9219,7 +9256,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     // actualizar
                     // Convertir el ID a entero ANTES de crear el parámetro
-                    int idCalidad = Convert.ToInt32(id_global_tunel_calidad);
+                    int idCalidad = System.Convert.ToInt32(id_global_tunel_calidad);
 
                     queryInsertUpdate = "UPDATE public.\"Limpieza_tunel\" SET \"Fecha\" = @Fecha, \"Kg_merma\" = @Kg_merma WHERE \"ID_Tunel\" = @ID_Limpieza;";
 
@@ -9231,7 +9268,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         },
                         new NpgsqlParameter("@Kg_merma", NpgsqlTypes.NpgsqlDbType.Numeric)
                         {
-                            Value = Convert.ToDecimal(txt_merma_tunel.Text)
+                            Value = System.Convert.ToDecimal(txt_merma_tunel.Text)
                         },
                         new NpgsqlParameter("@ID_Limpieza", NpgsqlTypes.NpgsqlDbType.Integer)
                         {
@@ -9248,7 +9285,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@Fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
-                        new NpgsqlParameter("@Kg_merma", Convert.ToDecimal(txt_merma_tunel.Text))
+                        new NpgsqlParameter("@Kg_merma", System.Convert.ToDecimal(txt_merma_tunel.Text))
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                 }
@@ -9282,7 +9319,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Merma de la tabla?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id_calidad = Convert.ToInt32(id_global_tunel_calidad);
+                int id_calidad = System.Convert.ToInt32(id_global_tunel_calidad);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                 string query = @"DELETE FROM public.""Limpieza_tunel""
@@ -9361,7 +9398,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (e.RowIndex >= 0)
             {
                 id_global_tunel_calidad = dgv_Tunel_calidad.Rows[e.RowIndex].Cells[0].Value.ToString();
-                Fecha = Convert.ToDateTime(dgv_Tunel_calidad.Rows[e.RowIndex].Cells[1].Value);
+                Fecha = System.Convert.ToDateTime(dgv_Tunel_calidad.Rows[e.RowIndex].Cells[1].Value);
                 txt_merma_tunel.Text = dgv_Tunel_calidad.Rows[e.RowIndex].Cells[3].Value.ToString();
 
                 dtp_tunel.Value = Fecha;
@@ -10940,6 +10977,12 @@ ORDER BY
             string[] pestañasSinSemanas = { "tabPage27", "tabPage29" };
             // Obtener la pestaña seleccionada
             string tabSeleccionado = tabgraficas.SelectedTab.Name;
+            // Validar que se haya seleccionado un año
+            if (CB_Anio_grafica.SelectedItem == null)
+            {
+                MetroFramework.MetroMessageBox.Show(this,"Por favor seleccione un año para graficar.");
+                return;
+            }
 
             if (pestañasSinSemanas.Contains(tabSeleccionado))
             {
@@ -10955,21 +10998,6 @@ ORDER BY
                 }
                 return;
             }
-
-            //if (pestañasSinSemanas.Contains(tabgraficas.SelectedIndex))
-            //{
-            //    // Pestañas que no necesitan semanas seleccionadas
-            //    switch (tabgraficas.SelectedIndex)
-            //    {
-            //        case 8: // Cumplimiento planeación mensual por supervisor
-            //            GraficarCumplimientoPlaneacionMensualPorSupervisor();
-            //            break;
-            //        case 10: // Nueva pestaña para cumplimiento Kg terminado mensual por supervisor
-            //            GraficarCumplimientoKgTerminadoMensualPorSupervisor();
-            //            break;
-            //    }
-            //    return;
-            //}
 
             // Para TODAS LAS DEMÁS pestañas, validar semanas seleccionadas
             var seleccionados = lista_semanas.CheckedItems;
@@ -11040,48 +11068,49 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento Tiempo Efectivo - Otras Áreas
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-                ROUND(
-                    AVG(
-                        100 - (
-                            (COALESCE(tmo_daily.total_min_detenidos, 0) + COALESCE(tmm_daily.total_min_detenidos, 0)) / 
-                            NULLIF(f.""Hr_programadas"", 0)
-                        )
-                    ),
-                2) AS ""Promedio_Cumplimiento_Tiempo_Efectivo""
-            FROM 
-                public.""Ficha"" f
-            LEFT JOIN (
-                SELECT 
-                    ""ID_Ficha"",
-                    SUM(""Min_Detenidos"") AS total_min_detenidos
-                FROM 
-                    public.""Tiempo_Muerto_Operativo""
-                GROUP BY 
-                    ""ID_Ficha""
-            ) tmo_daily ON f.""ID_Ficha"" = tmo_daily.""ID_Ficha""
-            LEFT JOIN (
-                SELECT 
-                    ""ID_Ficha"",
-                    SUM(""Min_Detenidos"") AS total_min_detenidos
-                FROM 
-                    public.""Tiempo_muerto_Mecanico""
-                GROUP BY 
-                    ""ID_Ficha""
-            ) tmm_daily ON f.""ID_Ficha"" = tmm_daily.""ID_Ficha""
-            WHERE 
-                f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                AND f.""Hr_programadas"" > 0
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-            GROUP BY 
-                EXTRACT(YEAR FROM f.""Fecha""),
-                EXTRACT(WEEK FROM f.""Fecha"")
-            ORDER BY 
-                ""Año"", ""No_Semana""";
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+    ROUND(
+        AVG(
+            100 - (
+                (COALESCE(tmo_daily.total_min_detenidos, 0) + COALESCE(tmm_daily.total_min_detenidos, 0)) / 
+                NULLIF(f.""Hr_programadas"", 0)
+            )
+        ),
+    2) AS ""Promedio_Cumplimiento_Tiempo_Efectivo""
+FROM 
+    public.""Ficha"" f
+LEFT JOIN (
+    SELECT 
+        ""ID_Ficha"",
+        SUM(""Min_Detenidos"") AS total_min_detenidos
+    FROM 
+        public.""Tiempo_Muerto_Operativo""
+    GROUP BY 
+        ""ID_Ficha""
+) tmo_daily ON f.""ID_Ficha"" = tmo_daily.""ID_Ficha""
+LEFT JOIN (
+    SELECT 
+        ""ID_Ficha"",
+        SUM(""Min_Detenidos"") AS total_min_detenidos
+    FROM 
+        public.""Tiempo_muerto_Mecanico""
+    GROUP BY 
+        ""ID_Ficha""
+) tmm_daily ON f.""ID_Ficha"" = tmm_daily.""ID_Ficha""
+WHERE 
+    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND f.""Hr_programadas"" > 0
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha"")
+ORDER BY 
+    ""Año"", ""No_Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -11123,7 +11152,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Tiempo_Efectivo"]);
+                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Tiempo_Efectivo"]);
 
                     // Validar que el valor esté en rango 0-100
                     if (cumplimiento < 0) cumplimiento = 0;
@@ -11295,38 +11324,39 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento Tiempo Efectivo
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-                ROUND(AVG(
-                    CASE 
-                        WHEN f.""Hr_programadas"" > 0 THEN
-                            100 - (((COALESCE(tmo_avg.""Avg_Operativo"", 0) + COALESCE(tmm_avg.""Avg_Mecanico"", 0)) / f.""Hr_programadas"") * 100)
-                        ELSE 0
-                    END
-                ), 2) AS ""Promedio_Cumplimiento_Tiempo_Efectivo""
-            FROM public.""Ficha"" f
-            LEFT JOIN (
-                SELECT 
-                    tmo.""ID_Ficha"",
-                    ROUND(AVG(tmo.""Min_Detenidos""), 2) AS ""Avg_Operativo""
-                FROM public.""Tiempo_Muerto_Operativo"" tmo
-                GROUP BY tmo.""ID_Ficha""
-            ) tmo_avg ON f.""ID_Ficha"" = tmo_avg.""ID_Ficha""
-            LEFT JOIN (
-                SELECT 
-                    tmm.""ID_Ficha"",
-                    ROUND(AVG(tmm.""Min_Detenidos""), 2) AS ""Avg_Mecanico""
-                FROM public.""Tiempo_muerto_Mecanico"" tmm
-                GROUP BY tmm.""ID_Ficha""
-            ) tmm_avg ON f.""ID_Ficha"" = tmm_avg.""ID_Ficha""
-            WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                AND f.""Hr_programadas"" > 0
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-            GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha"")
-            ORDER BY ""Año"", ""No_Semana""";
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+    ROUND(AVG(
+        CASE 
+            WHEN f.""Hr_programadas"" > 0 THEN
+                100 - (((COALESCE(tmo_avg.""Avg_Operativo"", 0) + COALESCE(tmm_avg.""Avg_Mecanico"", 0)) / f.""Hr_programadas"") * 100)
+            ELSE 0
+        END
+    ), 2) AS ""Promedio_Cumplimiento_Tiempo_Efectivo""
+FROM public.""Ficha"" f
+LEFT JOIN (
+    SELECT 
+        tmo.""ID_Ficha"",
+        ROUND(AVG(tmo.""Min_Detenidos""), 2) AS ""Avg_Operativo""
+    FROM public.""Tiempo_Muerto_Operativo"" tmo
+    GROUP BY tmo.""ID_Ficha""
+) tmo_avg ON f.""ID_Ficha"" = tmo_avg.""ID_Ficha""
+LEFT JOIN (
+    SELECT 
+        tmm.""ID_Ficha"",
+        ROUND(AVG(tmm.""Min_Detenidos""), 2) AS ""Avg_Mecanico""
+    FROM public.""Tiempo_muerto_Mecanico"" tmm
+    GROUP BY tmm.""ID_Ficha""
+) tmm_avg ON f.""ID_Ficha"" = tmm_avg.""ID_Ficha""
+WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+    AND f.""Hr_programadas"" > 0
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha"")
+ORDER BY ""Año"", ""No_Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -11368,7 +11398,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Tiempo_Efectivo"]);
+                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Tiempo_Efectivo"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
@@ -11536,167 +11566,171 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento General Semanal
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                Año,
-                ""No de Semana"" AS ""No_Semana"",
-                ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_General""
-            FROM (
-                -- Primera consulta: Todas las áreas EXCEPTO Tunel/Sumergidor y Despegue
-                SELECT 
-                    Año,
-                    ""No de Semana"",
-                    ""% Cumplimiento""
-                FROM (
-                    SELECT 
-                        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-                        EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
-                        f.""Area"",
-                        f.""OP"",
-                        ROUND(
-                            CASE 
-                                -- Primero verificamos si el denominador es cero o NULL
-                                WHEN (CASE 
-                                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Polvos' THEN 
-                                            CASE 
-                                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                                ELSE 
-                                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                            END
-                                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        ELSE 0
-                                    END) <= 0 THEN 0
-                                -- Si el denominador es mayor que cero, aplicamos la fórmula
-                                ELSE LEAST(
-                                    (SUM(f.""Kg_prod_term"") / 
-                                    (CASE 
-                                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        WHEN f.""Area"" = 'Polvos' THEN 
-                                            CASE 
-                                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                                ELSE 
-                                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                            END
-                                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                        ELSE 1
-                                    END)) * 100,
-                                    100
-                                )
-                            END,
-                        2) AS ""% Cumplimiento""
-                    FROM 
-                        public.""Ficha"" f
-                    LEFT JOIN 
-                        public.""Tiempo_Muerto_Operativo"" tmo 
-                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                    LEFT JOIN 
-                        public.""Tiempo_muerto_Mecanico"" tmm 
-                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                    LEFT JOIN 
-                        public.""Empacado"" e ON f.""OP"" = e.""OP""
-                    LEFT JOIN 
-                        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-                    LEFT JOIN 
-                        public.""Grind"" g ON f.""OP"" = g.""OP""
-                    LEFT JOIN 
-                        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-                    LEFT JOIN 
-                        public.""Maquinas"" m ON f.""OP"" = m.""OP""
-                    LEFT JOIN 
-                        public.""Polvos"" p ON f.""OP"" = p.""OP""
-                    LEFT JOIN 
-                        public.""Revolturas"" r ON f.""OP"" = r.""OP""
-                    WHERE 
-                        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                    GROUP BY 
-                        EXTRACT(YEAR FROM f.""Fecha""),
-                        EXTRACT(WEEK FROM f.""Fecha""),
-                        f.""Area"",
-                        f.""OP"",
-                        e.""Meta_kg_hr_line"",
-                        ev.""Meta_kg_hr"",
-                        g.""Meta_Kg_hr"",
-                        i.""Meta_kg_hr_line"",
-                        m.""Meta_Kg_Hr"",
-                        p.""Meta_kg_hr_hum"",
-                        p.""Meta_kg_hr_idon"",
-                        r.""Meta_Kg_Hr""
-                ) AS subconsulta1
-                
-                UNION ALL
-                
-                -- Segunda consulta: Solo áreas Tunel/Sumergidor y Despegue
-                SELECT 
-                    ""Año"" AS Año,
-                    ""No. Semana"" AS ""No de Semana"",
-                    ""% Cumplimiento a Planeación"" AS ""% Cumplimiento""
-                FROM (
-                    SELECT 
-                        COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
-                        COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
-                        COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
-                        COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
-                        COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
-                        CASE 
-                            WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
-                                ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+SELECT 
+    Año,
+    ""No de Semana"" AS ""No_Semana"",
+    ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_General""
+FROM (
+    -- Primera consulta: Todas las áreas EXCEPTO Tunel/Sumergidor y Despegue
+    SELECT 
+        Año,
+        ""No de Semana"",
+        ""% Cumplimiento""
+    FROM (
+        SELECT 
+            EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+            EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+            f.""Area"",
+            f.""OP"",
+            ROUND(
+                CASE 
+                    -- Primero verificamos si el denominador es cero o NULL
+                    WHEN (CASE 
+                            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Polvos' THEN 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                        COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                    ELSE 
+                                        COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                END
+                            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
                             ELSE 0
-                        END AS ""% Cumplimiento a Planeación""
-                    FROM (
-                        SELECT 
-                            EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                            f.""OP""
-                        FROM public.""Ficha"" f
-                        WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                        GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
-                    ) q1
-                    FULL JOIN (
-                        SELECT 
-                            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                            ""OP"",
-                            SUM(""Hr_programadas"") AS ""Horas Programadas""
-                        FROM public.""Ficha""
-                        WHERE ""Area"" = 'Tunel/Sumergidor'
-                            AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-                        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-                    ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
-                    FULL JOIN (
-                        SELECT 
-                            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                            ""OP"",
-                            SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
-                        FROM public.""Ficha""
-                        WHERE ""Area"" = 'Despegue'
-                            AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-                        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-                    ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
-                        AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
-                        AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
-                    LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
-                ) AS subconsulta2
-                WHERE ""% Cumplimiento a Planeación"" > 0
-            ) AS todas_las_areas
-            GROUP BY 
-                Año, ""No de Semana""
-            ORDER BY 
-                Año, ""No de Semana""";
+                        END) <= 0 THEN 0
+                    -- Si el denominador es mayor que cero, aplicamos la fórmula
+                    ELSE LEAST(
+                        (SUM(f.""Kg_prod_term"") / 
+                        (CASE 
+                            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                            WHEN f.""Area"" = 'Polvos' THEN 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                        COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                    ELSE 
+                                        COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                                END
+                            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                            ELSE 1
+                        END)) * 100,
+                        100
+                    )
+                END,
+            2) AS ""% Cumplimiento""
+        FROM 
+            public.""Ficha"" f
+        LEFT JOIN 
+            public.""Tiempo_Muerto_Operativo"" tmo 
+            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        LEFT JOIN 
+            public.""Tiempo_muerto_Mecanico"" tmm 
+            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        LEFT JOIN 
+            public.""Empacado"" e ON f.""OP"" = e.""OP""
+        LEFT JOIN 
+            public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+        LEFT JOIN 
+            public.""Grind"" g ON f.""OP"" = g.""OP""
+        LEFT JOIN 
+            public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+        LEFT JOIN 
+            public.""Maquinas"" m ON f.""OP"" = m.""OP""
+        LEFT JOIN 
+            public.""Polvos"" p ON f.""OP"" = p.""OP""
+        LEFT JOIN 
+            public.""Revolturas"" r ON f.""OP"" = r.""OP""
+        WHERE 
+            f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY 
+            EXTRACT(YEAR FROM f.""Fecha""),
+            EXTRACT(WEEK FROM f.""Fecha""),
+            f.""Area"",
+            f.""OP"",
+            e.""Meta_kg_hr_line"",
+            ev.""Meta_kg_hr"",
+            g.""Meta_Kg_hr"",
+            i.""Meta_kg_hr_line"",
+            m.""Meta_Kg_Hr"",
+            p.""Meta_kg_hr_hum"",
+            p.""Meta_kg_hr_idon"",
+            r.""Meta_Kg_Hr""
+    ) AS subconsulta1
+    
+    UNION ALL
+    
+    -- Segunda consulta: Solo áreas Tunel/Sumergidor y Despegue
+    SELECT 
+        ""Año"" AS Año,
+        ""No. Semana"" AS ""No de Semana"",
+        ""% Cumplimiento a Planeación"" AS ""% Cumplimiento""
+    FROM (
+        SELECT 
+            COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+            COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+            COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
+            COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
+            COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
+            CASE 
+                WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
+                    ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+                ELSE 0
+            END AS ""% Cumplimiento a Planeación""
+        FROM (
+            SELECT 
+                EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+                EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                f.""OP""
+            FROM public.""Ficha"" f
+            WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+            GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
+        ) q1
+        FULL JOIN (
+            SELECT 
+                EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                ""OP"",
+                SUM(""Hr_programadas"") AS ""Horas Programadas""
+            FROM public.""Ficha""
+            WHERE ""Area"" = 'Tunel/Sumergidor'
+                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+                AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+            GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+        ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
+        FULL JOIN (
+            SELECT 
+                EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+                EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+                ""OP"",
+                SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
+            FROM public.""Ficha""
+            WHERE ""Area"" = 'Despegue'
+                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+                AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+            GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+        ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+            AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+            AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+        LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+    ) AS subconsulta2
+    WHERE ""% Cumplimiento a Planeación"" > 0
+) AS todas_las_areas
+GROUP BY 
+    Año, ""No de Semana""
+ORDER BY 
+    Año, ""No de Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -11738,7 +11772,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_General"]);
+                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_General"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
@@ -11904,109 +11938,110 @@ ORDER BY
             try
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                Año,
-                ""Mes"",
-                ""Supervisor"",
-                ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado_Mensual""
-            FROM (
-                SELECT 
-                    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-                    TO_CHAR(f.""Fecha"", 'Month') AS ""Mes"",
-                    f.""Area"",
-                    f.""OP"",
-                    COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-                    ROUND(
-                        CASE 
-                            -- Primero verificamos si el denominador es cero o NULL
-                            WHEN (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 0
-                                END) <= 0 THEN 0
-                            -- Si el denominador es mayor que cero, aplicamos la fórmula
-                            ELSE LEAST(
-                                (SUM(f.""Kg_prod_term"") / 
-                                (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 1
-                                END)) * 100,
-                                100
-                            )
-                        END,
-                    2) AS ""% Cumplimiento de Kg Terminado""
-                FROM 
-                    public.""Ficha"" f
-                LEFT JOIN 
-                    public.""Tiempo_Muerto_Operativo"" tmo 
-                    ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                LEFT JOIN 
-                    public.""Tiempo_muerto_Mecanico"" tmm 
-                    ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                LEFT JOIN 
-                    public.""Empacado"" e ON f.""OP"" = e.""OP""
-                LEFT JOIN 
-                    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-                LEFT JOIN 
-                    public.""Grind"" g ON f.""OP"" = g.""OP""
-                LEFT JOIN 
-                    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-                LEFT JOIN 
-                    public.""Maquinas"" m ON f.""OP"" = m.""OP""
-                LEFT JOIN 
-                    public.""Polvos"" p ON f.""OP"" = p.""OP""
-                LEFT JOIN 
-                    public.""Revolturas"" r ON f.""OP"" = r.""OP""
-                LEFT JOIN 
-                    public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-                WHERE 
-                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                GROUP BY 
-                    EXTRACT(YEAR FROM f.""Fecha""),
-                    TO_CHAR(f.""Fecha"", 'Month'),
-                    f.""Area"",
-                    f.""OP"",
-                    u.""Usuario"",
-                    e.""Meta_kg_hr_line"",
-                    ev.""Meta_kg_hr"",
-                    g.""Meta_Kg_hr"",
-                    i.""Meta_kg_hr_line"",
-                    m.""Meta_Kg_Hr"",
-                    p.""Meta_kg_hr_hum"",
-                    p.""Meta_kg_hr_idon"",
-                    r.""Meta_Kg_Hr""
-            ) AS subconsulta
-            GROUP BY 
-                Año, ""Mes"", ""Supervisor""
-            ORDER BY 
-                Año, 
-                EXTRACT(MONTH FROM TO_DATE(""Mes"", 'Month')),
-                ""Supervisor""";
+SELECT 
+    Año,
+    ""Mes"",
+    ""Supervisor"",
+    ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado_Mensual""
+FROM (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+        TO_CHAR(f.""Fecha"", 'Month') AS ""Mes"",
+        f.""Area"",
+        f.""OP"",
+        COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
+        ROUND(
+            CASE 
+                -- Primero verificamos si el denominador es cero o NULL
+                WHEN (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 0
+                    END) <= 0 THEN 0
+                -- Si el denominador es mayor que cero, aplicamos la fórmula
+                ELSE LEAST(
+                    (SUM(f.""Kg_prod_term"") / 
+                    (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 1
+                    END)) * 100,
+                    100
+                )
+            END,
+        2) AS ""% Cumplimiento de Kg Terminado""
+    FROM 
+        public.""Ficha"" f
+    LEFT JOIN 
+        public.""Tiempo_Muerto_Operativo"" tmo 
+        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+    LEFT JOIN 
+        public.""Tiempo_muerto_Mecanico"" tmm 
+        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+    LEFT JOIN 
+        public.""Empacado"" e ON f.""OP"" = e.""OP""
+    LEFT JOIN 
+        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+    LEFT JOIN 
+        public.""Grind"" g ON f.""OP"" = g.""OP""
+    LEFT JOIN 
+        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+    LEFT JOIN 
+        public.""Maquinas"" m ON f.""OP"" = m.""OP""
+    LEFT JOIN 
+        public.""Polvos"" p ON f.""OP"" = p.""OP""
+    LEFT JOIN 
+        public.""Revolturas"" r ON f.""OP"" = r.""OP""
+    LEFT JOIN 
+        public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE 
+        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        TO_CHAR(f.""Fecha"", 'Month'),
+        f.""Area"",
+        f.""OP"",
+        u.""Usuario"",
+        e.""Meta_kg_hr_line"",
+        ev.""Meta_kg_hr"",
+        g.""Meta_Kg_hr"",
+        i.""Meta_kg_hr_line"",
+        m.""Meta_Kg_Hr"",
+        p.""Meta_kg_hr_hum"",
+        p.""Meta_kg_hr_idon"",
+        r.""Meta_Kg_Hr""
+) AS subconsulta
+GROUP BY 
+    Año, ""Mes"", ""Supervisor""
+ORDER BY 
+    Año, 
+    EXTRACT(MONTH FROM TO_DATE(""Mes"", 'Month')),
+    ""Supervisor""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -12074,7 +12109,7 @@ ORDER BY
                     // Filtrar datos para este supervisor
                     var datosSupervisor = datos.AsEnumerable()
                         .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => Convert.ToInt32(row["Año"]))
+                        .OrderBy(row => System.Convert.ToInt32(row["Año"]))
                         .ThenBy(row => GetMesNumeroDesdeNombre(row["Mes"].ToString().Trim()))
                         .ToList();
 
@@ -12082,7 +12117,7 @@ ORDER BY
                     foreach (DataRow row in datosSupervisor)
                     {
                         string mes = $"{row["Mes"].ToString().Trim()} {row["Año"]}";
-                        double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado_Mensual"]);
+                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado_Mensual"]);
 
                         int pointIndex = serieSupervisor.Points.AddXY(mes, cumplimiento);
 
@@ -12276,108 +12311,109 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento de Kg Terminado por Supervisor
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                Año,
-                ""No de Semana"" AS ""No_Semana"",
-                ""Supervisor"",
-                ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
-            FROM (
-                SELECT 
-                    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
-                    f.""Area"",
-                    f.""OP"",
-                    COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-                    ROUND(
-                        CASE 
-                            -- Primero verificamos si el denominador es cero o NULL
-                            WHEN (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 0
-                                END) <= 0 THEN 0
-                            -- Si el denominador es mayor que cero, aplicamos la fórmula
-                            ELSE LEAST(
-                                (SUM(f.""Kg_prod_term"") / 
-                                (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 1
-                                END)) * 100,
-                                100
-                            )
-                        END,
-                    2) AS ""% Cumplimiento de Kg Terminado""
-                FROM 
-                    public.""Ficha"" f
-                LEFT JOIN 
-                    public.""Tiempo_Muerto_Operativo"" tmo 
-                    ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                LEFT JOIN 
-                    public.""Tiempo_muerto_Mecanico"" tmm 
-                    ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                LEFT JOIN 
-                    public.""Empacado"" e ON f.""OP"" = e.""OP""
-                LEFT JOIN 
-                    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-                LEFT JOIN 
-                    public.""Grind"" g ON f.""OP"" = g.""OP""
-                LEFT JOIN 
-                    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-                LEFT JOIN 
-                    public.""Maquinas"" m ON f.""OP"" = m.""OP""
-                LEFT JOIN 
-                    public.""Polvos"" p ON f.""OP"" = p.""OP""
-                LEFT JOIN 
-                    public.""Revolturas"" r ON f.""OP"" = r.""OP""
-                LEFT JOIN 
-                    public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-                WHERE 
-                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                GROUP BY 
-                    EXTRACT(YEAR FROM f.""Fecha""),
-                    EXTRACT(WEEK FROM f.""Fecha""),
-                    f.""Area"",
-                    f.""OP"",
-                    u.""Usuario"",
-                    e.""Meta_kg_hr_line"",
-                    ev.""Meta_kg_hr"",
-                    g.""Meta_Kg_hr"",
-                    i.""Meta_kg_hr_line"",
-                    m.""Meta_Kg_Hr"",
-                    p.""Meta_kg_hr_hum"",
-                    p.""Meta_kg_hr_idon"",
-                    r.""Meta_Kg_Hr""
-            ) AS subconsulta
-            GROUP BY 
-                Año, ""No de Semana"", ""Supervisor""
-            ORDER BY 
-                Año, ""No de Semana"", ""Supervisor""";
+SELECT 
+    Año,
+    ""No de Semana"" AS ""No_Semana"",
+    ""Supervisor"",
+    ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
+FROM (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+        f.""Area"",
+        f.""OP"",
+        COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
+        ROUND(
+            CASE 
+                -- Primero verificamos si el denominador es cero o NULL
+                WHEN (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 0
+                    END) <= 0 THEN 0
+                -- Si el denominador es mayor que cero, aplicamos la fórmula
+                ELSE LEAST(
+                    (SUM(f.""Kg_prod_term"") / 
+                    (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 1
+                    END)) * 100,
+                    100
+                )
+            END,
+        2) AS ""% Cumplimiento de Kg Terminado""
+    FROM 
+        public.""Ficha"" f
+    LEFT JOIN 
+        public.""Tiempo_Muerto_Operativo"" tmo 
+        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+    LEFT JOIN 
+        public.""Tiempo_muerto_Mecanico"" tmm 
+        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+    LEFT JOIN 
+        public.""Empacado"" e ON f.""OP"" = e.""OP""
+    LEFT JOIN 
+        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+    LEFT JOIN 
+        public.""Grind"" g ON f.""OP"" = g.""OP""
+    LEFT JOIN 
+        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+    LEFT JOIN 
+        public.""Maquinas"" m ON f.""OP"" = m.""OP""
+    LEFT JOIN 
+        public.""Polvos"" p ON f.""OP"" = p.""OP""
+    LEFT JOIN 
+        public.""Revolturas"" r ON f.""OP"" = r.""OP""
+    LEFT JOIN 
+        public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE 
+        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        EXTRACT(WEEK FROM f.""Fecha""),
+        f.""Area"",
+        f.""OP"",
+        u.""Usuario"",
+        e.""Meta_kg_hr_line"",
+        ev.""Meta_kg_hr"",
+        g.""Meta_Kg_hr"",
+        i.""Meta_kg_hr_line"",
+        m.""Meta_Kg_Hr"",
+        p.""Meta_kg_hr_hum"",
+        p.""Meta_kg_hr_idon"",
+        r.""Meta_Kg_Hr""
+) AS subconsulta
+GROUP BY 
+    Año, ""No de Semana"", ""Supervisor""
+ORDER BY 
+    Año, ""No de Semana"", ""Supervisor""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -12445,14 +12481,14 @@ ORDER BY
                     // Filtrar datos para este supervisor
                     var datosSupervisor = datos.AsEnumerable()
                         .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => Convert.ToInt32(row["No_Semana"]))
+                        .OrderBy(row => System.Convert.ToInt32(row["No_Semana"]))
                         .ToList();
 
                     // Agregar puntos para este supervisor
                     foreach (DataRow row in datosSupervisor)
                     {
                         string semana = $"Sem {row["No_Semana"]}";
-                        double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
+                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
 
                         int pointIndex = serieSupervisor.Points.AddXY(semana, cumplimiento);
 
@@ -12621,7 +12657,7 @@ ORDER BY
             try
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
             SELECT 
                 ""Año"",
@@ -12662,6 +12698,7 @@ ORDER BY
                         f.""ID_user""
                     FROM public.""Ficha"" f
                     WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+                        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
                     GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(MONTH FROM f.""Fecha""), f.""OP"", f.""ID_user""
                 ) q1
                 FULL JOIN (
@@ -12686,6 +12723,7 @@ ORDER BY
                         SUM(""Hr_programadas"") AS ""Horas Programadas""
                     FROM public.""Ficha""
                     WHERE ""Area"" = 'Tunel/Sumergidor'
+                        AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
                     GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP"", ""ID_user""
                 ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""Mes"" = q2.""Mes"" AND q1.""OP"" = q2.""OP"" AND q1.""ID_user"" = q2.""ID_user""
                 FULL JOIN (
@@ -12710,6 +12748,7 @@ ORDER BY
                         SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
                     FROM public.""Ficha""
                     WHERE ""Area"" = 'Despegue'
+                        AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
                     GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP"", ""ID_user""
                 ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
                     AND COALESCE(q1.""Mes"", q2.""Mes"") = q3.""Mes""
@@ -12803,7 +12842,7 @@ ORDER BY
                     // Filtrar datos para este supervisor
                     var datosSupervisor = datos.AsEnumerable()
                         .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => Convert.ToInt32(row["Año"]))
+                        .OrderBy(row => System.Convert.ToInt32(row["Año"]))
                         .ThenBy(row => GetMesNumero(row["Mes"].ToString()))
                         .ToList();
 
@@ -12811,7 +12850,7 @@ ORDER BY
                     foreach (DataRow row in datosSupervisor)
                     {
                         string mes = $"{row["Mes"]} {row["Año"]}";
-                        double cumplimiento = Convert.ToDouble(row["Promedio_Mensual_Cumplimiento_Planeacion"]);
+                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Mensual_Cumplimiento_Planeacion"]);
 
                         int pointIndex = serieSupervisor.Points.AddXY(mes, cumplimiento);
 
@@ -13004,68 +13043,71 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento a Planeación por Supervisor
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                ""Año"",
-                ""No. Semana"" AS ""No_Semana"",
-                ""Supervisor"",
-                ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Cumplimiento_Planeacion""
-            FROM (
-                SELECT 
-                    COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
-                    COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
-                    COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-                    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
-                    COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
-                    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
-                    CASE 
-                        WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
-                            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
-                        ELSE 0
-                    END AS ""% Cumplimiento a Planeación""
-                FROM (
-                    SELECT 
-                        EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                        f.""OP"",
-                        f.""ID_user""
-                    FROM public.""Ficha"" f
-                    WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                    GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP"", f.""ID_user""
-                ) q1
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                        ""OP"",
-                        ""ID_user"",
-                        SUM(""Hr_programadas"") AS ""Horas Programadas""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Tunel/Sumergidor'
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP"", ""ID_user""
-                ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP"" AND q1.""ID_user"" = q2.""ID_user""
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                        ""OP"",
-                        ""ID_user"",
-                        SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Despegue'
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP"", ""ID_user""
-                ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
-                    AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
-                    AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
-                    AND COALESCE(q1.""ID_user"", q2.""ID_user"") = q3.""ID_user""
-                LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
-                LEFT JOIN public.""Usuarios"" u ON COALESCE(q1.""ID_user"", q2.""ID_user"", q3.""ID_user"") = u.""ID_User""
-            ) AS subconsulta
-            WHERE ""% Cumplimiento a Planeación"" > 0
-                AND ""No. Semana"" IN (" + semanasParam + @")
-            GROUP BY ""Año"", ""No. Semana"", ""Supervisor""
-            ORDER BY ""Año"", ""No. Semana"", ""Supervisor""";
+SELECT 
+    ""Año"",
+    ""No. Semana"" AS ""No_Semana"",
+    ""Supervisor"",
+    ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Cumplimiento_Planeacion""
+FROM (
+    SELECT 
+        COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+        COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+        COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
+        COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
+        COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
+        COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
+        CASE 
+            WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
+                ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+            ELSE 0
+        END AS ""% Cumplimiento a Planeación""
+    FROM (
+        SELECT 
+            EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+            f.""OP"",
+            f.""ID_user""
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP"", f.""ID_user""
+    ) q1
+    FULL JOIN (
+        SELECT 
+            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+            ""OP"",
+            ""ID_user"",
+            SUM(""Hr_programadas"") AS ""Horas Programadas""
+        FROM public.""Ficha""
+        WHERE ""Area"" = 'Tunel/Sumergidor'
+            AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP"", ""ID_user""
+    ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP"" AND q1.""ID_user"" = q2.""ID_user""
+    FULL JOIN (
+        SELECT 
+            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+            ""OP"",
+            ""ID_user"",
+            SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
+        FROM public.""Ficha""
+        WHERE ""Area"" = 'Despegue'
+            AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP"", ""ID_user""
+    ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+        AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+        AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+        AND COALESCE(q1.""ID_user"", q2.""ID_user"") = q3.""ID_user""
+    LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+    LEFT JOIN public.""Usuarios"" u ON COALESCE(q1.""ID_user"", q2.""ID_user"", q3.""ID_user"") = u.""ID_User""
+) AS subconsulta
+WHERE ""% Cumplimiento a Planeación"" > 0
+    AND ""No. Semana"" IN (" + semanasParam + @")
+GROUP BY ""Año"", ""No. Semana"", ""Supervisor""
+ORDER BY ""Año"", ""No. Semana"", ""Supervisor""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13133,14 +13175,14 @@ ORDER BY
                     // Filtrar datos para este supervisor
                     var datosSupervisor = datos.AsEnumerable()
                         .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => Convert.ToInt32(row["No_Semana"]))
+                        .OrderBy(row => System.Convert.ToInt32(row["No_Semana"]))
                         .ToList();
 
                     // Agregar puntos para este supervisor
                     foreach (DataRow row in datosSupervisor)
                     {
                         string semana = $"Sem {row["No_Semana"]}";
-                        double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Planeacion"]);
+                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Planeacion"]);
 
                         int pointIndex = serieSupervisor.Points.AddXY(semana, cumplimiento);
 
@@ -13311,97 +13353,98 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                Año,
-                ""No de Semana"" AS ""No_Semana"",
-                ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
-            FROM (
-                SELECT 
-                    EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
-                    f.""Area"",
-                    f.""OP"",
-                    ROUND(
-                        CASE 
-                            -- Primero verificamos si el denominador es cero o NULL
-                            WHEN (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 0
-                                END) <= 0 THEN 0
-                            -- Si el denominador es mayor que cero, aplicamos la fórmula
-                            ELSE LEAST(
-                                (SUM(f.""Kg_prod_term"") / 
-                                (CASE 
-                                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    WHEN f.""Area"" = 'Polvos' THEN 
-                                        CASE 
-                                            WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                                COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                            ELSE 
-                                                COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                        END
-                                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 1
-                                END)) * 100,
-                                100
-                            )
-                        END,
-                    2) AS ""% Cumplimiento""
-                FROM 
-                    public.""Ficha"" f
-                LEFT JOIN 
-                    public.""Empacado"" e ON f.""OP"" = e.""OP""
-                LEFT JOIN 
-                    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-                LEFT JOIN 
-                    public.""Grind"" g ON f.""OP"" = g.""OP""
-                LEFT JOIN 
-                    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-                LEFT JOIN 
-                    public.""Maquinas"" m ON f.""OP"" = m.""OP""
-                LEFT JOIN 
-                    public.""Polvos"" p ON f.""OP"" = p.""OP""
-                LEFT JOIN 
-                    public.""Revolturas"" r ON f.""OP"" = r.""OP""
-                WHERE 
-                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                GROUP BY 
-                    EXTRACT(YEAR FROM f.""Fecha""),
-                    EXTRACT(WEEK FROM f.""Fecha""),
-                    f.""Area"",
-                    f.""OP"",
-                    e.""Meta_kg_hr_line"",
-                    ev.""Meta_kg_hr"",
-                    g.""Meta_Kg_hr"",
-                    i.""Meta_kg_hr_line"",
-                    m.""Meta_Kg_Hr"",
-                    p.""Meta_kg_hr_hum"",
-                    p.""Meta_kg_hr_idon"",
-                    r.""Meta_Kg_Hr""
-            ) AS subconsulta
-            GROUP BY 
-                Año, ""No de Semana""
-            ORDER BY 
-                Año, ""No de Semana""";
+SELECT 
+    Año,
+    ""No de Semana"" AS ""No_Semana"",
+    ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
+FROM (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
+        f.""Area"",
+        f.""OP"",
+        ROUND(
+            CASE 
+                -- Primero verificamos si el denominador es cero o NULL
+                WHEN (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 0
+                    END) <= 0 THEN 0
+                -- Si el denominador es mayor que cero, aplicamos la fórmula
+                ELSE LEAST(
+                    (SUM(f.""Kg_prod_term"") / 
+                    (CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
+                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
+                                ELSE 
+                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
+                        ELSE 1
+                    END)) * 100,
+                    100
+                )
+            END,
+        2) AS ""% Cumplimiento""
+    FROM 
+        public.""Ficha"" f
+    LEFT JOIN 
+        public.""Empacado"" e ON f.""OP"" = e.""OP""
+    LEFT JOIN 
+        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+    LEFT JOIN 
+        public.""Grind"" g ON f.""OP"" = g.""OP""
+    LEFT JOIN 
+        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+    LEFT JOIN 
+        public.""Maquinas"" m ON f.""OP"" = m.""OP""
+    LEFT JOIN 
+        public.""Polvos"" p ON f.""OP"" = p.""OP""
+    LEFT JOIN 
+        public.""Revolturas"" r ON f.""OP"" = r.""OP""
+    WHERE 
+        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        EXTRACT(WEEK FROM f.""Fecha""),
+        f.""Area"",
+        f.""OP"",
+        e.""Meta_kg_hr_line"",
+        ev.""Meta_kg_hr"",
+        g.""Meta_Kg_hr"",
+        i.""Meta_kg_hr_line"",
+        m.""Meta_Kg_Hr"",
+        p.""Meta_kg_hr_hum"",
+        p.""Meta_kg_hr_idon"",
+        r.""Meta_Kg_Hr""
+) AS subconsulta
+GROUP BY 
+    Año, ""No de Semana""
+ORDER BY 
+    Año, ""No de Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13443,7 +13486,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
+                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
@@ -13611,64 +13654,67 @@ ORDER BY
                 // Construir la consulta SQL para % Cumplimiento a Planeación
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                ""Año"",
-                ""No. Semana"" AS ""No_Semana"",
-                ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Cumplimiento""
-            FROM (
-                SELECT 
-                    COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
-                    COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
-                    COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
-                    COALESCE(q2.""Horas Reales"", 0) AS ""Horas_Reales"",
-                    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
-                    COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
-                    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
-                    CASE 
-                        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 AND (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) > 0 THEN
-                            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
-                        ELSE 0
-                    END AS ""% Cumplimiento a Planeación""
-                FROM (
-                    SELECT 
-                        EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                        f.""OP""
-                    FROM public.""Ficha"" f
-                    WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                    GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
-                ) q1
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                        ""OP"",
-                        SUM(""Hr_efectivas"") AS ""Horas Reales"",
-                        SUM(""Hr_programadas"") AS ""Horas Programadas""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Tunel/Sumergidor'
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-                ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                        ""OP"",
-                        SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Despegue'
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-                ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
-                    AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
-                    AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
-                LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
-            ) AS subconsulta
-            WHERE ""% Cumplimiento a Planeación"" > 0
-                AND ""No. Semana"" IN (" + semanasParam + @")
-            GROUP BY ""Año"", ""No. Semana""
-            ORDER BY ""Año"", ""No. Semana""";
+SELECT 
+    ""Año"",
+    ""No. Semana"" AS ""No_Semana"",
+    ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Cumplimiento""
+FROM (
+    SELECT 
+        COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
+        COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
+        COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
+        COALESCE(q2.""Horas Reales"", 0) AS ""Horas_Reales"",
+        COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
+        COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
+        COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
+        CASE 
+            WHEN COALESCE(q2.""Horas Reales"", 0) > 0 AND (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) > 0 THEN
+                ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
+            ELSE 0
+        END AS ""% Cumplimiento a Planeación""
+    FROM (
+        SELECT 
+            EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+            f.""OP""
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
+            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
+    ) q1
+    FULL JOIN (
+        SELECT 
+            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+            ""OP"",
+            SUM(""Hr_efectivas"") AS ""Horas Reales"",
+            SUM(""Hr_programadas"") AS ""Horas Programadas""
+        FROM public.""Ficha""
+        WHERE ""Area"" = 'Tunel/Sumergidor'
+            AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+    ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
+    FULL JOIN (
+        SELECT 
+            EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+            EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+            ""OP"",
+            SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
+        FROM public.""Ficha""
+        WHERE ""Area"" = 'Despegue'
+            AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+        GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
+    ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
+        AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
+        AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
+    LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+) AS subconsulta
+WHERE ""% Cumplimiento a Planeación"" > 0
+    AND ""No. Semana"" IN (" + semanasParam + @")
+GROUP BY ""Año"", ""No. Semana""
+ORDER BY ""Año"", ""No. Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13710,7 +13756,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = Convert.ToDouble(row["Promedio_Cumplimiento"]);
+                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
@@ -13878,34 +13924,35 @@ ORDER BY
                 // Construir la consulta SQL para KG de merma por Supervisor
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            WITH merma_usuario AS (
-                SELECT 
-                    u.""Usuario"" as ""Nombre_Usuario"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
-                    EXTRACT(YEAR FROM f.""Fecha"") AS año,
-                    SUM(
-                        CASE 
-                            WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
-                                f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
-                            ELSE f.""Merma_kg""
-                        END
-                    ) AS total_merma_kg
-                FROM public.""Ficha"" f
-                INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-                WHERE f.""Area"" IS NOT NULL
-                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
-            )
+WITH merma_usuario AS (
+    SELECT 
+        u.""Usuario"" as ""Nombre_Usuario"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
+        EXTRACT(YEAR FROM f.""Fecha"") AS año,
+        SUM(
+            CASE 
+                WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
+                    f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
+                ELSE f.""Merma_kg""
+            END
+        ) AS total_merma_kg
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE f.""Area"" IS NOT NULL
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
+)
 
-            SELECT 
-                ""Nombre_Usuario"" AS ""Supervisor"",
-                numero_semana as ""No_Semana"",
-                año as ""Año"",
-                COALESCE(total_merma_kg, 0) as ""Merma_Kg""
-            FROM merma_usuario
-            ORDER BY año, numero_semana, ""Nombre_Usuario""";
+SELECT 
+    ""Nombre_Usuario"" AS ""Supervisor"",
+    numero_semana as ""No_Semana"",
+    año as ""Año"",
+    COALESCE(total_merma_kg, 0) as ""Merma_Kg""
+FROM merma_usuario
+ORDER BY año, numero_semana, ""Nombre_Usuario""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13964,13 +14011,13 @@ ORDER BY
                     // Filtrar datos para este supervisor y agregar puntos
                     var datosSupervisor = datos.AsEnumerable()
                         .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => Convert.ToInt32(row["No_Semana"]))
+                        .OrderBy(row => System.Convert.ToInt32(row["No_Semana"]))
                         .ToList();
 
                     foreach (DataRow row in datosSupervisor)
                     {
                         string semana = $"Sem {row["No_Semana"]}";
-                        double kgMerma = Convert.ToDouble(row["Merma_Kg"]);
+                        double kgMerma = System.Convert.ToDouble(row["Merma_Kg"]);
 
                         int pointIndex = serieSupervisor.Points.AddXY(semana, kgMerma);
 
@@ -14185,37 +14232,38 @@ ORDER BY
                 // Construir la consulta SQL
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            WITH FTT_Por_Area AS (
-                SELECT 
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-                    f.""Area"",
-                    CASE 
-                        WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
-                        ELSE LEAST(
-                            ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
-                            100
-                        )
-                    END AS ""FTT""
-                FROM 
-                    public.""Ficha"" f
-                WHERE 
-                    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                GROUP BY 
-                    EXTRACT(WEEK FROM f.""Fecha""),
-                    f.""Area""
+WITH FTT_Por_Area AS (
+    SELECT 
+        EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+        f.""Area"",
+        CASE 
+            WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
+            ELSE LEAST(
+                ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
+                100
             )
-            SELECT 
-                ""No_Semana"",
-                ROUND(AVG(""FTT""), 2) AS ""FTT_Promedio""
-            FROM 
-                FTT_Por_Area
-            GROUP BY 
-                ""No_Semana""
-            ORDER BY 
-                ""No_Semana""";
+        END AS ""FTT""
+    FROM 
+        public.""Ficha"" f
+    WHERE 
+        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY 
+        EXTRACT(WEEK FROM f.""Fecha""),
+        f.""Area""
+)
+SELECT 
+    ""No_Semana"",
+    ROUND(AVG(""FTT""), 2) AS ""FTT_Promedio""
+FROM 
+    FTT_Por_Area
+GROUP BY 
+    ""No_Semana""
+ORDER BY 
+    ""No_Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -14257,7 +14305,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double fttPromedio = Convert.ToDouble(row["FTT_Promedio"]);
+                    double fttPromedio = System.Convert.ToDouble(row["FTT_Promedio"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieFTTPromedio.Points.AddXY(semana, fttPromedio);
@@ -14410,20 +14458,21 @@ ORDER BY
                 // Construir la consulta SQL
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-                CASE 
-                    WHEN SUM(f.""Kg_prod_seco"") > 0 THEN
-                        ROUND(((SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_seco"")) * 100, 2)
-                    ELSE 0
-                END AS ""FTT""
-            FROM public.""Ficha"" f
-            WHERE f.""Area"" = 'Despegue'
-            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-            ORDER BY ""No_Semana""";
+SELECT 
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+    CASE 
+        WHEN SUM(f.""Kg_prod_seco"") > 0 THEN
+            ROUND(((SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_seco"")) * 100, 2)
+        ELSE 0
+    END AS ""FTT""
+FROM public.""Ficha"" f
+WHERE f.""Area"" = 'Despegue'
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+ORDER BY ""No_Semana""";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -14465,7 +14514,7 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double fttValue = Convert.ToDouble(row["FTT"]);
+                    double fttValue = System.Convert.ToDouble(row["FTT"]);
 
                     // Agregar punto a la serie
                     int pointIndex = serieFTT.Points.AddXY(semana, fttValue);
@@ -14621,24 +14670,25 @@ ORDER BY
                 // Construir la consulta SQL
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                SUM(""Hr_programadas"" * d.""Kg_fresco_hr"") AS ""Suma_Kg_Fresco_Meta_por_Hr_programadas"",
-                SUM(""Hr_efectivas"" * d.""Kg_fresco_hr"") AS ""Kg_Fresco_Meta_por_Hr_Reales"",
-                SUM(kg_frescos_enter_se) AS ""Kg_Fresco_Real""
-            FROM 
-                public.""Ficha"" f
-            INNER JOIN 
-                public.""Deshidratado"" d ON f.""OP"" = d.""OP""
-            WHERE 
-                f.""Area"" = 'Tunel/Sumergidor'
-                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-            GROUP BY 
-                EXTRACT(WEEK FROM ""Fecha"")
-            ORDER BY 
-                semana";
+SELECT 
+    EXTRACT(WEEK FROM ""Fecha"") AS semana,
+    SUM(""Hr_programadas"" * d.""Kg_fresco_hr"") AS ""Suma_Kg_Fresco_Meta_por_Hr_programadas"",
+    SUM(""Hr_efectivas"" * d.""Kg_fresco_hr"") AS ""Kg_Fresco_Meta_por_Hr_Reales"",
+    SUM(kg_frescos_enter_se) AS ""Kg_Fresco_Real""
+FROM 
+    public.""Ficha"" f
+INNER JOIN 
+    public.""Deshidratado"" d ON f.""OP"" = d.""OP""
+WHERE 
+    f.""Area"" = 'Tunel/Sumergidor'
+    AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+    AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+GROUP BY 
+    EXTRACT(WEEK FROM ""Fecha"")
+ORDER BY 
+    semana";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -14713,9 +14763,9 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["semana"]}";
-                    double metaProgramada = Convert.ToDouble(row["Suma_Kg_Fresco_Meta_por_Hr_programadas"]);
-                    double metaReales = Convert.ToDouble(row["Kg_Fresco_Meta_por_Hr_Reales"]);
-                    double real = Convert.ToDouble(row["Kg_Fresco_Real"]);
+                    double metaProgramada = System.Convert.ToDouble(row["Suma_Kg_Fresco_Meta_por_Hr_programadas"]);
+                    double metaReales = System.Convert.ToDouble(row["Kg_Fresco_Meta_por_Hr_Reales"]);
+                    double real = System.Convert.ToDouble(row["Kg_Fresco_Real"]);
 
                     // Agregar puntos a las series
                     int pointIndex = serieMetaProgramada.Points.AddXY(semana, metaProgramada);
@@ -14876,24 +14926,25 @@ ORDER BY
                 // Construir la consulta SQL
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
+                string añoSeleccionado = CB_Anio_grafica.Text;
                 string query = @"
-            SELECT 
-                EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                SUM(""Hr_programadas"" * d.""Kg_seco_hr"") AS ""Suma_Kg_Seco_Meta_por_Hr_programadas"",
-                SUM(""Hr_efectivas"" * d.""Kg_seco_hr"") AS ""Kg_Seco_Meta_por_Hr_Reales"",
-                SUM(""Kg_prod_seco"") AS ""Kg_Seco_Real""
-            FROM 
-                public.""Ficha"" f
-            INNER JOIN 
-                public.""Deshidratado"" d ON f.""OP"" = d.""OP""
-            WHERE 
-                f.""Area"" = 'Despegue'
-                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-            GROUP BY 
-                EXTRACT(WEEK FROM ""Fecha"")
-            ORDER BY 
-                semana";
+SELECT 
+    EXTRACT(WEEK FROM ""Fecha"") AS semana,
+    SUM(""Hr_programadas"" * d.""Kg_seco_hr"") AS ""Suma_Kg_Seco_Meta_por_Hr_programadas"",
+    SUM(""Hr_efectivas"" * d.""Kg_seco_hr"") AS ""Kg_Seco_Meta_por_Hr_Reales"",
+    SUM(""Kg_prod_seco"") AS ""Kg_Seco_Real""
+FROM 
+    public.""Ficha"" f
+INNER JOIN 
+    public.""Deshidratado"" d ON f.""OP"" = d.""OP""
+WHERE 
+    f.""Area"" = 'Despegue'
+    AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
+    AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
+GROUP BY 
+    EXTRACT(WEEK FROM ""Fecha"")
+ORDER BY 
+    semana";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -14968,9 +15019,9 @@ ORDER BY
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["semana"]}";
-                    double metaProgramada = Convert.ToDouble(row["Suma_Kg_Seco_Meta_por_Hr_programadas"]);
-                    double metaReales = Convert.ToDouble(row["Kg_Seco_Meta_por_Hr_Reales"]);
-                    double real = Convert.ToDouble(row["Kg_Seco_Real"]);
+                    double metaProgramada = System.Convert.ToDouble(row["Suma_Kg_Seco_Meta_por_Hr_programadas"]);
+                    double metaReales = System.Convert.ToDouble(row["Kg_Seco_Meta_por_Hr_Reales"]);
+                    double real = System.Convert.ToDouble(row["Kg_Seco_Real"]);
 
                     // Agregar puntos a las series
                     int pointIndex = serieMetaProgramada.Points.AddXY(semana, metaProgramada);
@@ -15329,7 +15380,7 @@ ORDER BY
             Tablero.Properties.Settings.Default.ServerSMTP = Txt_server_Smtp.Text;
             Tablero.Properties.Settings.Default.RemitenteEMail = Txt_Remitente.Text;
             Tablero.Properties.Settings.Default.PasswordEmail = Txt_Password_SMTP.Text;
-            Tablero.Properties.Settings.Default.PuertoSMTP = Convert.ToInt32(TxtPuerto.Text);
+            Tablero.Properties.Settings.Default.PuertoSMTP = System.Convert.ToInt32(TxtPuerto.Text);
             Tablero.Properties.Settings.Default.SSLCheck = Check_ssl.Checked;
             Tablero.Properties.Settings.Default.DestinatariosEmail = Txt_Destinatarios.Text;
             Tablero.Properties.Settings.Default.Save();

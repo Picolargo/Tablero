@@ -30,21 +30,21 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea15 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea16 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea17 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea18 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea19 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea20 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea21 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea22 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea23 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea24 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea25 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea26 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea27 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea28 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea29 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea30 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea31 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea32 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea33 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea34 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea35 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea36 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea37 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea38 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea39 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea40 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea41 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea42 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -110,6 +110,7 @@
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.borrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.pnl_graficas = new System.Windows.Forms.Panel();
             this.materialCard19 = new MaterialSkin.Controls.MaterialCard();
@@ -337,7 +338,8 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.borrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CB_Anio_grafica = new MaterialSkin.Controls.MaterialComboBox();
+            this.panel7 = new System.Windows.Forms.Panel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -492,6 +494,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            this.panel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1572,15 +1575,22 @@
             this.editarToolStripMenuItem1,
             this.borrarToolStripMenuItem});
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.editarToolStripMenuItem.Text = "Ficha";
             // 
             // editarToolStripMenuItem1
             // 
             this.editarToolStripMenuItem1.Name = "editarToolStripMenuItem1";
-            this.editarToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem1.Size = new System.Drawing.Size(106, 22);
             this.editarToolStripMenuItem1.Text = "Editar";
             this.editarToolStripMenuItem1.Click += new System.EventHandler(this.editarToolStripMenuItem1_Click);
+            // 
+            // borrarToolStripMenuItem
+            // 
+            this.borrarToolStripMenuItem.Name = "borrarToolStripMenuItem";
+            this.borrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.borrarToolStripMenuItem.Text = "Borrar";
+            this.borrarToolStripMenuItem.Click += new System.EventHandler(this.borrarToolStripMenuItem_Click);
             // 
             // tabPage2
             // 
@@ -1599,8 +1609,7 @@
             // 
             this.pnl_graficas.AutoScroll = true;
             this.pnl_graficas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnl_graficas.Controls.Add(this.materialCard19);
-            this.pnl_graficas.Controls.Add(this.tabgraficas);
+            this.pnl_graficas.Controls.Add(this.panel7);
             this.pnl_graficas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_graficas.Location = new System.Drawing.Point(3, 3);
             this.pnl_graficas.Name = "pnl_graficas";
@@ -1609,7 +1618,9 @@
             // 
             // materialCard19
             // 
+            this.materialCard19.AutoScroll = true;
             this.materialCard19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard19.Controls.Add(this.CB_Anio_grafica);
             this.materialCard19.Controls.Add(this.bnt_graficar);
             this.materialCard19.Controls.Add(this.lista_semanas);
             this.materialCard19.Depth = 0;
@@ -1620,7 +1631,7 @@
             this.materialCard19.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard19.Name = "materialCard19";
             this.materialCard19.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard19.Size = new System.Drawing.Size(183, 915);
+            this.materialCard19.Size = new System.Drawing.Size(196, 932);
             this.materialCard19.TabIndex = 38;
             // 
             // bnt_graficar
@@ -1646,12 +1657,12 @@
             // 
             // lista_semanas
             // 
-            this.lista_semanas.Location = new System.Drawing.Point(17, 65);
+            this.lista_semanas.Location = new System.Drawing.Point(17, 120);
             this.lista_semanas.MultiSelect = true;
             this.lista_semanas.Name = "lista_semanas";
             this.lista_semanas.ShowCheckBoxes = true;
             this.lista_semanas.ShowColumnHeaders = false;
-            this.lista_semanas.Size = new System.Drawing.Size(149, 833);
+            this.lista_semanas.Size = new System.Drawing.Size(149, 735);
             this.lista_semanas.TabIndex = 1;
             // 
             // tabgraficas
@@ -1672,11 +1683,11 @@
             this.tabgraficas.Controls.Add(this.tabPage32);
             this.tabgraficas.Dock = System.Windows.Forms.DockStyle.Right;
             this.tabgraficas.HotTrack = true;
-            this.tabgraficas.Location = new System.Drawing.Point(183, 0);
+            this.tabgraficas.Location = new System.Drawing.Point(204, 0);
             this.tabgraficas.Name = "tabgraficas";
             this.tabgraficas.Padding = new System.Drawing.Point(10, 7);
             this.tabgraficas.SelectedIndex = 0;
-            this.tabgraficas.Size = new System.Drawing.Size(1529, 915);
+            this.tabgraficas.Size = new System.Drawing.Size(1470, 932);
             this.tabgraficas.TabIndex = 37;
             this.tabgraficas.SelectedIndexChanged += new System.EventHandler(this.tabgraficas_SelectedIndexChanged);
             // 
@@ -1687,19 +1698,19 @@
             this.tabPage18.Location = new System.Drawing.Point(4, 30);
             this.tabPage18.Name = "tabPage18";
             this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage18.Size = new System.Drawing.Size(1521, 881);
+            this.tabPage18.Size = new System.Drawing.Size(1462, 898);
             this.tabPage18.TabIndex = 0;
             this.tabPage18.Text = "Kg Fresco";
             this.tabPage18.UseVisualStyleBackColor = true;
             // 
             // charview_kg_fresco
             // 
-            chartArea15.Name = "ChartArea1";
-            this.charview_kg_fresco.ChartAreas.Add(chartArea15);
+            chartArea29.Name = "ChartArea1";
+            this.charview_kg_fresco.ChartAreas.Add(chartArea29);
             this.charview_kg_fresco.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_kg_fresco.Location = new System.Drawing.Point(3, 3);
             this.charview_kg_fresco.Name = "charview_kg_fresco";
-            this.charview_kg_fresco.Size = new System.Drawing.Size(1515, 875);
+            this.charview_kg_fresco.Size = new System.Drawing.Size(1456, 892);
             this.charview_kg_fresco.TabIndex = 36;
             this.charview_kg_fresco.Text = "chart1";
             // 
@@ -1716,8 +1727,8 @@
             // 
             // charview_kg_seco
             // 
-            chartArea16.Name = "ChartArea1";
-            this.charview_kg_seco.ChartAreas.Add(chartArea16);
+            chartArea30.Name = "ChartArea1";
+            this.charview_kg_seco.ChartAreas.Add(chartArea30);
             this.charview_kg_seco.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_kg_seco.Location = new System.Drawing.Point(3, 3);
             this.charview_kg_seco.Name = "charview_kg_seco";
@@ -1737,8 +1748,8 @@
             // 
             // charview_ftt_deshidratado
             // 
-            chartArea17.Name = "ChartArea1";
-            this.charview_ftt_deshidratado.ChartAreas.Add(chartArea17);
+            chartArea31.Name = "ChartArea1";
+            this.charview_ftt_deshidratado.ChartAreas.Add(chartArea31);
             this.charview_ftt_deshidratado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_ftt_deshidratado.Location = new System.Drawing.Point(0, 0);
             this.charview_ftt_deshidratado.Name = "charview_ftt_deshidratado";
@@ -1758,8 +1769,8 @@
             // 
             // charview_ftt_demas_areas
             // 
-            chartArea18.Name = "ChartArea1";
-            this.charview_ftt_demas_areas.ChartAreas.Add(chartArea18);
+            chartArea32.Name = "ChartArea1";
+            this.charview_ftt_demas_areas.ChartAreas.Add(chartArea32);
             this.charview_ftt_demas_areas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.charview_ftt_demas_areas.Location = new System.Drawing.Point(0, 0);
             this.charview_ftt_demas_areas.Name = "charview_ftt_demas_areas";
@@ -1779,8 +1790,8 @@
             // 
             // chartMermaSupervisor
             // 
-            chartArea19.Name = "ChartArea1";
-            this.chartMermaSupervisor.ChartAreas.Add(chartArea19);
+            chartArea33.Name = "ChartArea1";
+            this.chartMermaSupervisor.ChartAreas.Add(chartArea33);
             this.chartMermaSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartMermaSupervisor.Location = new System.Drawing.Point(0, 0);
             this.chartMermaSupervisor.Name = "chartMermaSupervisor";
@@ -1800,8 +1811,8 @@
             // 
             // ChartCumplimientoDes
             // 
-            chartArea20.Name = "ChartArea1";
-            this.ChartCumplimientoDes.ChartAreas.Add(chartArea20);
+            chartArea34.Name = "ChartArea1";
+            this.ChartCumplimientoDes.ChartAreas.Add(chartArea34);
             this.ChartCumplimientoDes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoDes.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoDes.Name = "ChartCumplimientoDes";
@@ -1821,8 +1832,8 @@
             // 
             // ChartCumplimientoKgTerminado
             // 
-            chartArea21.Name = "ChartArea1";
-            this.ChartCumplimientoKgTerminado.ChartAreas.Add(chartArea21);
+            chartArea35.Name = "ChartArea1";
+            this.ChartCumplimientoKgTerminado.ChartAreas.Add(chartArea35);
             this.ChartCumplimientoKgTerminado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoKgTerminado.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoKgTerminado.Name = "ChartCumplimientoKgTerminado";
@@ -1842,8 +1853,8 @@
             // 
             // ChartCumplimientoPlaneacionSupervisor
             // 
-            chartArea22.Name = "ChartArea1";
-            this.ChartCumplimientoPlaneacionSupervisor.ChartAreas.Add(chartArea22);
+            chartArea36.Name = "ChartArea1";
+            this.ChartCumplimientoPlaneacionSupervisor.ChartAreas.Add(chartArea36);
             this.ChartCumplimientoPlaneacionSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoPlaneacionSupervisor.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoPlaneacionSupervisor.Name = "ChartCumplimientoPlaneacionSupervisor";
@@ -1863,8 +1874,8 @@
             // 
             // ChartCumplimientoPlaneacionMensual
             // 
-            chartArea23.Name = "ChartArea1";
-            this.ChartCumplimientoPlaneacionMensual.ChartAreas.Add(chartArea23);
+            chartArea37.Name = "ChartArea1";
+            this.ChartCumplimientoPlaneacionMensual.ChartAreas.Add(chartArea37);
             this.ChartCumplimientoPlaneacionMensual.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoPlaneacionMensual.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoPlaneacionMensual.Name = "ChartCumplimientoPlaneacionMensual";
@@ -1884,8 +1895,8 @@
             // 
             // ChartCumplimientoKgTerminadoSupervisor
             // 
-            chartArea24.Name = "ChartArea1";
-            this.ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Add(chartArea24);
+            chartArea38.Name = "ChartArea1";
+            this.ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Add(chartArea38);
             this.ChartCumplimientoKgTerminadoSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoKgTerminadoSupervisor.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoKgTerminadoSupervisor.Name = "ChartCumplimientoKgTerminadoSupervisor";
@@ -1905,8 +1916,8 @@
             // 
             // ChartCumplimientoKgTerminadoMensualSupervisor
             // 
-            chartArea25.Name = "ChartArea1";
-            this.ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Add(chartArea25);
+            chartArea39.Name = "ChartArea1";
+            this.ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Add(chartArea39);
             this.ChartCumplimientoKgTerminadoMensualSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoKgTerminadoMensualSupervisor.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoKgTerminadoMensualSupervisor.Name = "ChartCumplimientoKgTerminadoMensualSupervisor";
@@ -1925,8 +1936,8 @@
             // 
             // ChartCumplimientoGeneralSemanal
             // 
-            chartArea26.Name = "ChartArea1";
-            this.ChartCumplimientoGeneralSemanal.ChartAreas.Add(chartArea26);
+            chartArea40.Name = "ChartArea1";
+            this.ChartCumplimientoGeneralSemanal.ChartAreas.Add(chartArea40);
             this.ChartCumplimientoGeneralSemanal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoGeneralSemanal.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoGeneralSemanal.Name = "ChartCumplimientoGeneralSemanal";
@@ -1946,8 +1957,8 @@
             // 
             // ChartCumplimientoTiempoEfectivo
             // 
-            chartArea27.Name = "ChartArea1";
-            this.ChartCumplimientoTiempoEfectivo.ChartAreas.Add(chartArea27);
+            chartArea41.Name = "ChartArea1";
+            this.ChartCumplimientoTiempoEfectivo.ChartAreas.Add(chartArea41);
             this.ChartCumplimientoTiempoEfectivo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoTiempoEfectivo.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoTiempoEfectivo.Name = "ChartCumplimientoTiempoEfectivo";
@@ -1967,8 +1978,8 @@
             // 
             // ChartCumplimientoTiempoEfectivoOtrasAreas
             // 
-            chartArea28.Name = "ChartArea1";
-            this.ChartCumplimientoTiempoEfectivoOtrasAreas.ChartAreas.Add(chartArea28);
+            chartArea42.Name = "ChartArea1";
+            this.ChartCumplimientoTiempoEfectivoOtrasAreas.ChartAreas.Add(chartArea42);
             this.ChartCumplimientoTiempoEfectivoOtrasAreas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ChartCumplimientoTiempoEfectivoOtrasAreas.Location = new System.Drawing.Point(0, 0);
             this.ChartCumplimientoTiempoEfectivoOtrasAreas.Name = "ChartCumplimientoTiempoEfectivoOtrasAreas";
@@ -2244,7 +2255,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -5505,12 +5516,39 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // borrarToolStripMenuItem
+            // CB_Anio_grafica
             // 
-            this.borrarToolStripMenuItem.Name = "borrarToolStripMenuItem";
-            this.borrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.borrarToolStripMenuItem.Text = "Borrar";
-            this.borrarToolStripMenuItem.Click += new System.EventHandler(this.borrarToolStripMenuItem_Click);
+            this.CB_Anio_grafica.AutoResize = false;
+            this.CB_Anio_grafica.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_grafica.Depth = 0;
+            this.CB_Anio_grafica.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_grafica.DropDownHeight = 174;
+            this.CB_Anio_grafica.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_grafica.DropDownWidth = 121;
+            this.CB_Anio_grafica.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_grafica.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_grafica.FormattingEnabled = true;
+            this.CB_Anio_grafica.Hint = "Año";
+            this.CB_Anio_grafica.IntegralHeight = false;
+            this.CB_Anio_grafica.ItemHeight = 43;
+            this.CB_Anio_grafica.Location = new System.Drawing.Point(17, 65);
+            this.CB_Anio_grafica.MaxDropDownItems = 4;
+            this.CB_Anio_grafica.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_grafica.Name = "CB_Anio_grafica";
+            this.CB_Anio_grafica.Size = new System.Drawing.Size(149, 49);
+            this.CB_Anio_grafica.StartIndex = -1;
+            this.CB_Anio_grafica.TabIndex = 36;
+            // 
+            // panel7
+            // 
+            this.panel7.AutoScroll = true;
+            this.panel7.Controls.Add(this.materialCard19);
+            this.panel7.Controls.Add(this.tabgraficas);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel7.Location = new System.Drawing.Point(0, 0);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(1674, 932);
+            this.panel7.TabIndex = 39;
             // 
             // Form_principal
             // 
@@ -5706,6 +5744,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            this.panel7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -6005,6 +6044,8 @@
         private System.Windows.Forms.TabPage tabPage32;
         private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoTiempoEfectivoOtrasAreas;
         private System.Windows.Forms.ToolStripMenuItem borrarToolStripMenuItem;
+        private System.Windows.Forms.Panel panel7;
+        private MaterialSkin.Controls.MaterialComboBox CB_Anio_grafica;
     }
 }
 
