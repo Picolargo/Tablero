@@ -11011,10 +11011,10 @@ ORDER BY
                 switch (tabSeleccionado)
                 {
                     case "tabPage27":
-                        GraficarCumplimientoPlaneacionMensualPorSupervisor();
+                        GraficarCumplimientoMensualDespeguePorSupervisor();
                         break;
                     case "tabPage29":
-                        GraficarCumplimientoKgTerminadoMensualPorSupervisor();
+                        GraficarCumplimientoMensualOtrasAreasPorSupervisor();
                         break;
                 }
                 return;
@@ -11069,7 +11069,7 @@ ORDER BY
                     GraficarCumplimientoDespeguePorSupervisor(semanasSeleccionadas);
                     break;
                 case "tabPage28":
-                    GraficarCumplimientoKgTerminadoPorSupervisor(semanasSeleccionadas);
+                    GraficarCumplimientoOtrasAreasPorSupervisor(semanasSeleccionadas);
                     break;
                 case "tabPage30":
                     GraficarCumplimientoGeneralSemanal(semanasSeleccionadas);
@@ -11081,6 +11081,427 @@ ORDER BY
                     GraficarCumplimientoTiempoEfectivoOtrasAreas(semanasSeleccionadas);
                     break;
             }
+        }
+        private void GraficarCumplimientoOtrasAreasPorSupervisor(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento Otras Áreas por Supervisor
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string añoSeleccionado = CB_Anio_grafica.Text;
+
+                string query = @"
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+    COALESCE(u.""Usuario"", 'Sin Supervisor') as Supervisor,
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
+    
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha""),
+    u.""Usuario""
+ORDER BY 
+    año,
+    No_Semana,
+    Supervisor;";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento por supervisor para otras áreas en las semanas seleccionadas.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento Otras Áreas por Supervisor
+                ConfigurarChartCumplimientoOtrasAreasPorSupervisor();
+
+                // Limpiar series existentes
+                ChartCumplimientoOtrasAreasPorSupervisor.Series.Clear();
+
+                // Diccionario para organizar datos por supervisor
+                Dictionary<string, Dictionary<string, double>> datosPorSupervisor =
+                    new Dictionary<string, Dictionary<string, double>>();
+
+                // Diccionario para mantener el orden de semanas
+                SortedSet<string> semanasOrdenadas = new SortedSet<string>();
+
+                // Lista de supervisores en orden
+                List<string> listaSupervisores = new List<string>();
+
+                // Organizar datos por supervisor y semana
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    string supervisor = row["Supervisor"].ToString();
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
+
+                    // Validar y ajustar valores
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar semana al conjunto ordenado
+                    semanasOrdenadas.Add(semana);
+
+                    // Agregar supervisor a la lista si no existe
+                    if (!listaSupervisores.Contains(supervisor))
+                    {
+                        listaSupervisores.Add(supervisor);
+                    }
+
+                    // Inicializar diccionario para el supervisor si no existe
+                    if (!datosPorSupervisor.ContainsKey(supervisor))
+                    {
+                        datosPorSupervisor[supervisor] = new Dictionary<string, double>();
+                    }
+
+                    // Agregar dato del supervisor para la semana
+                    datosPorSupervisor[supervisor][semana] = cumplimiento;
+                }
+
+                // Si hay muchos supervisores, limitar la visualización
+                if (listaSupervisores.Count > 15)
+                {
+                    var opcion = MetroFramework.MetroMessageBox.Show(this,
+                        $"Se detectaron {listaSupervisores.Count} supervisores en otras áreas.\n\n" +
+                        "¿Desea mostrar solo los 15 principales? (Recomendado para mejor visualización)\n\n" +
+                        "Sí: Mostrar solo 15\nNo: Mostrar todos (puede afectar la legibilidad)",
+                        "Muchos supervisores detectados",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (opcion == DialogResult.Yes)
+                    {
+                        // Calcular promedio por supervisor y tomar los 15 mejores
+                        var supervisoresOrdenados = listaSupervisores
+                            .Select(s => new
+                            {
+                                Supervisor = s,
+                                Promedio = datosPorSupervisor.ContainsKey(s) &&
+                                          datosPorSupervisor[s].Values.Any() ?
+                                          datosPorSupervisor[s].Values.Average() : 0
+                            })
+                            .OrderByDescending(x => x.Promedio)
+                            .Take(15)
+                            .Select(x => x.Supervisor)
+                            .ToList();
+
+                        listaSupervisores = supervisoresOrdenados;
+                    }
+                }
+
+                // Generar paleta dinámica de colores
+                Color[] coloresSupervisores = GenerarPaletaColoresOtrasAreas(listaSupervisores.Count);
+
+                // Crear series para cada supervisor
+                for (int i = 0; i < listaSupervisores.Count; i++)
+                {
+                    string supervisor = listaSupervisores[i];
+                    var datosSupervisor = datosPorSupervisor.ContainsKey(supervisor)
+                        ? datosPorSupervisor[supervisor]
+                        : new Dictionary<string, double>();
+
+                    // Crear serie para el supervisor
+                    Series serieSupervisor = new Series(supervisor);
+                    serieSupervisor.ChartType = SeriesChartType.Line;
+
+                    // Asignar color de la paleta
+                    serieSupervisor.Color = coloresSupervisores[i % coloresSupervisores.Length];
+
+                    // Configuración de la serie
+                    ConfigurarSerieSupervisorOtrasAreas(serieSupervisor);
+
+                    // Agregar datos para todas las semanas
+                    foreach (string semana in semanasOrdenadas)
+                    {
+                        double valor = datosSupervisor.ContainsKey(semana) ? datosSupervisor[semana] : 0;
+
+                        int pointIndex = serieSupervisor.Points.AddXY(semana, valor);
+
+                        // Configurar etiqueta solo si hay valor > 0
+                        ConfigurarPuntoGraficaOtrasAreas(serieSupervisor.Points[pointIndex], valor);
+                    }
+
+                    // Agregar serie al chart
+                    ChartCumplimientoOtrasAreasPorSupervisor.Series.Add(serieSupervisor);
+                }
+
+                // Ajustar leyenda según cantidad de supervisores
+                AjustarLeyendaOtrasAreasParaMultiplesSupervisores(listaSupervisores.Count);
+
+                // Actualizar el chart
+                ChartCumplimientoOtrasAreasPorSupervisor.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento por supervisor de otras áreas: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        // Método para generar paleta dinámica de colores para Otras Áreas
+        private Color[] GenerarPaletaColoresOtrasAreas(int cantidad)
+        {
+            if (cantidad <= 0) return new Color[] { Color.Green };
+
+            List<Color> colores = new List<Color>();
+
+            // Para pocos supervisores, usar colores predefinidos con tonos verdes/azules
+            if (cantidad <= 12)
+            {
+                // Paleta con tonos más apropiados para producción (verdes, azules)
+                Color[] basePalette = {
+            Color.FromArgb(46, 204, 113),   // Verde brillante
+            Color.FromArgb(52, 152, 219),   // Azul
+            Color.FromArgb(26, 188, 156),   // Turquesa
+            Color.FromArgb(39, 174, 96),    // Verde esmeralda
+            Color.FromArgb(41, 128, 185),   // Azul oscuro
+            Color.FromArgb(22, 160, 133),   // Verde mar
+            Color.FromArgb(142, 68, 173),   // Púrpura
+            Color.FromArgb(243, 156, 18),   // Naranja
+            Color.FromArgb(230, 126, 34),   // Naranja oscuro
+            Color.FromArgb(231, 76, 60),    // Rojo
+            Color.FromArgb(155, 89, 182),   // Lila
+            Color.FromArgb(149, 165, 166)   // Gris
+        };
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    colores.Add(basePalette[i % basePalette.Length]);
+                }
+            }
+            else
+            {
+                // Para muchos supervisores, generar colores con tonos verdes/azules
+                Random rand = new Random(123); // Semilla diferente para variedad
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    // Enfocarse en tonos verdes y azules (0.2 a 0.6 en HSL)
+                    float hue = 0.2f + (float)i / (float)cantidad * 0.4f;
+                    float saturation = 0.6f + (float)rand.NextDouble() * 0.3f; // 0.6-0.9
+                    float lightness = 0.45f + (float)rand.NextDouble() * 0.2f; // 0.45-0.65
+
+                    colores.Add(HslToRgb(hue, saturation, lightness));
+                }
+            }
+
+            return colores.ToArray();
+        }
+
+        // Método para configurar una serie de supervisor para Otras Áreas
+        private void ConfigurarSerieSupervisorOtrasAreas(Series serie)
+        {
+            serie.BorderWidth = 2;
+            serie.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            serie.MarkerStyle = MarkerStyle.Circle;
+            serie.MarkerSize = 6;
+            serie.MarkerColor = serie.Color;
+            serie.MarkerBorderColor = Color.White;
+            serie.MarkerBorderWidth = 1;
+            serie.IsValueShownAsLabel = false;
+            serie.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+
+            // Para Otras Áreas, usar línea más sutil
+            serie.BorderWidth = 2;
+        }
+
+        // Método para configurar un punto individual para Otras Áreas
+        private void ConfigurarPuntoGraficaOtrasAreas(System.Windows.Forms.DataVisualization.Charting.DataPoint punto, double valor)
+        {
+            if (valor > 10) // Mostrar etiqueta solo si el valor es significativo
+            {
+                punto.Label = valor.ToString("N0") + "%";
+                punto.LabelBackColor = Color.FromArgb(180, 0, 0, 0);
+                punto.LabelForeColor = Color.White;
+                punto.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
+                punto.LabelBorderWidth = 1;
+                punto.Font = new Font("Segoe UI", 6, FontStyle.Bold);
+                punto.IsValueShownAsLabel = true;
+            }
+            else
+            {
+                punto.IsValueShownAsLabel = false;
+            }
+        }
+
+        // Método para ajustar la leyenda para Otras Áreas
+        private void AjustarLeyendaOtrasAreasParaMultiplesSupervisores(int cantidadSupervisores)
+        {
+            if (ChartCumplimientoOtrasAreasPorSupervisor.Legends.Count == 0) return;
+
+            var legend = ChartCumplimientoOtrasAreasPorSupervisor.Legends[0];
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 6;
+            legend.TextWrapThreshold = 5;
+
+            if (cantidadSupervisores > 20)
+            {
+                legend.Font = new Font("Segoe UI", 6, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 7, FontStyle.Bold);
+                legend.Position.Height = 75;
+            }
+            else if (cantidadSupervisores > 10)
+            {
+                legend.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                legend.Position.Height = 70;
+            }
+            else
+            {
+                legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+                legend.Position.Height = 65;
+            }
+        }
+
+        // Método de configuración del chart para Otras Áreas
+        private void ConfigurarChartCumplimientoOtrasAreasPorSupervisor()
+        {
+            // Limpiar el chart
+            ChartCumplimientoOtrasAreasPorSupervisor.Series.Clear();
+            ChartCumplimientoOtrasAreasPorSupervisor.ChartAreas.Clear();
+            ChartCumplimientoOtrasAreasPorSupervisor.Titles.Clear();
+            ChartCumplimientoOtrasAreasPorSupervisor.Legends.Clear();
+
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoOtrasAreasSupervisorArea");
+
+            // Fondo moderno
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+
+            // Configurar eje X
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(230, 230, 230);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+
+            // Configurar eje Y para porcentajes
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea horizontal en 90% para referencia (objetivo para otras áreas)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine =
+            //    new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 255, 245); // Fondo verde claro
+            //stripLine.BorderColor = Color.FromArgb(46, 204, 113); // Borde verde
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 90;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 90%";
+            //stripLine.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Posicionamiento del área
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 75; // Más espacio para datos
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoOtrasAreasPorSupervisor.ChartAreas.Add(chartArea);
+
+            // Configurar leyenda
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoOtrasAreasSupervisor";
+            legend.Title = "SUPERVISORES - OTRAS ÁREAS";
+            legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+
+            // Posicionamiento de leyenda
+            legend.Position.Auto = false;
+            legend.Position.X = 80;
+            legend.Position.Y = 15;
+            legend.Position.Width = 15;
+            legend.Position.Height = 70;
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 6;
+            legend.IsTextAutoFit = true;
+            legend.TextWrapThreshold = 4;
+
+            ChartCumplimientoOtrasAreasPorSupervisor.Legends.Add(legend);
+
+            // Configurar título principal
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO (OTRAS ÁREAS) POR SUPERVISOR";
+            mainTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoOtrasAreasPorSupervisor.Titles.Add(mainTitle);
+
+            // Configurar subtítulo
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Comparativo semanal de cumplimiento por supervisor en áreas de producción (excluyendo Deshidratado)";
+            subTitle.Font = new Font("Segoe UI", 10, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoOtrasAreasPorSupervisor.Titles.Add(subTitle);
+
+            // Configuración general del chart
+            ChartCumplimientoOtrasAreasPorSupervisor.BackColor = Color.White;
+            ChartCumplimientoOtrasAreasPorSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoOtrasAreasPorSupervisor.BorderlineWidth = 2;
+            ChartCumplimientoOtrasAreasPorSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoOtrasAreasPorSupervisor.TextAntiAliasingQuality =
+                System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
         }
         private void GraficarCumplimientoDespegue(List<string> semanasSeleccionadas)
         {
@@ -11838,177 +12259,52 @@ ORDER BY ""Año"", ""No_Semana""";
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
+
                 string query = @"
 SELECT 
-    Año,
-    ""No de Semana"" AS ""No_Semana"",
-    ROUND(AVG(""% Cumplimiento""), 2) AS ""Promedio_Cumplimiento_General""
-FROM (
-    -- Primera consulta: Todas las áreas EXCEPTO Tunel/Sumergidor y Despegue
-    SELECT 
-        Año,
-        ""No de Semana"",
-        ""% Cumplimiento""
-    FROM (
-        SELECT 
-            EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-            EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
-            f.""Area"",
-            f.""OP"",
-            ROUND(
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (
+            -- Suma de producción según área
+            SUM(
                 CASE 
-                    -- Primero verificamos si el denominador es cero o NULL
-                    WHEN (CASE 
-                            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Polvos' THEN 
-                                CASE 
-                                    WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                        COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 
-                                        COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                END
-                            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                            ELSE 0
-                        END) <= 0 THEN 0
-                    -- Si el denominador es mayor que cero, aplicamos la fórmula
-                    ELSE LEAST(
-                        (SUM(f.""Kg_prod_term"") / 
-                        (CASE 
-                            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                            WHEN f.""Area"" = 'Polvos' THEN 
-                                CASE 
-                                    WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                        COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                    ELSE 
-                                        COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                                END
-                            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                            ELSE 1
-                        END)) * 100,
-                        100
-                    )
-                END,
-            2) AS ""% Cumplimiento""
-        FROM 
-            public.""Ficha"" f
-        LEFT JOIN 
-            public.""Tiempo_Muerto_Operativo"" tmo 
-            ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        LEFT JOIN 
-            public.""Tiempo_muerto_Mecanico"" tmm 
-            ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        LEFT JOIN 
-            public.""Empacado"" e ON f.""OP"" = e.""OP""
-        LEFT JOIN 
-            public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-        LEFT JOIN 
-            public.""Grind"" g ON f.""OP"" = g.""OP""
-        LEFT JOIN 
-            public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-        LEFT JOIN 
-            public.""Maquinas"" m ON f.""OP"" = m.""OP""
-        LEFT JOIN 
-            public.""Polvos"" p ON f.""OP"" = p.""OP""
-        LEFT JOIN 
-            public.""Revolturas"" r ON f.""OP"" = r.""OP""
-        WHERE 
-            f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-        GROUP BY 
-            EXTRACT(YEAR FROM f.""Fecha""),
-            EXTRACT(WEEK FROM f.""Fecha""),
-            f.""Area"",
-            f.""OP"",
-            e.""Meta_kg_hr_line"",
-            ev.""Meta_kg_hr"",
-            g.""Meta_Kg_hr"",
-            i.""Meta_kg_hr_line"",
-            m.""Meta_Kg_Hr"",
-            p.""Meta_kg_hr_hum"",
-            p.""Meta_kg_hr_idon"",
-            r.""Meta_Kg_Hr""
-    ) AS subconsulta1
+                    WHEN f.""Area"" = 'Despegue' THEN f.""Kg_prod_seco""
+                    WHEN f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue') THEN f.""Kg_prod_term""
+                    ELSE 0
+                END
+            ) 
+            -- Restar Kg fuera de especificación
+            - SUM(f.""Kg_fuera_espec"")
+        ) 
+        -- Dividir entre la suma de Kg_meta
+        / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento General""
     
-    UNION ALL
-    
-    -- Segunda consulta: Solo áreas Tunel/Sumergidor y Despegue
-    SELECT 
-        ""Año"" AS Año,
-        ""No. Semana"" AS ""No de Semana"",
-        ""% Cumplimiento a Planeación"" AS ""% Cumplimiento""
-    FROM (
-        SELECT 
-            COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
-            COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
-            COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
-            COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
-            COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
-            CASE 
-                WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
-                    ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
-                ELSE 0
-            END AS ""% Cumplimiento a Planeación""
-        FROM (
-            SELECT 
-                EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                f.""OP""
-            FROM public.""Ficha"" f
-            WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-            GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(WEEK FROM f.""Fecha""), f.""OP""
-        ) q1
-        FULL JOIN (
-            SELECT 
-                EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                ""OP"",
-                SUM(""Hr_programadas"") AS ""Horas Programadas""
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Tunel/Sumergidor'
-                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-                AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
-            GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-        ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""No. Semana"" = q2.""No. Semana"" AND q1.""OP"" = q2.""OP""
-        FULL JOIN (
-            SELECT 
-                EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-                ""OP"",
-                SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Despegue'
-                AND EXTRACT(WEEK FROM ""Fecha"") IN (" + semanasParam + @")
-                AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
-            GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(WEEK FROM ""Fecha""), ""OP""
-        ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
-            AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana"" 
-            AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
-        LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
-    ) AS subconsulta2
-    WHERE ""% Cumplimiento a Planeación"" > 0
-) AS todas_las_areas
+FROM public.""Ficha"" f
+WHERE EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+    AND f.""Area"" != 'Tunel/Sumergidor'  -- Excluir Tunel/Sumergidor
 GROUP BY 
-    Año, ""No de Semana""
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha"")
 ORDER BY 
-    Año, ""No de Semana""";
+    año,
+    No_Semana;";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento general semanal para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento general semanal para las semanas seleccionadas.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -12021,41 +12317,57 @@ ORDER BY
                 // Crear serie única para el % de cumplimiento general
                 Series serieCumplimiento = new Series("% Cumplimiento General");
                 serieCumplimiento.ChartType = SeriesChartType.Line;
-                serieCumplimiento.Color = Color.FromArgb(52, 152, 219); // Azul vibrante
+
+                // Color dorado/naranja para indicador general
+                serieCumplimiento.Color = Color.FromArgb(241, 196, 15); // Dorado
                 serieCumplimiento.BorderWidth = 4;
                 serieCumplimiento.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                serieCumplimiento.MarkerStyle = MarkerStyle.Circle;
-                serieCumplimiento.MarkerSize = 12;
-                serieCumplimiento.MarkerColor = Color.FromArgb(52, 152, 219);
+                serieCumplimiento.MarkerStyle = MarkerStyle.Diamond; // Diamante para destacar
+                serieCumplimiento.MarkerSize = 10;
+                serieCumplimiento.MarkerColor = Color.FromArgb(241, 196, 15);
                 serieCumplimiento.MarkerBorderColor = Color.White;
                 serieCumplimiento.MarkerBorderWidth = 2;
                 serieCumplimiento.IsValueShownAsLabel = true;
                 serieCumplimiento.LabelFormat = "N1"; // Formato con un decimal
                 serieCumplimiento.Font = new Font("Segoe UI", 9, FontStyle.Bold);
                 serieCumplimiento.LabelForeColor = Color.White;
-                serieCumplimiento.LabelBackColor = Color.FromArgb(200, 0, 0, 0); // Fondo negro semitransparente
+                serieCumplimiento.LabelBackColor = Color.FromArgb(180, 241, 196, 15); // Fondo dorado semitransparente
                 serieCumplimiento.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
                 serieCumplimiento.LabelBorderWidth = 1;
                 serieCumplimiento.ShadowColor = Color.FromArgb(30, 30, 30);
-                serieCumplimiento.ShadowOffset = 2;
+                serieCumplimiento.ShadowOffset = 3;
+                serieCumplimiento.ToolTip = "#VALY{N1}% en semana #VALX";
 
                 // Llenar la serie con datos
                 foreach (DataRow row in datos.Rows)
                 {
                     string semana = $"Sem {row["No_Semana"]}";
-                    double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_General"]);
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento General"]);
+
+                    // Validar que el valor esté en rango 0-100
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
 
                     // Agregar punto a la serie
                     int pointIndex = serieCumplimiento.Points.AddXY(semana, cumplimiento);
 
-                    // Configurar etiqueta individual con símbolo % y fondo
+                    // Configurar etiqueta individual
                     System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieCumplimiento.Points[pointIndex];
                     point.Label = cumplimiento.ToString("N1") + "%";
-                    point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                    point.LabelForeColor = Color.White;
-                    point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                    point.LabelBackColor = Color.FromArgb(200, 241, 196, 15);
+                    point.LabelForeColor = Color.FromArgb(52, 73, 94); // Texto oscuro para contraste
+                    point.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
                     point.LabelBorderWidth = 1;
                     point.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                    point.ToolTip = $"{cumplimiento:N1}% de cumplimiento general en semana {row["No_Semana"]}";
+
+                    // Cambiar color del marcador según el valor
+                    if (cumplimiento >= 90)
+                        point.MarkerColor = Color.FromArgb(46, 204, 113); // Verde para buen desempeño
+                    else if (cumplimiento >= 80)
+                        point.MarkerColor = Color.FromArgb(241, 196, 15); // Amarillo para desempeño moderado
+                    else
+                        point.MarkerColor = Color.FromArgb(231, 76, 60); // Rojo para bajo desempeño
                 }
 
                 // Agregar serie al chart
@@ -12067,7 +12379,11 @@ ORDER BY
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento general semanal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento general semanal: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -12079,17 +12395,18 @@ ORDER BY
             ChartCumplimientoGeneralSemanal.Titles.Clear();
             ChartCumplimientoGeneralSemanal.Legends.Clear();
 
-            // Crear área de chart moderna para cumplimiento general semanal
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoGeneralSemanalArea");
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoGeneralSemanalArea");
 
-            // Fondo moderno consistente
+            // Fondo con gradiente dorado suave
             chartArea.BackColor = Color.FromArgb(255, 255, 255);
-            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackSecondaryColor = Color.FromArgb(255, 253, 245); // Dorado muy claro
             chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
             chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
             chartArea.ShadowOffset = 3;
 
-            // Configurar eje X moderno
+            // Configurar eje X - SEMANAS
             chartArea.AxisX.Title = "SEMANAS";
             chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
             chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
@@ -12101,51 +12418,43 @@ ORDER BY
             chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
             chartArea.AxisX.Interval = 1;
             chartArea.AxisX.IsMarginVisible = true;
+            chartArea.AxisX.IsLabelAutoFit = true;
 
-            // Configurar eje Y moderno para PORCENTAJES
-            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            // Configurar eje Y - PORCENTAJE
+            chartArea.AxisY.Title = "% CUMPLIMIENTO GENERAL";
             chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
             chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
             chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
             chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
             chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
             chartArea.AxisY.MajorGrid.Enabled = true;
             chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
             chartArea.AxisY.MajorTickMark.Enabled = true;
             chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
 
-            // Configurar eje Y para porcentajes (0% - 100%)
+            // Configurar eje Y para porcentajes
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Maximum = 100;
             chartArea.AxisY.Interval = 20;
 
-            //// Línea horizontal en 92.5% para referencia (promedio entre 90% planeación y 95% producción)
-            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
-            //stripLine.BackColor = Color.FromArgb(240, 248, 255); // Fondo azul muy claro
-            //stripLine.BorderColor = Color.FromArgb(52, 152, 219); // Borde azul vibrante
-            //stripLine.BorderWidth = 1;
-            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            //stripLine.IntervalOffset = 92.5;
-            //stripLine.StripWidth = 0.5;
-            //stripLine.Text = "Objetivo General 92.5%";
-            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            //stripLine.ForeColor = Color.FromArgb(52, 152, 219);
-            //chartArea.AxisY.StripLines.Add(stripLine);
+            // Añadir múltiples líneas de referencia para contexto
+           // AddStripLinesToChart(chartArea);
 
-            // Hacer el área de gráfico más grande
+            // Posicionamiento del área
             chartArea.Position.Auto = false;
-            chartArea.Position.X = 5;
+            chartArea.Position.X = 10;
             chartArea.Position.Y = 15;
-            chartArea.Position.Width = 90;
-            chartArea.Position.Height = 70;
+            chartArea.Position.Width = 85;
+            chartArea.Position.Height = 75;
 
             // Agregar área al chart
             ChartCumplimientoGeneralSemanal.ChartAreas.Add(chartArea);
 
-            // Configurar título principal moderno
-            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            mainTitle.Text = "% CUMPLIMIENTO GENERAL SEMANAL";
+            // Configurar título principal
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO GENERAL SEMANAL -";
             mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
             mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
             mainTitle.Alignment = ContentAlignment.TopCenter;
@@ -12153,18 +12462,20 @@ ORDER BY
             mainTitle.ShadowOffset = 2;
             ChartCumplimientoGeneralSemanal.Titles.Add(mainTitle);
 
-            // Configurar subtítulo moderno
-            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            subTitle.Text = "Promedio Semanal de Cumplimiento General - Contempla todas las áreas de producción";
+            // Configurar subtítulo
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Indicador consolidado de producción semanal";
             subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
             subTitle.ForeColor = Color.FromArgb(127, 140, 141);
             subTitle.Alignment = ContentAlignment.TopCenter;
             ChartCumplimientoGeneralSemanal.Titles.Add(subTitle);
 
-            // Configurar leyenda moderna en la parte inferior
-            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            // Configurar leyenda simplificada
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
             legend.Name = "LeyendaCumplimientoGeneral";
-            legend.Title = "INDICADOR GENERAL";
+            legend.Title = "LEGEND";
             legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
             legend.TitleForeColor = Color.FromArgb(52, 73, 94);
             legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
@@ -12177,1135 +12488,1042 @@ ORDER BY
             legend.BorderWidth = 1;
             legend.ShadowColor = Color.FromArgb(100, 100, 100);
             legend.ShadowOffset = 1;
-            legend.IsEquallySpacedItems = true;
-            legend.ItemColumnSpacing = 30;
+
+            // Posicionamiento de leyenda
             legend.Position.Auto = false;
-            legend.Position.X = 5;
-            legend.Position.Y = 85;
-            legend.Position.Width = 90;
-            legend.Position.Height = 10;
+            legend.Position.X = 10;
+            legend.Position.Y = 92;
+            legend.Position.Width = 85;
+            legend.Position.Height = 8;
 
             ChartCumplimientoGeneralSemanal.Legends.Add(legend);
 
-            // Configuración general del chart moderna
+            // Configuración general del chart
             ChartCumplimientoGeneralSemanal.BackColor = Color.White;
             ChartCumplimientoGeneralSemanal.BorderlineColor = Color.FromArgb(200, 200, 200);
             ChartCumplimientoGeneralSemanal.BorderlineWidth = 2;
             ChartCumplimientoGeneralSemanal.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            ChartCumplimientoGeneralSemanal.Padding = new Padding(20);
+            ChartCumplimientoGeneralSemanal.Padding = new Padding(15);
             ChartCumplimientoGeneralSemanal.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            ChartCumplimientoGeneralSemanal.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+            ChartCumplimientoGeneralSemanal.BackSecondaryColor = Color.FromArgb(255, 253, 245);
 
-            // Configurar anti-aliasing para máxima calidad
+            // Configurar anti-aliasing
             ChartCumplimientoGeneralSemanal.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
-            ChartCumplimientoGeneralSemanal.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoGeneralSemanal.TextAntiAliasingQuality =
+                System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
             ChartCumplimientoGeneralSemanal.IsSoftShadows = true;
-
-            // Suavizado adicional
-            chartArea.Area3DStyle.Enable3D = false;
         }
-        private void GraficarCumplimientoKgTerminadoMensualPorSupervisor()
+
+        // Método auxiliar para añadir líneas de referencia al chart
+        //private void AddStripLinesToChart(System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea)
+        //{
+        //    // Zona excelente (90-100%)
+        //    System.Windows.Forms.DataVisualization.Charting.StripLine excellentZone =
+        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
+        //    excellentZone.BackColor = Color.FromArgb(235, 255, 235); // Verde muy claro
+        //    excellentZone.BorderColor = Color.FromArgb(200, 200, 200);
+        //    excellentZone.BorderWidth = 0;
+        //    excellentZone.IntervalOffset = 90;
+        //    excellentZone.StripWidth = 10;
+        //    excellentZone.Text = "Excelente";
+        //    excellentZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+        //    excellentZone.ForeColor = Color.FromArgb(46, 204, 113);
+        //    chartArea.AxisY.StripLines.Add(excellentZone);
+
+        //    // Zona buena (80-90%)
+        //    System.Windows.Forms.DataVisualization.Charting.StripLine goodZone =
+        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
+        //    goodZone.BackColor = Color.FromArgb(255, 255, 235); // Amarillo muy claro
+        //    goodZone.BorderColor = Color.FromArgb(200, 200, 200);
+        //    goodZone.BorderWidth = 0;
+        //    goodZone.IntervalOffset = 80;
+        //    goodZone.StripWidth = 10;
+        //    goodZone.Text = "Bueno";
+        //    goodZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+        //    goodZone.ForeColor = Color.FromArgb(241, 196, 15);
+        //    chartArea.AxisY.StripLines.Add(goodZone);
+
+        //    // Zona de mejora (0-80%)
+        //    System.Windows.Forms.DataVisualization.Charting.StripLine improveZone =
+        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
+        //    improveZone.BackColor = Color.FromArgb(255, 235, 235); // Rojo muy claro
+        //    improveZone.BorderColor = Color.FromArgb(200, 200, 200);
+        //    improveZone.BorderWidth = 0;
+        //    improveZone.IntervalOffset = 0;
+        //    improveZone.StripWidth = 80;
+        //    improveZone.Text = "Requiere mejora";
+        //    improveZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+        //    improveZone.ForeColor = Color.FromArgb(231, 76, 60);
+        //    chartArea.AxisY.StripLines.Add(improveZone);
+
+        //    // Línea objetivo principal (92%)
+        //    System.Windows.Forms.DataVisualization.Charting.StripLine targetLine =
+        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
+        //    targetLine.BackColor = Color.Transparent;
+        //    targetLine.BorderColor = Color.FromArgb(241, 196, 15); // Dorado
+        //    targetLine.BorderWidth = 2;
+        //    targetLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot;
+        //    targetLine.IntervalOffset = 92;
+        //    targetLine.StripWidth = 0.5;
+        //    targetLine.Text = "Objetivo General 92%";
+        //    targetLine.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+        //    targetLine.ForeColor = Color.FromArgb(241, 196, 15);
+        //    chartArea.AxisY.StripLines.Add(targetLine);
+        //}
+        private void GraficarCumplimientoMensualOtrasAreasPorSupervisor()
         {
             try
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = @"
+
+                string query = $@"
 SELECT 
-    Año,
-    ""Mes"",
-    ""Supervisor"",
-    ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado_Mensual""
-FROM (
-    SELECT 
-        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-        TO_CHAR(f.""Fecha"", 'Month') AS ""Mes"",
-        f.""Area"",
-        f.""OP"",
-        COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-        ROUND(
-            CASE 
-                -- Primero verificamos si el denominador es cero o NULL
-                WHEN (CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                ELSE 
-                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        ELSE 0
-                    END) <= 0 THEN 0
-                -- Si el denominador es mayor que cero, aplicamos la fórmula
-                ELSE LEAST(
-                    (SUM(f.""Kg_prod_term"") / 
-                    (CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                ELSE 
-                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        ELSE 1
-                    END)) * 100,
-                    100
-                )
-            END,
-        2) AS ""% Cumplimiento de Kg Terminado""
-    FROM 
-        public.""Ficha"" f
-    LEFT JOIN 
-        public.""Tiempo_Muerto_Operativo"" tmo 
-        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-    LEFT JOIN 
-        public.""Tiempo_muerto_Mecanico"" tmm 
-        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-    LEFT JOIN 
-        public.""Empacado"" e ON f.""OP"" = e.""OP""
-    LEFT JOIN 
-        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-    LEFT JOIN 
-        public.""Grind"" g ON f.""OP"" = g.""OP""
-    LEFT JOIN 
-        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-    LEFT JOIN 
-        public.""Maquinas"" m ON f.""OP"" = m.""OP""
-    LEFT JOIN 
-        public.""Polvos"" p ON f.""OP"" = p.""OP""
-    LEFT JOIN 
-        public.""Revolturas"" r ON f.""OP"" = r.""OP""
-    LEFT JOIN 
-        public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-    WHERE 
-        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    GROUP BY 
-        EXTRACT(YEAR FROM f.""Fecha""),
-        TO_CHAR(f.""Fecha"", 'Month'),
-        f.""Area"",
-        f.""OP"",
-        u.""Usuario"",
-        e.""Meta_kg_hr_line"",
-        ev.""Meta_kg_hr"",
-        g.""Meta_Kg_hr"",
-        i.""Meta_kg_hr_line"",
-        m.""Meta_Kg_Hr"",
-        p.""Meta_kg_hr_hum"",
-        p.""Meta_kg_hr_idon"",
-        r.""Meta_Kg_Hr""
-) AS subconsulta
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    INITCAP(
+        CASE EXTRACT(MONTH FROM f.""Fecha"")
+            WHEN 1 THEN 'enero'
+            WHEN 2 THEN 'febrero'
+            WHEN 3 THEN 'marzo'
+            WHEN 4 THEN 'abril'
+            WHEN 5 THEN 'mayo'
+            WHEN 6 THEN 'junio'
+            WHEN 7 THEN 'julio'
+            WHEN 8 THEN 'agosto'
+            WHEN 9 THEN 'septiembre'
+            WHEN 10 THEN 'octubre'
+            WHEN 11 THEN 'noviembre'
+            WHEN 12 THEN 'diciembre'
+        END
+    ) as Mes,
+    COALESCE(u.""Usuario"", 'Sin Supervisor') as Supervisor,
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
+    
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
 GROUP BY 
-    Año, ""Mes"", ""Supervisor""
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(MONTH FROM f.""Fecha""),
+    u.""Usuario""
 ORDER BY 
-    Año, 
-    EXTRACT(MONTH FROM TO_DATE(""Mes"", 'Month')),
-    ""Supervisor""";
+    EXTRACT(MONTH FROM f.""Fecha""),
+    Supervisor;";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
-                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de Kg terminado mensual por supervisor.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento mensual por supervisor para otras áreas en el año seleccionado.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Configurar el chart de cumplimiento Kg terminado mensual por supervisor
-                ConfigurarChartCumplimientoKgTerminadoMensualPorSupervisor();
+                // Configurar el chart de cumplimiento mensual de otras áreas
+                ConfigurarChartCumplimientoMensualOtrasAreasPorSupervisor();
 
                 // Limpiar series existentes
-                ChartCumplimientoKgTerminadoMensualSupervisor.Series.Clear();
+                ChartCumplimientoMensualOtrasAreasPorSupervisor.Series.Clear();
 
-                // Obtener lista única de supervisores
-                var supervisores = datos.AsEnumerable()
-                    .Select(row => row["Supervisor"].ToString())
-                    .Distinct()
-                    .OrderBy(s => s)
-                    .ToList();
+                // Diccionario para organizar datos por supervisor
+                Dictionary<string, Dictionary<string, double>> datosPorSupervisor =
+                    new Dictionary<string, Dictionary<string, double>>();
 
-                // Paleta de colores para supervisores
-                Color[] coloresSupervisores = new Color[]
+                // Ordenar meses en español correctamente
+                Dictionary<string, int> ordenMeses = new Dictionary<string, int>
+        {
+            { "Enero", 1 }, { "Febrero", 2 }, { "Marzo", 3 }, { "Abril", 4 },
+            { "Mayo", 5 }, { "Junio", 6 }, { "Julio", 7 }, { "Agosto", 8 },
+            { "Septiembre", 9 }, { "Octubre", 10 }, { "Noviembre", 11 }, { "Diciembre", 12 }
+        };
+
+                // Lista de meses ordenados
+                List<string> mesesOrdenados = new List<string>();
+
+                // Lista de supervisores en orden
+                List<string> listaSupervisores = new List<string>();
+
+                // Primero, recolectar todos los meses únicos y ordenarlos
+                SortedSet<string> mesesSet = new SortedSet<string>(new MesComparer(ordenMeses));
+                foreach (DataRow row in datos.Rows)
                 {
-            Color.FromArgb(74, 134, 232),    // Azul
-            Color.FromArgb(46, 204, 113),    // Verde
-            Color.FromArgb(155, 89, 182),    // Púrpura
-            Color.FromArgb(241, 196, 15),    // Amarillo
-            Color.FromArgb(231, 76, 60),     // Rojo
-            Color.FromArgb(52, 152, 219),    // Azul claro
-            Color.FromArgb(230, 126, 34),    // Naranja
-            Color.FromArgb(26, 188, 156),    // Turquesa
-            Color.FromArgb(149, 165, 166),   // Gris
-            Color.FromArgb(142, 68, 173)     // Morado
-                };
+                    string mes = row["Mes"].ToString();
+                    mesesSet.Add(mes);
+                }
+                mesesOrdenados = mesesSet.ToList();
 
-                // Crear una serie por cada supervisor
-                for (int i = 0; i < supervisores.Count; i++)
+                // Organizar datos por supervisor y mes
+                foreach (DataRow row in datos.Rows)
                 {
-                    string supervisor = supervisores[i];
-                    Color colorSupervisor = coloresSupervisores[i % coloresSupervisores.Length];
+                    string mes = row["Mes"].ToString();
+                    string supervisor = row["Supervisor"].ToString();
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
 
+                    // Validar y ajustar valores
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar supervisor a la lista si no existe
+                    if (!listaSupervisores.Contains(supervisor))
+                    {
+                        listaSupervisores.Add(supervisor);
+                    }
+
+                    // Inicializar diccionario para el supervisor si no existe
+                    if (!datosPorSupervisor.ContainsKey(supervisor))
+                    {
+                        datosPorSupervisor[supervisor] = new Dictionary<string, double>();
+                    }
+
+                    // Agregar dato del supervisor para el mes
+                    datosPorSupervisor[supervisor][mes] = cumplimiento;
+                }
+
+                // Si hay muchos supervisores, limitar la visualización
+                if (listaSupervisores.Count > 15)
+                {
+                    var opcion = MetroFramework.MetroMessageBox.Show(this,
+                        $"Se detectaron {listaSupervisores.Count} supervisores en otras áreas.\n\n" +
+                        "¿Desea mostrar solo los 15 principales? (Recomendado para mejor visualización)\n\n" +
+                        "Sí: Mostrar solo 15\nNo: Mostrar todos (puede afectar la legibilidad)",
+                        "Muchos supervisores detectados",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (opcion == DialogResult.Yes)
+                    {
+                        // Calcular promedio por supervisor y tomar los 15 mejores
+                        var supervisoresOrdenados = listaSupervisores
+                            .Select(s => new
+                            {
+                                Supervisor = s,
+                                Promedio = datosPorSupervisor.ContainsKey(s) &&
+                                          datosPorSupervisor[s].Values.Any() ?
+                                          datosPorSupervisor[s].Values.Average() : 0
+                            })
+                            .OrderByDescending(x => x.Promedio)
+                            .Take(15)
+                            .Select(x => x.Supervisor)
+                            .ToList();
+
+                        listaSupervisores = supervisoresOrdenados;
+                    }
+                }
+
+                // Generar paleta dinámica de colores para otras áreas
+                Color[] coloresSupervisores = GenerarPaletaColoresMensualOtrasAreas(listaSupervisores.Count);
+
+                // Crear series para cada supervisor
+                for (int i = 0; i < listaSupervisores.Count; i++)
+                {
+                    string supervisor = listaSupervisores[i];
+                    var datosSupervisor = datosPorSupervisor.ContainsKey(supervisor)
+                        ? datosPorSupervisor[supervisor]
+                        : new Dictionary<string, double>();
+
+                    // Crear serie para el supervisor
                     Series serieSupervisor = new Series(supervisor);
                     serieSupervisor.ChartType = SeriesChartType.Line;
-                    serieSupervisor.Color = colorSupervisor;
-                    serieSupervisor.BorderWidth = 3;
-                    serieSupervisor.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                    serieSupervisor.MarkerStyle = MarkerStyle.Circle;
-                    serieSupervisor.MarkerSize = 10;
-                    serieSupervisor.MarkerColor = colorSupervisor;
-                    serieSupervisor.MarkerBorderColor = Color.White;
-                    serieSupervisor.MarkerBorderWidth = 2;
-                    serieSupervisor.IsValueShownAsLabel = true;
-                    serieSupervisor.LabelFormat = "N1";
-                    serieSupervisor.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                    serieSupervisor.LabelForeColor = Color.White;
-                    serieSupervisor.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                    serieSupervisor.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
-                    serieSupervisor.LabelBorderWidth = 1;
-                    serieSupervisor.ShadowColor = Color.FromArgb(30, 30, 30);
-                    serieSupervisor.ShadowOffset = 2;
 
-                    // Filtrar datos para este supervisor
-                    var datosSupervisor = datos.AsEnumerable()
-                        .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => System.Convert.ToInt32(row["Año"]))
-                        .ThenBy(row => GetMesNumeroDesdeNombre(row["Mes"].ToString().Trim()))
-                        .ToList();
+                    // Asignar color de la paleta
+                    serieSupervisor.Color = coloresSupervisores[i % coloresSupervisores.Length];
 
-                    // Agregar puntos para este supervisor
-                    foreach (DataRow row in datosSupervisor)
+                    // Configuración de la serie para gráfica mensual de otras áreas
+                    ConfigurarSerieSupervisorMensualOtrasAreas(serieSupervisor);
+
+                    // Agregar datos para todos los meses (en orden)
+                    foreach (string mes in mesesOrdenados)
                     {
-                        string mes = $"{row["Mes"].ToString().Trim()} {row["Año"]}";
-                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado_Mensual"]);
+                        double valor = datosSupervisor.ContainsKey(mes) ? datosSupervisor[mes] : 0;
 
-                        int pointIndex = serieSupervisor.Points.AddXY(mes, cumplimiento);
+                        int pointIndex = serieSupervisor.Points.AddXY(mes, valor);
 
-                        // Configurar etiqueta individual
-                        System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieSupervisor.Points[pointIndex];
-                        point.Label = cumplimiento.ToString("N1") + "%";
-                        point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                        point.LabelForeColor = Color.White;
-                        point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
-                        point.LabelBorderWidth = 1;
-                        point.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                        point.LabelAngle = -45; // Ángulo para mejor visualización
+                        // Configurar etiqueta solo si hay valor > 0
+                        ConfigurarPuntoGraficaMensualOtrasAreas(serieSupervisor.Points[pointIndex], valor);
                     }
 
                     // Agregar serie al chart
-                    ChartCumplimientoKgTerminadoMensualSupervisor.Series.Add(serieSupervisor);
+                    ChartCumplimientoMensualOtrasAreasPorSupervisor.Series.Add(serieSupervisor);
                 }
 
+                // Ajustar leyenda según cantidad de supervisores
+                AjustarLeyendaMensualOtrasAreasParaMultiplesSupervisores(listaSupervisores.Count);
+
                 // Actualizar el chart
-                ChartCumplimientoKgTerminadoMensualSupervisor.Invalidate();
+                ChartCumplimientoMensualOtrasAreasPorSupervisor.Invalidate();
 
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de Kg terminado mensual por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento mensual por supervisor de otras áreas: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        // Método auxiliar para obtener el número del mes desde el nombre (TO_CHAR)
-        private int GetMesNumeroDesdeNombre(string mesNombre)
+        // Método para generar paleta dinámica de colores para gráfica mensual de otras áreas
+        private Color[] GenerarPaletaColoresMensualOtrasAreas(int cantidad)
         {
-            string mesTrim = mesNombre.Trim();
-            switch (mesTrim)
+            if (cantidad <= 0) return new Color[] { Color.FromArgb(46, 204, 113) }; // Verde para otras áreas
+
+            List<Color> colores = new List<Color>();
+
+            // Para pocos supervisores, usar colores predefinidos con tonos verdes/azules
+            if (cantidad <= 12)
             {
-                case "January": return 1;
-                case "February": return 2;
-                case "March": return 3;
-                case "April": return 4;
-                case "May": return 5;
-                case "June": return 6;
-                case "July": return 7;
-                case "August": return 8;
-                case "September": return 9;
-                case "October": return 10;
-                case "November": return 11;
-                case "December": return 12;
-                default: return 0;
+                // Paleta con tonos apropiados para otras áreas (verdes, azules, turquesas)
+                Color[] basePalette = {
+            Color.FromArgb(46, 204, 113),   // Verde brillante (principal)
+            Color.FromArgb(52, 152, 219),   // Azul
+            Color.FromArgb(26, 188, 156),   // Turquesa
+            Color.FromArgb(39, 174, 96),    // Verde esmeralda
+            Color.FromArgb(41, 128, 185),   // Azul oscuro
+            Color.FromArgb(22, 160, 133),   // Verde mar
+            Color.FromArgb(155, 89, 182),   // Púrpura
+            Color.FromArgb(243, 156, 18),   // Naranja
+            Color.FromArgb(230, 126, 34),   // Naranja oscuro
+            Color.FromArgb(231, 76, 60),    // Rojo
+            Color.FromArgb(142, 68, 173),   // Púrpura oscuro
+            Color.FromArgb(149, 165, 166)   // Gris
+        };
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    colores.Add(basePalette[i % basePalette.Length]);
+                }
+            }
+            else
+            {
+                // Para muchos supervisores, generar colores con tonos verdes/azules
+                Random rand = new Random(789); // Semilla diferente
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    // Enfocarse en tonos verdes y azules (0.2 a 0.6 en HSL)
+                    float hue = 0.2f + (float)i / (float)cantidad * 0.4f;
+                    float saturation = 0.65f + (float)rand.NextDouble() * 0.25f; // 0.65-0.9
+                    float lightness = 0.45f + (float)rand.NextDouble() * 0.2f; // 0.45-0.65
+
+                    colores.Add(HslToRgb(hue, saturation, lightness));
+                }
+            }
+
+            return colores.ToArray();
+        }
+
+        // Método para configurar una serie de supervisor para gráfica mensual de otras áreas
+        private void ConfigurarSerieSupervisorMensualOtrasAreas(Series serie)
+        {
+            serie.BorderWidth = 3;
+            serie.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            serie.MarkerStyle = MarkerStyle.Circle;
+            serie.MarkerSize = 8;
+            serie.MarkerColor = serie.Color;
+            serie.MarkerBorderColor = Color.White;
+            serie.MarkerBorderWidth = 2;
+            serie.IsValueShownAsLabel = false;
+            serie.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            serie.ToolTip = "#VALY{N1}% en #VALX";
+
+            // Para otras áreas, usar línea ligeramente diferente
+            serie.BorderWidth = 3;
+        }
+
+        // Método para configurar un punto individual para gráfica mensual de otras áreas
+        private void ConfigurarPuntoGraficaMensualOtrasAreas(System.Windows.Forms.DataVisualization.Charting.DataPoint punto, double valor)
+        {
+            if (valor > 10) // Solo mostrar etiquetas para valores significativos
+            {
+                punto.Label = valor.ToString("N0") + "%";
+                punto.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
+                punto.LabelForeColor = Color.White;
+                punto.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                punto.LabelBorderWidth = 1;
+                punto.Font = new Font("Segoe UI", 7, FontStyle.Bold);
+                punto.IsValueShownAsLabel = true;
+                punto.ToolTip = $"{valor:N1}%";
+            }
+            else
+            {
+                punto.IsValueShownAsLabel = false;
+                punto.ToolTip = valor > 0 ? $"{valor:N1}%" : "Sin datos";
             }
         }
 
-        private void ConfigurarChartCumplimientoKgTerminadoMensualPorSupervisor()
+        // Método para ajustar la leyenda para gráfica mensual de otras áreas
+        private void AjustarLeyendaMensualOtrasAreasParaMultiplesSupervisores(int cantidadSupervisores)
+        {
+            if (ChartCumplimientoMensualOtrasAreasPorSupervisor.Legends.Count == 0) return;
+
+            var legend = ChartCumplimientoMensualOtrasAreasPorSupervisor.Legends[0];
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 7;
+            legend.TextWrapThreshold = 4;
+
+            if (cantidadSupervisores > 20)
+            {
+                legend.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                legend.Position.Height = 75;
+            }
+            else if (cantidadSupervisores > 10)
+            {
+                legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+                legend.Position.Height = 70;
+            }
+            else
+            {
+                legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+                legend.Position.Height = 65;
+            }
+        }
+
+        // Método de configuración del chart para Cumplimiento Mensual de Otras Áreas
+        private void ConfigurarChartCumplimientoMensualOtrasAreasPorSupervisor()
         {
             // Limpiar el chart
-            ChartCumplimientoKgTerminadoMensualSupervisor.Series.Clear();
-            ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Clear();
-            ChartCumplimientoKgTerminadoMensualSupervisor.Titles.Clear();
-            ChartCumplimientoKgTerminadoMensualSupervisor.Legends.Clear();
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Series.Clear();
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.ChartAreas.Clear();
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Titles.Clear();
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Legends.Clear();
 
-            // Crear área de chart moderna para cumplimiento Kg terminado mensual por supervisor
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoKgTerminadoMensualSupervisorArea");
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoMensualOtrasAreasSupervisorArea");
 
-            // Fondo moderno consistente
+            // Fondo moderno con tonos verdes claros
             chartArea.BackColor = Color.FromArgb(255, 255, 255);
-            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackSecondaryColor = Color.FromArgb(245, 252, 248); // Verde muy claro
             chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
             chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
-            chartArea.ShadowOffset = 3;
+            chartArea.ShadowOffset = 2;
 
-            // Configurar eje X moderno (para meses)
+            // Configurar eje X - MESES
             chartArea.AxisX.Title = "MESES";
             chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
             chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
             chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
             chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Angle = -45; // Inclinar etiquetas
             chartArea.AxisX.MajorGrid.Enabled = false;
             chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
             chartArea.AxisX.MajorTickMark.Enabled = true;
-            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
             chartArea.AxisX.Interval = 1;
             chartArea.AxisX.IsMarginVisible = true;
-            chartArea.AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont;
-            chartArea.AxisX.LabelStyle.Angle = -45; // Rotar etiquetas para mejor visualización
+            chartArea.AxisX.IsLabelAutoFit = true;
+            chartArea.AxisX.LabelAutoFitStyle =
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont |
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont |
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30;
 
-            // Configurar eje Y moderno para PORCENTAJES
+            // Configurar eje Y - PORCENTAJE
             chartArea.AxisY.Title = "% CUMPLIMIENTO";
             chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
             chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
             chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
             chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
             chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
             chartArea.AxisY.MajorGrid.Enabled = true;
             chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
             chartArea.AxisY.MajorTickMark.Enabled = true;
-            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
 
-            // Configurar eje Y para porcentajes (0% - 100%)
+            // Configurar eje Y para porcentajes
             chartArea.AxisY.Minimum = 0;
             chartArea.AxisY.Maximum = 100;
             chartArea.AxisY.Interval = 20;
 
-            //// Línea horizontal en 95% para referencia (objetivo de producción mensual)
-            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
-            //stripLine.BackColor = Color.FromArgb(235, 255, 240); // Fondo verde claro
+            // Línea horizontal en 90% para referencia (objetivo otras áreas)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine =
+            //    new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 255, 245); // Fondo verde claro
             //stripLine.BorderColor = Color.FromArgb(46, 204, 113); // Borde verde
-            //stripLine.BorderWidth = 1;
-            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            //stripLine.IntervalOffset = 95;
-            //stripLine.StripWidth = 0.5;
-            //stripLine.Text = "Objetivo 95%";
-            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
-            //chartArea.AxisY.StripLines.Add(stripLine);
-
-            // Hacer el área de gráfico más grande
-            chartArea.Position.Auto = false;
-            chartArea.Position.X = 10; // Más espacio para las etiquetas rotadas
-            chartArea.Position.Y = 15;
-            chartArea.Position.Width = 85;
-            chartArea.Position.Height = 70;
-
-            // Agregar área al chart
-            ChartCumplimientoKgTerminadoMensualSupervisor.ChartAreas.Add(chartArea);
-
-            // Configurar título principal moderno
-            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            mainTitle.Text = "% CUMPLIMIENTO MENSUAL POR SUPERVISOR";
-            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
-            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            mainTitle.Alignment = ContentAlignment.TopCenter;
-            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
-            mainTitle.ShadowOffset = 2;
-            ChartCumplimientoKgTerminadoMensualSupervisor.Titles.Add(mainTitle);
-
-            // Configurar subtítulo moderno
-            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            subTitle.Text = "Desempeño Mensual de Cumplimiento por Supervisor - Otras Áreas";
-            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
-            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
-            subTitle.Alignment = ContentAlignment.TopCenter;
-            ChartCumplimientoKgTerminadoMensualSupervisor.Titles.Add(subTitle);
-
-            // Configurar leyenda moderna en la parte inferior
-            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            legend.Name = "LeyendaSupervisoresKgTerminadoMensual";
-            legend.Title = "SUPERVISORES";
-            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
-            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            legend.ForeColor = Color.FromArgb(52, 73, 94);
-            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend.Alignment = StringAlignment.Center;
-            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
-            legend.BackColor = Color.FromArgb(248, 249, 250);
-            legend.BorderColor = Color.FromArgb(200, 200, 200);
-            legend.BorderWidth = 1;
-            legend.ShadowColor = Color.FromArgb(100, 100, 100);
-            legend.ShadowOffset = 1;
-            legend.IsEquallySpacedItems = true;
-            legend.ItemColumnSpacing = 15;
-            legend.Position.Auto = false;
-            legend.Position.X = 5;
-            legend.Position.Y = 85;
-            legend.Position.Width = 90;
-            legend.Position.Height = 10;
-            legend.MaximumAutoSize = 100;
-
-            ChartCumplimientoKgTerminadoMensualSupervisor.Legends.Add(legend);
-
-            // Configuración general del chart moderna
-            ChartCumplimientoKgTerminadoMensualSupervisor.BackColor = Color.White;
-            ChartCumplimientoKgTerminadoMensualSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
-            ChartCumplimientoKgTerminadoMensualSupervisor.BorderlineWidth = 2;
-            ChartCumplimientoKgTerminadoMensualSupervisor.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            ChartCumplimientoKgTerminadoMensualSupervisor.Padding = new Padding(20, 20, 20, 40);
-            ChartCumplimientoKgTerminadoMensualSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            ChartCumplimientoKgTerminadoMensualSupervisor.BackSecondaryColor = Color.FromArgb(248, 249, 250);
-
-            // Configurar anti-aliasing para máxima calidad
-            ChartCumplimientoKgTerminadoMensualSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
-            ChartCumplimientoKgTerminadoMensualSupervisor.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
-            ChartCumplimientoKgTerminadoMensualSupervisor.IsSoftShadows = true;
-
-            // Suavizado adicional
-            chartArea.Area3DStyle.Enable3D = false;
-        }
-        private void GraficarCumplimientoKgTerminadoPorSupervisor(List<string> semanasSeleccionadas)
-        {
-            try
-            {
-                // Construir la consulta SQL para % Cumplimiento de Kg Terminado por Supervisor
-                string semanasParam = string.Join(",", semanasSeleccionadas);
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = @"
-SELECT 
-    Año,
-    ""No de Semana"" AS ""No_Semana"",
-    ""Supervisor"",
-    ROUND(AVG(""% Cumplimiento de Kg Terminado""), 2) AS ""Promedio_Cumplimiento_Kg_Terminado""
-FROM (
-    SELECT 
-        EXTRACT(YEAR FROM f.""Fecha"") AS Año,
-        EXTRACT(WEEK FROM f.""Fecha"") AS ""No de Semana"",
-        f.""Area"",
-        f.""OP"",
-        COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-        ROUND(
-            CASE 
-                -- Primero verificamos si el denominador es cero o NULL
-                WHEN (CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                ELSE 
-                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        ELSE 0
-                    END) <= 0 THEN 0
-                -- Si el denominador es mayor que cero, aplicamos la fórmula
-                ELSE LEAST(
-                    (SUM(f.""Kg_prod_term"") / 
-                    (CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM MIN(f.""Fecha"")) BETWEEN 5 AND 9 THEN 
-                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * SUM(f.""Hr_efectivas"")
-                                ELSE 
-                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * SUM(f.""Hr_efectivas"")
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * SUM(f.""Hr_efectivas"")
-                        ELSE 1
-                    END)) * 100,
-                    100
-                )
-            END,
-        2) AS ""% Cumplimiento de Kg Terminado""
-    FROM 
-        public.""Ficha"" f
-    LEFT JOIN 
-        public.""Tiempo_Muerto_Operativo"" tmo 
-        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-    LEFT JOIN 
-        public.""Tiempo_muerto_Mecanico"" tmm 
-        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-    LEFT JOIN 
-        public.""Empacado"" e ON f.""OP"" = e.""OP""
-    LEFT JOIN 
-        public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-    LEFT JOIN 
-        public.""Grind"" g ON f.""OP"" = g.""OP""
-    LEFT JOIN 
-        public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-    LEFT JOIN 
-        public.""Maquinas"" m ON f.""OP"" = m.""OP""
-    LEFT JOIN 
-        public.""Polvos"" p ON f.""OP"" = p.""OP""
-    LEFT JOIN 
-        public.""Revolturas"" r ON f.""OP"" = r.""OP""
-    LEFT JOIN 
-        public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-    WHERE 
-        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    GROUP BY 
-        EXTRACT(YEAR FROM f.""Fecha""),
-        EXTRACT(WEEK FROM f.""Fecha""),
-        f.""Area"",
-        f.""OP"",
-        u.""Usuario"",
-        e.""Meta_kg_hr_line"",
-        ev.""Meta_kg_hr"",
-        g.""Meta_Kg_hr"",
-        i.""Meta_kg_hr_line"",
-        m.""Meta_Kg_Hr"",
-        p.""Meta_kg_hr_hum"",
-        p.""Meta_kg_hr_idon"",
-        r.""Meta_Kg_Hr""
-) AS subconsulta
-GROUP BY 
-    Año, ""No de Semana"", ""Supervisor""
-ORDER BY 
-    Año, ""No de Semana"", ""Supervisor""";
-
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento de Kg terminado por supervisor para las semanas seleccionadas.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Configurar el chart de cumplimiento Kg terminado por supervisor
-                ConfigurarChartCumplimientoKgTerminadoPorSupervisor();
-
-                // Limpiar series existentes
-                ChartCumplimientoKgTerminadoSupervisor.Series.Clear();
-
-                // Obtener lista única de supervisores
-                var supervisores = datos.AsEnumerable()
-                    .Select(row => row["Supervisor"].ToString())
-                    .Distinct()
-                    .OrderBy(s => s)
-                    .ToList();
-
-                // Paleta de colores para supervisores
-                Color[] coloresSupervisores = new Color[]
-                {
-            Color.FromArgb(74, 134, 232),    // Azul
-            Color.FromArgb(46, 204, 113),    // Verde
-            Color.FromArgb(155, 89, 182),    // Púrpura
-            Color.FromArgb(241, 196, 15),    // Amarillo
-            Color.FromArgb(231, 76, 60),     // Rojo
-            Color.FromArgb(52, 152, 219),    // Azul claro
-            Color.FromArgb(230, 126, 34),    // Naranja
-            Color.FromArgb(26, 188, 156),    // Turquesa
-            Color.FromArgb(149, 165, 166),   // Gris
-            Color.FromArgb(142, 68, 173)     // Morado
-                };
-
-                // Crear una serie por cada supervisor
-                for (int i = 0; i < supervisores.Count; i++)
-                {
-                    string supervisor = supervisores[i];
-                    Color colorSupervisor = coloresSupervisores[i % coloresSupervisores.Length];
-
-                    Series serieSupervisor = new Series(supervisor);
-                    serieSupervisor.ChartType = SeriesChartType.Line;
-                    serieSupervisor.Color = colorSupervisor;
-                    serieSupervisor.BorderWidth = 3;
-                    serieSupervisor.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                    serieSupervisor.MarkerStyle = MarkerStyle.Circle;
-                    serieSupervisor.MarkerSize = 10;
-                    serieSupervisor.MarkerColor = colorSupervisor;
-                    serieSupervisor.MarkerBorderColor = Color.White;
-                    serieSupervisor.MarkerBorderWidth = 2;
-                    serieSupervisor.IsValueShownAsLabel = true;
-                    serieSupervisor.LabelFormat = "N1";
-                    serieSupervisor.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                    serieSupervisor.LabelForeColor = Color.White;
-                    serieSupervisor.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                    serieSupervisor.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
-                    serieSupervisor.LabelBorderWidth = 1;
-                    serieSupervisor.ShadowColor = Color.FromArgb(30, 30, 30);
-                    serieSupervisor.ShadowOffset = 2;
-
-                    // Filtrar datos para este supervisor
-                    var datosSupervisor = datos.AsEnumerable()
-                        .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => System.Convert.ToInt32(row["No_Semana"]))
-                        .ToList();
-
-                    // Agregar puntos para este supervisor
-                    foreach (DataRow row in datosSupervisor)
-                    {
-                        string semana = $"Sem {row["No_Semana"]}";
-                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Cumplimiento_Kg_Terminado"]);
-
-                        int pointIndex = serieSupervisor.Points.AddXY(semana, cumplimiento);
-
-                        // Configurar etiqueta individual
-                        System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieSupervisor.Points[pointIndex];
-                        point.Label = cumplimiento.ToString("N1") + "%";
-                        point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                        point.LabelForeColor = Color.White;
-                        point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
-                        point.LabelBorderWidth = 1;
-                        point.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                        point.LabelAngle = -45; // Ángulo para mejor visualización
-                    }
-
-                    // Agregar serie al chart
-                    ChartCumplimientoKgTerminadoSupervisor.Series.Add(serieSupervisor);
-                }
-
-                // Actualizar el chart
-                ChartCumplimientoKgTerminadoSupervisor.Invalidate();
-
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento de Kg terminado por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void ConfigurarChartCumplimientoKgTerminadoPorSupervisor()
-        {
-            // Limpiar el chart
-            ChartCumplimientoKgTerminadoSupervisor.Series.Clear();
-            ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Clear();
-            ChartCumplimientoKgTerminadoSupervisor.Titles.Clear();
-            ChartCumplimientoKgTerminadoSupervisor.Legends.Clear();
-
-            // Crear área de chart moderna para cumplimiento Kg terminado por supervisor
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoKgTerminadoSupervisorArea");
-
-            // Fondo moderno consistente
-            chartArea.BackColor = Color.FromArgb(255, 255, 255);
-            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
-            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
-            chartArea.ShadowOffset = 3;
-
-            // Configurar eje X moderno
-            chartArea.AxisX.Title = "SEMANAS";
-            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
-            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisX.MajorGrid.Enabled = false;
-            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
-            chartArea.AxisX.MajorTickMark.Enabled = true;
-            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
-            chartArea.AxisX.Interval = 1;
-            chartArea.AxisX.IsMarginVisible = true;
-            chartArea.AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont;
-
-            // Configurar eje Y moderno para PORCENTAJES
-            chartArea.AxisY.Title = "% CUMPLIMIENTO";
-            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
-            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
-            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
-            chartArea.AxisY.MajorGrid.Enabled = true;
-            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
-            chartArea.AxisY.MajorTickMark.Enabled = true;
-            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
-
-            // Configurar eje Y para porcentajes (0% - 100%)
-            chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Maximum = 100;
-            chartArea.AxisY.Interval = 20;
-
-            //// Línea horizontal en 95% para referencia (objetivo de producción)
-            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
-            //stripLine.BackColor = Color.FromArgb(235, 255, 240); // Fondo verde claro
-            //stripLine.BorderColor = Color.FromArgb(46, 204, 113); // Borde verde
-            //stripLine.BorderWidth = 1;
-            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            //stripLine.IntervalOffset = 95;
-            //stripLine.StripWidth = 0.5;
-            //stripLine.Text = "Objetivo 95%";
-            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
-            //chartArea.AxisY.StripLines.Add(stripLine);
-
-            // Hacer el área de gráfico más grande
-            chartArea.Position.Auto = false;
-            chartArea.Position.X = 5;
-            chartArea.Position.Y = 15;
-            chartArea.Position.Width = 90;
-            chartArea.Position.Height = 70;
-
-            // Agregar área al chart
-            ChartCumplimientoKgTerminadoSupervisor.ChartAreas.Add(chartArea);
-
-            // Configurar título principal moderno
-            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            mainTitle.Text = "% CUMPLIMIENTO A PLANEACIÓN POR SUPERVISOR";
-            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
-            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            mainTitle.Alignment = ContentAlignment.TopCenter;
-            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
-            mainTitle.ShadowOffset = 2;
-            ChartCumplimientoKgTerminadoSupervisor.Titles.Add(mainTitle);
-
-            // Configurar subtítulo moderno
-            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            subTitle.Text = "Desempeño Semanal de Cumplimiento por Supervisor - Otras Áreas";
-            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
-            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
-            subTitle.Alignment = ContentAlignment.TopCenter;
-            ChartCumplimientoKgTerminadoSupervisor.Titles.Add(subTitle);
-
-            // Configurar leyenda moderna en la parte inferior
-            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            legend.Name = "LeyendaSupervisoresKgTerminado";
-            legend.Title = "SUPERVISORES";
-            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
-            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            legend.ForeColor = Color.FromArgb(52, 73, 94);
-            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend.Alignment = StringAlignment.Center;
-            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
-            legend.BackColor = Color.FromArgb(248, 249, 250);
-            legend.BorderColor = Color.FromArgb(200, 200, 200);
-            legend.BorderWidth = 1;
-            legend.ShadowColor = Color.FromArgb(100, 100, 100);
-            legend.ShadowOffset = 1;
-            legend.IsEquallySpacedItems = true;
-            legend.ItemColumnSpacing = 15;
-            legend.Position.Auto = false;
-            legend.Position.X = 5;
-            legend.Position.Y = 85;
-            legend.Position.Width = 90;
-            legend.Position.Height = 10;
-            legend.MaximumAutoSize = 100;
-
-            ChartCumplimientoKgTerminadoSupervisor.Legends.Add(legend);
-
-            // Configuración general del chart moderna
-            ChartCumplimientoKgTerminadoSupervisor.BackColor = Color.White;
-            ChartCumplimientoKgTerminadoSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
-            ChartCumplimientoKgTerminadoSupervisor.BorderlineWidth = 2;
-            ChartCumplimientoKgTerminadoSupervisor.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            ChartCumplimientoKgTerminadoSupervisor.Padding = new Padding(20);
-            ChartCumplimientoKgTerminadoSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            ChartCumplimientoKgTerminadoSupervisor.BackSecondaryColor = Color.FromArgb(248, 249, 250);
-
-            // Configurar anti-aliasing para máxima calidad
-            ChartCumplimientoKgTerminadoSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
-            ChartCumplimientoKgTerminadoSupervisor.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
-            ChartCumplimientoKgTerminadoSupervisor.IsSoftShadows = true;
-
-            // Suavizado adicional
-            chartArea.Area3DStyle.Enable3D = false;
-        }
-        private void GraficarCumplimientoPlaneacionMensualPorSupervisor()
-        {
-            try
-            {
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = @"
-            SELECT 
-                ""Año"",
-                ""Mes"",
-                ""Supervisor"",
-                ROUND(AVG(""% Cumplimiento a Planeación""), 2) AS ""Promedio_Mensual_Cumplimiento_Planeacion""
-            FROM (
-                SELECT 
-                    COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
-                    COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
-                    COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
-                    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas_Programadas"",
-                    COALESCE(d.""Kg_seco_hr"", 0) AS ""Kg_seco_hr"",
-                    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg_Fuera_Especificacion"",
-                    CASE 
-                        WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 AND COALESCE(d.""Kg_seco_hr"", 0) > 0 THEN
-                            ROUND((COALESCE(d.""Kg_seco_hr"", 0) - COALESCE(q3.""Kg Fuera de Especificación"", 0)) / (COALESCE(d.""Kg_seco_hr"", 0) * COALESCE(q2.""Horas Programadas"", 0)) * 100, 2)
-                        ELSE 0
-                    END AS ""% Cumplimiento a Planeación""
-                FROM (
-                    SELECT 
-                        EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-                        CASE EXTRACT(MONTH FROM f.""Fecha"")
-                            WHEN 1 THEN 'Enero'
-                            WHEN 2 THEN 'Febrero'
-                            WHEN 3 THEN 'Marzo'
-                            WHEN 4 THEN 'Abril'
-                            WHEN 5 THEN 'Mayo'
-                            WHEN 6 THEN 'Junio'
-                            WHEN 7 THEN 'Julio'
-                            WHEN 8 THEN 'Agosto'
-                            WHEN 9 THEN 'Septiembre'
-                            WHEN 10 THEN 'Octubre'
-                            WHEN 11 THEN 'Noviembre'
-                            WHEN 12 THEN 'Diciembre'
-                        END AS ""Mes"",
-                        f.""OP"",
-                        f.""ID_user""
-                    FROM public.""Ficha"" f
-                    WHERE f.""Area"" IN ('Tunel/Sumergidor', 'Despegue')
-                        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-                    GROUP BY EXTRACT(YEAR FROM f.""Fecha""), EXTRACT(MONTH FROM f.""Fecha""), f.""OP"", f.""ID_user""
-                ) q1
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        CASE EXTRACT(MONTH FROM ""Fecha"")
-                            WHEN 1 THEN 'Enero'
-                            WHEN 2 THEN 'Febrero'
-                            WHEN 3 THEN 'Marzo'
-                            WHEN 4 THEN 'Abril'
-                            WHEN 5 THEN 'Mayo'
-                            WHEN 6 THEN 'Junio'
-                            WHEN 7 THEN 'Julio'
-                            WHEN 8 THEN 'Agosto'
-                            WHEN 9 THEN 'Septiembre'
-                            WHEN 10 THEN 'Octubre'
-                            WHEN 11 THEN 'Noviembre'
-                            WHEN 12 THEN 'Diciembre'
-                        END AS ""Mes"",
-                        ""OP"",
-                        ""ID_user"",
-                        SUM(""Hr_programadas"") AS ""Horas Programadas""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Tunel/Sumergidor'
-                        AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP"", ""ID_user""
-                ) q2 ON q1.""Año"" = q2.""Año"" AND q1.""Mes"" = q2.""Mes"" AND q1.""OP"" = q2.""OP"" AND q1.""ID_user"" = q2.""ID_user""
-                FULL JOIN (
-                    SELECT 
-                        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
-                        CASE EXTRACT(MONTH FROM ""Fecha"")
-                            WHEN 1 THEN 'Enero'
-                            WHEN 2 THEN 'Febrero'
-                            WHEN 3 THEN 'Marzo'
-                            WHEN 4 THEN 'Abril'
-                            WHEN 5 THEN 'Mayo'
-                            WHEN 6 THEN 'Junio'
-                            WHEN 7 THEN 'Julio'
-                            WHEN 8 THEN 'Agosto'
-                            WHEN 9 THEN 'Septiembre'
-                            WHEN 10 THEN 'Octubre'
-                            WHEN 11 THEN 'Noviembre'
-                            WHEN 12 THEN 'Diciembre'
-                        END AS ""Mes"",
-                        ""OP"",
-                        ""ID_user"",
-                        SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación""
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Despegue'
-                        AND EXTRACT(YEAR FROM ""Fecha"") = " + añoSeleccionado + @"
-                    GROUP BY EXTRACT(YEAR FROM ""Fecha""), EXTRACT(MONTH FROM ""Fecha""), ""OP"", ""ID_user""
-                ) q3 ON COALESCE(q1.""Año"", q2.""Año"") = q3.""Año"" 
-                    AND COALESCE(q1.""Mes"", q2.""Mes"") = q3.""Mes""
-                    AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
-                    AND COALESCE(q1.""ID_user"", q2.""ID_user"") = q3.""ID_user""
-                LEFT JOIN public.""Deshidratado"" d ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
-                LEFT JOIN public.""Usuarios"" u ON COALESCE(q1.""ID_user"", q2.""ID_user"", q3.""ID_user"") = u.""ID_User""
-            ) AS subconsulta
-            WHERE ""% Cumplimiento a Planeación"" > 0
-            GROUP BY ""Año"", ""Mes"", ""Supervisor""
-            ORDER BY ""Año"", 
-                CASE ""Mes""
-                    WHEN 'Enero' THEN 1
-                    WHEN 'Febrero' THEN 2
-                    WHEN 'Marzo' THEN 3
-                    WHEN 'Abril' THEN 4
-                    WHEN 'Mayo' THEN 5
-                    WHEN 'Junio' THEN 6
-                    WHEN 'Julio' THEN 7
-                    WHEN 'Agosto' THEN 8
-                    WHEN 'Septiembre' THEN 9
-                    WHEN 'Octubre' THEN 10
-                    WHEN 'Noviembre' THEN 11
-                    WHEN 'Diciembre' THEN 12
-                END,
-                ""Supervisor""";
-
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this, "No se encontraron datos de cumplimiento a planeación mensual por supervisor.", "Precaución", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Configurar el chart de cumplimiento mensual por supervisor
-                ConfigurarChartCumplimientoPlaneacionMensual();
-
-                // Limpiar series existentes
-                ChartCumplimientoPlaneacionMensual.Series.Clear();
-
-                // Obtener lista única de supervisores
-                var supervisores = datos.AsEnumerable()
-                    .Select(row => row["Supervisor"].ToString())
-                    .Distinct()
-                    .OrderBy(s => s)
-                    .ToList();
-
-                // Paleta de colores para supervisores (misma que la anterior)
-                Color[] coloresSupervisores = new Color[]
-                {
-            Color.FromArgb(74, 134, 232),    // Azul
-            Color.FromArgb(46, 204, 113),    // Verde
-            Color.FromArgb(155, 89, 182),    // Púrpura
-            Color.FromArgb(241, 196, 15),    // Amarillo
-            Color.FromArgb(231, 76, 60),     // Rojo
-            Color.FromArgb(52, 152, 219),    // Azul claro
-            Color.FromArgb(230, 126, 34),    // Naranja
-            Color.FromArgb(26, 188, 156),    // Turquesa
-            Color.FromArgb(149, 165, 166),   // Gris
-            Color.FromArgb(142, 68, 173)     // Morado
-                };
-
-                // Crear una serie por cada supervisor
-                for (int i = 0; i < supervisores.Count; i++)
-                {
-                    string supervisor = supervisores[i];
-                    Color colorSupervisor = coloresSupervisores[i % coloresSupervisores.Length];
-
-                    Series serieSupervisor = new Series(supervisor);
-                    serieSupervisor.ChartType = SeriesChartType.Line;
-                    serieSupervisor.Color = colorSupervisor;
-                    serieSupervisor.BorderWidth = 3;
-                    serieSupervisor.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-                    serieSupervisor.MarkerStyle = MarkerStyle.Circle;
-                    serieSupervisor.MarkerSize = 10;
-                    serieSupervisor.MarkerColor = colorSupervisor;
-                    serieSupervisor.MarkerBorderColor = Color.White;
-                    serieSupervisor.MarkerBorderWidth = 2;
-                    serieSupervisor.IsValueShownAsLabel = true;
-                    serieSupervisor.LabelFormat = "N1";
-                    serieSupervisor.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                    serieSupervisor.LabelForeColor = Color.White;
-                    serieSupervisor.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                    serieSupervisor.LabelBorderColor = Color.FromArgb(100, 255, 255, 255);
-                    serieSupervisor.LabelBorderWidth = 1;
-                    serieSupervisor.ShadowColor = Color.FromArgb(30, 30, 30);
-                    serieSupervisor.ShadowOffset = 2;
-
-                    // Filtrar datos para este supervisor
-                    var datosSupervisor = datos.AsEnumerable()
-                        .Where(row => row["Supervisor"].ToString() == supervisor)
-                        .OrderBy(row => System.Convert.ToInt32(row["Año"]))
-                        .ThenBy(row => GetMesNumero(row["Mes"].ToString()))
-                        .ToList();
-
-                    // Agregar puntos para este supervisor
-                    foreach (DataRow row in datosSupervisor)
-                    {
-                        string mes = $"{row["Mes"]} {row["Año"]}";
-                        double cumplimiento = System.Convert.ToDouble(row["Promedio_Mensual_Cumplimiento_Planeacion"]);
-
-                        int pointIndex = serieSupervisor.Points.AddXY(mes, cumplimiento);
-
-                        // Configurar etiqueta individual
-                        System.Windows.Forms.DataVisualization.Charting.DataPoint point = serieSupervisor.Points[pointIndex];
-                        point.Label = cumplimiento.ToString("N1") + "%";
-                        point.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
-                        point.LabelForeColor = Color.White;
-                        point.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
-                        point.LabelBorderWidth = 1;
-                        point.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                        point.LabelAngle = -45; // Ángulo para mejor visualización
-                    }
-
-                    // Agregar serie al chart
-                    ChartCumplimientoPlaneacionMensual.Series.Add(serieSupervisor);
-                }
-
-                // Actualizar el chart
-                ChartCumplimientoPlaneacionMensual.Invalidate();
-
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this, $"Error al graficar cumplimiento a planeación mensual por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Método auxiliar para obtener el número del mes
-        private int GetMesNumero(string mes)
-        {
-            switch (mes)
-            {
-                case "Enero": return 1;
-                case "Febrero": return 2;
-                case "Marzo": return 3;
-                case "Abril": return 4;
-                case "Mayo": return 5;
-                case "Junio": return 6;
-                case "Julio": return 7;
-                case "Agosto": return 8;
-                case "Septiembre": return 9;
-                case "Octubre": return 10;
-                case "Noviembre": return 11;
-                case "Diciembre": return 12;
-                default: return 0;
-            }
-        }
-
-        private void ConfigurarChartCumplimientoPlaneacionMensual()
-        {
-            // Limpiar el chart
-            ChartCumplimientoPlaneacionMensual.Series.Clear();
-            ChartCumplimientoPlaneacionMensual.ChartAreas.Clear();
-            ChartCumplimientoPlaneacionMensual.Titles.Clear();
-            ChartCumplimientoPlaneacionMensual.Legends.Clear();
-
-            // Crear área de chart moderna para cumplimiento mensual por supervisor
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoPlaneacionMensualArea");
-
-            // Fondo moderno consistente
-            chartArea.BackColor = Color.FromArgb(255, 255, 255);
-            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
-            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
-            chartArea.ShadowOffset = 3;
-
-            // Configurar eje X moderno (para meses)
-            chartArea.AxisX.Title = "MESES";
-            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
-            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisX.MajorGrid.Enabled = false;
-            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
-            chartArea.AxisX.MajorTickMark.Enabled = true;
-            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
-            chartArea.AxisX.Interval = 1;
-            chartArea.AxisX.IsMarginVisible = true;
-            chartArea.AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont;
-            chartArea.AxisX.LabelStyle.Angle = -45; // Rotar etiquetas para mejor visualización
-
-            // Configurar eje Y moderno para PORCENTAJES
-            chartArea.AxisY.Title = "% CUMPLIMIENTO";
-            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
-            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
-            chartArea.AxisY.LabelStyle.Format = "0'%'"; // Formato de porcentaje
-            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
-            chartArea.AxisY.MajorGrid.Enabled = true;
-            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
-            chartArea.AxisY.MajorTickMark.Enabled = true;
-            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
-
-            // Configurar eje Y para porcentajes (0% - 100%)
-            chartArea.AxisY.Minimum = 0;
-            chartArea.AxisY.Maximum = 100;
-            chartArea.AxisY.Interval = 20;
-
-            //// Línea horizontal en 90% para referencia
-            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine = new System.Windows.Forms.DataVisualization.Charting.StripLine();
-            //stripLine.BackColor = Color.FromArgb(235, 245, 255);
-            //stripLine.BorderColor = Color.FromArgb(74, 134, 232);
             //stripLine.BorderWidth = 1;
             //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
             //stripLine.IntervalOffset = 90;
             //stripLine.StripWidth = 0.5;
             //stripLine.Text = "Objetivo 90%";
             //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            //stripLine.ForeColor = Color.FromArgb(74, 134, 232);
+            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
             //chartArea.AxisY.StripLines.Add(stripLine);
 
-            // Hacer el área de gráfico más grande
+            // Posicionamiento del área
             chartArea.Position.Auto = false;
-            chartArea.Position.X = 10; // Más espacio para las etiquetas rotadas
-            chartArea.Position.Y = 15;
-            chartArea.Position.Width = 85;
-            chartArea.Position.Height = 70;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 20;
+            chartArea.Position.Width = 75;
+            chartArea.Position.Height = 65;
 
             // Agregar área al chart
-            ChartCumplimientoPlaneacionMensual.ChartAreas.Add(chartArea);
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.ChartAreas.Add(chartArea);
 
-            // Configurar título principal moderno
-            System.Windows.Forms.DataVisualization.Charting.Title mainTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            mainTitle.Text = "% CUMPLIMIENTO A PLANEACIÓN MENSUAL POR SUPERVISOR";
-            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
-            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            mainTitle.Alignment = ContentAlignment.TopCenter;
-            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
-            mainTitle.ShadowOffset = 2;
-            ChartCumplimientoPlaneacionMensual.Titles.Add(mainTitle);
-
-            // Configurar subtítulo moderno
-            System.Windows.Forms.DataVisualization.Charting.Title subTitle = new System.Windows.Forms.DataVisualization.Charting.Title();
-            subTitle.Text = "Desempeño Mensual de Cumplimiento a Planeación por Supervisor - Áreas Deshidratado";
-            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
-            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
-            subTitle.Alignment = ContentAlignment.TopCenter;
-            ChartCumplimientoPlaneacionMensual.Titles.Add(subTitle);
-
-            // Configurar leyenda moderna en la parte inferior
-            System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            legend.Name = "LeyendaSupervisoresMensual";
+            // Configurar leyenda
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoMensualOtrasAreasSupervisor";
             legend.Title = "SUPERVISORES";
             legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
             legend.TitleForeColor = Color.FromArgb(52, 73, 94);
             legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             legend.ForeColor = Color.FromArgb(52, 73, 94);
-            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend.Alignment = StringAlignment.Center;
-            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
             legend.BackColor = Color.FromArgb(248, 249, 250);
             legend.BorderColor = Color.FromArgb(200, 200, 200);
             legend.BorderWidth = 1;
             legend.ShadowColor = Color.FromArgb(100, 100, 100);
             legend.ShadowOffset = 1;
-            legend.IsEquallySpacedItems = true;
-            legend.ItemColumnSpacing = 15;
+
+            // Posicionamiento de leyenda
             legend.Position.Auto = false;
-            legend.Position.X = 5;
-            legend.Position.Y = 85;
-            legend.Position.Width = 90;
-            legend.Position.Height = 10;
-            legend.MaximumAutoSize = 100;
+            legend.Position.X = 80;
+            legend.Position.Y = 20;
+            legend.Position.Width = 15;
+            legend.Position.Height = 65;
 
-            ChartCumplimientoPlaneacionMensual.Legends.Add(legend);
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 7;
+            legend.IsTextAutoFit = true;
+            legend.TextWrapThreshold = 3;
 
-            // Configuración general del chart moderna
-            ChartCumplimientoPlaneacionMensual.BackColor = Color.White;
-            ChartCumplimientoPlaneacionMensual.BorderlineColor = Color.FromArgb(200, 200, 200);
-            ChartCumplimientoPlaneacionMensual.BorderlineWidth = 2;
-            ChartCumplimientoPlaneacionMensual.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            ChartCumplimientoPlaneacionMensual.Padding = new Padding(20, 20, 20, 40); // Más padding abajo para leyenda
-            ChartCumplimientoPlaneacionMensual.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            ChartCumplimientoPlaneacionMensual.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Legends.Add(legend);
 
-            // Configurar anti-aliasing para máxima calidad
-            ChartCumplimientoPlaneacionMensual.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
-            ChartCumplimientoPlaneacionMensual.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
-            ChartCumplimientoPlaneacionMensual.IsSoftShadows = true;
+            // Configurar título principal
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO MENSUAL - OTRAS ÁREAS POR SUPERVISOR";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Titles.Add(mainTitle);
 
-            // Suavizado adicional
-            chartArea.Area3DStyle.Enable3D = false;
+            // Configurar subtítulo
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = $"Comparativo mensual de cumplimiento por supervisor en áreas de producción (excluyendo Deshidratado) - Año {CB_Anio_grafica.Text}";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Titles.Add(subTitle);
+
+            // Configuración general del chart
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BackColor = Color.White;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BorderlineWidth = 2;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.Padding = new Padding(20);
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.BackSecondaryColor = Color.FromArgb(245, 252, 248); // Verde claro
+
+            // Configurar anti-aliasing
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.TextAntiAliasingQuality =
+                System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoMensualOtrasAreasPorSupervisor.IsSoftShadows = true;
+        }
+
+        private void GraficarCumplimientoMensualDespeguePorSupervisor()
+        {
+            try
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string añoSeleccionado = CB_Anio_grafica.Text;
+
+                string query = $@"
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    INITCAP(
+        CASE EXTRACT(MONTH FROM f.""Fecha"")
+            WHEN 1 THEN 'enero'
+            WHEN 2 THEN 'febrero'
+            WHEN 3 THEN 'marzo'
+            WHEN 4 THEN 'abril'
+            WHEN 5 THEN 'mayo'
+            WHEN 6 THEN 'junio'
+            WHEN 7 THEN 'julio'
+            WHEN 8 THEN 'agosto'
+            WHEN 9 THEN 'septiembre'
+            WHEN 10 THEN 'octubre'
+            WHEN 11 THEN 'noviembre'
+            WHEN 12 THEN 'diciembre'
+        END
+    ) as Mes,
+    COALESCE(u.""Usuario"", 'Sin Supervisor') as Supervisor,
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
+    
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+WHERE f.""Area"" = 'Despegue'
+    AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(MONTH FROM f.""Fecha""),
+    u.""Usuario""
+ORDER BY 
+    EXTRACT(MONTH FROM f.""Fecha""),
+    Supervisor;";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento mensual por supervisor para el área Despegue en el año seleccionado.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento mensual
+                ConfigurarChartCumplimientoMensualDespeguePorSupervisor();
+
+                // Limpiar series existentes
+                ChartCumplimientoMensualDespeguePorSupervisor.Series.Clear();
+
+                // Diccionario para organizar datos por supervisor
+                Dictionary<string, Dictionary<string, double>> datosPorSupervisor =
+                    new Dictionary<string, Dictionary<string, double>>();
+
+                // Ordenar meses en español correctamente
+                Dictionary<string, int> ordenMeses = new Dictionary<string, int>
+        {
+            { "Enero", 1 }, { "Febrero", 2 }, { "Marzo", 3 }, { "Abril", 4 },
+            { "Mayo", 5 }, { "Junio", 6 }, { "Julio", 7 }, { "Agosto", 8 },
+            { "Septiembre", 9 }, { "Octubre", 10 }, { "Noviembre", 11 }, { "Diciembre", 12 }
+        };
+
+                // Lista de meses ordenados
+                List<string> mesesOrdenados = new List<string>();
+
+                // Lista de supervisores en orden
+                List<string> listaSupervisores = new List<string>();
+
+                // Primero, recolectar todos los meses únicos y ordenarlos
+                SortedSet<string> mesesSet = new SortedSet<string>(new MesComparer(ordenMeses));
+                foreach (DataRow row in datos.Rows)
+                {
+                    string mes = row["Mes"].ToString();
+                    mesesSet.Add(mes);
+                }
+                mesesOrdenados = mesesSet.ToList();
+
+                // Organizar datos por supervisor y mes
+                foreach (DataRow row in datos.Rows)
+                {
+                    string mes = row["Mes"].ToString();
+                    string supervisor = row["Supervisor"].ToString();
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
+
+                    // Validar y ajustar valores
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar supervisor a la lista si no existe
+                    if (!listaSupervisores.Contains(supervisor))
+                    {
+                        listaSupervisores.Add(supervisor);
+                    }
+
+                    // Inicializar diccionario para el supervisor si no existe
+                    if (!datosPorSupervisor.ContainsKey(supervisor))
+                    {
+                        datosPorSupervisor[supervisor] = new Dictionary<string, double>();
+                    }
+
+                    // Agregar dato del supervisor para el mes
+                    datosPorSupervisor[supervisor][mes] = cumplimiento;
+                }
+
+                // Si hay muchos supervisores, limitar la visualización
+                if (listaSupervisores.Count > 15)
+                {
+                    var opcion = MetroFramework.MetroMessageBox.Show(this,
+                        $"Se detectaron {listaSupervisores.Count} supervisores en Despegue.\n\n" +
+                        "¿Desea mostrar solo los 15 principales? (Recomendado para mejor visualización)\n\n" +
+                        "Sí: Mostrar solo 15\nNo: Mostrar todos (puede afectar la legibilidad)",
+                        "Muchos supervisores detectados",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (opcion == DialogResult.Yes)
+                    {
+                        // Calcular promedio por supervisor y tomar los 15 mejores
+                        var supervisoresOrdenados = listaSupervisores
+                            .Select(s => new
+                            {
+                                Supervisor = s,
+                                Promedio = datosPorSupervisor.ContainsKey(s) &&
+                                          datosPorSupervisor[s].Values.Any() ?
+                                          datosPorSupervisor[s].Values.Average() : 0
+                            })
+                            .OrderByDescending(x => x.Promedio)
+                            .Take(15)
+                            .Select(x => x.Supervisor)
+                            .ToList();
+
+                        listaSupervisores = supervisoresOrdenados;
+                    }
+                }
+
+                // Generar paleta dinámica de colores
+                Color[] coloresSupervisores = GenerarPaletaColoresMensual(listaSupervisores.Count);
+
+                // Crear series para cada supervisor
+                for (int i = 0; i < listaSupervisores.Count; i++)
+                {
+                    string supervisor = listaSupervisores[i];
+                    var datosSupervisor = datosPorSupervisor.ContainsKey(supervisor)
+                        ? datosPorSupervisor[supervisor]
+                        : new Dictionary<string, double>();
+
+                    // Crear serie para el supervisor
+                    Series serieSupervisor = new Series(supervisor);
+                    serieSupervisor.ChartType = SeriesChartType.Line;
+
+                    // Asignar color de la paleta
+                    serieSupervisor.Color = coloresSupervisores[i % coloresSupervisores.Length];
+
+                    // Configuración de la serie para gráfica mensual
+                    ConfigurarSerieSupervisorMensual(serieSupervisor);
+
+                    // Agregar datos para todos los meses (en orden)
+                    foreach (string mes in mesesOrdenados)
+                    {
+                        double valor = datosSupervisor.ContainsKey(mes) ? datosSupervisor[mes] : 0;
+
+                        int pointIndex = serieSupervisor.Points.AddXY(mes, valor);
+
+                        // Configurar etiqueta solo si hay valor > 0
+                        ConfigurarPuntoGraficaMensual(serieSupervisor.Points[pointIndex], valor);
+                    }
+
+                    // Agregar serie al chart
+                    ChartCumplimientoMensualDespeguePorSupervisor.Series.Add(serieSupervisor);
+                }
+
+                // Ajustar leyenda según cantidad de supervisores
+                AjustarLeyendaMensualParaMultiplesSupervisores(listaSupervisores.Count);
+
+                // Actualizar el chart
+                ChartCumplimientoMensualDespeguePorSupervisor.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento mensual por supervisor del área Despegue: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        // Clase comparadora para ordenar meses en español
+        private class MesComparer : IComparer<string>
+        {
+            private Dictionary<string, int> ordenMeses;
+
+            public MesComparer(Dictionary<string, int> orden)
+            {
+                this.ordenMeses = orden;
+            }
+
+            public int Compare(string x, string y)
+            {
+                int ordenX = ordenMeses.ContainsKey(x) ? ordenMeses[x] : 13;
+                int ordenY = ordenMeses.ContainsKey(y) ? ordenMeses[y] : 13;
+                return ordenX.CompareTo(ordenY);
+            }
+        }
+
+        // Método para generar paleta dinámica de colores para gráfica mensual
+        private Color[] GenerarPaletaColoresMensual(int cantidad)
+        {
+            if (cantidad <= 0) return new Color[] { Color.FromArgb(155, 89, 182) }; // Púrpura para Despegue
+
+            List<Color> colores = new List<Color>();
+
+            // Para pocos supervisores, usar colores predefinidos
+            if (cantidad <= 12)
+            {
+                // Paleta con tonos apropiados para Despegue (púrpuras, azules)
+                Color[] basePalette = {
+            Color.FromArgb(155, 89, 182),   // Púrpura principal
+            Color.FromArgb(142, 68, 173),   // Púrpura oscuro
+            Color.FromArgb(52, 152, 219),   // Azul
+            Color.FromArgb(41, 128, 185),   // Azul oscuro
+            Color.FromArgb(46, 204, 113),   // Verde
+            Color.FromArgb(39, 174, 96),    // Verde esmeralda
+            Color.FromArgb(243, 156, 18),   // Naranja
+            Color.FromArgb(230, 126, 34),   // Naranja oscuro
+            Color.FromArgb(231, 76, 60),    // Rojo
+            Color.FromArgb(26, 188, 156),   // Turquesa
+            Color.FromArgb(22, 160, 133),   // Verde mar
+            Color.FromArgb(149, 165, 166)   // Gris
+        };
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    colores.Add(basePalette[i % basePalette.Length]);
+                }
+            }
+            else
+            {
+                // Para muchos supervisores, generar colores con tonos púrpura/azul
+                Random rand = new Random(456); // Semilla diferente
+
+                for (int i = 0; i < cantidad; i++)
+                {
+                    // Enfocarse en tonos púrpura (0.7 a 0.9 en HSL)
+                    float hue = 0.7f + (float)i / (float)cantidad * 0.2f;
+                    float saturation = 0.6f + (float)rand.NextDouble() * 0.3f; // 0.6-0.9
+                    float lightness = 0.45f + (float)rand.NextDouble() * 0.2f; // 0.45-0.65
+
+                    colores.Add(HslToRgb(hue, saturation, lightness));
+                }
+            }
+
+            return colores.ToArray();
+        }
+
+        // Método para configurar una serie de supervisor para gráfica mensual
+        private void ConfigurarSerieSupervisorMensual(Series serie)
+        {
+            serie.BorderWidth = 3;
+            serie.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            serie.MarkerStyle = MarkerStyle.Circle;
+            serie.MarkerSize = 8; // Un poco más grande para gráfica mensual
+            serie.MarkerColor = serie.Color;
+            serie.MarkerBorderColor = Color.White;
+            serie.MarkerBorderWidth = 2;
+            serie.IsValueShownAsLabel = false;
+            serie.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            serie.ToolTip = "#VALY{N1}% en #VALX"; // Tooltip con formato
+
+            // Para gráficas mensuales, usar línea más gruesa
+            serie.BorderWidth = 3;
+        }
+
+        // Método para configurar un punto individual para gráfica mensual
+        private void ConfigurarPuntoGraficaMensual(System.Windows.Forms.DataVisualization.Charting.DataPoint punto, double valor)
+        {
+            if (valor > 0)
+            {
+                punto.Label = valor.ToString("N0") + "%";
+                punto.LabelBackColor = Color.FromArgb(200, 0, 0, 0);
+                punto.LabelForeColor = Color.White;
+                punto.LabelBorderColor = Color.FromArgb(150, 255, 255, 255);
+                punto.LabelBorderWidth = 1;
+                punto.Font = new Font("Segoe UI", 7, FontStyle.Bold);
+                punto.IsValueShownAsLabel = true;
+                punto.ToolTip = $"{valor:N1}%"; // Tooltip con decimal
+            }
+            else
+            {
+                punto.IsValueShownAsLabel = false;
+                punto.ToolTip = "Sin datos";
+            }
+        }
+
+        // Método para ajustar la leyenda para gráfica mensual
+        private void AjustarLeyendaMensualParaMultiplesSupervisores(int cantidadSupervisores)
+        {
+            if (ChartCumplimientoMensualDespeguePorSupervisor.Legends.Count == 0) return;
+
+            var legend = ChartCumplimientoMensualDespeguePorSupervisor.Legends[0];
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 7;
+            legend.TextWrapThreshold = 4;
+
+            if (cantidadSupervisores > 20)
+            {
+                legend.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                legend.Position.Height = 75;
+            }
+            else if (cantidadSupervisores > 10)
+            {
+                legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+                legend.Position.Height = 70;
+            }
+            else
+            {
+                legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+                legend.Position.Height = 65;
+            }
+        }
+
+        // Método de configuración del chart para Cumplimiento Mensual
+        private void ConfigurarChartCumplimientoMensualDespeguePorSupervisor()
+        {
+            // Limpiar el chart
+            ChartCumplimientoMensualDespeguePorSupervisor.Series.Clear();
+            ChartCumplimientoMensualDespeguePorSupervisor.ChartAreas.Clear();
+            ChartCumplimientoMensualDespeguePorSupervisor.Titles.Clear();
+            ChartCumplimientoMensualDespeguePorSupervisor.Legends.Clear();
+
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoMensualDespegueSupervisorArea");
+
+            // Fondo moderno
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea.ShadowColor = Color.FromArgb(100, 100, 100);
+            chartArea.ShadowOffset = 2;
+
+            // Configurar eje X - MESES
+            chartArea.AxisX.Title = "MESES";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Angle = -45; // Inclinar etiquetas para mejor legibilidad
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.MajorTickMark.Enabled = true;
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+            chartArea.AxisX.IsLabelAutoFit = true;
+            chartArea.AxisX.LabelAutoFitStyle =
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont |
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont |
+                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30;
+
+            // Configurar eje Y - PORCENTAJE
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 12, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(220, 220, 220);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisY.MajorTickMark.Enabled = true;
+
+            // Configurar eje Y para porcentajes
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea horizontal en 95% para referencia (objetivo Despegue)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine =
+            //    new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(245, 235, 255); // Fondo púrpura claro
+            //stripLine.BorderColor = Color.FromArgb(155, 89, 182); // Borde púrpura
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 95;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 95%";
+            //stripLine.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(155, 89, 182);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Posicionamiento del área
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 20; // Más espacio para títulos
+            chartArea.Position.Width = 75;
+            chartArea.Position.Height = 65;
+
+            // Agregar área al chart
+            ChartCumplimientoMensualDespeguePorSupervisor.ChartAreas.Add(chartArea);
+
+            // Configurar leyenda
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoMensualDespegueSupervisor";
+            legend.Title = "SUPERVISORES";
+            legend.TitleFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+            legend.ShadowColor = Color.FromArgb(100, 100, 100);
+            legend.ShadowOffset = 1;
+
+            // Posicionamiento de leyenda
+            legend.Position.Auto = false;
+            legend.Position.X = 80;
+            legend.Position.Y = 20;
+            legend.Position.Width = 15;
+            legend.Position.Height = 65;
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 7;
+            legend.IsTextAutoFit = true;
+            legend.TextWrapThreshold = 3;
+
+            ChartCumplimientoMensualDespeguePorSupervisor.Legends.Add(legend);
+
+            // Configurar título principal
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO MENSUAL - DESPEGUE POR SUPERVISOR";
+            mainTitle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoMensualDespeguePorSupervisor.Titles.Add(mainTitle);
+
+            // Configurar subtítulo
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = $"Comparativo mensual de cumplimiento por supervisor en el área de Despegue - Año {CB_Anio_grafica.Text}";
+            subTitle.Font = new Font("Segoe UI", 11, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoMensualDespeguePorSupervisor.Titles.Add(subTitle);
+
+            // Configuración general del chart
+            ChartCumplimientoMensualDespeguePorSupervisor.BackColor = Color.White;
+            ChartCumplimientoMensualDespeguePorSupervisor.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoMensualDespeguePorSupervisor.BorderlineWidth = 2;
+            ChartCumplimientoMensualDespeguePorSupervisor.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            ChartCumplimientoMensualDespeguePorSupervisor.Padding = new Padding(20);
+            ChartCumplimientoMensualDespeguePorSupervisor.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            ChartCumplimientoMensualDespeguePorSupervisor.BackSecondaryColor = Color.FromArgb(248, 249, 250);
+
+            // Configurar anti-aliasing
+            ChartCumplimientoMensualDespeguePorSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoMensualDespeguePorSupervisor.TextAntiAliasingQuality =
+                System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+            ChartCumplimientoMensualDespeguePorSupervisor.IsSoftShadows = true;
         }
         private void GraficarCumplimientoDespeguePorSupervisor(List<string> semanasSeleccionadas)
         {
