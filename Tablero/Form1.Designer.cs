@@ -663,7 +663,7 @@
             this.btn_cancelar_ficha.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
             this.btn_cancelar_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_cancelar_ficha.ImageList = this.imageList1;
-            this.btn_cancelar_ficha.Location = new System.Drawing.Point(371, 20);
+            this.btn_cancelar_ficha.Location = new System.Drawing.Point(445, 22);
             this.btn_cancelar_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_cancelar_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_cancelar_ficha.Name = "btn_cancelar_ficha";
@@ -700,7 +700,7 @@
             this.btn_save_ficha.HighEmphasis = true;
             this.btn_save_ficha.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
             this.btn_save_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_ficha.Location = new System.Drawing.Point(227, 20);
+            this.btn_save_ficha.Location = new System.Drawing.Point(301, 22);
             this.btn_save_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_save_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_save_ficha.Name = "btn_save_ficha";

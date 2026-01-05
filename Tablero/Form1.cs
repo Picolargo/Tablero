@@ -4654,6 +4654,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg Entrada (Proceso)", kgEnterProceso.ToString()),
                                 new KeyValuePair<string, string>("Kg Frescos de Entrada a secador", kgFrescosEnterSe.ToString()),
                                 new KeyValuePair<string, string>("Kg Canica", mermaCanica.ToString()),
@@ -4679,7 +4680,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -4739,6 +4740,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                                 {
                                     new KeyValuePair<string, string>("Lote", lote),
+                                    new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                     new KeyValuePair<string, string>("Kg Entrada (Proceso)", kgEnterProceso.ToString()),
                                     new KeyValuePair<string, string>("Kg Frescos de Entrada a secador", kgFrescosEnterSe.ToString()),
                                     new KeyValuePair<string, string>("Kg Canica", mermaCanica.ToString()),
@@ -4764,7 +4766,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -4859,6 +4861,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kilos Producto Seco", KgProdSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg Merma Secos", MermaKgSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraSpec.ToString()),
@@ -4870,7 +4873,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Kg Frescos Entrada a secador", kgFrescosEnterSe.ToString()),
                                 new KeyValuePair<string, string>("Cumplimiento de Metas (%)", textoPorcentCumplimiento),
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
-                                new KeyValuePair<string, string>("FTT", FTT.ToString())
+                                new KeyValuePair<string, string>("FTT", textoFTT)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -4883,7 +4886,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -4921,6 +4924,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Lote", lote),
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kilos Producto Seco", KgProdSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg Merma Secos", MermaKgSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraSpec.ToString()),
@@ -4932,7 +4936,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Kg Frescos Entrada a secador", kgFrescosEnterSe.ToString()),
                                 new KeyValuePair<string, string>("Cumplimiento de Metas (%)", textoPorcentCumplimiento),
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
-                                new KeyValuePair<string, string>("FTT", FTT.ToString())
+                                new KeyValuePair<string, string>("FTT", textoFTT)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -4945,7 +4949,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5048,6 +5052,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5056,8 +5061,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
-                                new KeyValuePair<string, string>("Aumento por humedad (%)", Porcent_Aumento_Hume.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
+                                new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -5070,7 +5075,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5113,6 +5118,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5121,8 +5127,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
-                                new KeyValuePair<string, string>("Aumento por humedad (%)", Porcent_Aumento_Hume.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
+                                new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
@@ -5135,7 +5141,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5219,6 +5225,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5227,7 +5234,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -5240,7 +5247,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5282,6 +5289,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5290,7 +5298,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
@@ -5303,7 +5311,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5387,6 +5395,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5395,7 +5404,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -5408,7 +5417,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5450,6 +5459,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5458,7 +5468,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
@@ -5471,7 +5481,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5556,6 +5566,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5566,7 +5577,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
@@ -5579,7 +5590,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5622,6 +5633,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5632,7 +5644,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString())
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
@@ -5645,7 +5657,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5733,6 +5745,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Piezas Producidas", Pz_producidas.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5744,7 +5757,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
 
@@ -5758,7 +5771,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -5799,6 +5812,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
                             {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Piezas Producidas", Pz_producidas.ToString()),
                                 new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
@@ -5810,7 +5824,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
                                 new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
-                                new KeyValuePair<string, string>("Logro de Planeación (%)", Porcent_Logrado.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
 
@@ -5824,7 +5838,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong>, correspondiente al OP 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
@@ -10269,11 +10283,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
     COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
     COALESCE(q2.""Horas Reales"", 0) AS ""Horas Reales"",
     COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
-    COALESCE(q1.""Promedio de Tiempo Muerto Operativo"", 0) AS ""Promedio de Tiempo Muerto Operativo"",
-    COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0) AS ""Promedio Tiempo Muerto Mecanico"",
+    COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) AS ""Suma de Tiempo Muerto Operativo"",
+    COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Suma de Tiempo Muerto Mecanico"",
     CASE 
         WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 THEN
-            ROUND(100 - (((COALESCE(q1.""Promedio de Tiempo Muerto Operativo"", 0) + COALESCE(q1.""Promedio Tiempo Muerto Mecanico"", 0)) / COALESCE(q2.""Horas Programadas"", 0)) * 100), 2)
+            ROUND(100 - (((COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) + COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) / COALESCE(q2.""Horas Programadas"", 0)) * 100), 2)
         ELSE 0
     END AS ""%Cumplimiento Tiempo Efectivo"",
     CASE 
@@ -10366,8 +10380,8 @@ FROM (
             WHEN 12 THEN 'Diciembre'
         END AS ""Mes"",
         f.""OP"",
-        ROUND(COALESCE(AVG(tmo.""Min_Detenidos""), 0)::numeric, 2) AS ""Promedio de Tiempo Muerto Operativo"",
-        ROUND(COALESCE(AVG(tmm.""Min_Detenidos""), 0)::numeric, 2) AS ""Promedio Tiempo Muerto Mecanico""
+        ROUND(COALESCE(SUM(tmo.""Min_Detenidos""), 0)::numeric, 2) AS ""Suma de Tiempo Muerto Operativo"",
+        ROUND(COALESCE(SUM(tmm.""Min_Detenidos""), 0)::numeric, 2) AS ""Suma de Tiempo Muerto Mecanico""
     FROM public.""Ficha"" f
     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
     LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
@@ -15650,8 +15664,7 @@ ORDER BY
             Tablero.Properties.Settings.Default.DestinatariosEmail = Txt_Destinatarios.Text;
             Tablero.Properties.Settings.Default.Save();
             email_varibles();
-            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
-                                                                    "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            test_correo();
         }
         private void Txt_Destinatarios_TextChanged(object sender, EventArgs e)
         {
@@ -15722,6 +15735,10 @@ ORDER BY
                 );
                 return;
             }
+            test_correo();
+        }
+        private void test_correo()
+        {
             // Enviar correo de prueba
             try
             {
@@ -15770,7 +15787,7 @@ ORDER BY
             catch (Exception ex)
             {
                 MetroFramework.MetroMessageBox.Show(this,
-                    "Error al enviar el correo de prueba:\n" + ex.Message,
+                    "Error al enviar el correo de prueba:\n" + ex.Message + ".\n favor de espear 24 hrs para la sinconización con su correo ó Revisar con el administrador de correo electronico.",
                     "Error SMTP",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
