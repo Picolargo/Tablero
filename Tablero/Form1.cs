@@ -77,6 +77,8 @@ namespace Tablero
         private string DestinatariosEmail = string.Empty;
         private bool SSLCheck = false;
         // Fin de variables para el envío de correos
+        List<ValueTuple<string, string>> valores_mecanico =
+        new List<(string, string)>();
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -4671,6 +4673,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4687,8 +4691,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     {tablaGenerada}
 
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <br>
+                                    <p> Con un total de minutos detenidos de <strong>{txt_TM_mecanico}</strong> minutos.</p>
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -4757,6 +4766,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 };
 
                                 string tablaGenerada = GenerarTablaValores(valores);
+                                // Generar tabla de tiempos muertos mecánicos
+                                string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                                 string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4773,8 +4784,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     {tablaGenerada}
 
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <br>
+                                    <p> Con un total de minutos detenidos de <strong>{txt_TM_mecanico.Text}</strong> minutos.</p>
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -6493,6 +6509,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         // Insertar en Tiempo_muerto_Mecanico desde DataGridView
         private void InsertarTiemposMuertosMecanicos(DatabaseHelper dbHelper, int idFicha)
         {
+           
             foreach (DataGridViewRow row in dgv_mecanico.Rows)
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
@@ -6512,6 +6529,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     };
 
                     dbHelper.ExecuteNonQuery(query, parameters);
+                    valores_mecanico.Add((
+                        row.Cells[0].Value.ToString(),
+                        motivos
+                    ));
                 }
             }
         }
@@ -15567,6 +15588,34 @@ ORDER BY
             }
 
             tabla += "</table>";
+
+            return tabla;
+        }
+        public string GenerarTablaTiemposMuertosMecanicos()
+        {
+            // Verifica si la lista está vacía o es nula
+            if (valores_mecanico == null || valores_mecanico.Count == 0)
+                return "<p>No se registraron tiempos muertos mecánicos.</p>";
+
+            string tabla = @"
+<div style='margin-top: 20px;'>
+    <h3 style='color: #2c3e50;'>Tiempos Muertos Mecánicos</h3>
+    <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+        <tr style='background: #e9ecef;'>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Minutos Detenidos</th>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Motivos</th>
+        </tr>";
+
+            foreach (var item in valores_mecanico)
+            {
+                tabla += $@"
+        <tr>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item1}</td>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item2}</td>
+        </tr>";
+            }
+
+            tabla += "</table></div>";
 
             return tabla;
         }
