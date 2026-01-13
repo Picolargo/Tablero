@@ -353,6 +353,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.cb_jefe_turno = new MaterialSkin.Controls.MaterialComboBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -1394,6 +1395,7 @@
             // materialCard2
             // 
             this.materialCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard2.Controls.Add(this.cb_jefe_turno);
             this.materialCard2.Controls.Add(this.dtp1);
             this.materialCard2.Controls.Add(this.cb_Turno);
             this.materialCard2.Controls.Add(this.cb_Area);
@@ -1414,10 +1416,10 @@
             this.dtp1.Enabled = false;
             this.dtp1.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
-            this.dtp1.Location = new System.Drawing.Point(393, 80);
+            this.dtp1.Location = new System.Drawing.Point(261, 80);
             this.dtp1.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp1.Name = "dtp1";
-            this.dtp1.Size = new System.Drawing.Size(259, 35);
+            this.dtp1.Size = new System.Drawing.Size(236, 35);
             this.dtp1.TabIndex = 7;
             // 
             // cb_Turno
@@ -1440,11 +1442,11 @@
             "1",
             "2",
             "3"});
-            this.cb_Turno.Location = new System.Drawing.Point(49, 66);
+            this.cb_Turno.Location = new System.Drawing.Point(19, 66);
             this.cb_Turno.MaxDropDownItems = 4;
             this.cb_Turno.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_Turno.Name = "cb_Turno";
-            this.cb_Turno.Size = new System.Drawing.Size(259, 49);
+            this.cb_Turno.Size = new System.Drawing.Size(236, 49);
             this.cb_Turno.StartIndex = -1;
             this.cb_Turno.TabIndex = 5;
             this.cb_Turno.SelectedIndexChanged += new System.EventHandler(this.cb_Turno_SelectedIndexChanged);
@@ -1474,11 +1476,11 @@
             "Polvos",
             "Revolturas",
             "Máquinas"});
-            this.cb_Area.Location = new System.Drawing.Point(49, 11);
+            this.cb_Area.Location = new System.Drawing.Point(19, 11);
             this.cb_Area.MaxDropDownItems = 4;
             this.cb_Area.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_Area.Name = "cb_Area";
-            this.cb_Area.Size = new System.Drawing.Size(259, 49);
+            this.cb_Area.Size = new System.Drawing.Size(236, 49);
             this.cb_Area.StartIndex = -1;
             this.cb_Area.TabIndex = 3;
             this.cb_Area.SelectedIndexChanged += new System.EventHandler(this.cb_Area_SelectedIndexChanged);
@@ -1499,11 +1501,11 @@
             this.cb_OP.Hint = "OP";
             this.cb_OP.IntegralHeight = false;
             this.cb_OP.ItemHeight = 43;
-            this.cb_OP.Location = new System.Drawing.Point(393, 11);
+            this.cb_OP.Location = new System.Drawing.Point(261, 11);
             this.cb_OP.MaxDropDownItems = 4;
             this.cb_OP.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_OP.Name = "cb_OP";
-            this.cb_OP.Size = new System.Drawing.Size(259, 49);
+            this.cb_OP.Size = new System.Drawing.Size(236, 49);
             this.cb_OP.StartIndex = 0;
             this.cb_OP.TabIndex = 1;
             this.cb_OP.SelectionChangeCommitted += new System.EventHandler(this.cb_OP_SelectionChangeCommitted);
@@ -5490,7 +5492,8 @@
             this.cmb_nivel_user.Items.AddRange(new object[] {
             "Administrador",
             "Supervisor",
-            "Calidad"});
+            "Calidad",
+            "Jefe de Turno"});
             this.cmb_nivel_user.Location = new System.Drawing.Point(13, 183);
             this.cmb_nivel_user.MaxDropDownItems = 4;
             this.cmb_nivel_user.MouseState = MaterialSkin.MouseState.OUT;
@@ -5804,6 +5807,30 @@
             // 
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
+            // 
+            // cb_jefe_turno
+            // 
+            this.cb_jefe_turno.AutoResize = false;
+            this.cb_jefe_turno.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_jefe_turno.Depth = 0;
+            this.cb_jefe_turno.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_jefe_turno.DropDownHeight = 174;
+            this.cb_jefe_turno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_jefe_turno.DropDownWidth = 121;
+            this.cb_jefe_turno.Enabled = false;
+            this.cb_jefe_turno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_jefe_turno.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_jefe_turno.FormattingEnabled = true;
+            this.cb_jefe_turno.Hint = "Jefe de Turno";
+            this.cb_jefe_turno.IntegralHeight = false;
+            this.cb_jefe_turno.ItemHeight = 43;
+            this.cb_jefe_turno.Location = new System.Drawing.Point(503, 11);
+            this.cb_jefe_turno.MaxDropDownItems = 4;
+            this.cb_jefe_turno.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_jefe_turno.Name = "cb_jefe_turno";
+            this.cb_jefe_turno.Size = new System.Drawing.Size(236, 49);
+            this.cb_jefe_turno.StartIndex = 0;
+            this.cb_jefe_turno.TabIndex = 8;
             // 
             // Form_principal
             // 
@@ -6322,6 +6349,7 @@
         private MaterialSkin.Controls.MaterialButton materialButton4;
         private MaterialSkin.Controls.MaterialCard materialCard22;
         private Telerik.WinControls.UI.RadGridView rgv_reporte_Tiempos;
+        private MaterialSkin.Controls.MaterialComboBox cb_jefe_turno;
     }
 }
 

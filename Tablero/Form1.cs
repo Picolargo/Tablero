@@ -79,6 +79,8 @@ namespace Tablero
         // Fin de variables para el envío de correos
         List<ValueTuple<string, string>> valores_mecanico =
         new List<(string, string)>();
+        List<ValueTuple<string, string>> valores_operativos =
+        new List<(string, string)>();
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -334,6 +336,7 @@ namespace Tablero
                 emaildatos();
                 email_varibles();
                 ActualizarAnioReportes();
+                carga_Jefes();
             }
             if (nivel_user == "Supervisor")
             {
@@ -356,6 +359,7 @@ namespace Tablero
                 CargarSemanasAnioActual();
                 actualiza_detalles_OP();
                 email_varibles();
+                carga_Jefes();
 
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -397,6 +401,13 @@ namespace Tablero
                 actualiza_tunel_calidad();
                 configurar_limpieza();
             }
+        }
+        private void carga_Jefes()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = "SELECT \"ID_User\",\"Usuario\" FROM public.\"Usuarios\" where \"Nivel\" = 'Jefe de Turno' ORDER BY \"Usuario\" ASC;";
+            dbHelper.LoadDataIntoComboBox(query, cb_jefe_turno, "Usuario", "ID_User");
         }
         private void ActualizarAnioReportes()
         {
@@ -491,7 +502,7 @@ namespace Tablero
                             ""No_Empleado"" as ""No Empleado"", 
                             ""Usuario"" as ""Nombre de usuario"", 
                             ""Password"" as ""Contraseña"", 
-                            ""Nivel"" 
+                            ""Nivel""
                           FROM public.""Usuarios""
                           ORDER BY ""No_Empleado"" ASC;";  // ← ASC para orden ascendente
 
@@ -901,6 +912,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cb_Turno.Enabled = true;
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
 
                 //nombrar controles
@@ -983,6 +995,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cb_Turno.Enabled = false;
                 cb_OP.Enabled = false;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 if (editar)
@@ -1075,6 +1088,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1143,6 +1157,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1212,6 +1227,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1279,6 +1295,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1326,7 +1343,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Inspeccion\" ORDER BY \"OP\";";
+                string query = "SELECT \"ID_OP\", \"OP\" FROM public.\"Empacado\" ORDER BY \"OP\";";
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
@@ -1350,6 +1367,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1420,6 +1438,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Kg entrada (proceso)";
@@ -1491,6 +1510,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 cb_OP.Enabled = true;
                 dtp1.Enabled = true;
+                cb_jefe_turno.Enabled = true;
 
                 //nombrar controles
                 Txt_1.EmbeddedLabelText = "Piezas Producidas";
@@ -1584,6 +1604,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_OP.Focus();
             cb_proceso.SelectedIndex = -1;
             cb_proceso.Focus();
+            cb_jefe_turno.SelectedIndex = -1;
+            cb_jefe_turno.Focus();
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
             Txt_2.Text = string.Empty;
@@ -1655,7 +1677,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cmb_nivel_user.Enabled = false;
             }
         }
-
+        private void LimpiarComboBox(MaterialComboBox comboBox)
+        {
+            comboBox.DataSource = null;
+            comboBox.Items.Clear();
+            comboBox.Text = string.Empty;
+        }
         private void btn_save_Click(object sender, EventArgs e)
         {
             if (txt_no_emp.Text == string.Empty || txt_usuario.Text == string.Empty || txt_contra.Text == string.Empty || cmb_nivel_user.SelectedIndex == -1)
@@ -1674,7 +1701,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Convertir el ID a entero ANTES de crear el parámetro
                     int idUsuario = System.Convert.ToInt32(id_global_users);
 
-                    queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel WHERE \"ID_User\" = @ID_usuario;";
+                    queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel  WHERE \"ID_User\" = @ID_usuario;";
 
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
@@ -1697,6 +1724,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     };
 
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                    LimpiarComboBox(cb_jefe_turno);
+                    carga_Jefes();
                 }
                 else
                 {
@@ -1718,12 +1747,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     queryInsertUpdate = "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel);";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
-                    new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
-                    new NpgsqlParameter("@Usuario", txt_usuario.Text),
-                    new NpgsqlParameter("@Password", txt_contra.Text),
-                    new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString())
+                        new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
+                        new NpgsqlParameter("@Usuario", txt_usuario.Text),
+                        new NpgsqlParameter("@Password", txt_contra.Text),
+                        new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString())
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                    LimpiarComboBox(cb_jefe_turno);
+                    carga_Jefes();
                 }
 
                 if (result > 0)
@@ -4595,8 +4626,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            string Variable_nombre = lbl_no_emp2.Text;
-            string variable_num = lbl_nom2.Text;
+            string Variable_nombre = lbl_nom2.Text;
+            string variable_num = lbl_no_emp2.Text;
             string cuerpoHtml1 = $@"
                 <html>
                 <body style='font-family: Arial; font-size: 14px; color: #333;'>
@@ -4671,10 +4702,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                             };
+                            
 
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4689,14 +4723,20 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
                                     <p>
                                         Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
                                     </p>
                                     {tablaTiemposMuertos}
-                                    <br>
-                                    <p> Con un total de minutos detenidos de <strong>{txt_TM_mecanico}</strong> minutos.</p>
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
                                     <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
@@ -4764,10 +4804,28 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                     new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                                 };
+                                string valorBuscado = cb_OP.Text;
+
+                                // Consulta para buscar donde OP = valor_buscado
+                                string query = "SELECT \"Orden_Produccion\", \"Producto\", \"Medida\", \"Descripcion\", " +
+                                    "\"Especificacion\", \"Ingredientes\", \"Humedad\", \"Comercio\", \"Manzana\", \"Analisis\", " +
+                                    "\"Area_Proceso\", \"OP_Origen\", \"Destino\", \"Clasificacion\" \r\nFROM public.\"Detalles_OP\" " +
+                                    "where \"Orden_Produccion\" = @valorBuscado";
+
+                                // Crear parámetro
+                                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                                {
+                                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                                };
+
+                                // Ejecutar consulta
+                                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
 
                                 string tablaGenerada = GenerarTablaValores(valores);
                                 // Generar tabla de tiempos muertos mecánicos
                                 string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                                string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                                string resultado = GenerarTablaDetallesOP();
                                 string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4782,14 +4840,20 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
                                     <p>
                                         Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
                                     </p>
                                     {tablaTiemposMuertos}
-                                    <br>
-                                    <p> Con un total de minutos detenidos de <strong>{txt_TM_mecanico.Text}</strong> minutos.</p>
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
                                     <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
@@ -4804,6 +4868,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                             </body>
                             </html>";
+
                                 cuerpoHtml1 += cuerpoHtml2;
                                 conf_email(cuerpoHtml1);
                                 //fin correo
@@ -4893,6 +4958,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4907,10 +4976,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -4956,6 +5036,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -4970,10 +5054,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5082,6 +5177,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5096,10 +5195,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5148,6 +5258,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5162,10 +5276,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5254,6 +5379,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5268,10 +5397,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5318,6 +5458,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5332,10 +5476,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5424,6 +5579,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5433,15 +5592,26 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5488,6 +5658,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5497,15 +5671,26 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                     <p>
                                         Durante el turno, se registró información en el área 
-                                        <strong>{cb_Area.Text}</strong> y perteneciente al proceso <strong>{proceso}</strong>, correspondiente al 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
                                         <strong>{op}</strong>. Los valores capturados fueron los siguientes:
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5597,6 +5782,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5611,10 +5800,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5628,7 +5828,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                             </body>
                             </html>";
-
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
@@ -5664,6 +5863,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5678,10 +5881,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5778,6 +5992,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                         string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
                         string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5792,10 +6010,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -5845,6 +6074,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             };
 
                             string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5859,10 +6092,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     </p>
 
                                     {tablaGenerada}
-
                                     <br>
-
                                     <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
                                         Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
                                     </p>
 
@@ -6514,7 +6758,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value)/60;
+                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value);
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_muerto_Mecanico"" (
@@ -6544,7 +6788,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value)/60;
+                    decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value);
                     string motivos = row.Cells[1].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_Muerto_Operativo"" (
@@ -6559,6 +6803,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     };
 
                     dbHelper.ExecuteNonQuery(query, parameters);
+                    valores_operativos.Add((
+                        row.Cells[0].Value.ToString(),
+                        motivos
+                    ));
                 }
             }
         }
@@ -6568,7 +6816,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text))
             {
-                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_comida.Text)/60;
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_comida.Text);
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Comida"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -6589,7 +6837,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text))
             {
-                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_energia.Text)/60;
+                decimal minutosDetenidos = System.Convert.ToDecimal(txt_Tiempo_energia.Text);
 
                 string query = @"INSERT INTO public.""Tiempo_Muerto_Energia"" (
                         ""ID_Ficha"", ""Minutos_Detenidos""
@@ -7020,10 +7268,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_meta.Text = resultado;
                 }
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4)
             {
                 // Consulta para buscar donde OP = valor_buscado
-                string query = "SELECT \"Kg_person_hr\" FROM public.\"Inspeccion\" WHERE \"OP\" = @valorBuscado;";
+                string query = "SELECT \"Meta_kg_hr_line\" FROM public.\"Inspeccion\" WHERE \"OP\" = @valorBuscado;";
 
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -7040,7 +7288,31 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 // Verificar si se encontraron resultados
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    resultado = dt.Rows[0]["Kg_person_hr"].ToString();
+                    resultado = dt.Rows[0]["Meta_kg_hr_line"].ToString();
+                    Txt_meta.Text = resultado;
+                }
+            }
+            if (cb_Area.SelectedIndex == 5)
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query = "SELECT \"Meta_kg_hr_line\" FROM public.\"Empacado\" WHERE \"OP\" = @valorBuscado;";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+                };
+
+                // Ejecutar consulta
+                System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                // Variable string donde guardar el resultado
+                string resultado = string.Empty;
+
+                // Verificar si se encontraron resultados
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    resultado = dt.Rows[0]["Meta_kg_hr_line"].ToString();
                     Txt_meta.Text = resultado;
                 }
             }
@@ -7870,6 +8142,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             reiniciarCampos();
             cb_Area.Focus();
             editar = false;
+            cb_jefe_turno.Enabled = false;
         }
 
         private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -9630,8 +9903,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -9685,8 +9958,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 WITH tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -9729,8 +10002,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 WITH tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -9771,8 +10044,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 WITH tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -9812,8 +10085,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 WITH tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -9873,8 +10146,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 tiempos_muertos AS (
                     SELECT 
                         f.""OP"",
-                        COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo_Muerto_Mecanico""
+                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
                     FROM public.""Ficha"" f
                     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
                         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -10401,8 +10674,8 @@ FROM (
             WHEN 12 THEN 'Diciembre'
         END AS ""Mes"",
         f.""OP"",
-        ROUND(COALESCE(SUM(tmo.""Min_Detenidos""), 0)::numeric, 2) AS ""Suma de Tiempo Muerto Operativo"",
-        ROUND(COALESCE(SUM(tmm.""Min_Detenidos""), 0)::numeric, 2) AS ""Suma de Tiempo Muerto Mecanico""
+        ROUND(COALESCE(SUM(tmo.""Min_Detenidos"")/60, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Operativo"",
+        ROUND(COALESCE(SUM(tmm.""Min_Detenidos"")/60, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Mecanico""
     FROM public.""Ficha"" f
     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
     LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
@@ -10690,11 +10963,11 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
     f.""OP"",
     SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
     SUM(f.""Hr_efectivas"") AS ""Hr Reales"",
-    COALESCE(SUM(tmo.""Min_Detenidos""), 0) AS ""Tiempo Muerto Operativo"",
-    COALESCE(SUM(tmm.""Min_Detenidos""), 0) AS ""Tiempo Muerto Mecánico"",
+    COALESCE(SUM(tmo.""Min_Detenidos"")/60, 0) AS ""Tiempo Muerto Operativo"",
+    COALESCE(SUM(tmm.""Min_Detenidos"")/60, 0) AS ""Tiempo Muerto Mecánico"",
     ROUND(
         100 - (
-            (COALESCE(SUM(tmo.""Min_Detenidos""), 0) + COALESCE(SUM(tmm.""Min_Detenidos""), 0)) / 
+            (COALESCE(SUM(tmo.""Min_Detenidos"")/60, 0) + COALESCE(SUM(tmm.""Min_Detenidos"")/60, 0)) / 
             NULLIF(SUM(f.""Hr_programadas""), 0)
         ), 
     2) AS ""% Cumplimiento Tiempo Efectivo"",
@@ -11803,7 +12076,7 @@ SELECT
     ROUND(
         AVG(
             100 - (
-                (COALESCE(tmo_daily.total_min_detenidos, 0) + COALESCE(tmm_daily.total_min_detenidos, 0)) / 
+                (COALESCE(tmo_daily.total_min_detenidos/60, 0) + COALESCE(tmm_daily.total_min_detenidos/60, 0)) / 
                 NULLIF(f.""Hr_programadas"", 0)
             )
         ),
@@ -11813,7 +12086,7 @@ FROM
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
-        SUM(""Min_Detenidos"") AS total_min_detenidos
+        SUM(""Min_Detenidos"")/60 AS total_min_detenidos
     FROM 
         public.""Tiempo_Muerto_Operativo""
     GROUP BY 
@@ -11822,7 +12095,7 @@ LEFT JOIN (
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
-        SUM(""Min_Detenidos"") AS total_min_detenidos
+        SUM(""Min_Detenidos"")/60 AS total_min_detenidos
     FROM 
         public.""Tiempo_muerto_Mecanico""
     GROUP BY 
@@ -12067,14 +12340,14 @@ FROM public.""Ficha"" f
 LEFT JOIN (
     SELECT 
         tmo.""ID_Ficha"",
-        ROUND(AVG(tmo.""Min_Detenidos""), 2) AS ""Avg_Operativo""
+        ROUND(AVG(tmo.""Min_Detenidos""/60), 2) AS ""Avg_Operativo""
     FROM public.""Tiempo_Muerto_Operativo"" tmo
     GROUP BY tmo.""ID_Ficha""
 ) tmo_avg ON f.""ID_Ficha"" = tmo_avg.""ID_Ficha""
 LEFT JOIN (
     SELECT 
         tmm.""ID_Ficha"",
-        ROUND(AVG(tmm.""Min_Detenidos""), 2) AS ""Avg_Mecanico""
+        ROUND(AVG(tmm.""Min_Detenidos""/60), 2) AS ""Avg_Mecanico""
     FROM public.""Tiempo_muerto_Mecanico"" tmm
     GROUP BY tmm.""ID_Ficha""
 ) tmm_avg ON f.""ID_Ficha"" = tmm_avg.""ID_Ficha""
@@ -15616,10 +15889,101 @@ ORDER BY
             }
 
             tabla += "</table></div>";
+            tabla += $@"<br><p> Con un total de minutos detenidos de <strong>{txt_TM_mecanico.Text}</strong> minutos.</p>";
 
             return tabla;
         }
+        public string GenerarTablaTiemposOperativos()
+        {
+            // Verifica si la lista está vacía o es nula
+            if (valores_operativos == null || valores_operativos.Count == 0)
+                return "<p>No se registraron tiempos muertos operativos.</p>";
 
+            string tabla = @"
+<div style='margin-top: 20px;'>
+    <h3 style='color: #2c3e50;'>Tiempos Muertos Operativos</h3>
+    <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+        <tr style='background: #e9ecef;'>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Minutos Detenidos</th>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Motivos</th>
+        </tr>";
+
+            foreach (var item in valores_operativos)
+            {
+                tabla += $@"
+        <tr>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item1}</td>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item2}</td>
+        </tr>";
+            }
+
+            tabla += "</table></div>";
+            tabla += $@"<br><p> Con un total de minutos detenidos de <strong>{txt_TM_operativo.Text}</strong> minutos.</p>";
+
+            return tabla;
+        }
+        public string GenerarTablaDetallesOP()
+        {
+            // Verifica si la lista está vacía o es nula
+            if (valores_operativos == null || valores_operativos.Count == 0)
+                return "<p>No se encontró registro en la tabla de detalles OP, favor de contactar al usuario Administrador y registrar los detalles del OP.</p>";
+
+            string valorBuscado = cb_OP.Text;
+            string Orden_Produccion = string.Empty;
+            string Producto = string.Empty;
+            string Medida = string.Empty;
+            string Descripcion = string.Empty;
+            string Especificacion = string.Empty;
+            string Ingredientes = string.Empty;
+            string Humedad = string.Empty;
+            string Comercio = string.Empty;
+            string Manzana = string.Empty;
+            string Analisis = string.Empty;
+            string Area_Proceso = string.Empty;
+            string OP_Origen = string.Empty;
+            string Destino = string.Empty;
+            string Clasificacion = string.Empty;
+
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // Consulta para buscar donde OP = valor_buscado
+            string query = "SELECT \"Orden_Produccion\", \"Producto\", \"Medida\", \"Descripcion\", " +
+                "\"Especificacion\", \"Ingredientes\", \"Humedad\", \"Comercio\", \"Manzana\", \"Analisis\", " +
+                "\"Area_Proceso\", \"OP_Origen\", \"Destino\", \"Clasificacion\" \r\nFROM public.\"Detalles_OP\" " +
+                "where \"Orden_Produccion\" = @valorBuscado";
+
+            // Crear parámetro
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+              new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = valorBuscado }
+            };
+
+            // Ejecutar consulta
+            System.Data.DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+            // Verificar si se encontraron resultados
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                Orden_Produccion = dt.Rows[0]["Orden_Produccion"].ToString();
+                Producto = dt.Rows[0]["Producto"].ToString();
+                Medida = dt.Rows[0]["Medida"].ToString();
+                Descripcion = dt.Rows[0]["Descripcion"].ToString();
+                Especificacion = dt.Rows[0]["Especificacion"].ToString();
+                Ingredientes = dt.Rows[0]["Ingredientes"].ToString();
+                Humedad = dt.Rows[0]["Humedad"].ToString();
+                Comercio = dt.Rows[0]["Comercio"].ToString();
+                Manzana = dt.Rows[0]["Manzana"].ToString();
+                Analisis = dt.Rows[0]["Analisis"].ToString();
+                Area_Proceso = dt.Rows[0]["Area_Proceso"].ToString();
+                OP_Origen = dt.Rows[0]["OP_Origen"].ToString();
+                Destino = dt.Rows[0]["Destino"].ToString();
+                Clasificacion = dt.Rows[0]["Clasificacion"].ToString();
+            }
+
+
+            string datos = $@"<p>Orden de Produccion: <strong>{Orden_Produccion}</strong>, Producto: <strong>{Producto}</strong>, Medida: <strong>{Medida}</strong>, Descripción: <strong>{Descripcion}</strong>, Especificación: <strong>{Especificacion}</strong>, Ingredientes: <strong>{Ingredientes}</strong>, Humedad: <strong>{Humedad}</strong>, Comercio: <strong>{Comercio}</strong>, Manzana: <strong>{Manzana}</strong>, Analisis: <strong>{Analisis}</strong>, Area de Proceso: <strong>{Area_Proceso}</strong>, OP de Origen: <strong>{OP_Origen}</strong>, Destino: <strong>{Destino}</strong>, Clasificación: <strong>{Clasificacion}</strong>,</p>";
+
+            return datos;
+        }
         private void pictureBox4_Click(object sender, EventArgs e)
         {
             // Alternar entre image1 e image3 con cada clic
@@ -15898,7 +16262,7 @@ ORDER BY
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     'Operativo' AS ""Tipo de Tiempo Muerto"",
-    (tmo.""Min_Detenidos"" * 60) AS ""Minutos Detenidos"",
+    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmo.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
 FROM ""Ficha"" f
@@ -15913,7 +16277,7 @@ SELECT
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     'Mecánico' AS ""Tipo de Tiempo Muerto"",
-    (tmm.""Min_Detenidos"" * 60) AS ""Minutos Detenidos"",
+    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmm.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
 FROM ""Ficha"" f
@@ -15929,6 +16293,9 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                     };
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+            // Formato solo fecha
+            rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+            rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
 
         }
 
