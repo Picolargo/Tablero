@@ -1606,6 +1606,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_proceso.Focus();
             cb_jefe_turno.SelectedIndex = -1;
             cb_jefe_turno.Focus();
+            cb_jefe_turno.Enabled = false;
             dtp1.Value = DateTime.Now;
             Txt_1.Text = string.Empty;
             Txt_2.Text = string.Empty;
@@ -4628,6 +4629,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             string Variable_nombre = lbl_nom2.Text;
             string variable_num = lbl_no_emp2.Text;
+            string jefe = cb_jefe_turno.Text;
+            int idUserSeleccionado = System.Convert.ToInt32(cb_jefe_turno.SelectedValue);
             string cuerpoHtml1 = $@"
                 <html>
                 <body style='font-family: Arial; font-size: 14px; color: #333;'>
@@ -4640,7 +4643,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             Estimado equipo,<br><br>
                             El sistema <strong>Tablero</strong> informa que el supervisor 
                             <strong>{Variable_nombre}</strong>, con número de empleado 
-                            <strong>{variable_num}</strong> y correspondiente al turno ";
+                            <strong>{variable_num}</strong> ha registrado la información correspondiente 
+                            al jefe de turno <strong>{jefe}</strong>, correspondiente al turno ";
 
             ////TUNEL/ SUMERGIDOR
             if (cb_Area.SelectedIndex == 0)
@@ -4649,7 +4653,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     int idUsuarioActual = id_user;
 
-                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text))
+                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
+                        && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
+                        && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
+                        && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) 
+                        && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text)
+                        && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -4671,6 +4680,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                         string area = cb_Area.Text;
                         decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
+                        
 
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -4681,7 +4691,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0);
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -4774,9 +4784,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             // Insertar en tabla Ficha y obtener el ID_Ficha generado
                             int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
                                 kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0);
-
-                            
+                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
 
                             if (idFicha > 0)
                             {
@@ -4900,7 +4908,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 1)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) 
+                    && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) 
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Despegue
                     int idUsuarioActual = id_user;
@@ -4936,7 +4947,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
-                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
                         //enviar correo
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -5014,7 +5025,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
-                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                            KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
                         //enviar correo
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -5126,7 +5137,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 2)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Evaporado
                     int idUsuarioActual = id_user;
@@ -5157,7 +5171,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
 
                         //enviar correo
                         //Crear lista de valores
@@ -5233,7 +5247,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
 
                         if (idFicha > 0)
                         {
@@ -5331,7 +5345,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 7)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Grind
                     int idUsuarioActual = id_user;
@@ -5360,7 +5377,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
 
                         //enviar correo
                         //Crear lista de valores
@@ -5435,7 +5452,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
                         if (idFicha > 0)
                         {
                             // Insertar en tablas relacionadas
@@ -5530,7 +5547,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4)
             {
-                if (cb_proceso.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text))
+                if (cb_proceso.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
+                    && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
+                    && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
+                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Inspeccion
                     int idUsuarioActual = id_user;
@@ -5560,7 +5580,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0);
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
 
                         //enviar correo
                         //Crear lista de valores
@@ -5635,7 +5655,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
                         if (idFicha > 0)
                         {
                             // Insertar en tablas relacionadas
@@ -5730,7 +5750,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 6)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
+                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Polvos
                     int idUsuarioActual = id_user;
@@ -5761,7 +5784,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                        polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
 
                         //enviar correo
                         //Crear lista de valores
@@ -5837,7 +5860,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
                             KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                            polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0);
+                            polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
 
                         if (idFicha > 0)
                         {
@@ -5936,7 +5959,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 8)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text))
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
+                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) 
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
                 {
                     //Revolturas
                     int idUsuarioActual = id_user;
@@ -5969,7 +5996,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     {
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, bobina_merma);
+                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, 
+                        null, meta, bobina_merma, idUserSeleccionado);
 
                         //enviar correo
                         //Crear lista de valores
@@ -6046,9 +6074,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     else
                     {
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
-                            Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                            kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma);
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null, Pz_producidas, KgProductoTerminado, 
+                            KgFueraEspec, Merma, 0, Porcent_Logrado,kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, 
+                            hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma, idUserSeleccionado);
                         if (idFicha > 0)
                         {
                             // Insertar en tablas relacionadas
@@ -6156,7 +6184,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe)
         {
             DatabaseHelper dbHelper2 = new DatabaseHelper(connectionString);
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -6172,7 +6200,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     " \"Kg_enter_proceso\" = @Kg_enter_proceso, \"kg_frescos_enter_se\" = @kg_frescos_enter_se, \"Merma_canica\" = @Merma_canica, \"Merma_podrido\" = @Merma_podrido," +
                     " \"Merma_tina\" = @Merma_tina, \"Merma_piso\" = @Merma_piso, \"Merma_canaletas\" = @Merma_canaletas, \"Merma_lavado_bandas\" = @Merma_lavado_bandas," +
                     " \"Cascara_carrete\" = @Cascara_carrete, \"Hr_inicio\" = @Hr_inicio, \"Hr_fin\" = @Hr_fin, \"Hr_programadas\" = @Hr_programadas, \"Personal_Operativo\" = @Personal_Operativo," +
-                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"MetaHr\" = @MetaHr WHERE \"ID_Ficha\" = @ID_Ficha;";
+                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"MetaHr\" = @MetaHr, \"ID_Jefe\" = @Jefe WHERE \"ID_Ficha\" = @ID_Ficha;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -6196,7 +6224,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe}
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6205,8 +6234,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_prod_seco"" = @Kg_prod_seco,
                                     ""Merma_kg"" = @Merma_kg_seco, ""Kg_fuera_espec"" = @Kg_fuera_spec, ""Kg_resecar"" = @Kg_resecar, ""Personal_Operativo"" = @Personal_Operativo, 
                                     ""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, ""porcent_cump_meta"" = @Porcent_cumplimiento, ""Kg_meta"" = @Kg_meta,
-                                    ""Relacion_Fr_seco"" = @Relacion_fresco_seco, ""FTT"" = @FTT, ""Hr_inicio"" = @hr_inicio, ""Hr_fin"" = @hr_fin, ""MetaHr"" = @MetaHr, ""kg_frescos_enter_se"" = @kg_frescos_enter_se
-                                    WHERE ""ID_Ficha"" = @ID_Ficha;";
+                                    ""Relacion_Fr_seco"" = @Relacion_fresco_seco, ""FTT"" = @FTT, ""Hr_inicio"" = @hr_inicio, ""Hr_fin"" = @hr_fin, ""MetaHr"" = @MetaHr, 
+                                    ""kg_frescos_enter_se"" = @kg_frescos_enter_se, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6228,7 +6257,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
-                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 }
+                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe}
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6237,7 +6267,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @OP, ""Kg_meta"" = @Kg_meta, 
                     ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, ""Kg_fuera_espec"" = @Kg_fuera_espec, 
                     ""Merma_kg"" = @Merma_kg,""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, ""Personal_Operativo"" = @Personal_Operativo, 
-                    ""porcent_aumento_hum"" = @porcent_aumento_hum, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                    ""porcent_aumento_hum"" = @porcent_aumento_hum, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6257,7 +6287,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6266,7 +6297,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @OP, ""Kg_meta"" = @Kg_meta, 
                                     ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, 
                                     ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg,""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, 
-                                    ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                                    ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6285,7 +6316,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6295,7 +6327,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Proceso"" = @Proceso, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_meta"" = @Kg_meta, 
                                     ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, 
                                     ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg,""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, 
-                                    ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                                    ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6315,7 +6347,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6325,7 +6358,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, 
                                     ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg, ""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, 
                                     ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""Polvo_colector"" = @Polvo_Colector, 
-                                    ""Granulo"" = @Granulo, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                                    ""Granulo"" = @Granulo, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6346,7 +6379,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Polvo_Colector", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Granulo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6356,7 +6390,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ""Kg_prod_term"" = @Kg_prod_term, ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg, ""Kg_meta"" = @Kg_meta, ""porcent_cump_meta"" = @porcent_cump_meta, 
                     ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Bobina_kg_enter"" = @Bobina_kg_enter, ""Bobina_utilizada"" = @Bobina_utilizada, ""Hr_inicio"" = @Hr_inicio, 
                     ""Hr_fin"" = @Hr_fin, ""Personal_Operativo"" = @Personal_Operativo, ""Hr_programadas"" = @Hr_programadas, ""Bobina_merma"" = @Bobina_merma, 
-                    ""Hr_efectivas"" = @Hr_efectivas, ""MetaHr"" = @MetaHr WHERE ""ID_Ficha"" = @ID_Ficha;";
+                    ""Hr_efectivas"" = @Hr_efectivas, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
@@ -6379,7 +6413,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Bobina_merma", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha}
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
             }
@@ -6403,7 +6438,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe)
         {
             string query = String.Empty;
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -6414,12 +6449,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
                     ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
                     ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""MetaHr""
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @lote, @op,
                     @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
                     @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
-                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @MetaHr
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
 
                 parameters = new NpgsqlParameter[]
@@ -6445,7 +6480,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Hr_efec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 1)
@@ -6453,12 +6489,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Lote"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
                     ""Personal_Operativo"", ""Hr_programadas"", ""Hr_efectivas"", ""porcent_cump_meta"", ""Kg_meta"",
-                    ""Relacion_Fr_seco"", ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr"", ""kg_frescos_enter_se""
+                    ""Relacion_Fr_seco"", ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr"", ""kg_frescos_enter_se"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @op, @Lote, @Kg_prod_seco, @Merma_kg_seco, @Kg_fuera_spec,
                     @Kg_resecar, @Personal_Operativo, @Hr_programadas,
                     @Hr_efectivas, @Porcent_cumplimiento, @Kg_meta,
-                    @Relacion_fresco_seco, @FTT, @hr_inicio, @hr_fin, @Area, @MetaHr, @kg_frescos_enter_se
+                    @Relacion_fresco_seco, @FTT, @hr_inicio, @hr_fin, @Area, @MetaHr, @kg_frescos_enter_se, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6482,7 +6518,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
-                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 }
+                    new NpgsqlParameter("@kg_frescos_enter_se", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var11 },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 2)
@@ -6490,12 +6527,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", 
                     ""Kg_prod_term"", ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", 
-                    ""porcent_aumento_hum"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
+                    ""porcent_aumento_hum"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta,
                     @Kg_enter_proceso, @Kg_prod_term, @Kg_fuera_espec,
                     @Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo,
-                    @porcent_aumento_hum, @Hr_inicio, @Hr_fin, @Area, @MetaHr
+                    @porcent_aumento_hum, @Hr_inicio, @Hr_fin, @Area, @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6516,17 +6553,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 5)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
+                    ""Area"", ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6546,17 +6585,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 4)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Proceso"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", ""MetaHr""
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", 
+                    ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @Proceso, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6577,17 +6618,20 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
                     new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 6)
             {
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", ""Kg_fuera_espec"", 
-                    ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Polvo_colector"", ""Granulo"", ""Area"", ""MetaHr""
+                    ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Polvo_colector"", ""Granulo"", 
+                    ""Area"", ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
-                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Polvo_Colector, @Granulo, @Area, @MetaHr
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Polvo_Colector, @Granulo, @Area, 
+                    @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6609,7 +6653,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Polvo_Colector", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
                     new NpgsqlParameter("@Granulo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             if (cb_Area.SelectedIndex == 8)
@@ -6617,10 +6662,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 query = @"INSERT INTO public.""Ficha"" (
                     ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Pz_prod"", ""Kg_prod_term"", ""Kg_fuera_espec"", ""Merma_kg"", ""Kg_meta"", ""porcent_cump_meta"", 
                     ""Kg_enter_proceso"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Hr_inicio"", ""Hr_fin"", ""Personal_Operativo"", ""Hr_programadas"", ""Bobina_merma"", 
-                    ""Hr_efectivas"", ""Area"", ""MetaHr""
+                    ""Hr_efectivas"", ""Area"", ""MetaHr"", ""ID_Jefe""
                 ) VALUES (
                     @id_user, @fecha, @turno, @OP, @Pz_prod, @Kg_prod_term, @Kg_fuera_espec, @Merma_kg, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Bobina_kg_enter,  
-                    @Bobina_utilizada, @Hr_inicio, @Hr_fin, @Personal_Operativo, @Hr_programadas, @Bobina_merma, @Hr_efectivas, @Area, @MetaHr
+                    @Bobina_utilizada, @Hr_inicio, @Hr_fin, @Personal_Operativo, @Hr_programadas, @Bobina_merma, @Hr_efectivas, @Area, @MetaHr, @Jefe
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
@@ -6644,7 +6689,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Bobina_merma", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var12 },
                     new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
-                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr }
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe }
                 };
             }
             return dbHelper.ExecuteScalarInt(query, parameters);
