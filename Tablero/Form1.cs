@@ -8199,6 +8199,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Suscripción al evento con los dos parámetros
             Editar_ficha.FichaSeleccionada += (id_global, area) =>
             {
+                cb_Area.SelectedIndex = -1;
+                reiniciarCampos();
+                cb_Area.Focus();
+                cb_jefe_turno.Enabled = false;
                 if (id_global == null || area == null)
                 {
                     editar = false;
@@ -8211,8 +8215,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     // Consulta para buscar donde OP = valor_buscado
                     string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
-                    "\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\" " +
-                    " FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
+                    "\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
+                    " \"ID_Jefe\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8239,6 +8243,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Merma_lavado_bandas = string.Empty;
                     string Personal_Operativo = string.Empty;
                     string Cascara_carrete = string.Empty;
+                    string ID_Jefe = string.Empty;
 
                     // Verificar si se encontraron resultados
                     if (dt2 != null && dt2.Rows.Count > 0)
@@ -8259,6 +8264,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Merma_lavado_bandas = dt2.Rows[0]["Merma_lavado_bandas"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         Cascara_carrete = dt2.Rows[0]["Cascara_carrete"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
 
                     cb_Area.Text = area;
@@ -8286,6 +8292,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
                     Txt_1.Enabled = false;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
 
                     actualiza_tiempos(id_global);
                 }
@@ -8295,7 +8306,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Consulta para buscar donde OP = valor_buscado
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Lote"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
                                     ""Personal_Operativo"", ""Hr_programadas"", ""Hr_efectivas"", ""porcent_cump_meta"", ""Kg_meta"", ""Relacion_Fr_seco"", 
-                                    ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""MetaHr"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                                    ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8319,6 +8330,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Kg_fuera_espec = string.Empty;
                     string Kg_resecar = string.Empty;
                     string Personal_Operativo = string.Empty;
+                    string ID_Jefe = string.Empty;
 
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
@@ -8334,6 +8346,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
                         Kg_resecar = dt2.Rows[0]["Kg_resecar"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
 
                     cb_Area.Text = area;
@@ -8353,6 +8366,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_4.Text = Kg_fuera_espec;
                     Txt_5.Text = Kg_resecar;
                     Txt_6.Text = Personal_Operativo;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
 
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
@@ -8365,7 +8383,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8388,6 +8406,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Kg_fuera_espec = string.Empty;
                     string Merma_kg = string.Empty;
                     string Personal_Operativo = string.Empty;
+                    string ID_Jefe = string.Empty;
 
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
@@ -8403,6 +8422,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
                         Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
 
                     cb_Area.Text = area;
@@ -8423,6 +8443,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_5.Text = Personal_Operativo;
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
 
                     actualiza_tiempos(id_global);
                 }
@@ -8431,7 +8456,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Proceso"", ""Kg_prod_term"", ""Kg_enter_proceso"", 
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8452,6 +8477,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Kg_fuera_espec = string.Empty;
                     string Merma_kg = string.Empty;
                     string Personal_Operativo = string.Empty;
+                    string ID_Jefe = string.Empty;
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
@@ -8466,6 +8492,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
                         Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
@@ -8487,6 +8514,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     cb_proceso.Focus();
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
                     actualiza_tiempos(id_global);
                 }
                 if (area == "Polvos")
@@ -8494,7 +8526,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_enter_proceso"", ""Kg_prod_term"",  
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"", ""Polvo_colector"", ""Granulo"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""Polvo_colector"", ""Granulo"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8516,6 +8548,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Personal_Operativo = string.Empty;
                     string Polvo_colector = string.Empty;
                     string Granulo = string.Empty;
+                    string ID_Jefe = string.Empty;
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
@@ -8531,6 +8564,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         Polvo_colector = dt2.Rows[0]["Polvo_colector"].ToString();
                         Granulo = dt2.Rows[0]["Granulo"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
@@ -8553,13 +8587,18 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_7.Text = Granulo;
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
                     actualiza_tiempos(id_global);
                 }
                 if (area == "Máquinas")
                 {
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""MetaHr"", ""Hr_inicio"", ""Hr_fin"", ""Pz_prod"", ""Kg_meta"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Bobina_merma"" 
+                    ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Bobina_merma"", ""ID_Jefe"" 
                     FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8586,7 +8625,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Bobina_kg_enter = string.Empty;
                     string Bobina_utilizada = string.Empty;
                     string Bobina_merma = string.Empty;
-
+                    string ID_Jefe = string.Empty;
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
@@ -8604,6 +8643,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Bobina_kg_enter = dt2.Rows[0]["Bobina_kg_enter"].ToString();
                         Bobina_utilizada = dt2.Rows[0]["Bobina_utilizada"].ToString();
                         Bobina_merma = dt2.Rows[0]["Bobina_merma"].ToString();
+                        ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                     }
 
                     cb_Area.Text = area;
@@ -8627,6 +8667,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_8.Text = Bobina_merma;
                     // Deshabilitar controles no editables
                     cb_Area.Enabled = false;
+                    if (!string.IsNullOrWhiteSpace(ID_Jefe))
+                    {
+                        cb_jefe_turno.SelectedValue = System.Convert.ToInt32(ID_Jefe);
+                        cb_jefe_turno.Focus();
+                    }
 
                     actualiza_tiempos(id_global);
                 }
