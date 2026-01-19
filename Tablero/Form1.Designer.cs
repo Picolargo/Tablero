@@ -98,6 +98,7 @@
             this.Txt_1 = new Telerik.WinControls.UI.RadTextBox();
             this.lbl_meta = new MaterialSkin.Controls.MaterialLabel();
             this.materialCard2 = new MaterialSkin.Controls.MaterialCard();
+            this.cb_jefe_turno = new MaterialSkin.Controls.MaterialComboBox();
             this.dtp1 = new MetroFramework.Controls.MetroDateTime();
             this.cb_Turno = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_Area = new MaterialSkin.Controls.MaterialComboBox();
@@ -149,7 +150,7 @@
             this.tabPage32 = new System.Windows.Forms.TabPage();
             this.ChartCumplimientoTiempoEfectivoOtrasAreas = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.btn_filtro_Tiempos = new MetroFramework.Controls.MetroTabControl();
+            this.tapcontrol = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
@@ -213,9 +214,8 @@
             this.btn_new_report_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.materialCard21 = new MaterialSkin.Controls.MaterialCard();
             this.txt_filtro_report_Tiempos = new MaterialSkin.Controls.MaterialTextBox();
-            this.materialButton4 = new MaterialSkin.Controls.MaterialButton();
+            this.btn_filtro_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.materialCard22 = new MaterialSkin.Controls.MaterialCard();
-            this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tap_control_metas = new MetroFramework.Controls.MetroTabControl();
             this.metroContextMenu1 = new MetroFramework.Controls.MetroContextMenu(this.components);
@@ -353,7 +353,7 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.cb_jefe_turno = new MaterialSkin.Controls.MaterialComboBox();
+            this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -424,7 +424,7 @@
             this.tabPage32.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoTiempoEfectivoOtrasAreas)).BeginInit();
             this.tabPage10.SuspendLayout();
-            this.btn_filtro_Tiempos.SuspendLayout();
+            this.tapcontrol.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
             this.panel2.SuspendLayout();
             this.materialCard3.SuspendLayout();
@@ -459,8 +459,6 @@
             this.materialCard20.SuspendLayout();
             this.materialCard21.SuspendLayout();
             this.materialCard22.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tap_control_metas.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -516,6 +514,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1410,6 +1410,30 @@
             this.materialCard2.Size = new System.Drawing.Size(755, 132);
             this.materialCard2.TabIndex = 2;
             // 
+            // cb_jefe_turno
+            // 
+            this.cb_jefe_turno.AutoResize = false;
+            this.cb_jefe_turno.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_jefe_turno.Depth = 0;
+            this.cb_jefe_turno.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_jefe_turno.DropDownHeight = 174;
+            this.cb_jefe_turno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_jefe_turno.DropDownWidth = 121;
+            this.cb_jefe_turno.Enabled = false;
+            this.cb_jefe_turno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_jefe_turno.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_jefe_turno.FormattingEnabled = true;
+            this.cb_jefe_turno.Hint = "Jefe de Turno";
+            this.cb_jefe_turno.IntegralHeight = false;
+            this.cb_jefe_turno.ItemHeight = 43;
+            this.cb_jefe_turno.Location = new System.Drawing.Point(503, 11);
+            this.cb_jefe_turno.MaxDropDownItems = 4;
+            this.cb_jefe_turno.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_jefe_turno.Name = "cb_jefe_turno";
+            this.cb_jefe_turno.Size = new System.Drawing.Size(236, 49);
+            this.cb_jefe_turno.StartIndex = 0;
+            this.cb_jefe_turno.TabIndex = 8;
+            // 
             // dtp1
             // 
             this.dtp1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2046,7 +2070,7 @@
             // tabPage10
             // 
             this.tabPage10.AutoScroll = true;
-            this.tabPage10.Controls.Add(this.btn_filtro_Tiempos);
+            this.tabPage10.Controls.Add(this.tapcontrol);
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
@@ -2055,24 +2079,24 @@
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
-            // btn_filtro_Tiempos
+            // tapcontrol
             // 
-            this.btn_filtro_Tiempos.Controls.Add(this.metroTabPage9);
-            this.btn_filtro_Tiempos.Controls.Add(this.tabPage16);
-            this.btn_filtro_Tiempos.Controls.Add(this.tabPage17);
-            this.btn_filtro_Tiempos.Controls.Add(this.metroTabPage10);
-            this.btn_filtro_Tiempos.Controls.Add(this.tabPage22);
-            this.btn_filtro_Tiempos.Controls.Add(this.tabPage33);
-            this.btn_filtro_Tiempos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(0, 0);
-            this.btn_filtro_Tiempos.Name = "btn_filtro_Tiempos";
-            this.btn_filtro_Tiempos.SelectedIndex = 5;
-            this.btn_filtro_Tiempos.Size = new System.Drawing.Size(1682, 940);
-            this.btn_filtro_Tiempos.Style = MetroFramework.MetroColorStyle.Black;
-            this.btn_filtro_Tiempos.TabIndex = 0;
-            this.btn_filtro_Tiempos.UseCustomForeColor = true;
-            this.btn_filtro_Tiempos.UseSelectable = true;
-            this.btn_filtro_Tiempos.UseStyleColors = true;
+            this.tapcontrol.Controls.Add(this.metroTabPage9);
+            this.tapcontrol.Controls.Add(this.tabPage16);
+            this.tapcontrol.Controls.Add(this.tabPage17);
+            this.tapcontrol.Controls.Add(this.metroTabPage10);
+            this.tapcontrol.Controls.Add(this.tabPage22);
+            this.tapcontrol.Controls.Add(this.tabPage33);
+            this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tapcontrol.Location = new System.Drawing.Point(0, 0);
+            this.tapcontrol.Name = "tapcontrol";
+            this.tapcontrol.SelectedIndex = 5;
+            this.tapcontrol.Size = new System.Drawing.Size(1682, 940);
+            this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
+            this.tapcontrol.TabIndex = 0;
+            this.tapcontrol.UseCustomForeColor = true;
+            this.tapcontrol.UseSelectable = true;
+            this.tapcontrol.UseStyleColors = true;
             // 
             // metroTabPage9
             // 
@@ -2247,7 +2271,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -3189,6 +3213,7 @@
             this.btn_clean_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_clean_Tiempos.UseAccentColor = false;
             this.btn_clean_Tiempos.UseVisualStyleBackColor = true;
+            this.btn_clean_Tiempos.Click += new System.EventHandler(this.btn_clean_Tiempos_Click);
             // 
             // btn_export_excel_Tiempos
             // 
@@ -3212,6 +3237,7 @@
             this.btn_export_excel_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_export_excel_Tiempos.UseAccentColor = false;
             this.btn_export_excel_Tiempos.UseVisualStyleBackColor = true;
+            this.btn_export_excel_Tiempos.Click += new System.EventHandler(this.btn_export_excel_Tiempos_Click);
             // 
             // btn_new_report_Tiempos
             // 
@@ -3242,7 +3268,7 @@
             this.materialCard21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.materialCard21.Controls.Add(this.txt_filtro_report_Tiempos);
-            this.materialCard21.Controls.Add(this.materialButton4);
+            this.materialCard21.Controls.Add(this.btn_filtro_Tiempos);
             this.materialCard21.Depth = 0;
             this.materialCard21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard21.Location = new System.Drawing.Point(1085, 14);
@@ -3271,29 +3297,31 @@
             this.txt_filtro_report_Tiempos.TabIndex = 32;
             this.txt_filtro_report_Tiempos.Text = "";
             this.txt_filtro_report_Tiempos.TrailingIcon = null;
+            this.txt_filtro_report_Tiempos.TextChanged += new System.EventHandler(this.txt_filtro_report_Tiempos_TextChanged);
             // 
-            // materialButton4
+            // btn_filtro_Tiempos
             // 
-            this.materialButton4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton4.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton4.Depth = 0;
-            this.materialButton4.Enabled = false;
-            this.materialButton4.HighEmphasis = true;
-            this.materialButton4.Icon = global::Tablero.Properties.Resources.filter_remove;
-            this.materialButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.materialButton4.ImageKey = "save_icon";
-            this.materialButton4.Location = new System.Drawing.Point(316, 19);
-            this.materialButton4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton4.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton4.Name = "materialButton4";
-            this.materialButton4.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton4.Size = new System.Drawing.Size(159, 36);
-            this.materialButton4.TabIndex = 31;
-            this.materialButton4.Text = "Limpiar Filtro";
-            this.materialButton4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.materialButton4.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton4.UseAccentColor = false;
-            this.materialButton4.UseVisualStyleBackColor = true;
+            this.btn_filtro_Tiempos.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_filtro_Tiempos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_filtro_Tiempos.Depth = 0;
+            this.btn_filtro_Tiempos.Enabled = false;
+            this.btn_filtro_Tiempos.HighEmphasis = true;
+            this.btn_filtro_Tiempos.Icon = global::Tablero.Properties.Resources.filter_remove;
+            this.btn_filtro_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_filtro_Tiempos.ImageKey = "save_icon";
+            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(316, 19);
+            this.btn_filtro_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_filtro_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_filtro_Tiempos.Name = "btn_filtro_Tiempos";
+            this.btn_filtro_Tiempos.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_filtro_Tiempos.Size = new System.Drawing.Size(159, 36);
+            this.btn_filtro_Tiempos.TabIndex = 31;
+            this.btn_filtro_Tiempos.Text = "Limpiar Filtro";
+            this.btn_filtro_Tiempos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_filtro_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_filtro_Tiempos.UseAccentColor = false;
+            this.btn_filtro_Tiempos.UseVisualStyleBackColor = true;
+            this.btn_filtro_Tiempos.Click += new System.EventHandler(this.btn_filtro_Tiempos_Click);
             // 
             // materialCard22
             // 
@@ -3309,23 +3337,6 @@
             this.materialCard22.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard22.Size = new System.Drawing.Size(1674, 779);
             this.materialCard22.TabIndex = 4;
-            // 
-            // rgv_reporte_Tiempos
-            // 
-            this.rgv_reporte_Tiempos.AutoScroll = true;
-            this.rgv_reporte_Tiempos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rgv_reporte_Tiempos.Location = new System.Drawing.Point(14, 14);
-            // 
-            // 
-            // 
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowAddNewRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
-            this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
-            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
-            this.rgv_reporte_Tiempos.TabIndex = 0;
             // 
             // tabPage4
             // 
@@ -5808,29 +5819,23 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // cb_jefe_turno
+            // rgv_reporte_Tiempos
             // 
-            this.cb_jefe_turno.AutoResize = false;
-            this.cb_jefe_turno.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_jefe_turno.Depth = 0;
-            this.cb_jefe_turno.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_jefe_turno.DropDownHeight = 174;
-            this.cb_jefe_turno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_jefe_turno.DropDownWidth = 121;
-            this.cb_jefe_turno.Enabled = false;
-            this.cb_jefe_turno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_jefe_turno.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_jefe_turno.FormattingEnabled = true;
-            this.cb_jefe_turno.Hint = "Jefe de Turno";
-            this.cb_jefe_turno.IntegralHeight = false;
-            this.cb_jefe_turno.ItemHeight = 43;
-            this.cb_jefe_turno.Location = new System.Drawing.Point(503, 11);
-            this.cb_jefe_turno.MaxDropDownItems = 4;
-            this.cb_jefe_turno.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_jefe_turno.Name = "cb_jefe_turno";
-            this.cb_jefe_turno.Size = new System.Drawing.Size(236, 49);
-            this.cb_jefe_turno.StartIndex = 0;
-            this.cb_jefe_turno.TabIndex = 8;
+            this.rgv_reporte_Tiempos.AutoScroll = true;
+            this.rgv_reporte_Tiempos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rgv_reporte_Tiempos.Location = new System.Drawing.Point(14, 14);
+            // 
+            // 
+            // 
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowAddNewRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
+            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
+            this.rgv_reporte_Tiempos.TabIndex = 1;
+            this.rgv_reporte_Tiempos.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_Tiempos_CustomFiltering);
             // 
             // Form_principal
             // 
@@ -5925,7 +5930,7 @@
             this.tabPage32.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoTiempoEfectivoOtrasAreas)).EndInit();
             this.tabPage10.ResumeLayout(false);
-            this.btn_filtro_Tiempos.ResumeLayout(false);
+            this.tapcontrol.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.materialCard3.ResumeLayout(false);
@@ -5970,8 +5975,6 @@
             this.materialCard21.ResumeLayout(false);
             this.materialCard21.PerformLayout();
             this.materialCard22.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tap_control_metas.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
@@ -6036,6 +6039,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -6213,7 +6218,7 @@
         private MaterialSkin.Controls.MaterialTextBox txt_destino;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox1;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox2;
-        private MetroFramework.Controls.MetroTabControl btn_filtro_Tiempos;
+        private MetroFramework.Controls.MetroTabControl tapcontrol;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;
         private MaterialSkin.Controls.MaterialCard materialCard8;
@@ -6346,10 +6351,10 @@
         private MaterialSkin.Controls.MaterialButton btn_new_report_Tiempos;
         private MaterialSkin.Controls.MaterialCard materialCard21;
         private MaterialSkin.Controls.MaterialTextBox txt_filtro_report_Tiempos;
-        private MaterialSkin.Controls.MaterialButton materialButton4;
+        private MaterialSkin.Controls.MaterialButton btn_filtro_Tiempos;
         private MaterialSkin.Controls.MaterialCard materialCard22;
-        private Telerik.WinControls.UI.RadGridView rgv_reporte_Tiempos;
         private MaterialSkin.Controls.MaterialComboBox cb_jefe_turno;
+        private Telerik.WinControls.UI.RadGridView rgv_reporte_Tiempos;
     }
 }
 

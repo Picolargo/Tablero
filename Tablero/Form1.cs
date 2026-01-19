@@ -23,7 +23,9 @@ using Telerik.WinControls.UI.Export;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using Telerik.WinForms.Documents.Model.Notes;
 using static System.Net.WebRequestMethods;
-using Excel = Microsoft.Office.Interop.Excel;
+using ClosedXML.Excel;
+using System.IO;
+//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tablero
 {
@@ -90,6 +92,14 @@ namespace Tablero
             rgv_reporte_consolidado.ShowFilteringRow = false;
             rgv_reporte_consolidado.EnableFiltering = true;
             rgv_reporte_consolidado.EnableCustomFiltering = true;
+
+            // Configurar propiedades similares al ejemplo
+            rgv_reporte_Tiempos.EnableGrouping = false;
+            rgv_reporte_Tiempos.EnableHotTracking = true;
+            rgv_reporte_Tiempos.ShowFilteringRow = false;
+            rgv_reporte_Tiempos.EnableFiltering = true;
+            rgv_reporte_Tiempos.EnableCustomFiltering = true;
+
 
             this.WindowState = FormWindowState.Maximized;
 
@@ -372,9 +382,9 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage9);
 
-                btn_filtro_Tiempos.TabPages.Remove(metroTabPage9);
-                btn_filtro_Tiempos.TabPages.Remove(tabPage16);
-                btn_filtro_Tiempos.TabPages.Remove(tabPage17);
+                tapcontrol.TabPages.Remove(metroTabPage9);
+                tapcontrol.TabPages.Remove(tabPage16);
+                tapcontrol.TabPages.Remove(tabPage17);
 
                 tabgraficas.TabPages.Remove(tabPage18);
                 tabgraficas.TabPages.Remove(tabPage19);
@@ -9846,114 +9856,361 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             btn_export_excel_merma.Enabled = false;
             btn_clean_merma.Enabled = false;
         }
+        //private void btn_export_excel_merma_Click(object sender, EventArgs e)
+        //{
+        //    LoadingScreen.ShowLoading();
+        //    try
+        //    {
+        //        var saveFileDialog = new SaveFileDialog
+        //        {
+        //            Filter = "Excel Files|*.xlsx;*.xls",
+        //            Title = "Guardar archivo de Excel"
+        //        };
+
+        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            ExportarDataGridViewFiltradoAExcel(
+        //                dgv_reporte_merma,
+        //                saveFileDialog.FileName
+        //            );
+
+        //            MetroFramework.MetroMessageBox.Show(
+        //                this,
+        //                "La exportación fue completada con éxito.",
+        //                "Exportación a Excel",
+        //                MessageBoxButtons.OK,
+        //                MessageBoxIcon.Information
+        //            );
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //MetroFramework.MetroMessageBox.Show(
+        //        //    this,
+        //        //    "Error durante la exportación: " + ex.Message,
+        //        //    "Error",
+        //        //    MessageBoxButtons.OK,
+        //        //    MessageBoxIcon.Error
+        //        //);
+        //       MessageBox.Show(
+        //            "Error durante la exportación: " + ex.Message,
+        //            "Error",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error
+        //        );
+        //    }
+        //    finally
+        //    {
+        //        LoadingScreen.HideLoading();
+        //    }
+        //}
+
+        //private async void btn_export_excel_merma_Click(object sender, EventArgs e)
+        //{
+        //    LoadingScreen.ShowLoading();
+        //    try
+        //    {
+        //        // Mostrar el diálogo de guardar archivo en el hilo principal
+        //        var saveFileDialog = new SaveFileDialog
+        //        {
+        //            Filter = "Excel Files|*.xlsx;*.xls",
+        //            Title = "Guardar archivo de Excel"
+        //        };
+
+        //        string filePath = null;
+
+        //        // Mostrar el diálogo de guardado en el hilo principal
+        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            filePath = saveFileDialog.FileName;
+
+        //            // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
+        //            await Task.Run(() =>
+        //            {
+        //                ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma, filePath);
+        //            });
+
+        //            MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    finally
+        //    {
+        //        // Ocultar la pantalla de cargando
+        //        LoadingScreen.HideLoading();
+        //    }
+        //}
+
+
+        //private void ExportarDataGridViewFiltradoAExcel(DataGridView dgv, string filePath)
+        //{
+        //    Excel.Application excelApp = new Excel.Application();
+        //    excelApp.Visible = false;
+
+        //    Excel.Workbook workbook = excelApp.Workbooks.Add();
+        //    Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
+
+        //    int colIndex = 1;
+
+        //    // Exportar encabezados solo para las columnas visibles
+        //    for (int i = 0; i < dgv.Columns.Count; i++)
+        //    {
+        //        if (dgv.Columns[i].Visible)
+        //        {
+        //            worksheet.Cells[1, colIndex] = dgv.Columns[i].HeaderText;
+
+        //            Excel.Range headerCell = worksheet.Cells[1, colIndex];
+        //            headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+        //            headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
+        //            headerCell.Font.Bold = true;
+        //            headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+        //            colIndex++;
+        //        }
+        //    }
+
+        //    int rowIndex = 2;
+
+        //    foreach (DataGridViewRow row in dgv.Rows)
+        //    {
+        //        if (row.Visible)
+        //        {
+        //            colIndex = 1;
+        //            for (int j = 0; j < dgv.Columns.Count; j++)
+        //            {
+        //                if (dgv.Columns[j].Visible)
+        //                {
+        //                    worksheet.Cells[rowIndex, colIndex] = row.Cells[j].Value?.ToString();
+        //                    colIndex++;
+        //                }
+        //            }
+        //            rowIndex++;
+        //        }
+        //    }
+
+        //    Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
+        //    usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+        //    worksheet.Columns.AutoFit();
+
+        //    if (filePath.EndsWith(".xlsx"))
+        //    {
+        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
+        //    }
+        //    else if (filePath.EndsWith(".xls"))
+        //    {
+        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
+        //    }
+
+        //    workbook.Close();
+        //    excelApp.Quit();
+
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        //}
+        private void ExportarDataGridViewFiltradoAExcel_ClosedXML(
+    DataGridView dgv,
+    string filePath)
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Reporte");
+
+                int colIndex = 1;
+
+                // ==========================
+                // ENCABEZADOS (COLUMNAS VISIBLES)
+                // ==========================
+                for (int i = 0; i < dgv.Columns.Count; i++)
+                {
+                    if (dgv.Columns[i].Visible)
+                    {
+                        var cell = worksheet.Cell(1, colIndex);
+                        cell.Value = dgv.Columns[i].HeaderText;
+
+                        cell.Style.Fill.BackgroundColor = XLColor.Orange;
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Font.FontColor = XLColor.Black;
+                        cell.Style.Alignment.Horizontal =
+                            XLAlignmentHorizontalValues.Center;
+
+                        colIndex++;
+                    }
+                }
+
+                int rowIndex = 2;
+                bool hayDatos = false;
+
+                // ==========================
+                // FILAS VISIBLES (RESPETA FILTROS)
+                // ==========================
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (!row.IsNewRow && row.Visible)
+                    {
+                        colIndex = 1;
+
+                        for (int j = 0; j < dgv.Columns.Count; j++)
+                        {
+                            if (dgv.Columns[j].Visible)
+                            {
+                                worksheet.Cell(rowIndex, colIndex).Value =
+                                    row.Cells[j].Value?.ToString();
+
+                                colIndex++;
+                            }
+                        }
+
+                        rowIndex++;
+                        hayDatos = true;
+                    }
+                }
+
+                // ==========================
+                // MENSAJE SI NO HAY DATOS
+                // ==========================
+                if (!hayDatos)
+                {
+                    worksheet.Cell(2, 1).Value =
+                        "No hay datos visibles para exportar";
+                }
+
+                // ==========================
+                // BORDES Y AJUSTES
+                // ==========================
+                var usedRange = worksheet.Range(
+                    1, 1,
+                    Math.Max(rowIndex - 1, 2),
+                    colIndex - 1
+                );
+
+                usedRange.Style.Border.OutsideBorder =
+                    XLBorderStyleValues.Thin;
+                usedRange.Style.Border.InsideBorder =
+                    XLBorderStyleValues.Thin;
+
+                worksheet.Columns().AdjustToContents();
+
+                workbook.SaveAs(filePath);
+            }
+        }
 
         private async void btn_export_excel_merma_Click(object sender, EventArgs e)
         {
             LoadingScreen.ShowLoading();
             try
             {
-                // Mostrar el diálogo de guardar archivo en el hilo principal
                 var saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Filter = "Excel Files|*.xlsx",
                     Title = "Guardar archivo de Excel"
                 };
 
-                string filePath = null;
-
-                // Mostrar el diálogo de guardado en el hilo principal
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = saveFileDialog.FileName;
+                    string filePath = saveFileDialog.FileName;
 
-                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma, filePath);
+                        ExportarDataGridViewAExcel_ClosedXML(
+                            dgv_reporte_merma,
+                            filePath
+                        );
                     });
 
-                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
-                // Ocultar la pantalla de cargando
                 LoadingScreen.HideLoading();
             }
         }
-
-        private void ExportarDataGridViewFiltradoAExcel(DataGridView dgv, string filePath)
+        private void ExportarDataGridViewAExcel_ClosedXML(
+    DataGridView dgv,
+    string filePath)
         {
-            Excel.Application excelApp = new Excel.Application();
-            excelApp.Visible = false;
-
-            Excel.Workbook workbook = excelApp.Workbooks.Add();
-            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
-
-            int colIndex = 1;
-
-            // Exportar encabezados solo para las columnas visibles
-            for (int i = 0; i < dgv.Columns.Count; i++)
+            using (var workbook = new XLWorkbook())
             {
-                if (dgv.Columns[i].Visible)
+                var worksheet = workbook.Worksheets.Add("Reporte");
+
+                int colIndex = 1;
+
+                // Encabezados (solo columnas visibles)
+                for (int i = 0; i < dgv.Columns.Count; i++)
                 {
-                    worksheet.Cells[1, colIndex] = dgv.Columns[i].HeaderText;
-
-                    Excel.Range headerCell = worksheet.Cells[1, colIndex];
-                    headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
-                    headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
-                    headerCell.Font.Bold = true;
-                    headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-
-                    colIndex++;
-                }
-            }
-
-            int rowIndex = 2;
-
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                if (row.Visible)
-                {
-                    colIndex = 1;
-                    for (int j = 0; j < dgv.Columns.Count; j++)
+                    if (dgv.Columns[i].Visible)
                     {
-                        if (dgv.Columns[j].Visible)
-                        {
-                            worksheet.Cells[rowIndex, colIndex] = row.Cells[j].Value?.ToString();
-                            colIndex++;
-                        }
+                        var cell = worksheet.Cell(1, colIndex);
+                        cell.Value = dgv.Columns[i].HeaderText;
+
+                        cell.Style.Fill.BackgroundColor = XLColor.Orange;
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Font.FontColor = XLColor.Black;
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        colIndex++;
                     }
-                    rowIndex++;
                 }
+
+                int rowIndex = 2;
+
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (!row.IsNewRow && row.Visible)
+                    {
+                        colIndex = 1;
+
+                        for (int j = 0; j < dgv.Columns.Count; j++)
+                        {
+                            if (dgv.Columns[j].Visible)
+                            {
+                                worksheet.Cell(rowIndex, colIndex).Value =
+                                    row.Cells[j].Value?.ToString();
+
+                                colIndex++;
+                            }
+                        }
+
+                        rowIndex++;
+                    }
+                }
+
+                // Bordes
+                var usedRange = worksheet.Range(
+                    1, 1,
+                    rowIndex - 1, colIndex - 1
+                );
+
+                usedRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                usedRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                worksheet.Columns().AdjustToContents();
+
+                workbook.SaveAs(filePath);
             }
-
-            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
-            usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-            worksheet.Columns.AutoFit();
-
-            if (filePath.EndsWith(".xlsx"))
-            {
-                workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
-            }
-            else if (filePath.EndsWith(".xls"))
-            {
-                workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
-            }
-
-            workbook.Close();
-            excelApp.Quit();
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
-       
+
 
         private void btn_new_report_consolidado_Click(object sender, EventArgs e)
         {
@@ -10422,121 +10679,207 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
         {
+          
             LoadingScreen.ShowLoading();
             try
             {
-                // Mostrar el diálogo de guardar archivo en el hilo principal
                 var saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Filter = "Excel Files|*.xlsx",
                     Title = "Guardar archivo de Excel"
                 };
 
-                string filePath = null;
-
-                // Mostrar el diálogo de guardado en el hilo principal
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = saveFileDialog.FileName;
+                    string filePath = saveFileDialog.FileName;
 
-                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                       ExportarRadGridViewFiltradoAExcel(rgv_reporte_consolidado, filePath);
+                        ExportarRadGridViewFiltradoAExcel_ClosedXML(
+                            rgv_reporte_consolidado,
+                            filePath
+                        );
                     });
 
-                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
-                // Ocultar la pantalla de cargando
                 LoadingScreen.HideLoading();
             }
         }
 
-        private void ExportarRadGridViewFiltradoAExcel(RadGridView radGridView, string filePath)
+        //private void ExportarRadGridViewFiltradoAExcel(RadGridView radGridView, string filePath)
+        //{
+        //    Excel.Application excelApp = new Excel.Application();
+        //    excelApp.Visible = false;
+
+        //    Excel.Workbook workbook = excelApp.Workbooks.Add();
+        //    Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
+
+        //    int colIndex = 1;
+
+        //    // Exportar encabezados solo para las columnas visibles
+        //    foreach (GridViewDataColumn column in radGridView.Columns)
+        //    {
+        //        if (column.IsVisible)
+        //        {
+        //            worksheet.Cells[1, colIndex] = column.HeaderText;
+
+        //            Excel.Range headerCell = worksheet.Cells[1, colIndex];
+        //            headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+        //            headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
+        //            headerCell.Font.Bold = true;
+        //            headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+        //            colIndex++;
+        //        }
+        //    }
+
+        //    int rowIndex = 2;
+
+        //    // Exportar datos de las filas visibles considerando filtros
+        //    // Usar ChildRows para obtener solo las filas visibles después de aplicar filtros
+        //    foreach (GridViewRowInfo row in radGridView.ChildRows)
+        //    {
+        //        // Verificar si la fila es visible y NO es una fila de grupo
+        //        // Las filas de grupo son del tipo GridViewGroupRowInfo
+        //        if (row.IsVisible && !(row is GridViewGroupRowInfo))
+        //        {
+        //            colIndex = 1;
+        //            foreach (GridViewDataColumn column in radGridView.Columns)
+        //            {
+        //                if (column.IsVisible)
+        //                {
+        //                    var cellValue = row.Cells[column.Name].Value;
+        //                    worksheet.Cells[rowIndex, colIndex] = cellValue?.ToString();
+        //                    colIndex++;
+        //                }
+        //            }
+        //            rowIndex++;
+        //        }
+        //    }
+
+        //    // Si no se encontraron datos, mostrar mensaje
+        //    if (rowIndex == 2)
+        //    {
+        //        worksheet.Cells[2, 1] = "No hay datos visibles para exportar";
+        //    }
+
+        //    Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[Math.Max(rowIndex - 1, 2), colIndex - 1]];
+        //    usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+        //    worksheet.Columns.AutoFit();
+
+        //    if (filePath.EndsWith(".xlsx"))
+        //    {
+        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
+        //    }
+        //    else if (filePath.EndsWith(".xls"))
+        //    {
+        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
+        //    }
+
+        //    workbook.Close();
+        //    excelApp.Quit();
+
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        //}
+        private void ExportarRadGridViewFiltradoAExcel_ClosedXML(
+    RadGridView radGridView,
+    string filePath)
         {
-            Excel.Application excelApp = new Excel.Application();
-            excelApp.Visible = false;
-
-            Excel.Workbook workbook = excelApp.Workbooks.Add();
-            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
-
-            int colIndex = 1;
-
-            // Exportar encabezados solo para las columnas visibles
-            foreach (GridViewDataColumn column in radGridView.Columns)
+            using (var workbook = new XLWorkbook())
             {
-                if (column.IsVisible)
+                var worksheet = workbook.Worksheets.Add("Consolidado");
+
+                int colIndex = 1;
+
+                // Encabezados
+                foreach (GridViewDataColumn column in radGridView.Columns)
                 {
-                    worksheet.Cells[1, colIndex] = column.HeaderText;
-
-                    Excel.Range headerCell = worksheet.Cells[1, colIndex];
-                    headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
-                    headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
-                    headerCell.Font.Bold = true;
-                    headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-
-                    colIndex++;
-                }
-            }
-
-            int rowIndex = 2;
-
-            // Exportar datos de las filas visibles considerando filtros
-            // Usar ChildRows para obtener solo las filas visibles después de aplicar filtros
-            foreach (GridViewRowInfo row in radGridView.ChildRows)
-            {
-                // Verificar si la fila es visible y NO es una fila de grupo
-                // Las filas de grupo son del tipo GridViewGroupRowInfo
-                if (row.IsVisible && !(row is GridViewGroupRowInfo))
-                {
-                    colIndex = 1;
-                    foreach (GridViewDataColumn column in radGridView.Columns)
+                    if (column.IsVisible)
                     {
-                        if (column.IsVisible)
-                        {
-                            var cellValue = row.Cells[column.Name].Value;
-                            worksheet.Cells[rowIndex, colIndex] = cellValue?.ToString();
-                            colIndex++;
-                        }
+                        var cell = worksheet.Cell(1, colIndex);
+                        cell.Value = column.HeaderText;
+
+                        cell.Style.Fill.BackgroundColor = XLColor.Orange;
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Font.FontColor = XLColor.Black;
+                        cell.Style.Alignment.Horizontal =
+                            XLAlignmentHorizontalValues.Center;
+
+                        colIndex++;
                     }
-                    rowIndex++;
                 }
+
+                int rowIndex = 2;
+                bool hayDatos = false;
+
+                foreach (GridViewRowInfo row in radGridView.ChildRows)
+                {
+                    if (row.IsVisible && !(row is GridViewGroupRowInfo))
+                    {
+                        colIndex = 1;
+
+                        foreach (GridViewDataColumn column in radGridView.Columns)
+                        {
+                            if (column.IsVisible)
+                            {
+                                worksheet.Cell(rowIndex, colIndex).Value =
+                                    row.Cells[column.Name].Value?.ToString();
+
+                                colIndex++;
+                            }
+                        }
+
+                        rowIndex++;
+                        hayDatos = true;
+                    }
+                }
+
+                if (!hayDatos)
+                {
+                    worksheet.Cell(2, 1).Value =
+                        "No hay datos visibles para exportar";
+                }
+
+                var usedRange = worksheet.Range(
+                    1, 1,
+                    Math.Max(rowIndex - 1, 2),
+                    colIndex - 1
+                );
+
+                usedRange.Style.Border.OutsideBorder =
+                    XLBorderStyleValues.Thin;
+                usedRange.Style.Border.InsideBorder =
+                    XLBorderStyleValues.Thin;
+
+                worksheet.Columns().AdjustToContents();
+
+                workbook.SaveAs(filePath);
             }
-
-            // Si no se encontraron datos, mostrar mensaje
-            if (rowIndex == 2)
-            {
-                worksheet.Cells[2, 1] = "No hay datos visibles para exportar";
-            }
-
-            Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[Math.Max(rowIndex - 1, 2), colIndex - 1]];
-            usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-            worksheet.Columns.AutoFit();
-
-            if (filePath.EndsWith(".xlsx"))
-            {
-                workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
-            }
-            else if (filePath.EndsWith(".xls"))
-            {
-                workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
-            }
-
-            workbook.Close();
-            excelApp.Quit();
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         }
+
         private void btn_filtro_consolidado_Click(object sender, EventArgs e)
         {
             txt_filtro_report_consolidado.Clear();
@@ -10595,6 +10938,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             rgv_reporte_consolidado.EndUpdate(false);
         }
+       
         // Método auxiliar para resetear el estilo de todas las celdas
         private void ResetearEstiloCeldas(GridViewCustomFilteringEventArgs e)
         {
@@ -10836,42 +11180,50 @@ ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, null);
         }
-
         private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
         {
             LoadingScreen.ShowLoading();
             try
             {
-                // Mostrar el diálogo de guardar archivo en el hilo principal
                 var saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Filter = "Excel Files|*.xlsx",
                     Title = "Guardar archivo de Excel"
                 };
 
-                string filePath = null;
-
-                // Mostrar el diálogo de guardado en el hilo principal
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = saveFileDialog.FileName;
+                    string filePath = saveFileDialog.FileName;
 
-                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_concentrado, filePath);
+                        ExportarDataGridViewFiltradoAExcel_ClosedXML(
+                            dgv_reporte_concentrado,
+                            filePath
+                        );
                     });
 
-                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
-                // Ocultar la pantalla de cargando
                 LoadingScreen.HideLoading();
             }
         }
@@ -11192,42 +11544,51 @@ ORDER BY
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, null);
         }
-
+        //dgv_reporte_concentrado_otras
         private async void btn_export_excel_concentrado_otras_Click(object sender, EventArgs e)
         {
             LoadingScreen.ShowLoading();
             try
             {
-                // Mostrar el diálogo de guardar archivo en el hilo principal
                 var saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Filter = "Excel Files|*.xlsx",
                     Title = "Guardar archivo de Excel"
                 };
 
-                string filePath = null;
-
-                // Mostrar el diálogo de guardado en el hilo principal
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = saveFileDialog.FileName;
+                    string filePath = saveFileDialog.FileName;
 
-                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_concentrado_otras, filePath);
+                        ExportarDataGridViewFiltradoAExcel_ClosedXML(
+                            dgv_reporte_concentrado_otras,
+                            filePath
+                        );
                     });
 
-                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
-                // Ocultar la pantalla de cargando
                 LoadingScreen.HideLoading();
             }
         }
@@ -15846,42 +16207,51 @@ ORDER BY
             btn_clean_merma_S.Enabled = true;
             btn_export_excel_merma_S.Enabled = true;
         }
-
+        //dgv_reporte_merma_S
         private async void btn_export_excel_merma_T_Click(object sender, EventArgs e)
         {
             LoadingScreen.ShowLoading();
             try
             {
-                // Mostrar el diálogo de guardar archivo en el hilo principal
                 var saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx;*.xls",
+                    Filter = "Excel Files|*.xlsx",
                     Title = "Guardar archivo de Excel"
                 };
 
-                string filePath = null;
-
-                // Mostrar el diálogo de guardado en el hilo principal
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = saveFileDialog.FileName;
+                    string filePath = saveFileDialog.FileName;
 
-                    // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma_S, filePath);
+                        ExportarDataGridViewAExcel_ClosedXML(
+                            dgv_reporte_merma_S,
+                            filePath
+                        );
                     });
 
-                    MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
             finally
             {
-                // Ocultar la pantalla de cargando
                 LoadingScreen.HideLoading();
             }
         }
@@ -16338,6 +16708,7 @@ ORDER BY
             btn_export_excel_Tiempos.Enabled = true;
             btn_clean_Tiempos.Enabled = true;
             txt_filtro_report_Tiempos.Enabled = true;
+            tapcontrol.Enabled = true;
             btn_filtro_Tiempos.Enabled = true;
         }
         public void reporte_tiempos()
@@ -16396,6 +16767,139 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             {
                 btn_new_report_Tiempos.Enabled = true;
             }
+        }
+
+        private async void btn_export_excel_Tiempos_Click(object sender, EventArgs e)
+        {
+            LoadingScreen.ShowLoading();
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveFileDialog.FileName;
+
+                    await Task.Run(() =>
+                    {
+                        ExportarRadGridViewFiltradoAExcel_ClosedXML(
+                            rgv_reporte_Tiempos,
+                            filePath
+                        );
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            finally
+            {
+                LoadingScreen.HideLoading();
+            }
+        }
+
+        private void btn_clean_Tiempos_Click(object sender, EventArgs e)
+        {
+            // Limpiar el DataGridView
+            rgv_reporte_Tiempos.DataSource = null;
+            rgv_reporte_Tiempos.Rows.Clear();
+            rgv_reporte_Tiempos.Columns.Clear();
+            // Limpiar el filtro al cargar nuevos datos
+            txt_filtro_report_Tiempos.Clear();
+            // Deshabilitar botones hasta que se seleccione un reporte y área
+            btn_export_excel_Tiempos.Enabled = false;
+            btn_clean_Tiempos.Enabled = false;
+            txt_filtro_report_Tiempos.Enabled = false;
+            btn_filtro_Tiempos.Enabled = false;
+            btn_new_report_Tiempos.Enabled = false;
+            cb_area_reporte_Tiempos.SelectedIndex = -1;
+        }
+
+        private void btn_filtro_Tiempos_Click(object sender, EventArgs e)
+        {
+            txt_filtro_report_Tiempos.Clear();
+        }
+
+        private void txt_filtro_report_Tiempos_TextChanged(object sender, EventArgs e)
+        {
+            // Refrescar el grid para aplicar el filtro
+            if (rgv_reporte_Tiempos != null)
+            {
+                rgv_reporte_Tiempos.MasterTemplate.Refresh();
+            }
+        }
+
+        private void rgv_reporte_Tiempos_CustomFiltering(object sender, GridViewCustomFilteringEventArgs e)
+        {
+            string textoFiltro = txt_filtro_report_Tiempos.Text.Trim();
+
+            // Si no hay texto de filtro, mostrar todas las filas
+            if (string.IsNullOrEmpty(textoFiltro))
+            {
+                e.Visible = true;
+                ResetearEstiloCeldas(e);
+                return;
+            }
+
+            // Iniciar actualización para mejor rendimiento
+            rgv_reporte_Tiempos.BeginUpdate();
+
+            // Por defecto ocultar la fila
+            e.Visible = false;
+
+            // Buscar en todas las celdas de la fila
+            for (int i = 0; i < e.Row.Cells.Count; i++)
+            {
+                GridViewCellInfo celda = e.Row.Cells[i];
+
+                // Verificar si la celda tiene valor
+                if (celda.Value != null)
+                {
+                    string textoCelda = celda.Value.ToString();
+
+                    // Buscar coincidencia (case-insensitive)
+                    if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    {
+                        e.Visible = true; // Mostrar la fila si hay coincidencia
+
+                        // Resaltar la celda que coincide
+                        celda.Style.CustomizeFill = true;
+                        celda.Style.DrawFill = true;
+                        celda.Style.BackColor = Color.FromArgb(201, 252, 254); // Color azul claro
+                    }
+                    else
+                    {
+                        // Resetear estilo si no coincide
+                        celda.Style.Reset();
+                    }
+                }
+                else
+                {
+                    // Resetear estilo si la celda es nula
+                    celda.Style.Reset();
+                }
+            }
+
+            rgv_reporte_Tiempos.EndUpdate(false);
         }
     }
 }
