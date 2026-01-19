@@ -10232,116 +10232,122 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 querySimple = @"
                 WITH turnos_trabajados AS (
-                    SELECT 
-                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                        EXTRACT(YEAR FROM ""Fecha"") AS año,
-                        COUNT(*) AS total_turnos_trabajados
-                    FROM public.""Ficha""
-                    WHERE ""Area"" = 'Tunel/Sumergidor'
-                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                ),
-                merma_semanal AS (
-                    SELECT 
-                        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-                        EXTRACT(YEAR FROM ""Fecha"") AS año,
-                        SUM(""Kg_merma"") AS merma_total_semanal
-                    FROM public.""Limpieza_tunel""
-                    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                ),
-                tiempos_muertos AS (
-                    SELECT 
-                        f.""OP"",
-                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
-                    FROM public.""Ficha"" f
-                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                    WHERE f.""Area"" = 'Tunel/Sumergidor'
-                    GROUP BY f.""OP""
-                )
-                SELECT
-                    f.""ID_Ficha"",
-                    f.""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""Lote"",
-                    f.""OP"",
-                    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-                    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-                    f.""Merma_canica"" AS ""Canica(Kg)"",
-                    f.""Merma_podrido"" AS ""Merma Podrido(Kg)"",
-                    f.""Merma_tina"" AS ""Merma Tina(Kg)"",
-                    f.""Merma_piso"" AS ""Merma Piso(Kg)"",
-                    f.""Merma_canaletas"" AS ""Merma Canaletas(Kg)"",
-                    f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
-                    f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
-                    f.""Personal_Operativo"" as ""Personal Operativo"",
-                    CASE 
-                        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-                        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-                        ELSE 0 
-                    END AS ""Limpieza Túnel"",
-                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-                FROM public.""Ficha"" f
-                LEFT JOIN turnos_trabajados tt 
-                    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-                LEFT JOIN merma_semanal ms 
-                    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                LEFT JOIN tiempos_muertos tm 
-                    ON f.""OP"" = tm.""OP""
-                WHERE f.""Area"" = 'Tunel/Sumergidor'
-                ORDER BY f.""OP"" ASC;";
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        COUNT(*) AS total_turnos_trabajados
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Tunel/Sumergidor'
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+),
+merma_semanal AS (
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        SUM(""Kg_merma"") AS merma_total_semanal
+    FROM public.""Limpieza_tunel""
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+),
+tiempos_muertos AS (
+    SELECT 
+        f.""OP"",
+        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+    WHERE f.""Area"" = 'Tunel/Sumergidor'
+    GROUP BY f.""OP""
+)
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    u.""Usuario"" AS ""Supervisor"",
+    jefe.""Usuario"" AS ""Jefe de Turno"",  -- Nueva columna
+    f.""Lote"",
+    f.""OP"",
+    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
+    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+    f.""Merma_canica"" AS ""Canica(Kg)"",
+    f.""Merma_podrido"" AS ""Merma Podrido(Kg)"",
+    f.""Merma_tina"" AS ""Merma Tina(Kg)"",
+    f.""Merma_piso"" AS ""Merma Piso(Kg)"",
+    f.""Merma_canaletas"" AS ""Merma Canaletas(Kg)"",
+    f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
+    f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
+    f.""Personal_Operativo"" as ""Personal Operativo"",
+    CASE 
+        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
+        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
+        ELSE 0 
+    END AS ""Limpieza Túnel"",
+    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+FROM public.""Ficha"" f
+LEFT JOIN turnos_trabajados tt 
+    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
+    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
+LEFT JOIN merma_semanal ms 
+    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
+    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
+LEFT JOIN public.""Usuarios"" u 
+    ON f.""ID_user"" = u.""ID_User""
+LEFT JOIN public.""Usuarios"" jefe  -- JOIN para obtener el nombre del jefe
+    ON f.""ID_Jefe"" = jefe.""ID_User""
+LEFT JOIN tiempos_muertos tm 
+    ON f.""OP"" = tm.""OP""
+WHERE f.""Area"" = 'Tunel/Sumergidor'
+ORDER BY f.""OP"" ASC;";
             }
             if (var1 == "Despegue")
             {
                 querySimple = @"
                 WITH tiempos_muertos AS (
-                    SELECT 
-                        f.""OP"",
-                        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
-                        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
-                    FROM public.""Ficha"" f
-                    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-                        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-                        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                    WHERE f.""Area"" = 'Despegue'
-                    GROUP BY f.""OP""
-                )
-                SELECT
-                    f.""ID_Ficha"",
-                    f.""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
-                    f.""Lote"",
-                    f.""OP"",
-                    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-                    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-                    f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
-                    f.""Merma_kg"" AS ""Merma(Kg)"",
-                    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-                    f.""Kg_resecar"" AS ""Kg para Resecar"",
-                    f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
-                    f.""Personal_Operativo"" as ""Personal Operativo"",
-                    f.""FTT"",
-                    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
-                    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
-                FROM public.""Ficha"" f
-                LEFT JOIN public.""Usuarios"" u 
-                    ON f.""ID_user"" = u.""ID_User""
-                LEFT JOIN tiempos_muertos tm 
-                    ON f.""OP"" = tm.""OP""
-                WHERE f.""Area"" = @Area
-                ORDER BY f.""OP"" ASC;";
+    SELECT 
+        f.""OP"",
+        COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Operativo"",
+        COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60,2), 0) AS ""Tiempo_Muerto_Mecanico""
+    FROM public.""Ficha"" f
+    LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
+        ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+    LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
+        ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+    WHERE f.""Area"" = 'Despegue'
+    GROUP BY f.""OP""
+)
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    u.""Usuario"" AS ""Supervisor"",
+    jefe.""Usuario"" AS ""Jefe de Turno"",  -- Nueva columna
+    f.""Lote"",
+    f.""OP"",
+    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
+    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
+    f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
+    f.""Merma_kg"" AS ""Merma(Kg)"",
+    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
+    f.""Kg_resecar"" AS ""Kg para Resecar"",
+    f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
+    f.""Personal_Operativo"" as ""Personal Operativo"",
+    f.""FTT"",
+    COALESCE(tm.""Tiempo_Muerto_Operativo"", 0) AS ""Tiempo Muerto Operativo"",
+    COALESCE(tm.""Tiempo_Muerto_Mecanico"", 0) AS ""Tiempo Muerto Mecánico""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u 
+    ON f.""ID_user"" = u.""ID_User""
+LEFT JOIN public.""Usuarios"" jefe  -- JOIN para obtener el nombre del jefe
+    ON f.""ID_Jefe"" = jefe.""ID_User""
+LEFT JOIN tiempos_muertos tm 
+    ON f.""OP"" = tm.""OP""
+WHERE f.""Area"" = @Area
+ORDER BY f.""OP"" ASC;";
             }
 
             if (var1 == "Evaporado")
@@ -10365,7 +10371,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
+                    u.""Usuario"" AS ""Supervisor"",
+                    jefe.""Usuario"" AS ""Jefe de Turno"",
                     f.""OP"",
                     f.""Kg_meta"" as ""Meta(Kg)"",
                     f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
@@ -10382,6 +10389,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ON f.""ID_user"" = u.""ID_User""
                 LEFT JOIN tiempos_muertos tm 
                     ON f.""OP"" = tm.""OP""
+                LEFT JOIN public.""Usuarios"" jefe
+                    ON f.""ID_Jefe"" = jefe.""ID_User""
                 WHERE f.""Area"" = @Area
                 ORDER BY f.""OP"" ASC;";
             }
@@ -10407,7 +10416,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
+                    u.""Usuario"" AS ""Supervisor"",
+                    jefe.""Usuario"" AS ""Jefe de Turno"",
                     f.""OP"",
                     f.""Kg_meta"" as ""Meta(Kg)"",
                     f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
@@ -10423,6 +10433,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ON f.""ID_user"" = u.""ID_User""
                 LEFT JOIN tiempos_muertos tm 
                     ON f.""OP"" = tm.""OP""
+                LEFT JOIN public.""Usuarios"" jefe
+                    ON f.""ID_Jefe"" = jefe.""ID_User""
                 WHERE f.""Area"" = @Area
                 ORDER BY f.""OP"" ASC;";
             }
@@ -10448,7 +10460,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
+                    u.""Usuario"" AS ""Supervisor"",
+                    jefe.""Usuario"" AS ""Jefe de Turno"",
                     f.""OP"",
                     f.""Kg_meta"" as ""Meta(Kg)"",
                     f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
@@ -10467,6 +10480,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ON f.""ID_user"" = u.""ID_User""
                 LEFT JOIN tiempos_muertos tm 
                     ON f.""OP"" = tm.""OP""
+                LEFT JOIN public.""Usuarios"" jefe
+                    ON f.""ID_Jefe"" = jefe.""ID_User""
                 WHERE f.""Area"" = @Area
                 ORDER BY f.""OP"" ASC;";
             }
@@ -10509,7 +10524,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     f.""Fecha"",
                     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
                     f.""Turno"",
-                    u.""Usuario"" AS ""Empleado"",
+                    u.""Usuario"" AS ""Supervisor"",
+                    jefe.""Usuario"" AS ""Jefe de Turno"",
                     f.""OP"",
                     f.""Kg_meta"" as ""Meta(Kg)"",
                     f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
@@ -10538,6 +10554,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ON f.""ID_user"" = u.""ID_User""
                 LEFT JOIN tiempos_muertos tm 
                     ON f.""OP"" = tm.""OP""
+                LEFT JOIN public.""Usuarios"" jefe
+                    ON f.""ID_Jefe"" = jefe.""ID_User""
                 WHERE f.""Area"" = 'Polvos'
                 ORDER BY f.""OP"" ASC;";
             }
@@ -10555,7 +10573,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             rgv_reporte_consolidado.Columns["Fecha"].BestFit();
             rgv_reporte_consolidado.Columns["No. Semana"].BestFit();
             rgv_reporte_consolidado.Columns["Turno"].BestFit();
-            rgv_reporte_consolidado.Columns["Empleado"].BestFit();
+            rgv_reporte_consolidado.Columns["Supervisor"].BestFit();
+            rgv_reporte_consolidado.Columns["Jefe de Turno"].BestFit();
             rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo"].BestFit();
             rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico"].BestFit();
             rgv_reporte_consolidado.Columns["OP"].BestFit();
@@ -10565,7 +10584,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             rgv_reporte_consolidado.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
-            rgv_reporte_consolidado.Columns["Empleado"].TextAlignment = ContentAlignment.MiddleCenter;
+            rgv_reporte_consolidado.Columns["Supervisor"].TextAlignment = ContentAlignment.MiddleCenter;
+            rgv_reporte_consolidado.Columns["Jefe de Turno"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Personal Operativo"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico"].TextAlignment = ContentAlignment.MiddleCenter;
@@ -11840,6 +11860,12 @@ ORDER BY
                 case "tabPage32":
                     GraficarCumplimientoTiempoEfectivoOtrasAreas(semanasSeleccionadas);
                     break;
+                case "tabPage34":
+                    GraficarCumplimientoDespeguePorJefe(semanasSeleccionadas);
+                    break;
+                case "tabPage35":
+                    GraficarCumplimientoOtrasAreasPorJefe(semanasSeleccionadas);
+                    break;
             }
         }
         private void GraficarCumplimientoOtrasAreasPorSupervisor(List<string> semanasSeleccionadas)
@@ -12019,6 +12045,183 @@ ORDER BY
                     MessageBoxIcon.Error);
             }
         }
+        private void GraficarCumplimientoOtrasAreasPorJefe(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento Otras Áreas por Supervisor
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string añoSeleccionado = CB_Anio_grafica.Text;
+
+                string query = @"
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+    COALESCE(u.""Usuario"", 'Sin Jefe de Turno') as ""Jefe de Turno"",
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
+    
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_Jefe"" = u.""ID_User""
+WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha""),
+    u.""Usuario""
+ORDER BY 
+    año,
+    No_Semana,
+    ""Jefe de Turno"";";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento por Jefe de turno para otras áreas en las semanas seleccionadas.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento Otras Áreas por Supervisor
+                ConfigurarChartCumplimientoOtrasAreasPorJefe();
+
+                // Limpiar series existentes
+                ChartCumplimientoOtrasAreasPorJefe.Series.Clear();
+
+                // Diccionario para organizar datos por supervisor
+                Dictionary<string, Dictionary<string, double>> datosPorSupervisor =
+                    new Dictionary<string, Dictionary<string, double>>();
+
+                // Diccionario para mantener el orden de semanas
+                SortedSet<string> semanasOrdenadas = new SortedSet<string>();
+
+                // Lista de supervisores en orden
+                List<string> listaSupervisores = new List<string>();
+
+                // Organizar datos por supervisor y semana
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    string supervisor = row["Jefe de Turno"].ToString();
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
+
+                    // Validar y ajustar valores
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar semana al conjunto ordenado
+                    semanasOrdenadas.Add(semana);
+
+                    // Agregar supervisor a la lista si no existe
+                    if (!listaSupervisores.Contains(supervisor))
+                    {
+                        listaSupervisores.Add(supervisor);
+                    }
+
+                    // Inicializar diccionario para el supervisor si no existe
+                    if (!datosPorSupervisor.ContainsKey(supervisor))
+                    {
+                        datosPorSupervisor[supervisor] = new Dictionary<string, double>();
+                    }
+
+                    // Agregar dato del supervisor para la semana
+                    datosPorSupervisor[supervisor][semana] = cumplimiento;
+                }
+
+                // Si hay muchos supervisores, limitar la visualización
+                if (listaSupervisores.Count > 15)
+                {
+                    var opcion = MetroFramework.MetroMessageBox.Show(this,
+                        $"Se detectaron {listaSupervisores.Count} Jefes de Turno en otras áreas.\n\n" +
+                        "¿Desea mostrar solo los 15 principales? (Recomendado para mejor visualización)\n\n" +
+                        "Sí: Mostrar solo 15\nNo: Mostrar todos (puede afectar la legibilidad)",
+                        "Muchos Jefes de Turno detectados",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (opcion == DialogResult.Yes)
+                    {
+                        // Calcular promedio por supervisor y tomar los 15 mejores
+                        var supervisoresOrdenados = listaSupervisores
+                            .Select(s => new
+                            {
+                                Supervisor = s,
+                                Promedio = datosPorSupervisor.ContainsKey(s) &&
+                                          datosPorSupervisor[s].Values.Any() ?
+                                          datosPorSupervisor[s].Values.Average() : 0
+                            })
+                            .OrderByDescending(x => x.Promedio)
+                            .Take(15)
+                            .Select(x => x.Supervisor)
+                            .ToList();
+
+                        listaSupervisores = supervisoresOrdenados;
+                    }
+                }
+
+                // Generar paleta dinámica de colores
+                Color[] coloresSupervisores = GenerarPaletaColoresOtrasAreas(listaSupervisores.Count);
+
+                // Crear series para cada supervisor
+                for (int i = 0; i < listaSupervisores.Count; i++)
+                {
+                    string supervisor = listaSupervisores[i];
+                    var datosSupervisor = datosPorSupervisor.ContainsKey(supervisor)
+                        ? datosPorSupervisor[supervisor]
+                        : new Dictionary<string, double>();
+
+                    // Crear serie para el supervisor
+                    Series serieSupervisor = new Series(supervisor);
+                    serieSupervisor.ChartType = SeriesChartType.Line;
+
+                    // Asignar color de la paleta
+                    serieSupervisor.Color = coloresSupervisores[i % coloresSupervisores.Length];
+
+                    // Configuración de la serie
+                    ConfigurarSerieSupervisorOtrasAreas(serieSupervisor);
+
+                    // Agregar datos para todas las semanas
+                    foreach (string semana in semanasOrdenadas)
+                    {
+                        double valor = datosSupervisor.ContainsKey(semana) ? datosSupervisor[semana] : 0;
+
+                        int pointIndex = serieSupervisor.Points.AddXY(semana, valor);
+
+                        // Configurar etiqueta solo si hay valor > 0
+                        ConfigurarPuntoGraficaOtrasAreas(serieSupervisor.Points[pointIndex], valor);
+                    }
+
+                    // Agregar serie al chart
+                    ChartCumplimientoOtrasAreasPorJefe.Series.Add(serieSupervisor);
+                }
+
+                // Ajustar leyenda según cantidad de Jefes de Turno
+                AjustarLeyendaOtrasAreasParaMultiplesJefe(listaSupervisores.Count);
+
+                // Actualizar el chart
+                ChartCumplimientoOtrasAreasPorJefe.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento por Jefe de Turno de otras áreas: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
         // Método para generar paleta dinámica de colores para Otras Áreas
         private Color[] GenerarPaletaColoresOtrasAreas(int cantidad)
@@ -12112,6 +12315,35 @@ ORDER BY
             if (ChartCumplimientoOtrasAreasPorSupervisor.Legends.Count == 0) return;
 
             var legend = ChartCumplimientoOtrasAreasPorSupervisor.Legends[0];
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 6;
+            legend.TextWrapThreshold = 5;
+
+            if (cantidadSupervisores > 20)
+            {
+                legend.Font = new Font("Segoe UI", 6, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 7, FontStyle.Bold);
+                legend.Position.Height = 75;
+            }
+            else if (cantidadSupervisores > 10)
+            {
+                legend.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                legend.Position.Height = 70;
+            }
+            else
+            {
+                legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+                legend.Position.Height = 65;
+            }
+        }
+        private void AjustarLeyendaOtrasAreasParaMultiplesJefe(int cantidadSupervisores)
+        {
+            if (ChartCumplimientoOtrasAreasPorJefe.Legends.Count == 0) return;
+
+            var legend = ChartCumplimientoOtrasAreasPorJefe.Legends[0];
 
             // Propiedades de auto-ajuste
             legend.AutoFitMinFontSize = 6;
@@ -12261,6 +12493,131 @@ ORDER BY
             ChartCumplimientoOtrasAreasPorSupervisor.BorderlineWidth = 2;
             ChartCumplimientoOtrasAreasPorSupervisor.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
             ChartCumplimientoOtrasAreasPorSupervisor.TextAntiAliasingQuality =
+                System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
+        }
+        private void ConfigurarChartCumplimientoOtrasAreasPorJefe()
+        {
+            // Limpiar el chart
+            ChartCumplimientoOtrasAreasPorJefe.Series.Clear();
+            ChartCumplimientoOtrasAreasPorJefe.ChartAreas.Clear();
+            ChartCumplimientoOtrasAreasPorJefe.Titles.Clear();
+            ChartCumplimientoOtrasAreasPorJefe.Legends.Clear();
+
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoOtrasAreasJefeArea");
+
+            // Fondo moderno
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+
+            // Configurar eje X
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisX.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.LineColor = Color.FromArgb(150, 150, 150);
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.IsMarginVisible = true;
+
+            // Configurar eje Y
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisY.TitleForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(230, 230, 230);
+            chartArea.AxisY.MajorGrid.Enabled = true;
+            chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
+
+            // Configurar eje Y para porcentajes
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea horizontal en 90% para referencia (objetivo para otras áreas)
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine =
+            //    new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(235, 255, 245); // Fondo verde claro
+            //stripLine.BorderColor = Color.FromArgb(46, 204, 113); // Borde verde
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 90;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 90%";
+            //stripLine.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(46, 204, 113);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Posicionamiento del área
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 75; // Más espacio para datos
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoOtrasAreasPorJefe.ChartAreas.Add(chartArea);
+
+            // Configurar leyenda
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoOtrasAreasJefe";
+            legend.Title = "JEFES DE TURNO - OTRAS ÁREAS";
+            legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+            legend.TitleForeColor = Color.FromArgb(52, 73, 94);
+            legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            legend.ForeColor = Color.FromArgb(52, 73, 94);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+
+            // Posicionamiento de leyenda
+            legend.Position.Auto = false;
+            legend.Position.X = 80;
+            legend.Position.Y = 15;
+            legend.Position.Width = 15;
+            legend.Position.Height = 70;
+
+            // Propiedades de auto-ajuste
+            legend.AutoFitMinFontSize = 6;
+            legend.IsTextAutoFit = true;
+            legend.TextWrapThreshold = 4;
+
+            ChartCumplimientoOtrasAreasPorJefe.Legends.Add(legend);
+
+            // Configurar título principal
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO (OTRAS ÁREAS) POR JEFE DE TURNO";
+            mainTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
+            mainTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            mainTitle.ShadowColor = Color.FromArgb(150, 150, 150);
+            mainTitle.ShadowOffset = 2;
+            ChartCumplimientoOtrasAreasPorJefe.Titles.Add(mainTitle);
+
+            // Configurar subtítulo
+            System.Windows.Forms.DataVisualization.Charting.Title subTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            subTitle.Text = "Comparativo semanal de cumplimiento por Jefe de Turno en áreas de producción (excluyendo Deshidratado)";
+            subTitle.Font = new Font("Segoe UI", 10, FontStyle.Italic);
+            subTitle.ForeColor = Color.FromArgb(127, 140, 141);
+            subTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoOtrasAreasPorJefe.Titles.Add(subTitle);
+
+            // Configuración general del chart
+            ChartCumplimientoOtrasAreasPorJefe.BackColor = Color.White;
+            ChartCumplimientoOtrasAreasPorJefe.BorderlineColor = Color.FromArgb(200, 200, 200);
+            ChartCumplimientoOtrasAreasPorJefe.BorderlineWidth = 2;
+            ChartCumplimientoOtrasAreasPorJefe.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+            ChartCumplimientoOtrasAreasPorJefe.TextAntiAliasingQuality =
                 System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
         }
         private void GraficarCumplimientoDespegue(List<string> semanasSeleccionadas)
@@ -14461,6 +14818,182 @@ ORDER BY
                     MessageBoxIcon.Error);
             }
         }
+        private void GraficarCumplimientoDespeguePorJefe(List<string> semanasSeleccionadas)
+        {
+            try
+            {
+                // Construir la consulta SQL para % Cumplimiento Despegue por Supervisor
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string añoSeleccionado = CB_Anio_grafica.Text;
+
+                string query = @"
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+    COALESCE(u.""Usuario"", 'Sin Jefe de Turno') as ""Jefe de Turno"",
+    
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
+    
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_Jefe"" = u.""ID_User""
+WHERE f.""Area"" = 'Despegue'
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha""),
+    u.""Usuario""
+ORDER BY 
+    año,
+    No_Semana,
+    ""Jefe de Turno"";";
+
+                // Ejecutar la consulta
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se encontraron datos de cumplimiento por Jefes de Turno para el área Despegue en las semanas seleccionadas.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Configurar el chart de cumplimiento Despegue por Supervisor
+                ConfigurarChartCumplimientoDespeguePorJefe();
+
+                // Limpiar series existentes
+                ChartCumplimientoDespeguePorJefe.Series.Clear();
+
+                // Diccionario para organizar datos por supervisor
+                Dictionary<string, Dictionary<string, double>> datosPorSupervisor =
+                    new Dictionary<string, Dictionary<string, double>>();
+
+                // Diccionario para mantener el orden de semanas
+                SortedSet<string> semanasOrdenadas = new SortedSet<string>();
+
+                // Lista de supervisores en orden
+                List<string> listaSupervisores = new List<string>();
+
+                // Organizar datos por supervisor y semana
+                foreach (DataRow row in datos.Rows)
+                {
+                    string semana = $"Sem {row["No_Semana"]}";
+                    string supervisor = row["Jefe de Turno"].ToString();
+                    double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
+
+                    // Validar y ajustar valores
+                    if (cumplimiento < 0) cumplimiento = 0;
+                    if (cumplimiento > 100) cumplimiento = 100;
+
+                    // Agregar semana al conjunto ordenado
+                    semanasOrdenadas.Add(semana);
+
+                    // Agregar supervisor a la lista si no existe
+                    if (!listaSupervisores.Contains(supervisor))
+                    {
+                        listaSupervisores.Add(supervisor);
+                    }
+
+                    // Inicializar diccionario para el supervisor si no existe
+                    if (!datosPorSupervisor.ContainsKey(supervisor))
+                    {
+                        datosPorSupervisor[supervisor] = new Dictionary<string, double>();
+                    }
+
+                    // Agregar dato del supervisor para la semana
+                    datosPorSupervisor[supervisor][semana] = cumplimiento;
+                }
+
+                // Si hay muchos supervisores, limitar la visualización
+                if (listaSupervisores.Count > 15)
+                {
+                    var opcion = MetroFramework.MetroMessageBox.Show(this,
+                        $"Se detectaron {listaSupervisores.Count} Jefes de Turno.\n\n" +
+                        "¿Desea mostrar solo los 15 principales? (Recomendado para mejor visualización)\n\n" +
+                        "Sí: Mostrar solo 15\nNo: Mostrar todos (puede afectar la legibilidad)",
+                        "Muchos Jefes de Turno detectados",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (opcion == DialogResult.Yes)
+                    {
+                        // Calcular promedio por supervisor y tomar los 15 mejores
+                        var supervisoresOrdenados = listaSupervisores
+                            .Select(s => new
+                            {
+                                Supervisor = s,
+                                Promedio = datosPorSupervisor[s].Values.Any() ?
+                                          datosPorSupervisor[s].Values.Average() : 0
+                            })
+                            .OrderByDescending(x => x.Promedio)
+                            .Take(15)
+                            .Select(x => x.Supervisor)
+                            .ToList();
+
+                        listaSupervisores = supervisoresOrdenados;
+                    }
+                }
+
+                // Generar paleta dinámica de colores
+                Color[] coloresSupervisores = GenerarPaletaColores(listaSupervisores.Count);
+
+                // Crear series para cada supervisor
+                for (int i = 0; i < listaSupervisores.Count; i++)
+                {
+                    string supervisor = listaSupervisores[i];
+                    var datosSupervisor = datosPorSupervisor.ContainsKey(supervisor)
+                        ? datosPorSupervisor[supervisor]
+                        : new Dictionary<string, double>();
+
+                    // Crear serie para el supervisor
+                    Series serieSupervisor = new Series(supervisor);
+                    serieSupervisor.ChartType = SeriesChartType.Line;
+
+                    // Asignar color de la paleta
+                    serieSupervisor.Color = coloresSupervisores[i % coloresSupervisores.Length];
+
+                    // Configuración de la serie
+                    ConfigurarSerieSupervisor(serieSupervisor);
+
+                    // Agregar datos para todas las semanas
+                    foreach (string semana in semanasOrdenadas)
+                    {
+                        double valor = datosSupervisor.ContainsKey(semana) ? datosSupervisor[semana] : 0;
+
+                        int pointIndex = serieSupervisor.Points.AddXY(semana, valor);
+
+                        // Configurar etiqueta solo si hay valor > 0
+                        ConfigurarPuntoGrafica(serieSupervisor.Points[pointIndex], valor);
+                    }
+
+                    // Agregar serie al chart
+                    ChartCumplimientoDespeguePorJefe.Series.Add(serieSupervisor);
+                }
+
+                // Ajustar leyenda según cantidad de supervisores
+                AjustarLeyendaParaMultiplesJefes(listaSupervisores.Count);
+
+                // Actualizar el chart
+                ChartCumplimientoDespeguePorJefe.Invalidate();
+
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al graficar cumplimiento por Jefe de Turno del área Despegue: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
         // Método para generar paleta dinámica de colores (corregido)
         private Color[] GenerarPaletaColores(int cantidad)
@@ -14613,8 +15146,135 @@ ORDER BY
                 legend.Position.Height = 65;
             }
         }
+        private void AjustarLeyendaParaMultiplesJefes(int cantidadSupervisores)
+        {
+            if (ChartCumplimientoDespeguePorJefe.Legends.Count == 0) return;
 
-        // Método de configuración del chart (corregido)
+            var legend = ChartCumplimientoDespeguePorJefe.Legends[0];
+
+            // Limpiar propiedades problemáticas
+            legend.AutoFitMinFontSize = 6; // Esta propiedad SÍ existe
+            legend.TextWrapThreshold = 5; // Umbral para envolver texto
+
+            if (cantidadSupervisores > 20)
+            {
+                // Para muchos supervisores
+                legend.Font = new Font("Segoe UI", 6, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 7, FontStyle.Bold);
+                legend.Position.Height = 75; // Más alta para más elementos
+            }
+            else if (cantidadSupervisores > 10)
+            {
+                // Para cantidad moderada
+                legend.Font = new Font("Segoe UI", 7, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                legend.Position.Height = 70;
+            }
+            else
+            {
+                // Para pocos supervisores
+                legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+                legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+                legend.Position.Height = 65;
+            }
+        }
+
+        private void ConfigurarChartCumplimientoDespeguePorJefe()
+        {
+            // Limpiar el chart
+            ChartCumplimientoDespeguePorJefe.Series.Clear();
+            ChartCumplimientoDespeguePorJefe.ChartAreas.Clear();
+            ChartCumplimientoDespeguePorJefe.Titles.Clear();
+            ChartCumplimientoDespeguePorJefe.Legends.Clear();
+
+            // Crear área de chart
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea =
+                new System.Windows.Forms.DataVisualization.Charting.ChartArea("CumplimientoDespegueJefeArea");
+
+            // Configuración básica del área (igual que antes)
+            chartArea.BackColor = Color.FromArgb(255, 255, 255);
+            chartArea.BackSecondaryColor = Color.FromArgb(248, 250, 252);
+            chartArea.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+
+            // Eje X
+            chartArea.AxisX.Title = "SEMANAS";
+            chartArea.AxisX.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisX.Interval = 1;
+
+            // Eje Y
+            chartArea.AxisY.Title = "% CUMPLIMIENTO";
+            chartArea.AxisY.TitleFont = new Font("Segoe UI", 11, FontStyle.Bold);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            chartArea.AxisY.LabelStyle.Format = "0'%'";
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = 100;
+            chartArea.AxisY.Interval = 20;
+
+            // Línea de referencia en 95%
+            //System.Windows.Forms.DataVisualization.Charting.StripLine stripLine =
+            //    new System.Windows.Forms.DataVisualization.Charting.StripLine();
+            //stripLine.BackColor = Color.FromArgb(245, 235, 255);
+            //stripLine.BorderColor = Color.FromArgb(155, 89, 182);
+            //stripLine.BorderWidth = 1;
+            //stripLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            //stripLine.IntervalOffset = 95;
+            //stripLine.StripWidth = 0.5;
+            //stripLine.Text = "Objetivo 95%";
+            //stripLine.Font = new Font("Segoe UI", 8, FontStyle.Italic);
+            //stripLine.ForeColor = Color.FromArgb(155, 89, 182);
+            //chartArea.AxisY.StripLines.Add(stripLine);
+
+            // Posicionamiento del área
+            chartArea.Position.Auto = false;
+            chartArea.Position.X = 5;
+            chartArea.Position.Y = 15;
+            chartArea.Position.Width = 75; // Más espacio para leyenda
+            chartArea.Position.Height = 70;
+
+            // Agregar área al chart
+            ChartCumplimientoDespeguePorJefe.ChartAreas.Add(chartArea);
+
+            // Configurar leyenda (simplificada)
+            System.Windows.Forms.DataVisualization.Charting.Legend legend =
+                new System.Windows.Forms.DataVisualization.Charting.Legend();
+            legend.Name = "LeyendaCumplimientoDespegueJefe";
+            legend.Title = "JEFE DE TURNO";
+            legend.TitleFont = new Font("Segoe UI", 9, FontStyle.Bold);
+            legend.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            legend.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+            legend.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
+            legend.BackColor = Color.FromArgb(248, 249, 250);
+            legend.BorderColor = Color.FromArgb(200, 200, 200);
+            legend.BorderWidth = 1;
+
+            // Posicionamiento de leyenda
+            legend.Position.Auto = false;
+            legend.Position.X = 80; // Al lado derecho del área
+            legend.Position.Y = 15;
+            legend.Position.Width = 15;
+            legend.Position.Height = 70;
+
+            // Propiedades que SÍ existen
+            legend.AutoFitMinFontSize = 6;
+            legend.IsTextAutoFit = true;
+            legend.TextWrapThreshold = 4;
+
+            ChartCumplimientoDespeguePorJefe.Legends.Add(legend);
+
+            // Títulos
+            System.Windows.Forms.DataVisualization.Charting.Title mainTitle =
+                new System.Windows.Forms.DataVisualization.Charting.Title();
+            mainTitle.Text = "% CUMPLIMIENTO - DESPEGUE POR JEFE DE TURNO";
+            mainTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
+            mainTitle.Alignment = ContentAlignment.TopCenter;
+            ChartCumplimientoDespeguePorJefe.Titles.Add(mainTitle);
+
+            // Configuración general
+            ChartCumplimientoDespeguePorJefe.BackColor = Color.White;
+            ChartCumplimientoDespeguePorJefe.AntiAliasing = System.Windows.Forms.DataVisualization.Charting.AntiAliasingStyles.All;
+        }
         private void ConfigurarChartCumplimientoDespeguePorSupervisor()
         {
             // Limpiar el chart
@@ -16719,6 +17379,44 @@ ORDER BY
             rgv_reporte_Tiempos.Rows.Clear();
             rgv_reporte_Tiempos.Columns.Clear();
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            if (var1 == "Todos")
+            {
+                // Consulta para TODAS las áreas
+                querySimple = @"SELECT 
+    f.""OP"" AS ""OP"",
+    f.""Fecha"" AS ""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    'Operativo' AS ""Tipo de Tiempo Muerto"",
+    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
+    tmo.""Motivos"" AS ""Motivos"",
+    f.""Area"" AS ""Area""
+FROM ""Ficha"" f
+LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+WHERE tmo.""Min_Detenidos"" IS NOT NULL
+
+UNION ALL
+
+SELECT 
+    f.""OP"" AS ""OP"",
+    f.""Fecha"" AS ""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    'Mecánico' AS ""Tipo de Tiempo Muerto"",
+    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
+    tmm.""Motivos"" AS ""Motivos"",
+    f.""Area"" AS ""Area""
+FROM ""Ficha"" f
+LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+WHERE tmm.""Min_Detenidos"" IS NOT NULL
+
+ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[0]; // Sin parámetros
+                dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+            }
+            else
+            {
+                // Consulta original para un área específica
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
@@ -16749,17 +17447,66 @@ WHERE (f.""Area"" = @Area)
 
 ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
-            NpgsqlParameter[] parameters = new NpgsqlParameter[]
-                    {
-                        new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
-                    };
-            // Cargar los datos de la tabla Usuarios en el DataGridView
-            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
+                };
+                dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+            }
+
             // Formato solo fecha
             rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
             rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
-
         }
+        //        public void reporte_tiempos()
+        //        {
+        //            string var1 = cb_area_reporte_Tiempos.Text;
+        //            string querySimple = string.Empty;
+        //            rgv_reporte_Tiempos.DataSource = null;
+        //            rgv_reporte_Tiempos.Rows.Clear();
+        //            rgv_reporte_Tiempos.Columns.Clear();
+        //            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+        //                querySimple = @"SELECT 
+        //    f.""OP"" AS ""OP"",
+        //    f.""Fecha"" AS ""Fecha"",
+        //    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        //    'Operativo' AS ""Tipo de Tiempo Muerto"",
+        //    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
+        //    tmo.""Motivos"" AS ""Motivos"",
+        //    f.""Area"" AS ""Area""
+        //FROM ""Ficha"" f
+        //LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        //WHERE (f.""Area"" = @Area)
+        //   AND tmo.""Min_Detenidos"" IS NOT NULL
+
+        //UNION ALL
+
+        //SELECT 
+        //    f.""OP"" AS ""OP"",
+        //    f.""Fecha"" AS ""Fecha"",
+        //    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        //    'Mecánico' AS ""Tipo de Tiempo Muerto"",
+        //    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
+        //    tmm.""Motivos"" AS ""Motivos"",
+        //    f.""Area"" AS ""Area""
+        //FROM ""Ficha"" f
+        //LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        //WHERE (f.""Area"" = @Area)
+        //   AND tmm.""Min_Detenidos"" IS NOT NULL
+
+        //ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
+
+        //            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //                    {
+        //                        new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
+        //                    };
+        //            // Cargar los datos de la tabla Usuarios en el DataGridView
+        //            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+        //            // Formato solo fecha
+        //            rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+        //            rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
+
+        //        }
 
         private void cb_area_reporte_Tiempos_SelectedIndexChanged(object sender, EventArgs e)
         {
