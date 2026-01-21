@@ -348,7 +348,7 @@ namespace Tablero
                 ActualizarAnioReportes();
                 carga_Jefes();
             }
-            if (nivel_user == "Supervisor")
+            if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
             {
                 // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
@@ -4779,15 +4779,16 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         else
                         {
                             // Verificar si ya existe
-                            string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote;";
+                            string queryChecklote = "SELECT COUNT(*) FROM public.\"Ficha\" WHERE \"Lote\"  ILIKE @Lote and \"OP\" = @op;";
                             NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
                             {
-                            new NpgsqlParameter("@Lote", lote),
+                                new NpgsqlParameter("@Lote", lote),
+                                new NpgsqlParameter("@op", op)
                             };
                             System.Data.DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
                             if (dtLote != null && dtLote.Rows.Count > 0 && System.Convert.ToInt32(dtLote.Rows[0][0]) > 0)
                             {
-                                MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MetroFramework.MetroMessageBox.Show(this, "El Lote ya existe con el OP selecionado. Por favor, elija otro lote.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 return;
                             }
 
