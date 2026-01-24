@@ -81,8 +81,8 @@ namespace Tablero
         // Fin de variables para el envío de correos
         List<ValueTuple<string, string>> valores_mecanico =
         new List<(string, string)>();
-        List<ValueTuple<string, string>> valores_operativos =
-        new List<(string, string)>();
+        List<ValueTuple<string, string, string>> valores_operativos =
+        new List<(string, string, string)>();
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -289,12 +289,13 @@ namespace Tablero
         }
         private void dgv_operativo_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            if (dgv_operativo.CurrentCell.ColumnIndex == 0) // Primera columna
+            // 1. Validación para solo números en columna 0
+            if (dgv_operativo.CurrentCell.ColumnIndex == 0)
             {
                 System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Evita múltiples suscripciones
+                    tb.KeyPress -= SoloNumeros_KeyPress;
                     tb.KeyPress += SoloNumeros_KeyPress;
                 }
             }
@@ -303,11 +304,10 @@ namespace Tablero
                 System.Windows.Forms.TextBox tb = e.Control as System.Windows.Forms.TextBox;
                 if (tb != null)
                 {
-                    tb.KeyPress -= SoloNumeros_KeyPress; // Quita la restricción en otras columnas
+                    tb.KeyPress -= SoloNumeros_KeyPress;
                 }
             }
         }
-
         private void txt_Tiempo_comida_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Permite solo dígitos y teclas de control (como backspace)
@@ -347,6 +347,8 @@ namespace Tablero
                 email_varibles();
                 ActualizarAnioReportes();
                 carga_Jefes();
+
+
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
             {
@@ -373,6 +375,7 @@ namespace Tablero
 
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+
             }
             if (nivel_user == "Calidad")
             {
@@ -1035,6 +1038,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.EmbeddedLabelText = "Relación Fresco-Seco";
                 Txt_Read_8.EmbeddedLabelText = "FTT";
 
+                Txt_6.Visible = true;
                 Txt_Read_5.Visible = true;
                 Txt_Read_7.Visible = true;
                 Txt_Read_8.Visible = true;
@@ -6846,24 +6850,23 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
                     decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value);
-                    string motivos = row.Cells[1].Value.ToString();
+                    string tipo = row.Cells[1].Value.ToString();
+                    string motivos = row.Cells[2].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_Muerto_Operativo"" (
-                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos""
-                        ) VALUES (@id_ficha, @min_detenidos, @motivos);";
+                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos"", ""Tipo""
+                        ) VALUES (@id_ficha, @min_detenidos, @motivos, @Tipo);";
 
                     NpgsqlParameter[] parameters = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
                         new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
-                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value },
+                        new NpgsqlParameter("@Tipo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipo ?? (object)DBNull.Value }
                     };
 
                     dbHelper.ExecuteNonQuery(query, parameters);
-                    valores_operativos.Add((
-                        row.Cells[0].Value.ToString(),
-                        motivos
-                    ));
+                    valores_operativos.Add((row.Cells[0].Value.ToString(), tipo, motivos));
                 }
             }
         }
@@ -6958,9 +6961,51 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             CalcularTotalMecanico();
         }
-
+        // MÉTODO CellValueChanged COMBINADO
         private void dgv_operativo_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            // Evitar errores
+            if (e.RowIndex < 0) return;
+
+            // Si cambió la columna Tipo
+            if (dgv_operativo.Columns[e.ColumnIndex].Name == "columTipo")
+            {
+                DataGridViewComboBoxCell cmbMotivo =
+                    dgv_operativo.Rows[e.RowIndex].Cells["columMotivo"] as DataGridViewComboBoxCell;
+
+                if (cmbMotivo == null) return;
+
+                cmbMotivo.Items.Clear();
+
+                string tipo = dgv_operativo.Rows[e.RowIndex]
+                               .Cells["columTipo"].Value?.ToString();
+
+                if (tipo == "ALMACÉN")
+                {
+                    cmbMotivo.Items.Add("ESPERA DE PRODUCTO");
+                    cmbMotivo.Items.Add("ESPERA DE INSUMOS");
+                }
+                else if (tipo == "CALIDAD")
+                {
+                    cmbMotivo.Items.Add("PRODUCTO SIN LIBERAR");
+                    cmbMotivo.Items.Add("ESPERA POR AW");
+                    cmbMotivo.Items.Add("DETENIDO POR PRODUCTO FUERA DE ESPECIFICACIÓN");
+                    cmbMotivo.Items.Add("PRESENCIA DE MATERIA EXTRAÑA");
+                }
+                else if (tipo == "PRODUCCIÓN")
+                {
+                    cmbMotivo.Items.Add("CAMBIO DE LOTE");
+                    cmbMotivo.Items.Add("ORGANIZACIÓN DE ARRANQUE");
+                    cmbMotivo.Items.Add("ACOMODO DE PERSONAL");
+                    cmbMotivo.Items.Add("LIMPIEZAS");
+                    cmbMotivo.Items.Add("PREPARACIÓN DE ÁREA");
+                }
+
+                // Limpiar selección previa
+                cmbMotivo.Value = null;
+            }
+
+           
             CalcularTotaloperativo();
         }
 
@@ -7065,7 +7110,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void Txt_6_TextChanged(object sender, EventArgs e)
         {
-            if (cb_Area.SelectedIndex == 0)
+            if (cb_Area.SelectedIndex == 0 || cb_Area.SelectedIndex == 1)
             {
                 var tb = (RadTextBox)sender;
                 string original = tb.Text;
@@ -17027,6 +17072,7 @@ ORDER BY
     <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
         <tr style='background: #e9ecef;'>
             <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Minutos Detenidos</th>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Tipo</th>
             <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Motivos</th>
         </tr>";
 
@@ -17036,6 +17082,7 @@ ORDER BY
         <tr>
             <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item1}</td>
             <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item2}</td>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item3}</td>
         </tr>";
             }
 
@@ -17388,7 +17435,7 @@ ORDER BY
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    'Operativo' AS ""Tipo de Tiempo Muerto"",
+    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
     (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmo.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
@@ -17417,12 +17464,12 @@ ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
             }
             else
             {
-                // Consulta original para un área específica
+                // Consulta para un área específica
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    'Operativo' AS ""Tipo de Tiempo Muerto"",
+    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
     (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmo.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
@@ -17459,56 +17506,6 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
             rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
         }
-        //        public void reporte_tiempos()
-        //        {
-        //            string var1 = cb_area_reporte_Tiempos.Text;
-        //            string querySimple = string.Empty;
-        //            rgv_reporte_Tiempos.DataSource = null;
-        //            rgv_reporte_Tiempos.Rows.Clear();
-        //            rgv_reporte_Tiempos.Columns.Clear();
-        //            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-        //                querySimple = @"SELECT 
-        //    f.""OP"" AS ""OP"",
-        //    f.""Fecha"" AS ""Fecha"",
-        //    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        //    'Operativo' AS ""Tipo de Tiempo Muerto"",
-        //    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
-        //    tmo.""Motivos"" AS ""Motivos"",
-        //    f.""Area"" AS ""Area""
-        //FROM ""Ficha"" f
-        //LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-        //WHERE (f.""Area"" = @Area)
-        //   AND tmo.""Min_Detenidos"" IS NOT NULL
-
-        //UNION ALL
-
-        //SELECT 
-        //    f.""OP"" AS ""OP"",
-        //    f.""Fecha"" AS ""Fecha"",
-        //    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-        //    'Mecánico' AS ""Tipo de Tiempo Muerto"",
-        //    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
-        //    tmm.""Motivos"" AS ""Motivos"",
-        //    f.""Area"" AS ""Area""
-        //FROM ""Ficha"" f
-        //LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-        //WHERE (f.""Area"" = @Area)
-        //   AND tmm.""Min_Detenidos"" IS NOT NULL
-
-        //ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
-
-        //            NpgsqlParameter[] parameters = new NpgsqlParameter[]
-        //                    {
-        //                        new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
-        //                    };
-        //            // Cargar los datos de la tabla Usuarios en el DataGridView
-        //            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
-        //            // Formato solo fecha
-        //            rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
-        //            rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
-
-        //        }
-
         private void cb_area_reporte_Tiempos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_area_reporte_Tiempos.SelectedIndex != -1)
@@ -17648,6 +17645,14 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             }
 
             rgv_reporte_Tiempos.EndUpdate(false);
+        }
+
+        private void dgv_operativo_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgv_operativo.IsCurrentCellDirty)
+            {
+                dgv_operativo.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 }

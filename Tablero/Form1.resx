@@ -125,7 +125,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAD6
-        UQAAAk1TRnQBSQFMAgEBCgEAAXABBQFwAQUBIAEAASABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGA
+        UQAAAk1TRnQBSQFMAgEBCgEAAZgBBQGYAQUBIAEAASABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGA
         AwABYAMAAQEBAAEgBgABwL0AAf8DAAH/AwAB/x8AAf8DAAH/AwAB//8APQADWAG3AyMB/wMjAf8DIwH/
         AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/
         AyMB/wMkATQ/AAH/AwAB/wMAAf8DAAH/FwAB/wMAAf8DAAH/AwAB//8AOQADIwH/AyMB/wMjAf8DIwH/
@@ -144,7 +144,7 @@
         /wAhAAMjAf8DIwH/AyMB/wMjAf8DIwH/AxIBFzQAAzYBWQMjAf8DIwH/AyMB/wMjAf8rAAH/AwAB/wMA
         Af84AAMDAQQDAAH/AwAB/wMAAf//ACUAAyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/
         AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/
-        KwAB/wMAAf8YAANOAf4DAAH/AwAB/wMAAf8DUwGqGwAB/wMAAf//ACUAAyMB/wMjAf8DIwH/AyMB/wMj
+        KwAB/wMAAf8YAANTAf4DAAH/AwAB/wMAAf8DUwGqGwAB/wMAAf//ACUAAyMB/wMjAf8DIwH/AyMB/wMj
         Af8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMjAf8DIwH/AyMB/wMj
         Af8DIwH/AyMB/wMjAf8DIwH/OwAB/wMAAf8DAAH/AwAB/wMAAf8DAAH/AwAB/wMAAf8DAAH/AwAB/wMA
         Af8DAAH/AwAB//8ANQADIwH/AyMB/wMjAf8DIwH/AyMB/xgAAwsBDgMjAf8DIwH/AyMB/wMjAf8DIwH/
@@ -480,7 +480,10 @@
   <metadata name="dataGridViewTextBoxColumn3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="dataGridViewTextBoxColumn4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="columTipo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="columMotivo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="Column1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

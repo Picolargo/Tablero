@@ -41,13 +41,13 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea14 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea15 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea16 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.card_meal_energy = new MaterialSkin.Controls.MaterialCard();
@@ -64,12 +64,13 @@
             this.card_dgv_operativo = new MaterialSkin.Controls.MaterialCard();
             this.dgv_operativo = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columTipo = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.columMotivo = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.txt_TM_mecanico = new MaterialSkin.Controls.MaterialTextBox();
             this.card_dgv_mecanico = new MaterialSkin.Controls.MaterialCard();
             this.dgv_mecanico = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.card_datos = new MaterialSkin.Controls.MaterialCard();
             this.Txt_meta = new MaterialSkin.Controls.MaterialTextBox2();
             this.card_datos_captura = new MaterialSkin.Controls.MaterialCard();
@@ -145,6 +146,10 @@
             this.ChartCumplimientoOtrasAreasPorSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage29 = new System.Windows.Forms.TabPage();
             this.ChartCumplimientoMensualOtrasAreasPorSupervisor = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage34 = new System.Windows.Forms.TabPage();
+            this.ChartCumplimientoDespeguePorJefe = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage35 = new System.Windows.Forms.TabPage();
+            this.ChartCumplimientoOtrasAreasPorJefe = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage30 = new System.Windows.Forms.TabPage();
             this.ChartCumplimientoGeneralSemanal = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage31 = new System.Windows.Forms.TabPage();
@@ -218,6 +223,7 @@
             this.txt_filtro_report_Tiempos = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_filtro_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.materialCard22 = new MaterialSkin.Controls.MaterialCard();
+            this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tap_control_metas = new MetroFramework.Controls.MetroTabControl();
             this.metroContextMenu1 = new MetroFramework.Controls.MetroContextMenu(this.components);
@@ -355,11 +361,6 @@
             this.radTaskbarButton1 = new Telerik.WinControls.UI.RadTaskbarButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
-            this.tabPage34 = new System.Windows.Forms.TabPage();
-            this.ChartCumplimientoDespeguePorJefe = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tabPage35 = new System.Windows.Forms.TabPage();
-            this.ChartCumplimientoOtrasAreasPorJefe = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
@@ -423,6 +424,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorSupervisor)).BeginInit();
             this.tabPage29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoMensualOtrasAreasPorSupervisor)).BeginInit();
+            this.tabPage34.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoDespeguePorJefe)).BeginInit();
+            this.tabPage35.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorJefe)).BeginInit();
             this.tabPage30.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoGeneralSemanal)).BeginInit();
             this.tabPage31.SuspendLayout();
@@ -465,6 +470,8 @@
             this.materialCard20.SuspendLayout();
             this.materialCard21.SuspendLayout();
             this.materialCard22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tap_control_metas.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -520,12 +527,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).BeginInit();
-            this.tabPage34.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoDespeguePorJefe)).BeginInit();
-            this.tabPage35.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorJefe)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -576,7 +577,7 @@
             this.card_meal_energy.Controls.Add(this.lbl_min_comida);
             this.card_meal_energy.Depth = 0;
             this.card_meal_energy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_meal_energy.Location = new System.Drawing.Point(797, 550);
+            this.card_meal_energy.Location = new System.Drawing.Point(797, 855);
             this.card_meal_energy.Margin = new System.Windows.Forms.Padding(14);
             this.card_meal_energy.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_meal_energy.Name = "card_meal_energy";
@@ -739,7 +740,7 @@
             this.card_TM.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_TM.Name = "card_TM";
             this.card_TM.Padding = new System.Windows.Forms.Padding(14);
-            this.card_TM.Size = new System.Drawing.Size(874, 395);
+            this.card_TM.Size = new System.Drawing.Size(874, 696);
             this.card_TM.TabIndex = 4;
             this.card_TM.Visible = false;
             // 
@@ -752,7 +753,7 @@
             this.txt_TM_operativo.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_operativo.Hint = "Minutos Totales";
             this.txt_TM_operativo.LeadingIcon = null;
-            this.txt_TM_operativo.Location = new System.Drawing.Point(442, 324);
+            this.txt_TM_operativo.Location = new System.Drawing.Point(62, 275);
             this.txt_TM_operativo.MaxLength = 50;
             this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_operativo.Multiline = false;
@@ -769,12 +770,12 @@
             this.card_dgv_operativo.Controls.Add(this.dgv_operativo);
             this.card_dgv_operativo.Depth = 0;
             this.card_dgv_operativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_operativo.Location = new System.Drawing.Point(442, 129);
+            this.card_dgv_operativo.Location = new System.Drawing.Point(62, 80);
             this.card_dgv_operativo.Margin = new System.Windows.Forms.Padding(14);
             this.card_dgv_operativo.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_operativo.Name = "card_dgv_operativo";
             this.card_dgv_operativo.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_operativo.Size = new System.Drawing.Size(400, 189);
+            this.card_dgv_operativo.Size = new System.Drawing.Size(784, 189);
             this.card_dgv_operativo.TabIndex = 7;
             // 
             // dgv_operativo
@@ -782,12 +783,14 @@
             this.dgv_operativo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_operativo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
+            this.columTipo,
+            this.columMotivo});
             this.dgv_operativo.Location = new System.Drawing.Point(0, 0);
             this.dgv_operativo.Name = "dgv_operativo";
-            this.dgv_operativo.Size = new System.Drawing.Size(400, 189);
+            this.dgv_operativo.Size = new System.Drawing.Size(784, 189);
             this.dgv_operativo.TabIndex = 1;
             this.dgv_operativo.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_operativo_CellValueChanged);
+            this.dgv_operativo.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_operativo_CurrentCellDirtyStateChanged);
             this.dgv_operativo.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_operativo_EditingControlShowing);
             this.dgv_operativo.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_operativo_RowsAdded);
             this.dgv_operativo.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgv_operativo_RowsRemoved);
@@ -799,11 +802,25 @@
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.Width = 110;
             // 
-            // dataGridViewTextBoxColumn4
+            // columTipo
             // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Motivos Operativos";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.columTipo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.columTipo.FillWeight = 51.94805F;
+            this.columTipo.HeaderText = "Tipo";
+            this.columTipo.Items.AddRange(new object[] {
+            "ALMACÉN",
+            "CALIDAD",
+            "PRODUCCIÓN"});
+            this.columTipo.Name = "columTipo";
+            this.columTipo.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.columTipo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // columMotivo
+            // 
+            this.columMotivo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.columMotivo.FillWeight = 148.0519F;
+            this.columMotivo.HeaderText = "Motivo";
+            this.columMotivo.Name = "columMotivo";
             // 
             // txt_TM_mecanico
             // 
@@ -814,7 +831,7 @@
             this.txt_TM_mecanico.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_mecanico.Hint = "Minutos Totales";
             this.txt_TM_mecanico.LeadingIcon = null;
-            this.txt_TM_mecanico.Location = new System.Drawing.Point(17, 324);
+            this.txt_TM_mecanico.Location = new System.Drawing.Point(62, 537);
             this.txt_TM_mecanico.MaxLength = 50;
             this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_mecanico.Multiline = false;
@@ -832,12 +849,12 @@
             this.card_dgv_mecanico.Controls.Add(this.dgv_mecanico);
             this.card_dgv_mecanico.Depth = 0;
             this.card_dgv_mecanico.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_mecanico.Location = new System.Drawing.Point(17, 129);
+            this.card_dgv_mecanico.Location = new System.Drawing.Point(62, 342);
             this.card_dgv_mecanico.Margin = new System.Windows.Forms.Padding(14);
             this.card_dgv_mecanico.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_mecanico.Name = "card_dgv_mecanico";
             this.card_dgv_mecanico.Padding = new System.Windows.Forms.Padding(14);
-            this.card_dgv_mecanico.Size = new System.Drawing.Size(400, 189);
+            this.card_dgv_mecanico.Size = new System.Drawing.Size(784, 189);
             this.card_dgv_mecanico.TabIndex = 2;
             // 
             // dgv_mecanico
@@ -848,7 +865,7 @@
             this.Column2});
             this.dgv_mecanico.Location = new System.Drawing.Point(0, 0);
             this.dgv_mecanico.Name = "dgv_mecanico";
-            this.dgv_mecanico.Size = new System.Drawing.Size(400, 189);
+            this.dgv_mecanico.Size = new System.Drawing.Size(784, 189);
             this.dgv_mecanico.TabIndex = 1;
             this.dgv_mecanico.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_mecanico_CellValueChanged);
             this.dgv_mecanico.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgv_mecanico_EditingControlShowing);
@@ -866,7 +883,14 @@
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column2.HeaderText = "Motivos Mecánicos";
+            this.Column2.Items.AddRange(new object[] {
+            "FALLA TÉCNICA EN MAQUINARIA",
+            "FALLA EN BANDAS",
+            "REBABA DE METALES",
+            "FALLA DETECTOR METALES"});
             this.Column2.Name = "Column2";
+            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // card_datos
             // 
@@ -2017,6 +2041,48 @@
             this.ChartCumplimientoMensualOtrasAreasPorSupervisor.TabIndex = 43;
             this.ChartCumplimientoMensualOtrasAreasPorSupervisor.Text = "chart1";
             // 
+            // tabPage34
+            // 
+            this.tabPage34.Controls.Add(this.ChartCumplimientoDespeguePorJefe);
+            this.tabPage34.Location = new System.Drawing.Point(4, 30);
+            this.tabPage34.Name = "tabPage34";
+            this.tabPage34.Size = new System.Drawing.Size(1462, 898);
+            this.tabPage34.TabIndex = 13;
+            this.tabPage34.Text = "Cumplimiento a Planeación(Deshidratado) Semanal por Jefe de Turno";
+            this.tabPage34.UseVisualStyleBackColor = true;
+            // 
+            // ChartCumplimientoDespeguePorJefe
+            // 
+            chartArea12.Name = "ChartArea1";
+            this.ChartCumplimientoDespeguePorJefe.ChartAreas.Add(chartArea12);
+            this.ChartCumplimientoDespeguePorJefe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChartCumplimientoDespeguePorJefe.Location = new System.Drawing.Point(0, 0);
+            this.ChartCumplimientoDespeguePorJefe.Name = "ChartCumplimientoDespeguePorJefe";
+            this.ChartCumplimientoDespeguePorJefe.Size = new System.Drawing.Size(1462, 898);
+            this.ChartCumplimientoDespeguePorJefe.TabIndex = 39;
+            this.ChartCumplimientoDespeguePorJefe.Text = "chart1";
+            // 
+            // tabPage35
+            // 
+            this.tabPage35.Controls.Add(this.ChartCumplimientoOtrasAreasPorJefe);
+            this.tabPage35.Location = new System.Drawing.Point(4, 30);
+            this.tabPage35.Name = "tabPage35";
+            this.tabPage35.Size = new System.Drawing.Size(1462, 898);
+            this.tabPage35.TabIndex = 14;
+            this.tabPage35.Text = "Cumplimiento a Planeación(Otras Áreas) Semanal por Jefe de Turno";
+            this.tabPage35.UseVisualStyleBackColor = true;
+            // 
+            // ChartCumplimientoOtrasAreasPorJefe
+            // 
+            chartArea13.Name = "ChartArea1";
+            this.ChartCumplimientoOtrasAreasPorJefe.ChartAreas.Add(chartArea13);
+            this.ChartCumplimientoOtrasAreasPorJefe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ChartCumplimientoOtrasAreasPorJefe.Location = new System.Drawing.Point(0, 0);
+            this.ChartCumplimientoOtrasAreasPorJefe.Name = "ChartCumplimientoOtrasAreasPorJefe";
+            this.ChartCumplimientoOtrasAreasPorJefe.Size = new System.Drawing.Size(1462, 898);
+            this.ChartCumplimientoOtrasAreasPorJefe.TabIndex = 43;
+            this.ChartCumplimientoOtrasAreasPorJefe.Text = "chart1";
+            // 
             // tabPage30
             // 
             this.tabPage30.Controls.Add(this.ChartCumplimientoGeneralSemanal);
@@ -2283,7 +2349,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -3297,7 +3363,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(81, 12);
@@ -3349,6 +3415,24 @@
             this.materialCard22.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard22.Size = new System.Drawing.Size(1674, 779);
             this.materialCard22.TabIndex = 4;
+            // 
+            // rgv_reporte_Tiempos
+            // 
+            this.rgv_reporte_Tiempos.AutoScroll = true;
+            this.rgv_reporte_Tiempos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rgv_reporte_Tiempos.Location = new System.Drawing.Point(14, 14);
+            // 
+            // 
+            // 
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowAddNewRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
+            this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
+            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
+            this.rgv_reporte_Tiempos.TabIndex = 1;
+            this.rgv_reporte_Tiempos.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_Tiempos_CustomFiltering);
             // 
             // tabPage4
             // 
@@ -5831,66 +5915,6 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.RightToLeftChanged += new System.EventHandler(this.Mask_txt_hr2_TextChanged);
             // 
-            // rgv_reporte_Tiempos
-            // 
-            this.rgv_reporte_Tiempos.AutoScroll = true;
-            this.rgv_reporte_Tiempos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rgv_reporte_Tiempos.Location = new System.Drawing.Point(14, 14);
-            // 
-            // 
-            // 
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowAddNewRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
-            this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
-            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
-            this.rgv_reporte_Tiempos.TabIndex = 1;
-            this.rgv_reporte_Tiempos.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_Tiempos_CustomFiltering);
-            // 
-            // tabPage34
-            // 
-            this.tabPage34.Controls.Add(this.ChartCumplimientoDespeguePorJefe);
-            this.tabPage34.Location = new System.Drawing.Point(4, 30);
-            this.tabPage34.Name = "tabPage34";
-            this.tabPage34.Size = new System.Drawing.Size(1462, 898);
-            this.tabPage34.TabIndex = 13;
-            this.tabPage34.Text = "Cumplimiento a Planeación(Deshidratado) Semanal por Jefe de Turno";
-            this.tabPage34.UseVisualStyleBackColor = true;
-            // 
-            // ChartCumplimientoDespeguePorJefe
-            // 
-            chartArea12.Name = "ChartArea1";
-            this.ChartCumplimientoDespeguePorJefe.ChartAreas.Add(chartArea12);
-            this.ChartCumplimientoDespeguePorJefe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ChartCumplimientoDespeguePorJefe.Location = new System.Drawing.Point(0, 0);
-            this.ChartCumplimientoDespeguePorJefe.Name = "ChartCumplimientoDespeguePorJefe";
-            this.ChartCumplimientoDespeguePorJefe.Size = new System.Drawing.Size(1462, 898);
-            this.ChartCumplimientoDespeguePorJefe.TabIndex = 39;
-            this.ChartCumplimientoDespeguePorJefe.Text = "chart1";
-            // 
-            // tabPage35
-            // 
-            this.tabPage35.Controls.Add(this.ChartCumplimientoOtrasAreasPorJefe);
-            this.tabPage35.Location = new System.Drawing.Point(4, 30);
-            this.tabPage35.Name = "tabPage35";
-            this.tabPage35.Size = new System.Drawing.Size(1462, 898);
-            this.tabPage35.TabIndex = 14;
-            this.tabPage35.Text = "Cumplimiento a Planeación(Otras Áreas) Semanal por Jefe de Turno";
-            this.tabPage35.UseVisualStyleBackColor = true;
-            // 
-            // ChartCumplimientoOtrasAreasPorJefe
-            // 
-            chartArea13.Name = "ChartArea1";
-            this.ChartCumplimientoOtrasAreasPorJefe.ChartAreas.Add(chartArea13);
-            this.ChartCumplimientoOtrasAreasPorJefe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ChartCumplimientoOtrasAreasPorJefe.Location = new System.Drawing.Point(0, 0);
-            this.ChartCumplimientoOtrasAreasPorJefe.Name = "ChartCumplimientoOtrasAreasPorJefe";
-            this.ChartCumplimientoOtrasAreasPorJefe.Size = new System.Drawing.Size(1462, 898);
-            this.ChartCumplimientoOtrasAreasPorJefe.TabIndex = 43;
-            this.ChartCumplimientoOtrasAreasPorJefe.Text = "chart1";
-            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5977,6 +6001,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorSupervisor)).EndInit();
             this.tabPage29.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoMensualOtrasAreasPorSupervisor)).EndInit();
+            this.tabPage34.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoDespeguePorJefe)).EndInit();
+            this.tabPage35.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorJefe)).EndInit();
             this.tabPage30.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoGeneralSemanal)).EndInit();
             this.tabPage31.ResumeLayout(false);
@@ -6029,6 +6057,8 @@
             this.materialCard21.ResumeLayout(false);
             this.materialCard21.PerformLayout();
             this.materialCard22.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tap_control_metas.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
@@ -6093,12 +6123,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).EndInit();
-            this.tabPage34.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoDespeguePorJefe)).EndInit();
-            this.tabPage35.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ChartCumplimientoOtrasAreasPorJefe)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -6220,10 +6244,6 @@
         private System.Windows.Forms.DataGridView dgv_metas_Grind;
         private System.Windows.Forms.DataGridView dgv_metas_revolturas;
         private MaterialSkin.Controls.MaterialButton btn_new_op;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ErrorProvider errorProvider2;
         private MaterialSkin.Controls.MaterialComboBox cb_lote;
@@ -6417,6 +6437,11 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoDespeguePorJefe;
         private System.Windows.Forms.TabPage tabPage35;
         private System.Windows.Forms.DataVisualization.Charting.Chart ChartCumplimientoOtrasAreasPorJefe;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn columTipo;
+        private System.Windows.Forms.DataGridViewComboBoxColumn columMotivo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
     }
 }
 

@@ -127,6 +127,7 @@
             this.txt_contrasena.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_contrasena.TrailingIcon = null;
             this.txt_contrasena.UseSystemPasswordChar = false;
+            this.txt_contrasena.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_contrasena_KeyDown);
             // 
             // radSeparator1
             // 

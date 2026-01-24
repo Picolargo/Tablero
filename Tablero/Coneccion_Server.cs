@@ -210,5 +210,14 @@ namespace Tablero
         {
             isHovering = false;
         }
+
+        private void txt_contrasena_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btn_save_Click(btn_save, EventArgs.Empty);
+                e.SuppressKeyPress = true; // evita el beep
+            }
+        }
     }
 }
