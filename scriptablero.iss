@@ -2,24 +2,25 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Tablero"
-#define MyAppVersion "1.7"
-#define MyAppPublisher "Picolargo"
+#define MyAppVersion "1.8"
+#define MyAppPublisher "Fruticola Picoalrgo"
 #define MyAppExeName "Tablero.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{DC0B67BE-539F-447D-AF4B-E458370A3534}
+AppId={{70F0EC5A-058D-4424-B7EB-23C61D94172C}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
+DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=C:\Users\fruti\OneDrive\Escritorio\instalador tablero
-OutputBaseFilename=Tablero
+OutputBaseFilename=Instaldor_Tablero
 SetupIconFile=C:\Users\fruti\source\repos\Tablero\Tablero\formulario_icono.ico
 Compression=lzma
 SolidCompression=yes
