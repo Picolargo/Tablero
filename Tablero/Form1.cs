@@ -17674,7 +17674,7 @@ ORDER BY
 
             if (var1 == "Todos")
             {
-                // Consulta para TODAS las áreas
+                // Consulta para TODAS las áreas - ACTUALIZADA con columnas Tipo
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
@@ -17693,7 +17693,7 @@ SELECT
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    'Mecánico' AS ""Tipo de Tiempo Muerto"",
+    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"", -- Usa la columna Tipo real
     (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmm.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
@@ -17708,7 +17708,7 @@ ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
             }
             else
             {
-                // Consulta para un área específica
+                // Consulta para un área específica - ACTUALIZADA con columnas Tipo
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
@@ -17728,7 +17728,7 @@ SELECT
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    'Mecánico' AS ""Tipo de Tiempo Muerto"",
+    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"", -- Usa la columna Tipo real
     (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmm.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
