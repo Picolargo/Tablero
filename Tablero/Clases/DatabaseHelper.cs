@@ -33,7 +33,18 @@ namespace Tablero
                 }
             }
         }
-
+        // Método auxiliar para detectar errores de red - SOLO para el login
+        private bool IsNetworkError(Exception ex)
+        {
+            string errorMessage = ex.Message.ToLower();
+            return errorMessage.Contains("network") ||
+                   errorMessage.Contains("connection") ||
+                   errorMessage.Contains("timeout") ||
+                   errorMessage.Contains("host") ||
+                   errorMessage.Contains("unable to connect") ||
+                   errorMessage.Contains("no such host") ||
+                   errorMessage.Contains("connection refused");
+        }
         // Ejecutar consulta SELECT
         public DataTable ExecuteSelectQuery(string query, NpgsqlParameter[] parameters = null)
         {
@@ -57,7 +68,7 @@ namespace Tablero
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error en SELECT: " + ex.Message);
+                    MessageBox.Show("Tipo de Eror: " + ex.Message+ ", Favor de verificar su conexión a Internet","Error de Red",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return null;
                 }
             }
@@ -149,16 +160,17 @@ namespace Tablero
             }
         }
 
-        // Validación de usuario corregida para PostgreSQL
-        //public bool ValidateUser(string usuario, string password)
+        // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
+        //public bool ValidateUser(string identificador, string password)
         //{
-        //    // Consulta corregida con comillas para nombres de columnas con mayúsculas
+        //    // Consulta que acepta tanto Usuario como No_Empleado
         //    string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-        //                   WHERE ""Usuario"" ILIKE @usuario AND ""Password"" = @password";
+        //           WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+        //           AND ""Password"" = @password";
 
         //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
         //    {
-        //        new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario },
+        //        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
         //        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
         //    };
 
@@ -180,64 +192,131 @@ namespace Tablero
         // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
         public bool ValidateUser(string identificador, string password)
         {
+            return ValidateUser(identificador, password, out _);
+        }
+
+        // Nueva versión con manejo de error de conexión
+        public bool ValidateUser(string identificador, string password, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
             // Consulta que acepta tanto Usuario como No_Empleado
             string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-                   WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
-                   AND ""Password"" = @password";
+           WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+           AND ""Password"" = @password";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
-                new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
             };
 
             try
             {
-                DataTable result = ExecuteSelectQuery(query, parameters);
-                if (result != null && result.Rows.Count > 0)
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
                 {
-                    return Convert.ToInt32(result.Rows[0][0]) > 0;
+                    connection.Open();
+                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddRange(parameters);
+
+                        object result = command.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) > 0 : false;
+                    }
                 }
-                return false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al validar usuario: " + ex.Message);
+                if (IsNetworkError(ex))
+                {
+                    errorMessage = "CONNECTION_ERROR";
+                }
+                else
+                {
+                    errorMessage = ex.Message;
+                }
                 return false;
             }
         }
 
         // Método adicional para obtener información completa del usuario
+        //public DataRow GetUserInfo(string identificador)
+        //{
+        //    string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" FROM public.""Usuarios"" 
+        //           WHERE ""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador";
+
+        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //    {
+        //        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+        //    };
+
+        //    try
+        //    {
+        //        DataTable result = ExecuteSelectQuery(query, parameters);
+        //        if (result != null && result.Rows.Count > 0)
+        //        {
+        //            return result.Rows[0];
+        //        }
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error al obtener información del usuario: " + ex.Message);
+        //        return null;
+        //    }
+        //}
+        // Método adicional para obtener información completa del usuario
         public DataRow GetUserInfo(string identificador)
         {
-            //string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" 
-            //               FROM public.""Usuarios"" WHERE ""Usuario"" ILIKE @usuario";
+            return GetUserInfo(identificador, out _);
+        }
 
-            //NpgsqlParameter[] parameters = new NpgsqlParameter[]
-            //{
-            //    new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario }
-            //};
+        // Nueva versión con manejo de error de conexión
+        public DataRow GetUserInfo(string identificador, out string errorMessage)
+        {
+            errorMessage = string.Empty;
 
             string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" FROM public.""Usuarios"" 
-                   WHERE ""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador";
+           WHERE ""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-                new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
             };
 
             try
             {
-                DataTable result = ExecuteSelectQuery(query, parameters);
-                if (result != null && result.Rows.Count > 0)
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
                 {
-                    return result.Rows[0];
+                    connection.Open();
+                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddRange(parameters);
+
+                        using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command))
+                        {
+                            DataTable dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+
+                            if (dataTable.Rows.Count > 0)
+                            {
+                                return dataTable.Rows[0];
+                            }
+                            return null;
+                        }
+                    }
                 }
-                return null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener información del usuario: " + ex.Message);
+                if (IsNetworkError(ex))
+                {
+                    errorMessage = "CONNECTION_ERROR";
+                }
+                else
+                {
+                    errorMessage = ex.Message;
+                }
                 return null;
             }
         }

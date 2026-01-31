@@ -4468,16 +4468,16 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             meta_programada = hr_programada * meta_x_hr;
             Txt_Read_2.Text = meta_programada.ToString("0.##");
         }
-        private void calcular_meta_programada_inspec_emp()
-        {
-            double hr_programada, meta_programada, meta_x_hr, personal_o;
+        //private void calcular_meta_programada_inspec_emp()
+        //{
+        //    double hr_programada, meta_programada, meta_x_hr, personal_o;
 
-            hr_programada = double.TryParse(Txt_Read_1.Text, out hr_programada) ? hr_programada : 0;
-            meta_x_hr = double.TryParse(Txt_meta.Text, out meta_x_hr) ? meta_x_hr : 0;
-            personal_o = double.TryParse(Txt_5.Text, out personal_o) ? personal_o : 0;
-            meta_programada = meta_x_hr * personal_o * hr_programada;
-            Txt_Read_2.Text = meta_programada.ToString("0.##");
-        }
+        //    hr_programada = double.TryParse(Txt_Read_1.Text, out hr_programada) ? hr_programada : 0;
+        //    meta_x_hr = double.TryParse(Txt_meta.Text, out meta_x_hr) ? meta_x_hr : 0;
+        //    personal_o = double.TryParse(Txt_5.Text, out personal_o) ? personal_o : 0;
+        //    meta_programada = meta_x_hr * personal_o * hr_programada;
+        //    Txt_Read_2.Text = meta_programada.ToString("0.##");
+        //}
 
         private void calcular_turno()
         {
@@ -6820,17 +6820,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
                     decimal minDetenidos = System.Convert.ToDecimal(row.Cells[0].Value);
-                    string motivos = row.Cells[1].Value.ToString();
+                    string tipo = row.Cells[1].Value.ToString();
+                    string motivos = row.Cells[2].Value.ToString();
 
                     string query = @"INSERT INTO public.""Tiempo_muerto_Mecanico"" (
-                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos""
-                        ) VALUES (@id_ficha, @min_detenidos, @motivos);";
+                            ""ID_Ficha"", ""Min_Detenidos"", ""Motivos"", ""Tipo""
+                        ) VALUES (@id_ficha, @min_detenidos, @motivos, @Tipo);";
 
                     NpgsqlParameter[] parameters = new NpgsqlParameter[]
                     {
                         new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
                         new NpgsqlParameter("@min_detenidos", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = minDetenidos },
-                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value }
+                        new NpgsqlParameter("@motivos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivos ?? (object)DBNull.Value },
+                        new NpgsqlParameter("@Tipo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipo ?? (object)DBNull.Value }
                     };
 
                     dbHelper.ExecuteNonQuery(query, parameters);
@@ -7053,7 +7055,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
             {
-                calcular_meta_programada_inspec_emp();
+                calcular_meta_programada();
                 porcentaje_logrado_planeacion();
             }
         }
@@ -7103,7 +7105,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
             {
-                calcular_meta_programada_inspec_emp();
+                calcular_meta_programada();
                 porcentaje_logrado_planeacion();
             }
         }
@@ -7214,7 +7216,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
             {
-                calcular_meta_programada_inspec_emp();
+                calcular_meta_programada();
                 porcentaje_logrado_planeacion();
             }
 
@@ -7534,7 +7536,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 calcular_turno();
                 if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
                 {
-                    calcular_meta_programada_inspec_emp();
+                    calcular_meta_programada();
                     porcentaje_logrado_planeacion();
                 }
             }
@@ -7557,7 +7559,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 calcular_turno();
                 if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
                 {
-                    calcular_meta_programada_inspec_emp();
+                    calcular_meta_programada();
                     porcentaje_logrado_planeacion();
                 }
             }
@@ -8758,52 +8760,294 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 MetroFramework.MetroMessageBox.Show(this, $"Error al cargar tiempos muertos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void actualiza_tiempos_mecanicos(string id)
         {
-            dgv_mecanico.DataSource = null;
-            dgv_mecanico.Columns.Clear();
-
-            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-            string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
-                            ""Motivos"" as ""Motivos Mecánicos"" 
-                     FROM public.""Tiempo_muerto_Mecanico"" 
-                     WHERE ""ID_Ficha"" = @id_ficha 
-                     ORDER BY ""ID_T_Mecanico"" ASC;";
-
-            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            try
             {
-        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
-            };
+                dgv_mecanico.DataSource = null;
+                dgv_mecanico.Rows.Clear();
+                dgv_mecanico.Columns.Clear();
 
-            dbHelper.LoadDataIntoDataGridView(query, dgv_mecanico, parameters);
-            // Configurar columnas DESPUÉS de cargar los datos
-            ConfigurarColumnasDataGridView(dgv_mecanico);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // Consulta actualizada para incluir la columna "Tipo"
+                string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+                        ""Motivos"" as ""Motivos Mecánicos"",
+                        ""Tipo"" as ""Tipo""
+                 FROM public.""Tiempo_muerto_Mecanico"" 
+                 WHERE ""ID_Ficha"" = @id_ficha 
+                 ORDER BY ""ID_T_Mecanico"" ASC;";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
+                };
+
+                // Obtener los datos
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    // Configurar columnas vacías si no hay datos
+                    ConfigurarColumnasMecanico();
+                    return;
+                }
+
+                // Configurar columnas
+                ConfigurarColumnasMecanico();
+
+                // Cargar datos en el grid
+                foreach (DataRow row in dt.Rows)
+                {
+                    int rowIndex = dgv_mecanico.Rows.Add();
+
+                    // Minutos Detenidos
+                    dgv_mecanico.Rows[rowIndex].Cells["colMinutos"].Value = row["Minutos Detenidos"];
+
+                    // Tipo (ComboBox)
+                    string tipo = row["Tipo"]?.ToString();
+                    if (!string.IsNullOrEmpty(tipo))
+                    {
+                        dgv_mecanico.Rows[rowIndex].Cells["Column2"].Value = tipo;
+                    }
+
+                    // Motivos Mecánicos
+                    dgv_mecanico.Rows[rowIndex].Cells["colMotivos"].Value = row["Motivos Mecánicos"];
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar tiempos mecánicos: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void actualiza_tiempos_operativos(string id)
         {
-            dgv_operativo.DataSource = null;
+            try
+            {
+                dgv_operativo.DataSource = null;
+                dgv_operativo.Rows.Clear();
+                dgv_operativo.Columns.Clear();
+
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // Consulta actualizada para incluir la columna "Tipo"
+                string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+                        ""Motivos"" as ""Motivos Operativos"",
+                        ""Tipo"" as ""Tipo""
+                 FROM public.""Tiempo_Muerto_Operativo"" 
+                 WHERE ""ID_Ficha"" = @id_ficha 
+                 ORDER BY ""ID_T_Operativo"" ASC;";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
+                };
+
+                // Obtener los datos
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    // Configurar columnas vacías si no hay datos
+                    ConfigurarColumnasOperativo();
+                    return;
+                }
+
+                // Configurar columnas
+                ConfigurarColumnasOperativo();
+
+                // Cargar datos en el grid
+                foreach (DataRow row in dt.Rows)
+                {
+                    int rowIndex = dgv_operativo.Rows.Add();
+
+                    // Minutos Detenidos
+                    dgv_operativo.Rows[rowIndex].Cells["colMinutos"].Value = row["Minutos Detenidos"];
+
+                    // Tipo (ComboBox)
+                    string tipo = row["Tipo"]?.ToString();
+                    if (!string.IsNullOrEmpty(tipo))
+                    {
+                        dgv_operativo.Rows[rowIndex].Cells["columTipo"].Value = tipo;
+
+                        // También configurar los motivos disponibles según el tipo
+                        ConfigurarMotivosSegunTipo(rowIndex, tipo);
+                    }
+
+                    // Motivos Operativos
+                    string motivo = row["Motivos Operativos"]?.ToString();
+                    if (!string.IsNullOrEmpty(motivo))
+                    {
+                        dgv_operativo.Rows[rowIndex].Cells["columMotivo"].Value = motivo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar tiempos operativos: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ConfigurarMotivosSegunTipo(int rowIndex, string tipo)
+        {
+            if (rowIndex < 0 || rowIndex >= dgv_operativo.Rows.Count) return;
+
+            DataGridViewComboBoxCell cmbMotivo =
+                dgv_operativo.Rows[rowIndex].Cells["columMotivo"] as DataGridViewComboBoxCell;
+
+            if (cmbMotivo == null) return;
+
+            cmbMotivo.Items.Clear();
+
+            if (tipo == "ALMACÉN")
+            {
+                cmbMotivo.Items.Add("ESPERA DE PRODUCTO");
+                cmbMotivo.Items.Add("ESPERA DE INSUMOS");
+            }
+            else if (tipo == "CALIDAD")
+            {
+                cmbMotivo.Items.Add("PRODUCTO SIN LIBERAR");
+                cmbMotivo.Items.Add("ESPERA POR AW");
+                cmbMotivo.Items.Add("DETENIDO POR PRODUCTO FUERA DE ESPECIFICACIÓN");
+                cmbMotivo.Items.Add("PRESENCIA DE MATERIA EXTRAÑA");
+            }
+            else if (tipo == "PRODUCCIÓN")
+            {
+                cmbMotivo.Items.Add("CAMBIO DE LOTE");
+                cmbMotivo.Items.Add("ORGANIZACIÓN DE ARRANQUE");
+                cmbMotivo.Items.Add("ACOMODO DE PERSONAL");
+                cmbMotivo.Items.Add("LIMPIEZAS");
+                cmbMotivo.Items.Add("PREPARACIÓN DE ÁREA");
+            }
+        }
+
+        private void ConfigurarColumnasMecanico()
+        {
+            // Limpiar columnas existentes
+            dgv_mecanico.Columns.Clear();
+
+            // Columna 0: Minutos Detenidos (TextBox)
+            DataGridViewTextBoxColumn colMinutos = new DataGridViewTextBoxColumn();
+            colMinutos.Name = "colMinutos";
+            colMinutos.HeaderText = "Minutos Detenidos";
+            colMinutos.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colMinutos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgv_mecanico.Columns.Add(colMinutos);
+
+            // Columna 1: Tipo (ComboBox)
+            DataGridViewComboBoxColumn colTipo = new DataGridViewComboBoxColumn();
+            colTipo.Name = "Column2"; // Nombre que mencionaste
+            colTipo.HeaderText = "Tipo";
+            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            // Agregar los items del ComboBox (mismos que configuraste)
+            colTipo.Items.Add("FALLA TÉCNICA EN MAQUINARIA");
+            colTipo.Items.Add("FALLA EN BANDAS");
+            colTipo.Items.Add("REBABA DE METALES");
+            colTipo.Items.Add("FALLA DETECTOR METALES");
+
+            dgv_mecanico.Columns.Add(colTipo);
+
+            // Columna 2: Motivos Mecánicos (TextBox)
+            DataGridViewTextBoxColumn colMotivos = new DataGridViewTextBoxColumn();
+            colMotivos.Name = "colMotivos";
+            colMotivos.HeaderText = "Motivos Mecánicos";
+            colMotivos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colMotivos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dgv_mecanico.Columns.Add(colMotivos);
+
+            // Configurar alineación de encabezados
+            dgv_mecanico.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv_mecanico.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv_mecanico.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
+
+        private void ConfigurarColumnasOperativo()
+        {
+            // Limpiar columnas existentes
             dgv_operativo.Columns.Clear();
 
-            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            // Columna 0: Minutos Detenidos (TextBox)
+            DataGridViewTextBoxColumn colMinutos = new DataGridViewTextBoxColumn();
+            colMinutos.Name = "colMinutos";
+            colMinutos.HeaderText = "Minutos Detenidos";
+            colMinutos.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colMinutos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgv_operativo.Columns.Add(colMinutos);
 
-            string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
-                            ""Motivos"" as ""Motivos Operativos"" 
-                     FROM public.""Tiempo_Muerto_Operativo"" 
-                     WHERE ""ID_Ficha"" = @id_ficha 
-                     ORDER BY ""ID_T_Operativo"" ASC;";
+            // Columna 1: Tipo (ComboBox)
+            DataGridViewComboBoxColumn colTipo = new DataGridViewComboBoxColumn();
+            colTipo.Name = "columTipo"; // Nombre que mencionaste
+            colTipo.HeaderText = "Tipo";
+            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
-            NpgsqlParameter[] parameters = new NpgsqlParameter[]
-            {
-                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
-            };
+            // Agregar los items del ComboBox
+            colTipo.Items.Add("ALMACÉN");
+            colTipo.Items.Add("CALIDAD");
+            colTipo.Items.Add("PRODUCCIÓN");
 
-            dbHelper.LoadDataIntoDataGridView(query, dgv_operativo, parameters);
-            // Configurar columnas DESPUÉS de cargar los datos
-            ConfigurarColumnasDataGridView(dgv_operativo);
+            dgv_operativo.Columns.Add(colTipo);
+
+            // Columna 2: Motivos Operativos (ComboBox)
+            DataGridViewComboBoxColumn colMotivo = new DataGridViewComboBoxColumn();
+            colMotivo.Name = "columMotivo"; // Nombre que mencionaste
+            colMotivo.HeaderText = "Motivos Operativos";
+            colMotivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgv_operativo.Columns.Add(colMotivo);
+
+            // Configurar alineación de encabezados
+            dgv_operativo.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv_operativo.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv_operativo.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
+        //private void actualiza_tiempos_mecanicos(string id)
+        //{
+        //    dgv_mecanico.DataSource = null;
+        //    dgv_mecanico.Columns.Clear();
+
+        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+        //    string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+        //                    ""Motivos"" as ""Motivos Mecánicos"" 
+        //             FROM public.""Tiempo_muerto_Mecanico"" 
+        //             WHERE ""ID_Ficha"" = @id_ficha 
+        //             ORDER BY ""ID_T_Mecanico"" ASC;";
+
+        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //    {
+        //new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
+        //    };
+
+        //    dbHelper.LoadDataIntoDataGridView(query, dgv_mecanico, parameters);
+        //    // Configurar columnas DESPUÉS de cargar los datos
+        //    ConfigurarColumnasDataGridView(dgv_mecanico);
+        //}
+
+        //private void actualiza_tiempos_operativos(string id)
+        //{
+        //    dgv_operativo.DataSource = null;
+        //    dgv_operativo.Columns.Clear();
+
+        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+        //    string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
+        //                    ""Motivos"" as ""Motivos Operativos"" 
+        //             FROM public.""Tiempo_Muerto_Operativo"" 
+        //             WHERE ""ID_Ficha"" = @id_ficha 
+        //             ORDER BY ""ID_T_Operativo"" ASC;";
+
+        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //    {
+        //        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
+        //    };
+
+        //    dbHelper.LoadDataIntoDataGridView(query, dgv_operativo, parameters);
+        //    // Configurar columnas DESPUÉS de cargar los datos
+        //    ConfigurarColumnasDataGridView(dgv_operativo);
+        //}
 
         private void actualiza_tiempo_comida(string id)
         {
@@ -8855,26 +9099,26 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
         }
 
-        private void ConfigurarColumnasDataGridView(DataGridView dataGridView)
-        {
-            if (dataGridView.Columns.Count >= 2)
-            {
-                // Primera columna: AutoSizeMode = AllCells
-                dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                //dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
+        //private void ConfigurarColumnasDataGridView(DataGridView dataGridView)
+        //{
+        //    if (dataGridView.Columns.Count >= 2)
+        //    {
+        //        // Primera columna: AutoSizeMode = AllCells
+        //        dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        //        //dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
 
-                // Segunda columna: AutoSizeMode = Fill
-                dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                //dataGridView.Columns[1].HeaderText = "Motivos";
+        //        // Segunda columna: AutoSizeMode = Fill
+        //        dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        //        //dataGridView.Columns[1].HeaderText = "Motivos";
 
-                // Opcional: Configuración adicional para mejor apariencia
-                dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dataGridView.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        //        // Opcional: Configuración adicional para mejor apariencia
+        //        dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+        //        dataGridView.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
-                dataGridView.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dataGridView.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
-        }
+        //        dataGridView.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        //        dataGridView.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        //    }
+        //}
 
         private void dtp_calidad_ValueChanged(object sender, EventArgs e)
         {
