@@ -162,5 +162,16 @@ namespace Tablero
                 FichaSeleccionada?.Invoke(null, null);
             }
         }
+
+        private void txt_password_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // evita beep
+                MaterialExpansionPanel1_OnActionButtonClick(
+                    materialExpansionPanel1, EventArgs.Empty
+                );
+            }
+        }
     }
 }

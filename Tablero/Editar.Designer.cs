@@ -146,6 +146,7 @@
             this.txt_password.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txt_password.TrailingIcon = null;
             this.txt_password.UseSystemPasswordChar = false;
+            this.txt_password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_password_KeyDown);
             // 
             // Editar
             // 

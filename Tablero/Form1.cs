@@ -25,7 +25,6 @@ using Telerik.WinForms.Documents.Model.Notes;
 using static System.Net.WebRequestMethods;
 using ClosedXML.Excel;
 using System.IO;
-//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tablero
 {
@@ -1580,7 +1579,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
         }
-
         private void CalcularSuma()
         {
             decimal total = 0;
@@ -1790,7 +1788,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
             }
         }
-
         private void limpiarCampos()
         {
             txt_no_emp.Text = string.Empty;
@@ -1977,7 +1974,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             limpiar_filtros();
         }
-
         private void limpiar_filtros()
         {
             // Mostrar todas las filas del DataGridView
@@ -1996,7 +1992,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Restablecer el estado del filtro
             filtroUsuariosActivo = false;
         }
-
         private void limpiar_filtros_OP()
         {
             // Mostrar todas las filas del DataGridView
@@ -2060,7 +2055,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             filtroUsuariosActivo_OP = false;
             filtroUsuariosActivo_OP_dgv_activo = 0;
         }
-
         private void txt_search_no_emp_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -2237,7 +2231,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 tap_control_metas.SelectedIndex = 7;
             }
         }
-
         private void reiniciar_controles_meta()
         {
             txt_Meta_1.Hint = string.Empty;
@@ -2284,7 +2277,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cmb_area.Focus();
             txt_op.Focus();
         }
-
         private void btn_meta_save_Click(object sender, EventArgs e)
         {
             if (cmb_area.SelectedIndex == -1)
@@ -3050,7 +3042,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
             }
         }
-
         private void dgv_metas_des_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -3082,7 +3073,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 btn_meta_cancel.Enabled = false;
             }
         }
-
         private void txt_Meta_1_KeyPress(object sender, KeyPressEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3124,7 +3114,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Si llegó aquí, no es un carácter válido
             e.Handled = true;
         }
-
         private void txt_Meta_1_Validating(object sender, CancelEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3179,7 +3168,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Si llegó aquí, no es un carácter válido
             e.Handled = true;
         }
-
         private void txt_Meta_2_Validating(object sender, CancelEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3234,7 +3222,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Si llegó aquí, no es un carácter válido
             e.Handled = true;
         }
-
         private void txt_Meta_3_Validating(object sender, CancelEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3289,7 +3276,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Si llegó aquí, no es un carácter válido
             e.Handled = true;
         }
-
         private void txt_Meta_4_Validating(object sender, CancelEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3302,7 +3288,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 e.Cancel = true;
             }
         }
-
         private void txt_Meta_5_KeyPress(object sender, KeyPressEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3344,7 +3329,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Si llegó aquí, no es un carácter válido
             e.Handled = true;
         }
-
         private void txt_Meta_5_Validating(object sender, CancelEventArgs e)
         {
             MaterialTextBox textBox = (MaterialTextBox)sender;
@@ -3357,7 +3341,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 e.Cancel = true;
             }
         }
-
         private void btn_meta_edit_Click(object sender, EventArgs e)
         {
             btn_meta_edit.Enabled = false;
@@ -3395,7 +3378,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 txt_op.Focus();
             }
         }
-
         private void btn_meta_cancel_Click(object sender, EventArgs e)
         {
             btn_meta_save.Enabled = false;
@@ -3414,7 +3396,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             id_global_meta_empacado = string.Empty;
             id_global_meta_inspec = string.Empty;
         }
-
         private void btn_delete_user_Click(object sender, EventArgs e)
         {
             if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este usuario?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -3459,7 +3440,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             }
         }
-
         private void btn_meta_delete_Click(object sender, EventArgs e)
         {
             ///deshidratado
@@ -3506,7 +3486,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-
             ///empacado
             ///
             if (cmb_area.SelectedIndex == 1 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Empacado?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
@@ -4468,17 +4447,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             meta_programada = hr_programada * meta_x_hr;
             Txt_Read_2.Text = meta_programada.ToString("0.##");
         }
-        //private void calcular_meta_programada_inspec_emp()
-        //{
-        //    double hr_programada, meta_programada, meta_x_hr, personal_o;
-
-        //    hr_programada = double.TryParse(Txt_Read_1.Text, out hr_programada) ? hr_programada : 0;
-        //    meta_x_hr = double.TryParse(Txt_meta.Text, out meta_x_hr) ? meta_x_hr : 0;
-        //    personal_o = double.TryParse(Txt_5.Text, out personal_o) ? personal_o : 0;
-        //    meta_programada = meta_x_hr * personal_o * hr_programada;
-        //    Txt_Read_2.Text = meta_programada.ToString("0.##");
-        //}
-
         private void calcular_turno()
         {
             if (cb_Area.SelectedIndex != -1)
@@ -4726,10 +4694,21 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                             };
+                            //lista de valores para resumen
                             
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgfrescosentersexhr = (kgFrescosEnterSe / hr_efec).ToString("0.##");
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg frescos entrada a secador en turno", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Kg frescos entrada a secador por hora", Kgfrescosentersexhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
-                            // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                             string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
                             string resultado = GenerarTablaDetallesOP();
@@ -4743,9 +4722,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
-
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -4827,6 +4810,20 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                     new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                                 };
+                                //lista de valores para resumen
+
+                                string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                                string Kgfrescosentersexhr = (kgFrescosEnterSe / hr_efec).ToString("0.##");
+                                List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                                {
+                                    new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                    new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                    new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                    new KeyValuePair<string, string>("Kg frescos entrada a secador en turno", kgFrescosEnterSe.ToString()),
+                                    new KeyValuePair<string, string>("Kg frescos entrada a secador por hora", Kgfrescosentersexhr)
+                                };
+
+                                string tablaResumen = GenerarTablaResumen(valoresResumen);
                                 string valorBuscado = cb_OP.Text;
 
                                 // Consulta para buscar donde OP = valor_buscado
@@ -4859,9 +4856,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
-
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -4982,7 +4983,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProdSeco/ hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -4998,7 +5011,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                         <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5060,7 +5078,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProdSeco / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5076,7 +5106,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                       <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5204,7 +5239,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5220,7 +5267,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5285,7 +5337,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5301,7 +5365,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                      <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5409,7 +5478,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5425,7 +5506,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5488,7 +5574,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5504,7 +5602,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5612,7 +5715,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5628,7 +5743,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5691,7 +5811,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5707,9 +5839,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
-
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -5818,7 +5954,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5834,7 +5982,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -5899,7 +6052,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -5915,7 +6080,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                       <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -6033,7 +6203,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
+                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
                         string tablaGenerada = GenerarTablaValores(valores);
                         // Generar tabla de tiempos muertos mecánicos
                         string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -6049,9 +6231,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
-
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -6115,7 +6301,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
+                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
 
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             // Generar tabla de tiempos muertos mecánicos
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
@@ -6131,7 +6329,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. Los valores capturados fueron los siguientes:
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
 
                                     {tablaGenerada}
@@ -8780,7 +8983,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
+                    new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
                 };
 
                 // Obtener los datos
@@ -8941,7 +9144,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             DataGridViewComboBoxColumn colTipo = new DataGridViewComboBoxColumn();
             colTipo.Name = "Column2"; // Nombre que mencionaste
             colTipo.HeaderText = "Tipo";
-            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colTipo.Width = 161; // Ajusta el ancho según tus necesidades
 
             // Agregar los items del ComboBox (mismos que configuraste)
             colTipo.Items.Add("FALLA TÉCNICA EN MAQUINARIA");
@@ -8957,6 +9161,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             colMotivos.HeaderText = "Motivos Mecánicos";
             colMotivos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             colMotivos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            colMotivos.Width = 470;
             dgv_mecanico.Columns.Add(colMotivos);
 
             // Configurar alineación de encabezados
@@ -8982,7 +9187,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             DataGridViewComboBoxColumn colTipo = new DataGridViewComboBoxColumn();
             colTipo.Name = "columTipo"; // Nombre que mencionaste
             colTipo.HeaderText = "Tipo";
-            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colTipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colTipo.Width = 161; // Ajusta el ancho según tus necesidades
 
             // Agregar los items del ComboBox
             colTipo.Items.Add("ALMACÉN");
@@ -8996,6 +9202,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             colMotivo.Name = "columMotivo"; // Nombre que mencionaste
             colMotivo.HeaderText = "Motivos Operativos";
             colMotivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colMotivo.Width = 470;
             dgv_operativo.Columns.Add(colMotivo);
 
             // Configurar alineación de encabezados
@@ -9003,52 +9210,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             dgv_operativo.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgv_operativo.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
-        //private void actualiza_tiempos_mecanicos(string id)
-        //{
-        //    dgv_mecanico.DataSource = null;
-        //    dgv_mecanico.Columns.Clear();
-
-        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-        //    string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
-        //                    ""Motivos"" as ""Motivos Mecánicos"" 
-        //             FROM public.""Tiempo_muerto_Mecanico"" 
-        //             WHERE ""ID_Ficha"" = @id_ficha 
-        //             ORDER BY ""ID_T_Mecanico"" ASC;";
-
-        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-        //    {
-        //new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
-        //    };
-
-        //    dbHelper.LoadDataIntoDataGridView(query, dgv_mecanico, parameters);
-        //    // Configurar columnas DESPUÉS de cargar los datos
-        //    ConfigurarColumnasDataGridView(dgv_mecanico);
-        //}
-
-        //private void actualiza_tiempos_operativos(string id)
-        //{
-        //    dgv_operativo.DataSource = null;
-        //    dgv_operativo.Columns.Clear();
-
-        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-        //    string query = @"SELECT ""Min_Detenidos"" as ""Minutos Detenidos"", 
-        //                    ""Motivos"" as ""Motivos Operativos"" 
-        //             FROM public.""Tiempo_Muerto_Operativo"" 
-        //             WHERE ""ID_Ficha"" = @id_ficha 
-        //             ORDER BY ""ID_T_Operativo"" ASC;";
-
-        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-        //    {
-        //        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id) }
-        //    };
-
-        //    dbHelper.LoadDataIntoDataGridView(query, dgv_operativo, parameters);
-        //    // Configurar columnas DESPUÉS de cargar los datos
-        //    ConfigurarColumnasDataGridView(dgv_operativo);
-        //}
-
         private void actualiza_tiempo_comida(string id)
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -9098,28 +9259,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 txt_Tiempo_energia.Text = "0";
             }
         }
-
-        //private void ConfigurarColumnasDataGridView(DataGridView dataGridView)
-        //{
-        //    if (dataGridView.Columns.Count >= 2)
-        //    {
-        //        // Primera columna: AutoSizeMode = AllCells
-        //        dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-        //        //dataGridView.Columns[0].HeaderText = "Minutos Detenidos";
-
-        //        // Segunda columna: AutoSizeMode = Fill
-        //        dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-        //        //dataGridView.Columns[1].HeaderText = "Motivos";
-
-        //        // Opcional: Configuración adicional para mejor apariencia
-        //        dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-        //        dataGridView.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-        //        dataGridView.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        //        dataGridView.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        //    }
-        //}
-
         private void dtp_calidad_ValueChanged(object sender, EventArgs e)
         {
             ActualizarNumeroSemana();
@@ -10146,162 +10285,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             btn_export_excel_merma.Enabled = false;
             btn_clean_merma.Enabled = false;
         }
-        //private void btn_export_excel_merma_Click(object sender, EventArgs e)
-        //{
-        //    LoadingScreen.ShowLoading();
-        //    try
-        //    {
-        //        var saveFileDialog = new SaveFileDialog
-        //        {
-        //            Filter = "Excel Files|*.xlsx;*.xls",
-        //            Title = "Guardar archivo de Excel"
-        //        };
-
-        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            ExportarDataGridViewFiltradoAExcel(
-        //                dgv_reporte_merma,
-        //                saveFileDialog.FileName
-        //            );
-
-        //            MetroFramework.MetroMessageBox.Show(
-        //                this,
-        //                "La exportación fue completada con éxito.",
-        //                "Exportación a Excel",
-        //                MessageBoxButtons.OK,
-        //                MessageBoxIcon.Information
-        //            );
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //MetroFramework.MetroMessageBox.Show(
-        //        //    this,
-        //        //    "Error durante la exportación: " + ex.Message,
-        //        //    "Error",
-        //        //    MessageBoxButtons.OK,
-        //        //    MessageBoxIcon.Error
-        //        //);
-        //       MessageBox.Show(
-        //            "Error durante la exportación: " + ex.Message,
-        //            "Error",
-        //            MessageBoxButtons.OK,
-        //            MessageBoxIcon.Error
-        //        );
-        //    }
-        //    finally
-        //    {
-        //        LoadingScreen.HideLoading();
-        //    }
-        //}
-
-        //private async void btn_export_excel_merma_Click(object sender, EventArgs e)
-        //{
-        //    LoadingScreen.ShowLoading();
-        //    try
-        //    {
-        //        // Mostrar el diálogo de guardar archivo en el hilo principal
-        //        var saveFileDialog = new SaveFileDialog
-        //        {
-        //            Filter = "Excel Files|*.xlsx;*.xls",
-        //            Title = "Guardar archivo de Excel"
-        //        };
-
-        //        string filePath = null;
-
-        //        // Mostrar el diálogo de guardado en el hilo principal
-        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            filePath = saveFileDialog.FileName;
-
-        //            // Ejecutar la tarea pesada (exportar a Excel) en un hilo separado usando Task.Run
-        //            await Task.Run(() =>
-        //            {
-        //                ExportarDataGridViewFiltradoAExcel(dgv_reporte_merma, filePath);
-        //            });
-
-        //            MetroFramework.MetroMessageBox.Show(this, "La exportación fue completada con éxito.", "Exportación a Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MetroFramework.MetroMessageBox.Show(this, "Error durante la exportación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    finally
-        //    {
-        //        // Ocultar la pantalla de cargando
-        //        LoadingScreen.HideLoading();
-        //    }
-        //}
-
-
-        //private void ExportarDataGridViewFiltradoAExcel(DataGridView dgv, string filePath)
-        //{
-        //    Excel.Application excelApp = new Excel.Application();
-        //    excelApp.Visible = false;
-
-        //    Excel.Workbook workbook = excelApp.Workbooks.Add();
-        //    Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
-
-        //    int colIndex = 1;
-
-        //    // Exportar encabezados solo para las columnas visibles
-        //    for (int i = 0; i < dgv.Columns.Count; i++)
-        //    {
-        //        if (dgv.Columns[i].Visible)
-        //        {
-        //            worksheet.Cells[1, colIndex] = dgv.Columns[i].HeaderText;
-
-        //            Excel.Range headerCell = worksheet.Cells[1, colIndex];
-        //            headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
-        //            headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
-        //            headerCell.Font.Bold = true;
-        //            headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-
-        //            colIndex++;
-        //        }
-        //    }
-
-        //    int rowIndex = 2;
-
-        //    foreach (DataGridViewRow row in dgv.Rows)
-        //    {
-        //        if (row.Visible)
-        //        {
-        //            colIndex = 1;
-        //            for (int j = 0; j < dgv.Columns.Count; j++)
-        //            {
-        //                if (dgv.Columns[j].Visible)
-        //                {
-        //                    worksheet.Cells[rowIndex, colIndex] = row.Cells[j].Value?.ToString();
-        //                    colIndex++;
-        //                }
-        //            }
-        //            rowIndex++;
-        //        }
-        //    }
-
-        //    Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[rowIndex - 1, colIndex - 1]];
-        //    usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-        //    worksheet.Columns.AutoFit();
-
-        //    if (filePath.EndsWith(".xlsx"))
-        //    {
-        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
-        //    }
-        //    else if (filePath.EndsWith(".xls"))
-        //    {
-        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
-        //    }
-
-        //    workbook.Close();
-        //    excelApp.Quit();
-
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
-        //}
         private void ExportarDataGridViewFiltradoAExcel_ClosedXML(
     DataGridView dgv,
     string filePath)
@@ -11035,85 +11018,6 @@ ORDER BY f.""OP"" ASC;";
                 LoadingScreen.HideLoading();
             }
         }
-
-        //private void ExportarRadGridViewFiltradoAExcel(RadGridView radGridView, string filePath)
-        //{
-        //    Excel.Application excelApp = new Excel.Application();
-        //    excelApp.Visible = false;
-
-        //    Excel.Workbook workbook = excelApp.Workbooks.Add();
-        //    Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets[1];
-
-        //    int colIndex = 1;
-
-        //    // Exportar encabezados solo para las columnas visibles
-        //    foreach (GridViewDataColumn column in radGridView.Columns)
-        //    {
-        //        if (column.IsVisible)
-        //        {
-        //            worksheet.Cells[1, colIndex] = column.HeaderText;
-
-        //            Excel.Range headerCell = worksheet.Cells[1, colIndex];
-        //            headerCell.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
-        //            headerCell.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Black);
-        //            headerCell.Font.Bold = true;
-        //            headerCell.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-
-        //            colIndex++;
-        //        }
-        //    }
-
-        //    int rowIndex = 2;
-
-        //    // Exportar datos de las filas visibles considerando filtros
-        //    // Usar ChildRows para obtener solo las filas visibles después de aplicar filtros
-        //    foreach (GridViewRowInfo row in radGridView.ChildRows)
-        //    {
-        //        // Verificar si la fila es visible y NO es una fila de grupo
-        //        // Las filas de grupo son del tipo GridViewGroupRowInfo
-        //        if (row.IsVisible && !(row is GridViewGroupRowInfo))
-        //        {
-        //            colIndex = 1;
-        //            foreach (GridViewDataColumn column in radGridView.Columns)
-        //            {
-        //                if (column.IsVisible)
-        //                {
-        //                    var cellValue = row.Cells[column.Name].Value;
-        //                    worksheet.Cells[rowIndex, colIndex] = cellValue?.ToString();
-        //                    colIndex++;
-        //                }
-        //            }
-        //            rowIndex++;
-        //        }
-        //    }
-
-        //    // Si no se encontraron datos, mostrar mensaje
-        //    if (rowIndex == 2)
-        //    {
-        //        worksheet.Cells[2, 1] = "No hay datos visibles para exportar";
-        //    }
-
-        //    Excel.Range usedRange = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[Math.Max(rowIndex - 1, 2), colIndex - 1]];
-        //    usedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-        //    worksheet.Columns.AutoFit();
-
-        //    if (filePath.EndsWith(".xlsx"))
-        //    {
-        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook);
-        //    }
-        //    else if (filePath.EndsWith(".xls"))
-        //    {
-        //        workbook.SaveAs(filePath, Excel.XlFileFormat.xlExcel8);
-        //    }
-
-        //    workbook.Close();
-        //    excelApp.Quit();
-
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
-        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
-        //}
         private void ExportarRadGridViewFiltradoAExcel_ClosedXML(
     RadGridView radGridView,
     string filePath)
@@ -13920,63 +13824,6 @@ ORDER BY
                 System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.High;
             ChartCumplimientoGeneralSemanal.IsSoftShadows = true;
         }
-
-        // Método auxiliar para añadir líneas de referencia al chart
-        //private void AddStripLinesToChart(System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea)
-        //{
-        //    // Zona excelente (90-100%)
-        //    System.Windows.Forms.DataVisualization.Charting.StripLine excellentZone =
-        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
-        //    excellentZone.BackColor = Color.FromArgb(235, 255, 235); // Verde muy claro
-        //    excellentZone.BorderColor = Color.FromArgb(200, 200, 200);
-        //    excellentZone.BorderWidth = 0;
-        //    excellentZone.IntervalOffset = 90;
-        //    excellentZone.StripWidth = 10;
-        //    excellentZone.Text = "Excelente";
-        //    excellentZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
-        //    excellentZone.ForeColor = Color.FromArgb(46, 204, 113);
-        //    chartArea.AxisY.StripLines.Add(excellentZone);
-
-        //    // Zona buena (80-90%)
-        //    System.Windows.Forms.DataVisualization.Charting.StripLine goodZone =
-        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
-        //    goodZone.BackColor = Color.FromArgb(255, 255, 235); // Amarillo muy claro
-        //    goodZone.BorderColor = Color.FromArgb(200, 200, 200);
-        //    goodZone.BorderWidth = 0;
-        //    goodZone.IntervalOffset = 80;
-        //    goodZone.StripWidth = 10;
-        //    goodZone.Text = "Bueno";
-        //    goodZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
-        //    goodZone.ForeColor = Color.FromArgb(241, 196, 15);
-        //    chartArea.AxisY.StripLines.Add(goodZone);
-
-        //    // Zona de mejora (0-80%)
-        //    System.Windows.Forms.DataVisualization.Charting.StripLine improveZone =
-        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
-        //    improveZone.BackColor = Color.FromArgb(255, 235, 235); // Rojo muy claro
-        //    improveZone.BorderColor = Color.FromArgb(200, 200, 200);
-        //    improveZone.BorderWidth = 0;
-        //    improveZone.IntervalOffset = 0;
-        //    improveZone.StripWidth = 80;
-        //    improveZone.Text = "Requiere mejora";
-        //    improveZone.Font = new Font("Segoe UI", 8, FontStyle.Italic);
-        //    improveZone.ForeColor = Color.FromArgb(231, 76, 60);
-        //    chartArea.AxisY.StripLines.Add(improveZone);
-
-        //    // Línea objetivo principal (92%)
-        //    System.Windows.Forms.DataVisualization.Charting.StripLine targetLine =
-        //        new System.Windows.Forms.DataVisualization.Charting.StripLine();
-        //    targetLine.BackColor = Color.Transparent;
-        //    targetLine.BorderColor = Color.FromArgb(241, 196, 15); // Dorado
-        //    targetLine.BorderWidth = 2;
-        //    targetLine.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot;
-        //    targetLine.IntervalOffset = 92;
-        //    targetLine.StripWidth = 0.5;
-        //    targetLine.Text = "Objetivo General 92%";
-        //    targetLine.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-        //    targetLine.ForeColor = Color.FromArgb(241, 196, 15);
-        //    chartArea.AxisY.StripLines.Add(targetLine);
-        //}
         private void GraficarCumplimientoMensualOtrasAreasPorSupervisor()
         {
             try
@@ -17256,7 +17103,7 @@ ORDER BY
         public string GenerarTablaValores(List<KeyValuePair<string, string>> valores)
         {
             string tabla = @"
-        <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+            <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
             <tr style='background: #e9ecef;'>
                 <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Concepto</th>
                 <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Valor</th>
@@ -17271,6 +17118,69 @@ ORDER BY
             </tr>";
             }
 
+            tabla += "</table>";
+
+            return tabla;
+        }
+        public string GenerarTablaResumen(List<KeyValuePair<string, string>> valores)
+        {
+            string tabla = @"
+            <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+            <tr style='background: #e9ecef;'>
+                <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Concepto</th>
+                <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Valor</th>
+            </tr>";
+
+            foreach (var item in valores)
+            {
+                tabla += $@"
+            <tr>
+                <td style='border: 1px solid #ccc; padding: 8px;'>{item.Key}</td>
+                <td style='border: 1px solid #ccc; padding: 8px;'>{item.Value}</td>
+            </tr>";
+            }
+            if (cb_Area.SelectedIndex == 1)
+            {
+                decimal porcentaje = 0;
+                string valorLimpio = Txt_Read_5.Text.Replace("%", "").Trim();
+                decimal.TryParse(valorLimpio, out porcentaje);
+
+                string colorFila;
+
+                if (porcentaje >= 90)
+                    colorFila = "#00913F"; // Verde
+                else if (porcentaje >= 80)
+                    colorFila = "#E5BE01"; // Amarillo
+                else
+                    colorFila = "#A52019"; // Rojo
+
+                tabla += $@"
+                    <tr style='background-color: {colorFila};'>
+                        <td style='border: 1px solid #ccc; padding: 8px;'>% Cumplimiento</td>
+                        <td style='border: 1px solid #ccc; padding: 8px;'>{Txt_Read_5.Text}</td>
+                    </tr>";
+            }
+            if (cb_Area.SelectedIndex != 0 && cb_Area.SelectedIndex != 1)
+            {
+                decimal porcentaje = 0;
+                string valorLimpio = Txt_Read_4.Text.Replace("%", "").Trim();
+                decimal.TryParse(valorLimpio, out porcentaje);
+
+                string colorFila;
+
+                if (porcentaje >= 90)
+                    colorFila = "#d4edda"; // Verde
+                else if (porcentaje >= 80)
+                    colorFila = "#fff3cd"; // Amarillo
+                else
+                    colorFila = "#f8d7da"; // Rojo
+
+                tabla += $@"
+                    <tr style='background-color: {colorFila};'>
+                        <td style='border: 1px solid #ccc; padding: 8px;'>% Cumplimiento</td>
+                        <td style='border: 1px solid #ccc; padding: 8px;'>{Txt_Read_2.Text}</td>
+                    </tr>";
+            }
             tabla += "</table>";
 
             return tabla;
