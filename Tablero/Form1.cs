@@ -1,13 +1,16 @@
-﻿using MaterialSkin;
+﻿using ClosedXML.Excel;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using Npgsql;
 using System;
 using System.Collections.Generic; // ¡Agrega esta línea!
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -23,8 +26,6 @@ using Telerik.WinControls.UI.Export;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using Telerik.WinForms.Documents.Model.Notes;
 using static System.Net.WebRequestMethods;
-using ClosedXML.Excel;
-using System.IO;
 
 namespace Tablero
 {
@@ -45,6 +46,9 @@ namespace Tablero
         private string id_global_detalles_OP = string.Empty;
         private int id_user = 0;
         private string nivel_user = string.Empty;
+        private string nombre_admin = string.Empty;
+        private string numero_empleado_admin = string.Empty;
+        private int id_supervisor_global = 0;
         private bool filtroUsuariosActivo = false;
         private bool filtroUsuariosActivo_OP = false;
         private bool filtrodetallesOP = false;
@@ -107,6 +111,9 @@ namespace Tablero
             connectionString = conexionstring; // Asignar la cadena de conexión pasada como parámetro
             id_user = ID_usuario; // Asignar el ID del usuario pasado como parámetro
             nivel_user = nivel; // Asignar el nivel del usuario pasado como parámetro
+
+            nombre_admin = var_nom_empledo.ToUpper(); // Almacenar el nombre del usuario para uso futuro
+            numero_empleado_admin = var_no_empledo; // Almacenar el número de empleado para uso futuro
 
             // Initialize MaterialSkinManager and set the theme and color scheme  
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -347,7 +354,7 @@ namespace Tablero
                 ActualizarAnioReportes();
                 carga_Jefes();
 
-
+                menuStrip1.Visible = true; // Mostrar el menú para el administrador
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
             {
@@ -4634,6 +4641,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 try
                 {
                     int idUsuarioActual = id_user;
+                   
 
                     if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
                         && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
@@ -4671,6 +4679,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                         if (editar)
                         {
+                            idUsuarioActual = id_supervisor_global;
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
                             mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
@@ -4694,20 +4703,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                             };
-                            //lista de valores para resumen
-                            
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
-                            string Kgfrescosentersexhr = (kgFrescosEnterSe / hr_efec).ToString("0.##");
-                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
-                            {
-                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
-                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
-                                new KeyValuePair<string, string>("Kg frescos entrada a secador en turno", kgFrescosEnterSe.ToString()),
-                                new KeyValuePair<string, string>("Kg frescos entrada a secador por hora", Kgfrescosentersexhr)
-                            };
-
-                            string tablaResumen = GenerarTablaResumen(valoresResumen);
                             string tablaGenerada = GenerarTablaValores(valores);
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                             string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
@@ -4722,13 +4717,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                        <strong>{op}</strong>. La siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
-                                    {tablaResumen} 
                                     <br>
-                                    <p>
-                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
-                                    </p>
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -4810,22 +4801,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     new KeyValuePair<string, string>("Kg de Meta Programada", meta_kg.ToString()),
                                     new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString())
                                 };
-                                //lista de valores para resumen
-
-                                string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
-                                string Kgfrescosentersexhr = (kgFrescosEnterSe / hr_efec).ToString("0.##");
-                                List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
-                                {
-                                    new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
-                                    new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                    new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
-                                    new KeyValuePair<string, string>("Kg frescos entrada a secador en turno", kgFrescosEnterSe.ToString()),
-                                    new KeyValuePair<string, string>("Kg frescos entrada a secador por hora", Kgfrescosentersexhr)
-                                };
-
-                                string tablaResumen = GenerarTablaResumen(valoresResumen);
                                 string valorBuscado = cb_OP.Text;
-
                                 // Consulta para buscar donde OP = valor_buscado
                                 string query = "SELECT \"Orden_Produccion\", \"Producto\", \"Medida\", \"Descripcion\", " +
                                     "\"Especificacion\", \"Ingredientes\", \"Humedad\", \"Comercio\", \"Manzana\", \"Analisis\", " +
@@ -4856,12 +4832,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
-                                    </p>
-                                    {tablaResumen} 
-                                    <br>
-                                    <p>
-                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                        <strong>{op}</strong>. La siguiente tabla muestra los detalles registrados durante el turno:
                                     </p>
                                     {tablaGenerada}
                                     <br>
@@ -4961,6 +4932,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
@@ -4983,14 +4955,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProdSeco/ hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5078,14 +5048,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProdSeco / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5219,6 +5187,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         Porcent_Aumento_Hume, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
@@ -5239,14 +5208,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5337,14 +5304,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                             string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5459,6 +5424,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
@@ -5478,14 +5444,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5574,14 +5538,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                             string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5696,6 +5658,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado);
@@ -5715,14 +5678,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5811,14 +5772,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                             string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -5933,6 +5892,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         polvo_colector, Granulo, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado);
@@ -5954,14 +5914,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -6052,14 +6010,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
+
                             string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -6179,6 +6136,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     if (editar)
                     {
+                        idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, 
@@ -6203,14 +6161,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
-                        string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                         string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -6301,14 +6257,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
-                            string MetaProgramadaxHr = (meta_kg / hr_efec).ToString("0.##");
                             string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
-                                new KeyValuePair<string, string>("Meta programada por hora", MetaProgramadaxHr),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
                             };
@@ -6648,6 +6602,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cb_Area.Focus();
                 editar = false; // Reiniciar el estado de edición
                 id_global_ficha = string.Empty; // Limpiar el ID global
+                if (nivel_user == "Administrador")
+                {
+                    lbl_no_emp2.Text = numero_empleado_admin;
+                    lbl_nom2.Text = nombre_admin;
+                    cb_supervisor_turno.Visible = false;
+                }
             }
         }
 
@@ -8450,6 +8410,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_Area.Focus();
             editar = false;
             cb_jefe_turno.Enabled = false;
+            if (nivel_user == "Administrador")
+            {
+                lbl_no_emp2.Text = numero_empleado_admin;
+                lbl_nom2.Text = nombre_admin;
+                cb_supervisor_turno.Visible = false;
+            }
         }
 
         private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -8471,13 +8437,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
                 //MessageBox.Show($"ID seleccionado: {id_global}\nÁrea: {area}");
                 id_global_ficha = id_global;
+                cb_supervisor_turno.Visible = true;
                 if (area == "Tunel/Sumergidor")
                 {
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     // Consulta para buscar donde OP = valor_buscado
                     string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
                     "\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
-                    " \"ID_Jefe\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
+                    " \"ID_Jefe\", \"ID_user\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8505,6 +8472,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Personal_Operativo = string.Empty;
                     string Cascara_carrete = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
 
                     // Verificar si se encontraron resultados
                     if (dt2 != null && dt2.Rows.Count > 0)
@@ -8526,8 +8494,36 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         Cascara_carrete = dt2.Rows[0]["Cascara_carrete"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
+                    }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                        // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
                     }
 
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -8567,7 +8563,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Consulta para buscar donde OP = valor_buscado
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Lote"", ""Kg_prod_seco"", ""Merma_kg"", ""Kg_fuera_espec"", ""Kg_resecar"", 
                                     ""Personal_Operativo"", ""Hr_programadas"", ""Hr_efectivas"", ""porcent_cump_meta"", ""Kg_meta"", ""Relacion_Fr_seco"", 
-                                    ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                                    ""FTT"", ""Hr_inicio"", ""Hr_fin"", ""MetaHr"", ""ID_Jefe"", ""ID_user"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8577,6 +8573,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                     // Ejecutar consulta
                     System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+
+                    
 
                     // Variables
                     string OP = string.Empty;
@@ -8592,6 +8590,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Kg_resecar = string.Empty;
                     string Personal_Operativo = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
 
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
@@ -8608,8 +8607,37 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Kg_resecar = dt2.Rows[0]["Kg_resecar"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
+                    }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
                     }
 
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
+                    ///
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -8644,7 +8672,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""ID_Jefe"", ""ID_user"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8668,6 +8696,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Merma_kg = string.Empty;
                     string Personal_Operativo = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
 
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
@@ -8684,8 +8713,36 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
+                    }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
                     }
 
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -8717,7 +8774,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Proceso"", ""Kg_prod_term"", ""Kg_enter_proceso"", 
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""ID_Jefe"", ""ID_user"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8739,6 +8796,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Merma_kg = string.Empty;
                     string Personal_Operativo = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
+
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
@@ -8754,7 +8813,36 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Merma_kg = dt2.Rows[0]["Merma_kg"].ToString();
                         Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
                     }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
+                    }
+
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -8787,7 +8875,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_enter_proceso"", ""Kg_prod_term"",  
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""MetaHr"", ""Polvo_colector"", ""Granulo"", ""ID_Jefe"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
+                    ""MetaHr"", ""Polvo_colector"", ""Granulo"", ""ID_Jefe"", ""ID_user"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
                     {
@@ -8810,6 +8898,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Polvo_colector = string.Empty;
                     string Granulo = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
+
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         OP = dt2.Rows[0]["OP"].ToString();
@@ -8826,7 +8916,36 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Polvo_colector = dt2.Rows[0]["Polvo_colector"].ToString();
                         Granulo = dt2.Rows[0]["Granulo"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
                     }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
+                    }
+
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -8859,7 +8978,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                     string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""MetaHr"", ""Hr_inicio"", ""Hr_fin"", ""Pz_prod"", ""Kg_meta"", ""Kg_prod_term"", 
-                    ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Bobina_merma"", ""ID_Jefe"" 
+                    ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Bobina_kg_enter"", ""Bobina_utilizada"", ""Bobina_merma"", ""ID_Jefe"", ""ID_user"" 
                     FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                     // Crear parámetro
                     NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -8887,6 +9006,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string Bobina_utilizada = string.Empty;
                     string Bobina_merma = string.Empty;
                     string ID_Jefe = string.Empty;
+                    string ID_user = string.Empty;
+
                     if (dt2 != null && dt2.Rows.Count > 0)
                     {
                         Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
@@ -8905,8 +9026,36 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Bobina_utilizada = dt2.Rows[0]["Bobina_utilizada"].ToString();
                         Bobina_merma = dt2.Rows[0]["Bobina_merma"].ToString();
                         ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+                        ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
+                    }
+                    ////seccion para cargar supervisor
+                    //buscar usuario
+                    query2 = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"ID_User\" = @idUser";
+
+                    // Crear parámetro
+                    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                    {
+                        new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(ID_user) }
+                    };
+
+                    // Ejecutar consulta
+                    System.Data.DataTable dt1 = dbHelper.ExecuteSelectQuery(query2, parameters);
+
+                    string usuario_var = string.Empty;
+                    string no_empleado_var = string.Empty;
+
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        usuario_var = dt1.Rows[0]["Usuario"].ToString();
+                        no_empleado_var = dt1.Rows[0]["No_Empleado"].ToString();
                     }
 
+                    lbl_no_emp2.Text = no_empleado_var;
+                    lbl_nom2.Text = usuario_var;
+
+                    string query = "SELECT \"Usuario\", \"No_Empleado\" FROM public.\"Usuarios\" where \"Nivel\" = 'Supervisor'";
+                    dbHelper.LoadDataIntoComboBox(query, cb_supervisor_turno, "Usuario", "No_Empleado");
+                    //////////////termina seccion supervisor
                     cb_Area.Text = area;
                     cb_OP.Text = OP;
                     // LLAMAR MANUALMENTE EL EVENTO después de asignar el valor
@@ -17806,6 +17955,83 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             if (dgv_operativo.IsCurrentCellDirty)
             {
                 dgv_operativo.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void cb_supervisor_turno_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+            
+            //DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            //// Consulta para buscar donde OP = valor_buscado
+            //string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
+            //"\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
+            //" \"ID_Jefe\", \"ID_user\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
+
+            //// Crear parámetro
+            //NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+            //{
+            //            new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
+            //};
+
+            //// Ejecutar consulta
+            //System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+            //// Verificar si se encontraron resultados
+            //if (dt2 != null && dt2.Rows.Count > 0)
+            //{
+            //    OP = dt2.Rows[0]["OP"].ToString();
+            //    Turno = dt2.Rows[0]["Turno"].ToString();
+            //    Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
+            //    Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
+            //    Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
+            //    MetaHr = dt2.Rows[0]["MetaHr"].ToString();
+            //    Lote = dt2.Rows[0]["Lote"].ToString();
+            //    Kg_enter_proceso = dt2.Rows[0]["Kg_enter_proceso"].ToString();
+            //    Merma_canica = dt2.Rows[0]["Merma_canica"].ToString();
+            //    Merma_podrido = dt2.Rows[0]["Merma_podrido"].ToString();
+            //    Merma_tina = dt2.Rows[0]["Merma_tina"].ToString();
+            //    Merma_piso = dt2.Rows[0]["Merma_piso"].ToString();
+            //    Merma_canaletas = dt2.Rows[0]["Merma_canaletas"].ToString();
+            //    Merma_lavado_bandas = dt2.Rows[0]["Merma_lavado_bandas"].ToString();
+            //    Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
+            //    Cascara_carrete = dt2.Rows[0]["Cascara_carrete"].ToString();
+            //    ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
+            //    ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
+            //}
+        }
+
+        private void cb_supervisor_turno_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cb_supervisor_turno.SelectedItem != null)
+            {
+                // OPCIÓN 1: Usando SelectedValue (recomendado)
+                string valorNoEmpleado = cb_supervisor_turno.SelectedValue?.ToString();
+                lbl_no_emp2.Text = valorNoEmpleado;
+                lbl_nom2.Text = cb_supervisor_turno.Text;
+
+
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                // Consulta para buscar donde OP = valor_buscado
+                string query2 = "SELECT \"ID_User\" FROM public.\"Usuarios\" where \"No_Empleado\" = @valorBuscado";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = valorNoEmpleado
+                        }
+                };
+
+                // Ejecutar consulta
+                System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                string id_supervisor = string.Empty;
+                // Verificar si se encontraron resultados
+                if (dt2 != null && dt2.Rows.Count > 0)
+                {
+                    id_supervisor = dt2.Rows[0]["ID_User"].ToString();
+                }
+                id_supervisor_global = System.Convert.ToInt32(id_supervisor);
             }
         }
     }

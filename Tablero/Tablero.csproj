@@ -259,6 +259,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\logo1.gif" />
+    <None Include="Resources\logopicolargo.png" />
     <None Include="Resources\checklist_66191021.png" />
     <None Include="Resources\chart_graph_statistics_bar.png" />
     <None Include="Resources\filter_filters_icon.png" />
