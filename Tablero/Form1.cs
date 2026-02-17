@@ -325,6 +325,7 @@ namespace Tablero
 
         private void Form_principal_Load(object sender, EventArgs e)
         {
+            materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo
             if (nivel_user == "Administrador")
             {
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -362,7 +363,7 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage10);
-                materialTabControl1.TabPages.Remove(tabPage11);
+                materialTabControl1.TabPages.Remove(tabPage11); 
 
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
 
@@ -405,10 +406,11 @@ namespace Tablero
                 tabgraficas.TabPages.Remove(tabPage27);
                 tabgraficas.TabPages.Remove(tabPage28);
                 tabgraficas.TabPages.Remove(tabPage29);
-                tabgraficas.TabPages.Remove(tabPage30
-                    );
+                tabgraficas.TabPages.Remove(tabPage30);
                 tabgraficas.TabPages.Remove(tabPage31);
                 tabgraficas.TabPages.Remove(tabPage32);
+                tabgraficas.TabPages.Remove(tabPage34);
+                tabgraficas.TabPages.Remove(tabPage35);
 
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
@@ -1677,6 +1679,32 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
                 
         }
+        private void reiniciarCampos_comboturno()
+        {
+            Mask_txt_hr1.Text = string.Empty;
+            Mask_txt_hr2.Text = string.Empty;
+            txt_Tiempo_comida.Text = "30";
+            txt_Tiempo_energia.Text = "0";
+            if (dgv_mecanico.DataSource is DataTable dt1)
+            {
+                dt1.Rows.Clear();
+            }
+            else
+            {
+                dgv_mecanico.Rows.Clear();
+            }
+
+            if (dgv_operativo.DataSource is DataTable dt2)
+            {
+                dt2.Rows.Clear();
+            }
+            else
+            {
+                dgv_operativo.Rows.Clear();
+            }
+
+        }
+
 
         private void dgv_users_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -4460,31 +4488,49 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 try
                 {
-
-                    if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text) && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
+                    if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text)
+                        && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
                     {
-                        // Si la hora de fin es menor a la de inicio, significa que pasó a otro día
-                        if (horaFin < horaInicio)
+                        // Crear copias de las horas para no modificar las originales
+                        DateTime inicio = horaInicio;
+                        DateTime fin = horaFin;
+
+                        // Verificar si la hora de fin es menor que la de inicio
+                        // Pero considerar que si la diferencia es muy grande (>12 horas),
+                        // probablemente es porque pasó al día siguiente
+                        if (fin < inicio)
                         {
-                            horaFin = horaFin.AddDays(1);
+                            // Si la diferencia es más de 12 horas en negativo, asumimos que es del día siguiente
+                            if ((inicio - fin).TotalHours > 12)
+                            {
+                                fin = fin.AddDays(1);
+                            }
                         }
 
                         // Calcular diferencia inicial
-                        TimeSpan diferencia = horaFin - horaInicio;
+                        TimeSpan diferencia = fin - inicio;
 
                         // Restar minutos energia
                         if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
                         {
                             diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
                         }
+                        //validar si el turno es menor a 6 horas
+                        // Convertir la diferencia a minutos totales (como double)
+                        double minutosTotales = diferencia.TotalMinutes;
 
+                        // Comparar con 360 minutos (6 horas = 360 minutos)
+                        if (minutosTotales < 360)
+                        {
+                            txt_Tiempo_comida.Text = "0";
+                        }
                         // Restar minutos comida
                         if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
                         {
                             diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
                         }
 
-                        // Mostrar horas totales (con decimales si hay minutos) - SIN CAMBIOS
+                        // Mostrar horas totales (con decimales si hay minutos)
                         Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
 
                         // Calcular la nueva diferencia restando los minutos
@@ -4501,15 +4547,18 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
                         }
+
                         // Asegurar que no sea negativo
                         if (diferenciaConDescuento.TotalMinutes < 0)
                         {
                             diferenciaConDescuento = TimeSpan.Zero;
                         }
+
                         if (!string.IsNullOrEmpty(Txt_meta.Text) && cb_Area.SelectedIndex != 4)
                         {
                             calcular_meta_programada();
                         }
+
                         // Mostrar el resultado con descuento en Txt_Read_3
                         Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
                     }
@@ -4517,21 +4566,18 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show($"Error en cálculo: {ex.Message}");
                     if (ex is FormatException)
                     {
-                        //MetroFramework.MetroMessageBox.Show(this, "Formato de hora inválido. Asegúrese de usar HH:mm.",
-                        //                                    "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         btn_save_ficha.Enabled = false;
                     }
                 }
             }
-
         }
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Turno.SelectedIndex != -1)
             {
+                if (!editar) { reiniciarCampos_comboturno(); }
                 if (cb_Turno.SelectedIndex == 0)
                 {
                     Mask_txt_hr1.Text = "07:00";
@@ -7685,6 +7731,29 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void txt_Tiempo_comida_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
+            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_cumplimiento_metas();
+                Ftt_metodo();
+                Relacion_Fresco_seco();
+            }
+            if ((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_logrado_planeacion();
+            }
+            if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+            {
+                porcentaje_aumento_humedad();
+            }
+            if ((cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_logrado_planeacion_platinum();
+            }
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            {
+                calcular_meta_programada();
+                porcentaje_logrado_planeacion();
+            }
         }
 
         private void Mask_txt_hr1_TextChanged(object sender, EventArgs e)
@@ -7736,6 +7805,29 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void txt_Tiempo_energia_TextChanged(object sender, EventArgs e)
         {
             calcular_turno();
+            if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_cumplimiento_metas();
+                Ftt_metodo();
+                Relacion_Fresco_seco();
+            }
+            if ((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_logrado_planeacion();
+            }
+            if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+            {
+                porcentaje_aumento_humedad();
+            }
+            if ((cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+            {
+                porcentaje_logrado_planeacion_platinum();
+            }
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            {
+                calcular_meta_programada();
+                porcentaje_logrado_planeacion();
+            }
         }
 
         private void Txt_2_Validating(object sender, CancelEventArgs e)
@@ -15976,8 +16068,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario""";
                     serieSupervisor.LabelBorderWidth = 1;
                     serieSupervisor.ShadowColor = Color.FromArgb(30, 30, 30);
                     serieSupervisor.ShadowOffset = 2;
-                    serieSupervisor["PointWidth"] = "0.6";
-                    serieSupervisor["DrawSideBySide"] = "True";
+                    serieSupervisor["PointWidth"] = "0.8";
+                    serieSupervisor["DrawSideBySide"] = "TRUE";
+                    serieSupervisor.SmartLabelStyle.Enabled = true;
+                    serieSupervisor.SmartLabelStyle.AllowOutsidePlotArea = LabelOutsidePlotAreaStyle.Yes;
+                    serieSupervisor.SmartLabelStyle.MovingDirection = LabelAlignmentStyles.Top;
+                    serieSupervisor.SmartLabelStyle.MinMovingDistance = 10;
 
                     // Filtrar datos para este supervisor y agregar puntos
                     var datosSupervisor = datos.AsEnumerable()
@@ -16005,7 +16101,35 @@ ORDER BY año, numero_semana, ""Nombre_Usuario""";
                     // Agregar serie al chart
                     chartMermaSupervisor.Series.Add(serieSupervisor);
                 }
+                double maxValorReal = 0;
 
+                foreach (Series serie in chartMermaSupervisor.Series)
+                {
+                    foreach (System.Windows.Forms.DataVisualization.Charting.DataPoint point in serie.Points)
+                    {
+                        if (point.YValues[0] > maxValorReal)
+                            maxValorReal = point.YValues[0];
+                    }
+                }
+                var area = chartMermaSupervisor.ChartAreas["MermaSupervisorArea"];
+
+                area.AxisY.Minimum = 0;
+
+                // Si todos los valores son 0 evitar error
+                if (maxValorReal == 0)
+                {
+                    area.AxisY.Maximum = 10;
+                    area.AxisY.Interval = 2;
+                }
+                else
+                {
+                    double intervalo = ObtenerIntervaloElegante(maxValorReal);
+
+                    area.AxisY.Interval = intervalo;
+
+                    // Redondear el máximo hacia arriba al múltiplo del intervalo
+                    area.AxisY.Maximum = Math.Ceiling(maxValorReal / intervalo) * intervalo;
+                }
                 // Actualizar el chart
                 chartMermaSupervisor.Invalidate();
 
@@ -16015,7 +16139,22 @@ ORDER BY año, numero_semana, ""Nombre_Usuario""";
                 MetroFramework.MetroMessageBox.Show(this, $"Error al graficar merma por supervisor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private double ObtenerIntervaloElegante(double max)
+        {
+            double roughInterval = max / 6; // Queremos aprox 6 divisiones visibles
 
+            double magnitude = Math.Pow(10, Math.Floor(Math.Log10(roughInterval)));
+            double residual = roughInterval / magnitude;
+
+            if (residual > 5)
+                return 10 * magnitude;
+            if (residual > 2)
+                return 5 * magnitude;
+            if (residual > 1)
+                return 2 * magnitude;
+
+            return magnitude;
+        }
         // Método para generar colores armoniosos usando una paleta predefinida escalable
         private Color GenerateHarmoniousColor(int index, int totalColors)
         {
@@ -16104,9 +16243,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario""";
             chartArea.AxisX.MajorTickMark.Enabled = true;
             chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
             chartArea.AxisX.Interval = 1;
-            chartArea.AxisX.IsMarginVisible = true;
+            //chartArea.AxisX.IsMarginVisible = true;
             chartArea.AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont |
                                                System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels;
+            chartArea.AxisX.IsMarginVisible = false;
 
             // Configurar eje Y moderno para KILOGRAMOS
             chartArea.AxisY.Title = "KILOGRAMOS DE MERMA";
@@ -16120,6 +16260,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario""";
             chartArea.AxisY.LineColor = Color.FromArgb(150, 150, 150);
             chartArea.AxisY.MajorTickMark.Enabled = true;
             chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(100, 100, 100);
+            //chartArea.AxisY.IsLogarithmic = true;
 
             // Configurar eje Y automáticamente según los datos
             chartArea.AxisY.Minimum = 0;
@@ -17327,7 +17468,7 @@ ORDER BY
                 tabla += $@"
                     <tr style='background-color: {colorFila};'>
                         <td style='border: 1px solid #ccc; padding: 8px;'>% Cumplimiento</td>
-                        <td style='border: 1px solid #ccc; padding: 8px;'>{Txt_Read_2.Text}</td>
+                        <td style='border: 1px solid #ccc; padding: 8px;'>{Txt_Read_4.Text}</td>
                     </tr>";
             }
             tabla += "</table>";
@@ -17958,48 +18099,6 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             }
         }
 
-        private void cb_supervisor_turno_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
-            
-            //DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            //// Consulta para buscar donde OP = valor_buscado
-            //string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
-            //"\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
-            //" \"ID_Jefe\", \"ID_user\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
-
-            //// Crear parámetro
-            //NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
-            //{
-            //            new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Integer) { Value = System.Convert.ToInt32(id_global) }
-            //};
-
-            //// Ejecutar consulta
-            //System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
-            //// Verificar si se encontraron resultados
-            //if (dt2 != null && dt2.Rows.Count > 0)
-            //{
-            //    OP = dt2.Rows[0]["OP"].ToString();
-            //    Turno = dt2.Rows[0]["Turno"].ToString();
-            //    Fecha = System.Convert.ToDateTime(dt2.Rows[0]["Fecha"]);
-            //    Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
-            //    Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
-            //    MetaHr = dt2.Rows[0]["MetaHr"].ToString();
-            //    Lote = dt2.Rows[0]["Lote"].ToString();
-            //    Kg_enter_proceso = dt2.Rows[0]["Kg_enter_proceso"].ToString();
-            //    Merma_canica = dt2.Rows[0]["Merma_canica"].ToString();
-            //    Merma_podrido = dt2.Rows[0]["Merma_podrido"].ToString();
-            //    Merma_tina = dt2.Rows[0]["Merma_tina"].ToString();
-            //    Merma_piso = dt2.Rows[0]["Merma_piso"].ToString();
-            //    Merma_canaletas = dt2.Rows[0]["Merma_canaletas"].ToString();
-            //    Merma_lavado_bandas = dt2.Rows[0]["Merma_lavado_bandas"].ToString();
-            //    Personal_Operativo = dt2.Rows[0]["Personal_Operativo"].ToString();
-            //    Cascara_carrete = dt2.Rows[0]["Cascara_carrete"].ToString();
-            //    ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
-            //    ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
-            //}
-        }
-
         private void cb_supervisor_turno_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (cb_supervisor_turno.SelectedItem != null)
@@ -18032,6 +18131,22 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                     id_supervisor = dt2.Rows[0]["ID_User"].ToString();
                 }
                 id_supervisor_global = System.Convert.ToInt32(id_supervisor);
+            }
+        }
+
+        private void dgv_operativo_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+            // Marcar el error como manejado para que no muestre el diálogo predeterminado
+            e.ThrowException = false;
+
+            // Opcional: Si el error es por valor inválido en ComboBox, limpiar la celda
+            if (e.Exception is ArgumentException)
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgv_operativo.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = null;
+                }
             }
         }
     }
