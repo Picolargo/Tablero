@@ -2,14 +2,14 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Tablero"
-#define MyAppVersion "1.8.5"
+#define MyAppVersion "1.4"
 #define MyAppExeName "Tablero.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{DC908F9B-3A85-4642-8988-0048D1404387}
+AppId={{0A9F0F74-A2BE-4EA5-A55A-B872590E5011}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -43,6 +43,15 @@ Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ExcelNumberFormat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ExcelNumberFormat.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MaterialSkin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion

@@ -159,36 +159,6 @@ namespace Tablero
                 MessageBox.Show("Error al cargar datos: " + ex.Message);
             }
         }
-
-        // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
-        //public bool ValidateUser(string identificador, string password)
-        //{
-        //    // Consulta que acepta tanto Usuario como No_Empleado
-        //    string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-        //           WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
-        //           AND ""Password"" = @password";
-
-        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-        //    {
-        //        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
-        //        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
-        //    };
-
-        //    try
-        //    {
-        //        DataTable result = ExecuteSelectQuery(query, parameters);
-        //        if (result != null && result.Rows.Count > 0)
-        //        {
-        //            return Convert.ToInt32(result.Rows[0][0]) > 0;
-        //        }
-        //        return false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error al validar usuario: " + ex.Message);
-        //        return false;
-        //    }
-        //}
         // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
         public bool ValidateUser(string identificador, string password)
         {
@@ -238,34 +208,6 @@ namespace Tablero
                 return false;
             }
         }
-
-        // Método adicional para obtener información completa del usuario
-        //public DataRow GetUserInfo(string identificador)
-        //{
-        //    string query = @"SELECT ""ID_User"", ""Usuario"", ""No_Empleado"", ""Nivel"" FROM public.""Usuarios"" 
-        //           WHERE ""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador";
-
-        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
-        //    {
-        //        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
-        //    };
-
-        //    try
-        //    {
-        //        DataTable result = ExecuteSelectQuery(query, parameters);
-        //        if (result != null && result.Rows.Count > 0)
-        //        {
-        //            return result.Rows[0];
-        //        }
-        //        return null;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error al obtener información del usuario: " + ex.Message);
-        //        return null;
-        //    }
-        //}
-        // Método adicional para obtener información completa del usuario
         public DataRow GetUserInfo(string identificador)
         {
             return GetUserInfo(identificador, out _);
