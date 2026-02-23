@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition49 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition50 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition51 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition5 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -109,10 +109,14 @@
             this.pnl_graficas = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
             this.materialCard26 = new MaterialSkin.Controls.MaterialCard();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel10 = new System.Windows.Forms.Panel();
             this.labelTitulo = new System.Windows.Forms.Label();
-            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.labelSubtitulo = new System.Windows.Forms.Label();
+            this.panel11 = new System.Windows.Forms.Panel();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.materialCard19 = new MaterialSkin.Controls.MaterialCard();
+            this.cb_tipo_grafica = new MaterialSkin.Controls.MaterialComboBox();
             this.CB_Anio_grafica = new MaterialSkin.Controls.MaterialComboBox();
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
@@ -360,7 +364,6 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
-            this.cb_tipo_grafica = new MaterialSkin.Controls.MaterialComboBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -400,6 +403,9 @@
             this.pnl_graficas.SuspendLayout();
             this.panel7.SuspendLayout();
             this.materialCard26.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel10.SuspendLayout();
+            this.panel11.SuspendLayout();
             this.materialCard19.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
@@ -1754,9 +1760,7 @@
             // materialCard26
             // 
             this.materialCard26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard26.Controls.Add(this.labelTitulo);
-            this.materialCard26.Controls.Add(this.cartesianChart1);
-            this.materialCard26.Controls.Add(this.labelSubtitulo);
+            this.materialCard26.Controls.Add(this.tableLayoutPanel1);
             this.materialCard26.Depth = 0;
             this.materialCard26.Dock = System.Windows.Forms.DockStyle.Right;
             this.materialCard26.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -1767,32 +1771,69 @@
             this.materialCard26.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard26.Size = new System.Drawing.Size(1311, 932);
             this.materialCard26.TabIndex = 42;
+            this.materialCard26.Visible = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.panel10, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel11, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(14, 14);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.411504F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.58849F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1283, 904);
+            this.tableLayoutPanel1.TabIndex = 42;
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.labelTitulo);
+            this.panel10.Controls.Add(this.labelSubtitulo);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(3, 3);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1277, 60);
+            this.panel10.TabIndex = 0;
             // 
             // labelTitulo
             // 
             this.labelTitulo.AutoSize = true;
-            this.labelTitulo.Location = new System.Drawing.Point(390, 14);
+            this.labelTitulo.Location = new System.Drawing.Point(3, 10);
             this.labelTitulo.Name = "labelTitulo";
-            this.labelTitulo.Size = new System.Drawing.Size(35, 13);
+            this.labelTitulo.Size = new System.Drawing.Size(55, 13);
             this.labelTitulo.TabIndex = 40;
-            this.labelTitulo.Text = "label2";
-            // 
-            // cartesianChart1
-            // 
-            this.cartesianChart1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cartesianChart1.Location = new System.Drawing.Point(14, 65);
-            this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(1283, 853);
-            this.cartesianChart1.TabIndex = 39;
+            this.labelTitulo.Text = "labelTitulo";
             // 
             // labelSubtitulo
             // 
             this.labelSubtitulo.AutoSize = true;
-            this.labelSubtitulo.Location = new System.Drawing.Point(390, 38);
+            this.labelSubtitulo.Location = new System.Drawing.Point(3, 32);
             this.labelSubtitulo.Name = "labelSubtitulo";
-            this.labelSubtitulo.Size = new System.Drawing.Size(35, 13);
+            this.labelSubtitulo.Size = new System.Drawing.Size(70, 13);
             this.labelSubtitulo.TabIndex = 41;
-            this.labelSubtitulo.Text = "label2";
+            this.labelSubtitulo.Text = "labelSubtitulo";
+            // 
+            // panel11
+            // 
+            this.panel11.Controls.Add(this.cartesianChart1);
+            this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel11.Location = new System.Drawing.Point(3, 69);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(1277, 832);
+            this.panel11.TabIndex = 1;
+            // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cartesianChart1.Location = new System.Drawing.Point(0, 0);
+            this.cartesianChart1.Margin = new System.Windows.Forms.Padding(10);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Padding = new System.Windows.Forms.Padding(10);
+            this.cartesianChart1.Size = new System.Drawing.Size(1277, 832);
+            this.cartesianChart1.TabIndex = 39;
             // 
             // materialCard19
             // 
@@ -1810,8 +1851,50 @@
             this.materialCard19.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard19.Name = "materialCard19";
             this.materialCard19.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard19.Size = new System.Drawing.Size(321, 932);
+            this.materialCard19.Size = new System.Drawing.Size(294, 932);
             this.materialCard19.TabIndex = 38;
+            // 
+            // cb_tipo_grafica
+            // 
+            this.cb_tipo_grafica.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cb_tipo_grafica.AutoResize = false;
+            this.cb_tipo_grafica.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_tipo_grafica.Depth = 0;
+            this.cb_tipo_grafica.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_tipo_grafica.DropDownHeight = 174;
+            this.cb_tipo_grafica.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_tipo_grafica.DropDownWidth = 121;
+            this.cb_tipo_grafica.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_tipo_grafica.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_tipo_grafica.FormattingEnabled = true;
+            this.cb_tipo_grafica.Hint = "Grafica";
+            this.cb_tipo_grafica.IntegralHeight = false;
+            this.cb_tipo_grafica.ItemHeight = 43;
+            this.cb_tipo_grafica.Items.AddRange(new object[] {
+            "Kg Fresco",
+            "Kg Seco",
+            "FTT Deshidratado",
+            "FTT Demás Áreas",
+            "Mermas/ Supervisor",
+            "Cumpl(Despegue)",
+            "Cumpl(Otras áreas)",
+            "Cumpl/Sup(Despegue)",
+            "Cumpl/Sup/Mens(Despegue)",
+            "Cumpl/Sup(Otras áreas)",
+            "Cumpl/Sup/Men(Otras áreas)",
+            "Cumpl/Jefe(Despegue)",
+            "Cumpl/Jefe(Otras áreas)",
+            "Cumpl General",
+            "Tiempo Efectivo",
+            "Tiempo Efectivo Producción"});
+            this.cb_tipo_grafica.Location = new System.Drawing.Point(17, 65);
+            this.cb_tipo_grafica.MaxDropDownItems = 4;
+            this.cb_tipo_grafica.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_tipo_grafica.Name = "cb_tipo_grafica";
+            this.cb_tipo_grafica.Size = new System.Drawing.Size(266, 49);
+            this.cb_tipo_grafica.StartIndex = -1;
+            this.cb_tipo_grafica.TabIndex = 37;
+            this.cb_tipo_grafica.SelectedIndexChanged += new System.EventHandler(this.cb_tipo_grafica_SelectedIndexChanged);
             // 
             // CB_Anio_grafica
             // 
@@ -1828,7 +1911,7 @@
             this.CB_Anio_grafica.Hint = "Año";
             this.CB_Anio_grafica.IntegralHeight = false;
             this.CB_Anio_grafica.ItemHeight = 43;
-            this.CB_Anio_grafica.Location = new System.Drawing.Point(76, 120);
+            this.CB_Anio_grafica.Location = new System.Drawing.Point(17, 120);
             this.CB_Anio_grafica.MaxDropDownItems = 4;
             this.CB_Anio_grafica.MouseState = MaterialSkin.MouseState.OUT;
             this.CB_Anio_grafica.Name = "CB_Anio_grafica";
@@ -1859,13 +1942,14 @@
             // 
             // lista_semanas
             // 
-            this.lista_semanas.Location = new System.Drawing.Point(76, 175);
+            this.lista_semanas.Location = new System.Drawing.Point(17, 175);
             this.lista_semanas.MultiSelect = true;
             this.lista_semanas.Name = "lista_semanas";
             this.lista_semanas.ShowCheckBoxes = true;
             this.lista_semanas.ShowColumnHeaders = false;
             this.lista_semanas.Size = new System.Drawing.Size(155, 673);
             this.lista_semanas.TabIndex = 1;
+            this.lista_semanas.Visible = false;
             // 
             // tabPage10
             // 
@@ -2135,7 +2219,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition49;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -2241,7 +2325,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -3149,7 +3233,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition50;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition5;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -6323,7 +6407,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition51;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition6;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1646, 751);
             this.radGridView1.TabIndex = 0;
@@ -6346,41 +6430,6 @@
             // 
             this.metroContextMenu2.Name = "metroContextMenu2";
             this.metroContextMenu2.Size = new System.Drawing.Size(61, 4);
-            // 
-            // cb_tipo_grafica
-            // 
-            this.cb_tipo_grafica.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cb_tipo_grafica.AutoResize = false;
-            this.cb_tipo_grafica.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_tipo_grafica.Depth = 0;
-            this.cb_tipo_grafica.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_tipo_grafica.DropDownHeight = 174;
-            this.cb_tipo_grafica.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_tipo_grafica.DropDownWidth = 121;
-            this.cb_tipo_grafica.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_tipo_grafica.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_tipo_grafica.FormattingEnabled = true;
-            this.cb_tipo_grafica.Hint = "Grafica";
-            this.cb_tipo_grafica.IntegralHeight = false;
-            this.cb_tipo_grafica.ItemHeight = 43;
-            this.cb_tipo_grafica.Items.AddRange(new object[] {
-            "Kg Fresco",
-            "Kg Seco",
-            "FTT Deshidratado",
-            "FTT Demás Áreas",
-            "Mermas por Supervisor",
-            "%Cumplimiento(Despegue)",
-            "%Cumplimiento(Otras áreas)",
-            "%Cumplimiento/Supervisor(Despegue)",
-            "%Cumplimiento/Supervisor/Mensual(Despegue)",
-            "%Cumplimiento/Supervisor(Otras áreas)"});
-            this.cb_tipo_grafica.Location = new System.Drawing.Point(17, 65);
-            this.cb_tipo_grafica.MaxDropDownItems = 4;
-            this.cb_tipo_grafica.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_tipo_grafica.Name = "cb_tipo_grafica";
-            this.cb_tipo_grafica.Size = new System.Drawing.Size(287, 49);
-            this.cb_tipo_grafica.StartIndex = -1;
-            this.cb_tipo_grafica.TabIndex = 37;
             // 
             // Form_principal
             // 
@@ -6444,7 +6493,10 @@
             this.pnl_graficas.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.materialCard26.ResumeLayout(false);
-            this.materialCard26.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
+            this.panel11.ResumeLayout(false);
             this.materialCard19.ResumeLayout(false);
             this.materialCard19.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
@@ -6909,6 +6961,9 @@
         private System.Windows.Forms.Label labelTitulo;
         private MaterialSkin.Controls.MaterialCard materialCard26;
         private MaterialSkin.Controls.MaterialComboBox cb_tipo_grafica;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.Panel panel11;
     }
 }
 
