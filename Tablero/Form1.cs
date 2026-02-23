@@ -13716,19 +13716,22 @@ ORDER BY
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
                 string query = @"
-        SELECT 
-            EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-            CASE 
-                WHEN SUM(f.""Kg_prod_seco"") > 0 THEN
-                    ROUND(((SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_seco"")) * 100, 2)
-                ELSE 0
-            END AS ""FTT""
-        FROM public.""Ficha"" f
-        WHERE f.""Area"" = 'Despegue'
-            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        ORDER BY ""No_Semana""";
+SELECT 
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+    
+    -- Promedio de FTT multiplicado por 100 (redondeado hacia arriba)
+    CEIL(AVG(f.""FTT"") * 100) AS ""FTT""
+    
+FROM 
+    public.""Ficha"" f
+WHERE 
+    f.""Area"" = 'Despegue'
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(WEEK FROM f.""Fecha"")
+ORDER BY 
+    ""No_Semana"";";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13773,37 +13776,61 @@ ORDER BY
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-                string query = @"
-        WITH FTT_Por_Area AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-                f.""Area"",
-                CASE 
-                    WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
-                    ELSE LEAST(
-                        ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
-                        100
-                    )
-                END AS ""FTT""
-            FROM 
-                public.""Ficha"" f
-            WHERE 
-                f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-            GROUP BY 
-                EXTRACT(WEEK FROM f.""Fecha""),
-                f.""Area""
+        //        string query = @"
+        //WITH FTT_Por_Area AS (
+        //    SELECT 
+        //        EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+        //        f.""Area"",
+        //        CASE 
+        //            WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
+        //            ELSE LEAST(
+        //                ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
+        //                100
+        //            )
+        //        END AS ""FTT""
+        //    FROM 
+        //        public.""Ficha"" f
+        //    WHERE 
+        //        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        //        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        //        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+        //    GROUP BY 
+        //        EXTRACT(WEEK FROM f.""Fecha""),
+        //        f.""Area""
+        //)
+        //SELECT 
+        //    ""No_Semana"",
+        //    ROUND(AVG(""FTT""), 2) AS ""FTT""
+        //FROM 
+        //    FTT_Por_Area
+        //GROUP BY 
+        //    ""No_Semana""
+        //ORDER BY 
+        //    ""No_Semana""";
+                string query = @"SELECT 
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
+    
+    -- Fórmula FTT: (Kg_prod_term - Kg_fuera_espec) / Kg_prod_term * 100
+    CASE 
+        WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
+        ELSE CEIL(
+		LEAST(
+            ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
+            100
         )
-        SELECT 
-            ""No_Semana"",
-            ROUND(AVG(""FTT""), 2) AS ""FTT""
-        FROM 
-            FTT_Por_Area
-        GROUP BY 
-            ""No_Semana""
-        ORDER BY 
-            ""No_Semana""";
+		)
+    END AS ""FTT""
+    
+FROM 
+    public.""Ficha"" f
+WHERE 
+    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+GROUP BY 
+    EXTRACT(WEEK FROM f.""Fecha"")
+ORDER BY 
+    ""No_Semana"";";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -13944,34 +13971,63 @@ ORDER BY
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-                string query = @"
-        WITH merma_usuario AS (
-            SELECT 
-                u.""Usuario"" as ""Nombre_Usuario"",
-                EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
-                EXTRACT(YEAR FROM f.""Fecha"") AS año,
-                SUM(
-                    CASE 
-                        WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
-                            f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
-                        ELSE f.""Merma_kg""
-                    END
-                ) AS total_merma_kg
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-            WHERE f.""Area"" IS NOT NULL
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-            GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
-        )
+                //        string query = @"
+                //WITH merma_usuario AS (
+                //    SELECT 
+                //        u.""Usuario"" as ""Nombre_Usuario"",
+                //        EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
+                //        EXTRACT(YEAR FROM f.""Fecha"") AS año,
+                //        SUM(
+                //            CASE 
+                //                WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
+                //                    f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
+                //                ELSE f.""Merma_kg""
+                //            END
+                //        ) AS total_merma_kg
+                //    FROM public.""Ficha"" f
+                //    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+                //    WHERE f.""Area"" IS NOT NULL
+                //        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                //        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+                //    GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
+                //)
 
-        SELECT 
-            ""Nombre_Usuario"" AS ""Supervisor"",
-            numero_semana as ""No_Semana"",
-            año as ""Año"",
-            COALESCE(total_merma_kg, 0) as ""Merma_Kg""
-        FROM merma_usuario
-        ORDER BY año, numero_semana, ""Nombre_Usuario""";
+                //SELECT 
+                //    ""Nombre_Usuario"" AS ""Supervisor"",
+                //    numero_semana as ""No_Semana"",
+                //    año as ""Año"",
+                //    COALESCE(total_merma_kg, 0) as ""Merma_Kg""
+                //FROM merma_usuario
+                //ORDER BY año, numero_semana, ""Nombre_Usuario""";
+                string query = @"
+WITH merma_usuario AS (
+    SELECT 
+        u.""Usuario"" as ""Nombre_Usuario"",
+        EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
+        EXTRACT(YEAR FROM f.""Fecha"") AS año,
+        SUM(
+            CASE 
+                WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
+                    f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
+                ELSE f.""Merma_kg""
+            END
+        ) AS total_merma_kg
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE f.""Area"" IS NOT NULL
+        AND u.""Nivel"" = 'Supervisor'  -- Filtro por Nivel Supervisor
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
+)
+
+SELECT 
+    ""Nombre_Usuario"" AS ""Supervisor"",
+    numero_semana as ""No_Semana"",
+    año as ""Año"",
+    COALESCE(total_merma_kg, 0) as ""Merma_Kg""
+FROM merma_usuario
+ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -14486,31 +14542,57 @@ ORDER BY
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
+                //        string query = @"
+                //SELECT 
+                //    EXTRACT(YEAR FROM f.""Fecha"") as año,
+                //    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+                //    COALESCE(u.""Usuario"", 'Sin Supervisor') as Supervisor,
+
+                //    -- Porcentaje limitado al 100%
+                //    ROUND(LEAST(
+                //        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                //        100
+                //    ), 2) as ""% Cumplimiento""
+
+                //FROM public.""Ficha"" f
+                //LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+                //WHERE f.""Area"" = 'Despegue'
+                //    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+                //    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+                //GROUP BY 
+                //    EXTRACT(YEAR FROM f.""Fecha""),
+                //    EXTRACT(WEEK FROM f.""Fecha""),
+                //    u.""Usuario""
+                //ORDER BY 
+                //    año,
+                //    No_Semana,
+                //    Supervisor;";
                 string query = @"
-        SELECT 
-            EXTRACT(YEAR FROM f.""Fecha"") as año,
-            EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
-            COALESCE(u.""Usuario"", 'Sin Supervisor') as Supervisor,
+SELECT 
+    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+    u.""Usuario"" as Supervisor,  -- Ya no usamos COALESCE
 
-            -- Porcentaje limitado al 100%
-            ROUND(LEAST(
-                (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-                100
-            ), 2) as ""% Cumplimiento""
+    -- Porcentaje limitado al 100%
+    ROUND(LEAST(
+        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+        100
+    ), 2) as ""% Cumplimiento""
 
-        FROM public.""Ficha"" f
-        LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-        WHERE f.""Area"" = 'Despegue'
-            AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-            AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-        GROUP BY 
-            EXTRACT(YEAR FROM f.""Fecha""),
-            EXTRACT(WEEK FROM f.""Fecha""),
-            u.""Usuario""
-        ORDER BY 
-            año,
-            No_Semana,
-            Supervisor;";
+FROM public.""Ficha"" f
+INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Cambiado a INNER JOIN
+WHERE f.""Area"" = 'Despegue'
+    AND u.""Nivel"" = 'Supervisor'
+    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
+GROUP BY 
+    EXTRACT(YEAR FROM f.""Fecha""),
+    EXTRACT(WEEK FROM f.""Fecha""),
+    u.""Usuario""
+ORDER BY 
+    año,
+    No_Semana,
+    Supervisor;";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
