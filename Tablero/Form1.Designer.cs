@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -1885,7 +1885,7 @@
             "Cumpl/Jefe(Despegue)",
             "Cumpl/Jefe(Otras áreas)",
             "Cumpl General",
-            "Tiempo Efectivo",
+            "Tiempo Efectivo(Deshidratado)",
             "Tiempo Efectivo Producción"});
             this.cb_tipo_grafica.Location = new System.Drawing.Point(17, 65);
             this.cb_tipo_grafica.MaxDropDownItems = 4;
@@ -2219,7 +2219,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -2730,7 +2730,7 @@
             this.metroTabPage10.Name = "metroTabPage10";
             this.metroTabPage10.Size = new System.Drawing.Size(1674, 898);
             this.metroTabPage10.TabIndex = 1;
-            this.metroTabPage10.Text = "Mermas por Área";
+            this.metroTabPage10.Text = "%Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
             this.metroTabPage10.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage10.VerticalScrollbarSize = 0;
@@ -2870,7 +2870,7 @@
             this.tabPage22.Name = "tabPage22";
             this.tabPage22.Size = new System.Drawing.Size(1674, 898);
             this.tabPage22.TabIndex = 4;
-            this.tabPage22.Text = "Mermas por Supervisor";
+            this.tabPage22.Text = "Kg Mermas por Supervisor";
             // 
             // panel6
             // 
@@ -3233,7 +3233,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -6407,7 +6407,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition9;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1646, 751);
             this.radGridView1.TabIndex = 0;

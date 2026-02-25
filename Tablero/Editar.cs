@@ -95,7 +95,18 @@ namespace Tablero
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
-            string querySimple = @"SELECT ""ID_Ficha"", ""Fecha"", ""Turno"", ""OP"", ""Area"" FROM public.""Ficha"" ORDER BY ""OP"" ASC;";  // ← orden ascendente
+            string querySimple = @"SELECT 
+    f.""ID_Ficha"", 
+    f.""Fecha"", 
+    f.""Turno"", 
+    f.""OP"", 
+    f.""Area"",
+    COALESCE(u.""Usuario"", 'Sin Supervisor') AS ""Supervisor"",
+    COALESCE(j.""Usuario"", 'Sin Jefe de Turno') AS ""Jefe de Turno""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+LEFT JOIN public.""Usuarios"" j ON f.""ID_Jefe"" = j.""ID_User""
+ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, radGridView1, null);
