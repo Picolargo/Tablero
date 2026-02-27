@@ -419,6 +419,23 @@ namespace Tablero
                 configurar_limpieza();
                 ConfigurarTooltipParaComboBox();
             }
+            if (nivel_user == "Mantenimiento")
+            {
+                // Ocultar las pestañas no necesarias para el usuario de calidad
+                materialTabControl1.TabPages.Remove(tabPage1);
+                materialTabControl1.TabPages.Remove(tabPage2);
+                materialTabControl1.TabPages.Remove(tabPage3);
+                materialTabControl1.TabPages.Remove(tabPage4);
+                materialTabControl1.TabPages.Remove(tabPage9);
+                materialTabControl1.TabPages.Remove(tabPage11);
+                materialTabControl1.TabPages.Remove(tabPage36);
+
+                tapcontrol.TabPages.Remove(metroTabPage9);
+                tapcontrol.TabPages.Remove(tabPage16);
+                tapcontrol.TabPages.Remove(tabPage17);
+                tapcontrol.TabPages.Remove(metroTabPage10);
+                tapcontrol.TabPages.Remove(tabPage22);
+            }
         }
         private void ConfigurarTooltipParaComboBox()
         {
@@ -5021,7 +5038,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
-                        string Kgproducidosxhr = (KgProdSeco/ hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProdSeco/ hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5114,7 +5131,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
-                        string Kgproducidosxhr = (KgProdSeco / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProdSeco / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5274,7 +5291,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
-                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5370,7 +5387,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Aumento por humedad (%)", textoPorcent_Aumento_Hume)
                             };
-                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5510,7 +5527,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5604,7 +5621,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5744,7 +5761,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5838,7 +5855,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5980,7 +5997,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
-                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -6077,7 +6094,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
                             };
 
-                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -6227,7 +6244,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
-                        string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -6323,7 +6340,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado),
                                 new KeyValuePair<string, string>("Kg entrada (proceso)", kg_entrada.ToString())
                             };
-                            string Kgproducidosxhr = (KgProductoTerminado / hr_efec).ToString("0.##");
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
                             //lista de valores para resumen
                             List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -10790,6 +10807,7 @@ SELECT
     f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
     f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Limpieza Túnel (distribuida por turnos trabajados)
     CASE 
@@ -10858,6 +10876,7 @@ SELECT
     f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""FTT"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
@@ -10912,6 +10931,7 @@ SELECT
     f.""Merma_kg"" AS ""Merma(Kg)"",
     f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
@@ -10965,6 +10985,7 @@ ORDER BY f.""OP"" ASC;";
     f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
     f.""Merma_kg"" AS ""Merma(Kg)"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Totales de tiempo muerto
     COALESCE(tmo.total_min_operativo, 0) AS ""Tiempo Muerto Operativo(Hrs)"",
@@ -11019,6 +11040,7 @@ SELECT
     f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
     f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
     f.""Bobina_merma"" AS ""Bobina Merma"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
@@ -11091,6 +11113,7 @@ SELECT
     f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
     f.""Granulo"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
+    f.""Hr_efectivas"" as ""Horas Reales"",
     
     -- Limpieza Polvos (distribuida por turnos trabajados)
     CASE 
@@ -11149,15 +11172,15 @@ ORDER BY f.""OP"" ASC;";
             // Configurar el DataGridView
             rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar la columna ID
             rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
-            rgv_reporte_consolidado.Columns["Fecha"].BestFit();
-            rgv_reporte_consolidado.Columns["No. Semana"].BestFit();
-            rgv_reporte_consolidado.Columns["Turno"].BestFit();
-            rgv_reporte_consolidado.Columns["Supervisor"].BestFit();
-            rgv_reporte_consolidado.Columns["Jefe de Turno"].BestFit();
-            rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo(Hrs)"].BestFit();
-            rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico(Hrs)"].BestFit();
-            rgv_reporte_consolidado.Columns["OP"].BestFit();
-            rgv_reporte_consolidado.Columns["Personal Operativo"].BestFit();
+            //rgv_reporte_consolidado.Columns["Fecha"].BestFit();
+            //rgv_reporte_consolidado.Columns["No. Semana"].BestFit();
+            //rgv_reporte_consolidado.Columns["Turno"].BestFit();
+            //rgv_reporte_consolidado.Columns["Supervisor"].BestFit();
+            //rgv_reporte_consolidado.Columns["Jefe de Turno"].BestFit();
+            //rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo(Hrs)"].BestFit();
+            //rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico(Hrs)"].BestFit();
+            //rgv_reporte_consolidado.Columns["OP"].BestFit();
+            //rgv_reporte_consolidado.Columns["Personal Operativo"].BestFit();
 
             rgv_reporte_consolidado.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
             rgv_reporte_consolidado.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
@@ -11180,9 +11203,10 @@ ORDER BY f.""OP"" ASC;";
                 rgv_reporte_consolidado.Columns["Relación Fresco-Seco"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["FTT"].TextAlignment = ContentAlignment.MiddleCenter;
 
-                rgv_reporte_consolidado.Columns["Lote"].BestFit();
-                rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
-                rgv_reporte_consolidado.Columns["FTT"].BestFit();
+                //rgv_reporte_consolidado.Columns["Lote"].BestFit();
+                //rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
+                //rgv_reporte_consolidado.Columns["FTT"].BestFit();
+                
             }
             if (var1 == "Tunel/Sumergidor")
             {
@@ -11198,8 +11222,8 @@ ORDER BY f.""OP"" ASC;";
                 rgv_reporte_consolidado.Columns["Merma Lavado Bandas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Cáscara Carrete(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
 
-                rgv_reporte_consolidado.Columns["Lote"].BestFit();
-                rgv_reporte_consolidado.Columns["Canica(Kg)"].BestFit();
+                //rgv_reporte_consolidado.Columns["Lote"].BestFit();
+                //rgv_reporte_consolidado.Columns["Canica(Kg)"].BestFit();
                 //rgv_reporte_consolidado.Columns["Canica(Kg)"].BestFit();
             }
 
@@ -11215,9 +11239,9 @@ ORDER BY f.""OP"" ASC;";
                 rgv_reporte_consolidado.Columns["Granulo"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Limpieza Polvos"].TextAlignment = ContentAlignment.MiddleCenter;
 
-                rgv_reporte_consolidado.Columns["Granulo"].BestFit();
-                rgv_reporte_consolidado.Columns["Limpieza Polvos"].BestFit();
-                rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].BestFit();
+                //rgv_reporte_consolidado.Columns["Granulo"].BestFit();
+                //rgv_reporte_consolidado.Columns["Limpieza Polvos"].BestFit();
+                //rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].BestFit();
                 
             }
 
@@ -11249,7 +11273,7 @@ ORDER BY f.""OP"" ASC;";
             if (rgv_reporte_consolidado.Columns.Contains("Meta(Kg)"))
             {
                 rgv_reporte_consolidado.Columns["Meta(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                rgv_reporte_consolidado.Columns["Meta(Kg)"].BestFit();
+               //rgv_reporte_consolidado.Columns["Meta(Kg)"].BestFit();
             }
 
             if (rgv_reporte_consolidado.Columns.Contains("Kg Entrada(Proceso)"))
@@ -11270,8 +11294,9 @@ ORDER BY f.""OP"" ASC;";
             if (rgv_reporte_consolidado.Columns.Contains("Merma(Kg)"))
             {
                 rgv_reporte_consolidado.Columns["Merma(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
+                //rgv_reporte_consolidado.Columns["Merma(Kg)"].BestFit();
             }
+            rgv_reporte_consolidado.BestFitColumns(BestFitColumnMode.DisplayedCells);
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_consolidado.Clear();
         }

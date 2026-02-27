@@ -5405,7 +5405,8 @@
             "Administrador",
             "Supervisor",
             "Calidad",
-            "Jefe de Turno"});
+            "Jefe de Turno",
+            "Mantenimiento"});
             this.cmb_nivel_user.Location = new System.Drawing.Point(13, 183);
             this.cmb_nivel_user.MaxDropDownItems = 4;
             this.cmb_nivel_user.MouseState = MaterialSkin.MouseState.OUT;

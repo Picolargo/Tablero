@@ -316,13 +316,18 @@ namespace Tablero
             }
         }
 
+        private void cambiar_servidor()
+        {
+            Tablero.Properties.Settings.Default.Servidor = string.Empty;
+            Tablero.Properties.Settings.Default.Usuario = string.Empty;
+            Tablero.Properties.Settings.Default.Contrasena = string.Empty;
+            Tablero.Properties.Settings.Default.Save();
+        }
+
         private void login_Shown(object sender, EventArgs e)
         {
 
-            //Tablero.Properties.Settings.Default.Servidor = string.Empty;
-            //Tablero.Properties.Settings.Default.Usuario = string.Empty;
-            //Tablero.Properties.Settings.Default.Contrasena = string.Empty;
-            //Tablero.Properties.Settings.Default.Save();
+            //cambiar_servidor();
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;
