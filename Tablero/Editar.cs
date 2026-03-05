@@ -132,7 +132,7 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                     FichaSeleccionada?.Invoke(id_global, area);
 
                     // 🔹 Cierra el formulario
-                    this.Close();
+                   // this.Close();
                 }
             }
             else if (!editar && borrar)

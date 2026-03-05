@@ -262,7 +262,78 @@ namespace Tablero
                 return null;
             }
         }
+        // Versión más genérica para cualquier cantidad de columnas
+        public void LoadDataIntoMultiColumnComboBox(string query, RadMultiColumnComboBox multiColumnCombo,
+            string[] columnNames, string[] columnHeaders, bool[] columnVisibility, NpgsqlParameter[] parameters = null)
+        {
+            try
+            {
+                DataTable dataTable = ExecuteSelectQuery(query, parameters);
 
+                if (dataTable != null && dataTable.Rows.Count > 0)
+                {
+                    // Asignar el DataSource
+                    multiColumnCombo.DataSource = dataTable;
+
+                    // Configurar el editor (GridView)
+                    var gridView = multiColumnCombo.EditorControl as RadGridView;
+                    if (gridView != null)
+                    {
+                        // Limpiar columnas existentes
+                        gridView.Columns.Clear();
+
+                        // Agregar columnas según la configuración
+                        for (int i = 0; i < columnNames.Length; i++)
+                        {
+                            if (i >= columnNames.Length) break;
+
+                            GridViewTextBoxColumn column = new GridViewTextBoxColumn(columnNames[i]);
+                            column.FieldName = columnNames[i];
+                            column.HeaderText = (columnHeaders != null && i < columnHeaders.Length)
+                                ? columnHeaders[i]
+                                : columnNames[i];
+                            column.IsVisible = (columnVisibility != null && i < columnVisibility.Length)
+                                ? columnVisibility[i]
+                                : true;
+                            column.HeaderTextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+                            column.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+
+                            gridView.Columns.Add(column);
+                        }
+
+                        // Configurar opciones de visualización
+                        gridView.AutoSizeColumnsMode = GridViewAutoSizeColumnsMode.Fill;
+                        gridView.EnableFiltering = true;
+                        gridView.ShowHeaderCellButtons = true;
+                        gridView.ReadOnly = true;
+                    }
+
+                    // Configurar propiedades del combobox
+                    if (columnNames.Length > 0)
+                    {
+                        multiColumnCombo.DisplayMember = columnNames[1]; // La segunda columna como display (Lote)
+                        multiColumnCombo.ValueMember = columnNames[0]; // La primera columna como valor (ID)
+                    }
+
+                    multiColumnCombo.DropDownMaxSize = new Size(400, 300);
+                    multiColumnCombo.DropDownSizingMode = Telerik.WinControls.UI.SizingMode.RightBottom;
+                    multiColumnCombo.AutoFilter = true;
+                    multiColumnCombo.AutoSizeDropDownToBestFit = true;
+                }
+                else
+                {
+                    multiColumnCombo.DataSource = null;
+                    multiColumnCombo.Text = "No hay datos disponibles";
+
+                    var gridView = multiColumnCombo.EditorControl as RadGridView;
+                    gridView?.Columns.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar RadMultiColumnComboBox: {ex.Message}");
+            }
+        }
         // Método principal que acepta array de parámetros
         public void LoadDataIntoComboBox(string query, ComboBox comboBox, string displayMember, string valueMember, NpgsqlParameter[] parameters = null)
         {

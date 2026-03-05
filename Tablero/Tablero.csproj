@@ -169,6 +169,7 @@
     <Reference Include="Telerik.WinControls.RadSpreadsheet, Version=2024.4.1113.462, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.RichTextEditor, Version=2024.4.1113.462, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.TelerikMetro, Version=2024.4.1113.462, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Windows11, Version=2024.4.1113.462, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.UI, Version=2024.4.1113.462, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Documents.Core, Version=2024.4.1106.462, Culture=neutral, PublicKeyToken=5803cfa389c90ce7" />
     <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2024.4.1106.462, Culture=neutral, PublicKeyToken=5803cfa389c90ce7" />

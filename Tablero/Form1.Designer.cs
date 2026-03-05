@@ -30,9 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -77,8 +81,8 @@
             this.Txt_Read_2 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_Read_1 = new Telerik.WinControls.UI.RadTextBox();
             this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
+            this.radMultiColumnComboBox1 = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.cb_proceso = new MaterialSkin.Controls.MaterialComboBox();
-            this.cb_lote = new MaterialSkin.Controls.MaterialComboBox();
             this.Txt_11 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_10 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_9 = new Telerik.WinControls.UI.RadTextBox();
@@ -364,6 +368,7 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
+            this.windows11Theme1 = new Telerik.WinControls.Themes.Windows11Theme();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -386,6 +391,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_1)).BeginInit();
             this.Card_only_read.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_9)).BeginInit();
@@ -1145,8 +1153,8 @@
             // Card_only_read
             // 
             this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.radMultiColumnComboBox1);
             this.Card_only_read.Controls.Add(this.cb_proceso);
-            this.Card_only_read.Controls.Add(this.cb_lote);
             this.Card_only_read.Controls.Add(this.Txt_11);
             this.Card_only_read.Controls.Add(this.Txt_10);
             this.Card_only_read.Controls.Add(this.Txt_9);
@@ -1169,6 +1177,49 @@
             this.Card_only_read.Padding = new System.Windows.Forms.Padding(14);
             this.Card_only_read.Size = new System.Drawing.Size(718, 377);
             this.Card_only_read.TabIndex = 4;
+            // 
+            // radMultiColumnComboBox1
+            // 
+            // 
+            // radMultiColumnComboBox1.NestedRadGridView
+            // 
+            this.radMultiColumnComboBox1.EditorControl.BackColor = System.Drawing.SystemColors.Window;
+            this.radMultiColumnComboBox1.EditorControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radMultiColumnComboBox1.EditorControl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.radMultiColumnComboBox1.EditorControl.Location = new System.Drawing.Point(0, 0);
+            // 
+            // 
+            // 
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
+            gridViewTextBoxColumn1.HeaderText = "column1";
+            gridViewTextBoxColumn1.IsVisible = false;
+            gridViewTextBoxColumn1.Name = "column1";
+            gridViewTextBoxColumn2.HeaderText = "column2";
+            gridViewTextBoxColumn2.Name = "column2";
+            gridViewTextBoxColumn3.HeaderText = "column3";
+            gridViewTextBoxColumn3.Name = "column3";
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
+            gridViewTextBoxColumn1,
+            gridViewTextBoxColumn2,
+            gridViewTextBoxColumn3});
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
+            this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
+            this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
+            this.radMultiColumnComboBox1.EditorControl.Size = new System.Drawing.Size(240, 150);
+            this.radMultiColumnComboBox1.EditorControl.TabIndex = 0;
+            this.radMultiColumnComboBox1.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radMultiColumnComboBox1.Location = new System.Drawing.Point(20, 80);
+            this.radMultiColumnComboBox1.Name = "radMultiColumnComboBox1";
+            this.radMultiColumnComboBox1.Size = new System.Drawing.Size(170, 40);
+            this.radMultiColumnComboBox1.TabIndex = 28;
+            this.radMultiColumnComboBox1.TabStop = false;
+            this.radMultiColumnComboBox1.ThemeName = "Windows11";
+            this.radMultiColumnComboBox1.SelectedIndexChanged += new System.EventHandler(this.radMultiColumnComboBox1_SelectedIndexChanged);
             // 
             // cb_proceso
             // 
@@ -1196,31 +1247,6 @@
             this.cb_proceso.StartIndex = -1;
             this.cb_proceso.TabIndex = 27;
             this.cb_proceso.Visible = false;
-            // 
-            // cb_lote
-            // 
-            this.cb_lote.AutoResize = false;
-            this.cb_lote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cb_lote.Depth = 0;
-            this.cb_lote.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_lote.DropDownHeight = 174;
-            this.cb_lote.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_lote.DropDownWidth = 121;
-            this.cb_lote.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cb_lote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cb_lote.FormattingEnabled = true;
-            this.cb_lote.Hint = "Lote";
-            this.cb_lote.IntegralHeight = false;
-            this.cb_lote.ItemHeight = 43;
-            this.cb_lote.Location = new System.Drawing.Point(20, 80);
-            this.cb_lote.MaxDropDownItems = 4;
-            this.cb_lote.MouseState = MaterialSkin.MouseState.OUT;
-            this.cb_lote.Name = "cb_lote";
-            this.cb_lote.Size = new System.Drawing.Size(168, 49);
-            this.cb_lote.StartIndex = 0;
-            this.cb_lote.TabIndex = 26;
-            this.cb_lote.Visible = false;
-            this.cb_lote.SelectionChangeCommitted += new System.EventHandler(this.cb_lote_SelectionChangeCommitted);
             // 
             // Txt_11
             // 
@@ -2219,7 +2245,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -3233,7 +3259,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1646, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -6409,7 +6435,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition3;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1646, 751);
             this.radGridView1.TabIndex = 0;
@@ -6477,6 +6503,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_1)).EndInit();
             this.Card_only_read.ResumeLayout(false);
             this.Card_only_read.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_9)).EndInit();
@@ -6752,7 +6781,6 @@
         private MaterialSkin.Controls.MaterialButton btn_new_op;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ErrorProvider errorProvider2;
-        private MaterialSkin.Controls.MaterialComboBox cb_lote;
         private MaterialSkin.Controls.MaterialComboBox cb_proceso;
         private MetroFramework.Controls.MetroTabPage metroTabPage7;
         private System.Windows.Forms.DataGridView dgv_metas_polvos;
@@ -6966,6 +6994,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.Panel panel11;
+        private Telerik.WinControls.UI.RadMultiColumnComboBox radMultiColumnComboBox1;
+        private Telerik.WinControls.Themes.Windows11Theme windows11Theme1;
     }
 }
 
