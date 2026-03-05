@@ -55,7 +55,7 @@ namespace Tablero
                     int idUser = Convert.ToInt32(userInfo["ID_User"]);
                     string nivel = userInfo["Nivel"].ToString();
                     string noEmpleado = userInfo["No_Empleado"].ToString();
-                    if(nivel != "Administrador")
+                    if(nivel != "Super Administrador")
                     {                         // Credenciales sin nivel asignado
                         MetroFramework.MetroMessageBox.Show
                             (

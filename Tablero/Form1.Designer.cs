@@ -5402,6 +5402,7 @@
             this.cmb_nivel_user.IntegralHeight = false;
             this.cmb_nivel_user.ItemHeight = 43;
             this.cmb_nivel_user.Items.AddRange(new object[] {
+            "Super Administrador",
             "Administrador",
             "Supervisor",
             "Calidad",

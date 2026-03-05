@@ -343,7 +343,7 @@ namespace Tablero
         private void Form_principal_Load(object sender, EventArgs e)
         {
             materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo
-            if (nivel_user == "Administrador")
+            if (nivel_user == "Super Administrador")
             {
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -374,6 +374,38 @@ namespace Tablero
                 ConfigurarTooltipParaComboBox();
 
                 menuStrip1.Visible = true; // Mostrar el menú para el administrador
+            }
+            if (nivel_user == "Administrador")
+            {
+                lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+                dtp_polvos.Value = DateTime.Now;
+                dtp_tunel.Value = DateTime.Now;
+
+                // Obtener y mostrar el número de semana inicial
+                ActualizarNumeroSemana();
+
+                actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
+                actualiza_grid_Deshitratado();
+                actualiza_grid_Empacado();
+                actualiza_grid_inspec();
+                actualiza_grid_evaporado();
+                actualiza_grid_grind();
+                actualiza_revolturas();
+                actualiza_maquinas();
+                actualiza_polvos();
+                actualiza_polvos_calidad();
+                actualiza_detalles_OP();
+                actualiza_tunel_calidad();
+                configurar_limpieza();
+                CargarSemanasAnioActual();
+                emaildatos();
+                email_varibles();
+                ActualizarAnioReportes();
+                carga_Jefes();
+                ConfigurarTooltipParaComboBox();
+                materialTabControl1.TabPages.Remove(tabPage3);
+                menuStrip1.Visible = false; // Mostrar el menú para el administrador
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
             {
@@ -4702,6 +4734,30 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             string Variable_nombre = lbl_nom2.Text;
             string variable_num = lbl_no_emp2.Text;
             string jefe = cb_jefe_turno.Text;
+            if (editar) 
+            {
+                // Consulta para buscar donde OP = valor_buscado
+                string query2 = "SELECT \"ID_User\" FROM public.\"Usuarios\" where \"No_Empleado\" = @valorBuscado";
+
+                // Crear parámetro
+                NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@valorBuscado", NpgsqlTypes.NpgsqlDbType.Varchar)
+                        {
+                            Value = variable_num
+                        }
+                };
+                // Ejecutar consulta
+                System.Data.DataTable dt2 = dbHelper.ExecuteSelectQuery(query2, parameters2);
+                string id_supervisor = string.Empty;
+                // Verificar si se encontraron resultados
+                if (dt2 != null && dt2.Rows.Count > 0)
+                {
+                    id_supervisor = dt2.Rows[0]["ID_User"].ToString();
+                }
+                id_supervisor_global = System.Convert.ToInt32(id_supervisor);
+            }
+
             int idUserSeleccionado = System.Convert.ToInt32(cb_jefe_turno.SelectedValue);
             string cuerpoHtml1 = $@"
                 <html>
@@ -6765,8 +6821,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@op", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
                     new NpgsqlParameter("@Lote", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var2 ?? (object)DBNull.Value },
                     new NpgsqlParameter("@Kg_prod_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var9 },
-                    new NpgsqlParameter("@Kg_fuera_spec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
-                    new NpgsqlParameter("@Merma_kg_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_fuera_spec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Merma_kg_seco", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var10 },
                     new NpgsqlParameter("@Kg_resecar", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
                     new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = personal_O },
                     new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
@@ -11556,7 +11612,8 @@ ORDER BY f.""OP"" ASC;";
     COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
     COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
     COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
-    COALESCE(q2.""Horas Reales"", 0) AS ""Horas Reales"",
+    -- Horas Reales calculadas como Horas Programadas - Tiempo Muerto Mecánico
+    COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Horas Reales"",
     COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
     COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) AS ""Suma de Tiempo Muerto Operativo"",
     COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Suma de Tiempo Muerto Mecanico"",
@@ -11567,21 +11624,22 @@ ORDER BY f.""OP"" ASC;";
                 100 - (
                     (COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) +
                      COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))
-                     / COALESCE(q2.""Horas Programadas"", 0)
-                ) * 100
+                     / COALESCE(q2.""Horas Programadas"", 0) * 100
+                )
             , 2)
         ELSE 0
     END AS ""%Cumplimiento Tiempo Efectivo"",
 
     CASE 
-        WHEN COALESCE(q2.""Horas Reales"", 0) > 0 THEN
-            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) * q2.""Horas Reales"", 2)
+        WHEN (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) > 0 THEN
+            ROUND(COALESCE(d.""Kg_fresco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)), 2)
         ELSE 0
     END AS ""Kg Fresco Meta / Hras Reales"",
 
     COALESCE(q3.""Kg Fresco Real"", 0) AS ""Kg Fresco Real"",
-	COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
-	COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg Fuera de Especificación"",
+    COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
+    COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg Fuera de Especificación"",
+    
     CASE 
         WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
             ROUND(
@@ -11593,12 +11651,15 @@ ORDER BY f.""OP"" ASC;";
     END AS ""FTT"",
 
     COALESCE(q3.""Personal Operativo Promedio"", 0)::integer AS ""Personal Operativo Promedio"",
-    COALESCE(q3.""Personal Operativo Promedio"", 0) * COALESCE(q2.""Horas Reales"", 0) AS ""Horas Hombre""
+    -- Horas Hombre calculadas con las nuevas Horas Reales
+    COALESCE(q3.""Personal Operativo Promedio"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) AS ""Horas Hombre""
 
 FROM (
+    -- q1: Tiempos muertos para Despegue
     SELECT 
         EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+        EXTRACT(MONTH FROM f.""Fecha"") AS ""MesNum"",
         CASE EXTRACT(MONTH FROM f.""Fecha"")
             WHEN 1 THEN 'Enero'
             WHEN 2 THEN 'Febrero'
@@ -11614,8 +11675,8 @@ FROM (
             WHEN 12 THEN 'Diciembre'
         END AS ""Mes"",
         f.""OP"",
-        ROUND(COALESCE(SUM(tmo.""Min_Detenidos"")/60, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Operativo"",
-        ROUND(COALESCE(SUM(tmm.""Min_Detenidos"")/60, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Mecanico""
+        ROUND(COALESCE(SUM(tmo.""Min_Detenidos"")/60.0, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Operativo"",
+        ROUND(COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)::numeric, 2) AS ""Suma de Tiempo Muerto Mecanico""
     FROM public.""Ficha"" f
     LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
@@ -11630,9 +11691,11 @@ FROM (
 ) q1
 
 FULL JOIN (
+    -- q2: Horas para Tunel/Sumergidor
     SELECT 
         EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        EXTRACT(MONTH FROM ""Fecha"") AS ""MesNum"",
         CASE EXTRACT(MONTH FROM ""Fecha"")
             WHEN 1 THEN 'Enero'
             WHEN 2 THEN 'Febrero'
@@ -11648,7 +11711,6 @@ FULL JOIN (
             WHEN 12 THEN 'Diciembre'
         END AS ""Mes"",
         ""OP"",
-        SUM(""Hr_efectivas"") AS ""Horas Reales"",
         SUM(""Hr_programadas"") AS ""Horas Programadas""
     FROM public.""Ficha""
     WHERE ""Area"" = 'Tunel/Sumergidor'
@@ -11664,9 +11726,11 @@ AND q1.""Mes"" = q2.""Mes""
 AND q1.""OP"" = q2.""OP""
 
 FULL JOIN (
+    -- q3: Producción para Despegue
     SELECT 
         EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        EXTRACT(MONTH FROM ""Fecha"") AS ""MesNum"",
         CASE EXTRACT(MONTH FROM ""Fecha"")
             WHEN 1 THEN 'Enero'
             WHEN 2 THEN 'Febrero'
@@ -11703,7 +11767,7 @@ AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
 LEFT JOIN public.""Deshidratado"" d
 ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
 
-ORDER BY ""Año"", ""No. Semana"", ""Mes"", ""OP"";";
+ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, null);
@@ -13400,7 +13464,7 @@ ORDER BY
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
-
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////sume el tiempo operativo en Hr_efectivas
                 string query = @"
 SELECT 
     EXTRACT(WEEK FROM ""Fecha"") AS semana,
