@@ -1,4 +1,5 @@
-﻿using MaterialSkin.Controls;
+﻿using MaterialSkin;
+using MaterialSkin.Controls;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -145,16 +146,17 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                         string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                         // Verificar si ya existe
                         string queryChecklote = @"ROLLBACK;
-                                            BEGIN;
-                                            DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
-                                            DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
-                                            DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
-                                            DELETE FROM ""Tiempo_muerto_Mecanico"" WHERE ""ID_Ficha"" = @ID_Valor;
-                                            DELETE FROM ""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
-                                            COMMIT;";
+                     BEGIN;
+                     DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
+                     DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
+                     DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
+                     DELETE FROM ""Tiempo_muerto_Mecanico"" WHERE ""ID_Ficha"" = @ID_Valor;
+                     DELETE FROM ""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                     COMMIT;";
+
                         NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
                         {
-                            new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
                         };
                         DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
                         FichaSeleccionada?.Invoke(null, null);
@@ -167,6 +169,22 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
         private void Editar_FormClosed(object sender, FormClosedEventArgs e)
         {
+            // Cambiar el tema del formulario principal ANTES de invocar el evento
+            if (Application.OpenForms["Form_principal"] is Form_principal formPrincipal)
+            {
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(formPrincipal);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                materialSkinManager.ColorScheme = new ColorScheme(
+                    Primary.Orange600,
+                    Primary.Orange600,
+                    Primary.BlueGrey800,
+                    Accent.Blue700,
+                    TextShade.WHITE
+                );
+                formPrincipal.Text = string.Empty;
+            }
+
             // 🔹 Si no se seleccionó nada, dispara un evento con valores nulos opcionalmente
             if (!fichaSeleccionada)
             {

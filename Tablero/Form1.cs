@@ -1101,6 +1101,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     Txt_1.Visible = false;
                     radMultiColumnComboBox1.Visible = true;
+                    radMultiColumnComboBox1.Enabled = true;
                 }
                 Txt_1.EmbeddedLabelText = "Lote";
                 Txt_2.EmbeddedLabelText = "Kilos Producto Seco";
@@ -4697,7 +4698,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 dgv_operativo.Enabled = true;
                 if (cb_Area.SelectedIndex == 0)
                 {
-                    if (!editar) { Txt_1.Enabled = true; } else { Txt_1.Enabled = false; }
+                    if (!editar) 
+                    { 
+                        Txt_1.Enabled = true; 
+                    } 
+                    else 
+                    { 
+                        Txt_1.Enabled = false; 
+                    }
                     Txt_2.Enabled = true;
                     Txt_3.Enabled = true;
                     Txt_4.Enabled = true;
@@ -6760,7 +6768,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cb_Area.SelectedIndex = -1;
                 reiniciarCampos();
                 cb_Area.Focus();
-                editar = false; // Reiniciar el estado de edición
+                if (_editarForm == null || _editarForm.IsDisposed)
+                {
+                    editar = false; // Reiniciar el estado de edición
+                }
+                else
+                {
+                    // Traer al frente el formulario
+                    _editarForm.BringToFront(); // Opción 1
+                                                // _editarForm.Activate(); // Opción 2 (también funciona)
+
+                    // Opcional: También puedes enfocarlo
+                    _editarForm.Focus();
+                }
                 id_global_ficha = string.Empty; // Limpiar el ID global
                 if (nivel_user == "Super Administrador")
                 {
@@ -8565,6 +8585,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 lbl_no_emp2.Text = numero_empleado_admin;
                 lbl_nom2.Text = nombre_admin;
                 cb_supervisor_turno.Visible = false;
+
+                // Cerrar el formulario Editar si está abierto
+                if (_editarForm != null && !_editarForm.IsDisposed)
+                {
+                    _editarForm.Close();
+                    _editarForm = null; // Opcional, pero recomendado para liberar la referencia
+                }
             }
         }
 
@@ -8584,6 +8611,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 // Suscripción al evento con los dos parámetros
                 _editarForm.FichaSeleccionada += (id_global, area) =>
                 {
+
+                    
+
                     cb_Area.SelectedIndex = -1;
                     reiniciarCampos();
                     cb_Area.Focus();
@@ -8593,6 +8623,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         editar = false;
                         return;
                     }
+                    var materialSkinManager = MaterialSkinManager.Instance;
+                    materialSkinManager.AddFormToManage(this);
+                    materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                    materialSkinManager.ColorScheme = new ColorScheme(Primary.Red600, Primary.Red600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
+                    this.Text = "Modo Edición";
                     //MessageBox.Show($"ID seleccionado: {id_global}\nÁrea: {area}");
                     id_global_ficha = id_global;
                     cb_supervisor_turno.Visible = true;
@@ -9252,6 +9287,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 // Ya existe, traer al frente
                 _editarForm.BringToFront();
                 _editarForm.Focus();
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                materialSkinManager.ColorScheme = new ColorScheme(Primary.Red600, Primary.Red600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
+                this.Text = "Modo Edición";
             }
 
         }

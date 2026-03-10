@@ -2,14 +2,14 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Tablero"
-#define MyAppVersion "1.7.6"
+#define MyAppVersion "1.7.8"
 #define MyAppExeName "Tablero.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{521EB64D-A891-4C01-B8A6-48F6DFEE2DD4}
+AppId={{40B98BD0-874C-4685-B939-754B7D2D912D}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -106,6 +106,7 @@ Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinCont
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.TelerikMetro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.Windows11.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.xml"; DestDir: "{app}"; Flags: ignoreversion
