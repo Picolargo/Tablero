@@ -2,14 +2,14 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Tablero"
-#define MyAppVersion "1.7.8"
+#define MyAppVersion "1.5"
 #define MyAppExeName "Tablero.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{40B98BD0-874C-4685-B939-754B7D2D912D}
+AppId={{B5088374-F15F-4FAE-91A1-CED0C9EC3A0E}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
