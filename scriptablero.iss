@@ -9,7 +9,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{B5088374-F15F-4FAE-91A1-CED0C9EC3A0E}
+AppId={{FAE0C5EF-62EC-4D98-962E-2BADF2FBB6DC}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -17,9 +17,9 @@ DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputDir=C:\Users\fruti\OneDrive\Escritorio\instalador tablero
+OutputDir=C:\Users\sistemas\OneDrive\Escritorio\instalador tablero
 OutputBaseFilename=setup
-SetupIconFile=C:\Users\fruti\source\repos\Tablero\Tablero\formulario_icono.ico
+SetupIconFile=C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\formulario_icono.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -31,100 +31,100 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Tablero.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ClosedXML.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ClosedXML.Parser.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ClosedXML.Parser.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ClosedXML.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ClosedXML.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.Framework.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.Framework.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ExcelNumberFormat.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\ExcelNumberFormat.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.WinForms.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.Wpf.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\LiveCharts.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MaterialSkin.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Bcl.HashCode.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Bcl.HashCode.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Npgsql.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Npgsql.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\RBush.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\RBush.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\SixLabors.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\SixLabors.Fonts.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Buffers.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Collections.Immutable.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Collections.Immutable.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Diagnostics.DiagnosticSource.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Diagnostics.DiagnosticSource.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Memory.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Memory.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Numerics.Vectors.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Numerics.Vectors.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Runtime.CompilerServices.Unsafe.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Text.Encodings.Web.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Text.Encodings.Web.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Text.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Text.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Threading.Channels.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Threading.Channels.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Threading.Tasks.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.Threading.Tasks.Extensions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\System.ValueTuple.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Tablero.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Tablero.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Tablero.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.ChartView.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.ChartView.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.GridView.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.GridView.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.dll.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.TelerikMetro.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.Windows11.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.WinControls.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Fixed.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Fixed.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Pdf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Pdf.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Xls.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Xls.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Zip.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\Telerik.Windows.Zip.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\fruti\source\repos\Tablero\Tablero\bin\Release\TelerikCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Tablero.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ClosedXML.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ClosedXML.Parser.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ClosedXML.Parser.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ClosedXML.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ClosedXML.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.Framework.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.Framework.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\DocumentFormat.OpenXml.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ExcelNumberFormat.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\ExcelNumberFormat.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.WinForms.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.WinForms.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.Wpf.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.Wpf.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\LiveCharts.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\MaterialSkin.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Bcl.HashCode.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Bcl.HashCode.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Npgsql.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Npgsql.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\RBush.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\RBush.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\SixLabors.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\SixLabors.Fonts.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Buffers.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Collections.Immutable.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Collections.Immutable.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Diagnostics.DiagnosticSource.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Diagnostics.DiagnosticSource.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Memory.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Memory.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Numerics.Vectors.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Numerics.Vectors.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Runtime.CompilerServices.Unsafe.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Text.Encodings.Web.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Text.Encodings.Web.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Text.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Text.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Threading.Channels.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Threading.Channels.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Threading.Tasks.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.Threading.Tasks.Extensions.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\System.ValueTuple.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Tablero.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Tablero.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Tablero.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.ChartView.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.ChartView.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.GridView.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.GridView.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.dll.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.RadSpreadsheet.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.RichTextEditor.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.TelerikMetro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.Themes.Windows11.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.UI.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.WinControls.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Core.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Fixed.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Fixed.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Pdf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Pdf.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Xls.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.FormatProviders.Xls.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Documents.Spreadsheet.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Zip.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\Telerik.Windows.Zip.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sistemas\source\repos\Picolargo\Tablero\Tablero\bin\Release\TelerikCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

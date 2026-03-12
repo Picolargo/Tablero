@@ -4586,26 +4586,23 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         DateTime inicio = horaInicio;
                         DateTime fin = horaFin;
 
-                        // Verificar si la hora de fin es menor que la de inicio
-                        // Pero considerar que si la diferencia es muy grande (>12 horas),
-                        // probablemente es porque pasó al día siguiente
-                        if (fin < inicio)
+                        // CORRECCIÓN: Determinar si la hora fin es del día siguiente
+                        // Si fin es menor que inicio, asumimos que es del día siguiente
+                        // Esto funciona para cualquier caso de horas que crucen la medianoche
+                        if (fin <= inicio)
                         {
-                            // Si la diferencia es más de 12 horas en negativo, asumimos que es del día siguiente
-                            if ((inicio - fin).TotalHours > 12)
-                            {
-                                fin = fin.AddDays(1);
-                            }
+                            fin = fin.AddDays(1);
                         }
 
                         // Calcular diferencia inicial
                         TimeSpan diferencia = fin - inicio;
 
-                        // Restar minutos energia
+                        // Restar minutos energía
                         if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
                         {
                             diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
                         }
+
                         //validar si el turno es menor a 6 horas
                         // Convertir la diferencia a minutos totales (como double)
                         double minutosTotales = diferencia.TotalMinutes;
@@ -4615,10 +4612,17 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             txt_Tiempo_comida.Text = "0";
                         }
+
                         // Restar minutos comida
                         if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
                         {
                             diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
+
+                            // Asegurar que no sea negativo después de restar comida
+                            if (diferencia.TotalMinutes < 0)
+                            {
+                                diferencia = TimeSpan.Zero;
+                            }
                         }
 
                         // Mostrar horas totales (con decimales si hay minutos)
@@ -4664,6 +4668,97 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
             }
         }
+        //private void calcular_turno()
+        //{
+        //    if (cb_Area.SelectedIndex != -1)
+        //    {
+        //        try
+        //        {
+        //            if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text)
+        //                && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
+        //            {
+        //                // Crear copias de las horas para no modificar las originales
+        //                DateTime inicio = horaInicio;
+        //                DateTime fin = horaFin;
+
+        //                // Verificar si la hora de fin es menor que la de inicio
+        //                // Pero considerar que si la diferencia es muy grande (>12 horas),
+        //                // probablemente es porque pasó al día siguiente
+        //                if (fin < inicio)
+        //                {
+        //                    // Si la diferencia es más de 12 horas en negativo, asumimos que es del día siguiente
+        //                    if ((inicio - fin).TotalHours > 12)
+        //                    {
+        //                        fin = fin.AddDays(1);
+        //                    }
+        //                }
+
+        //                // Calcular diferencia inicial
+        //                TimeSpan diferencia = fin - inicio;
+
+        //                // Restar minutos energia
+        //                if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
+        //                {
+        //                    diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
+        //                }
+        //                //validar si el turno es menor a 6 horas
+        //                // Convertir la diferencia a minutos totales (como double)
+        //                double minutosTotales = diferencia.TotalMinutes;
+
+        //                // Comparar con 360 minutos (6 horas = 360 minutos)
+        //                if (minutosTotales < 360)
+        //                {
+        //                    txt_Tiempo_comida.Text = "0";
+        //                }
+        //                // Restar minutos comida
+        //                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
+        //                {
+        //                    diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
+        //                }
+
+        //                // Mostrar horas totales (con decimales si hay minutos)
+        //                Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+
+        //                // Calcular la nueva diferencia restando los minutos
+        //                TimeSpan diferenciaConDescuento = diferencia;
+
+        //                // Restar minutos mecánicos
+        //                if (!string.IsNullOrEmpty(txt_TM_mecanico.Text) && int.TryParse(txt_TM_mecanico.Text, out int minutosMecanico))
+        //                {
+        //                    diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosMecanico));
+        //                }
+
+        //                // Restar minutos operativos
+        //                if (!string.IsNullOrEmpty(txt_TM_operativo.Text) && int.TryParse(txt_TM_operativo.Text, out int minutosOperativo))
+        //                {
+        //                    diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
+        //                }
+
+        //                // Asegurar que no sea negativo
+        //                if (diferenciaConDescuento.TotalMinutes < 0)
+        //                {
+        //                    diferenciaConDescuento = TimeSpan.Zero;
+        //                }
+
+        //                if (!string.IsNullOrEmpty(Txt_meta.Text) && cb_Area.SelectedIndex != 4)
+        //                {
+        //                    calcular_meta_programada();
+        //                }
+
+        //                // Mostrar el resultado con descuento en Txt_Read_3
+        //                Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
+        //            }
+        //            btn_save_ficha.Enabled = true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            if (ex is FormatException)
+        //            {
+        //                btn_save_ficha.Enabled = false;
+        //            }
+        //        }
+        //    }
+        //}
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Turno.SelectedIndex != -1)

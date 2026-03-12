@@ -306,10 +306,10 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                             };
 
                             dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-
-
-                            // Para área Tunel/Sumergidor: solo borrar (comportamiento actual)
-                            queryChecklote = @"
+                            if (!string.IsNullOrEmpty(idficha_tunel))
+                            {
+                                // Para área Tunel/Sumergidor: solo borrar (comportamiento actual)
+                                queryChecklote = @"
                         BEGIN;
                         DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
@@ -318,12 +318,15 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                         DELETE FROM ""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
                         COMMIT;";
 
-                            NpgsqlParameter[] parametersLotetunel = new NpgsqlParameter[]
-                            {
+                                NpgsqlParameter[] parametersLotetunel = new NpgsqlParameter[]
+                                {
                             new NpgsqlParameter("@ID_Valor", int.Parse(idficha_tunel)),
-                            };
+                                };
 
-                            dbHelper.ExecuteSelectQuery(queryChecklote, parametersLotetunel);
+                                dbHelper.ExecuteSelectQuery(queryChecklote, parametersLotetunel);
+                            }
+
+                            
                         }
                         else
                         {
