@@ -7995,6 +7995,30 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 errorProvider1.SetError(Mask_txt_hr1, ""); // Borra el error si es válido
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
+                //if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+                //{
+                //    calcular_meta_programada();
+                //    porcentaje_logrado_planeacion();
+                //}
+
+                if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_cumplimiento_metas();
+                    Ftt_metodo();
+                    Relacion_Fresco_seco();
+                }
+                if ((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_logrado_planeacion();
+                }
+                if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+                {
+                    porcentaje_aumento_humedad();
+                }
+                if ((cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_logrado_planeacion_platinum();
+                }
                 if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
                 {
                     calcular_meta_programada();
@@ -8018,6 +8042,30 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 errorProvider2.SetError(Mask_txt_hr2, ""); // Borra el error si es válido
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
+                //if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+                //{
+                //    calcular_meta_programada();
+                //    porcentaje_logrado_planeacion();
+                //}
+
+                if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_cumplimiento_metas();
+                    Ftt_metodo();
+                    Relacion_Fresco_seco();
+                }
+                if ((cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 6) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_logrado_planeacion();
+                }
+                if (cb_Area.SelectedIndex == 2 && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text))
+                {
+                    porcentaje_aumento_humedad();
+                }
+                if ((cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 7) && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
+                {
+                    porcentaje_logrado_planeacion_platinum();
+                }
                 if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
                 {
                     calcular_meta_programada();

@@ -5119,7 +5119,7 @@
             this.TxtPuerto.HideSelection = true;
             this.TxtPuerto.Hint = "Puerto SMTP";
             this.TxtPuerto.LeadingIcon = null;
-            this.TxtPuerto.Location = new System.Drawing.Point(371, 51);
+            this.TxtPuerto.Location = new System.Drawing.Point(371, 74);
             this.TxtPuerto.MaxLength = 32767;
             this.TxtPuerto.MouseState = MaterialSkin.MouseState.OUT;
             this.TxtPuerto.Name = "TxtPuerto";
@@ -5168,7 +5168,7 @@
             this.lbl_text_asistive.AutoSize = true;
             this.lbl_text_asistive.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_text_asistive.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(140)))), ((int)(((byte)(255)))));
-            this.lbl_text_asistive.Location = new System.Drawing.Point(368, 256);
+            this.lbl_text_asistive.Location = new System.Drawing.Point(368, 279);
             this.lbl_text_asistive.Name = "lbl_text_asistive";
             this.lbl_text_asistive.Size = new System.Drawing.Size(228, 16);
             this.lbl_text_asistive.TabIndex = 20;
@@ -5184,7 +5184,7 @@
             this.Txt_Destinatarios.Depth = 0;
             this.Txt_Destinatarios.HideSelection = true;
             this.Txt_Destinatarios.Hint = "Correos Destinatarios";
-            this.Txt_Destinatarios.Location = new System.Drawing.Point(371, 134);
+            this.Txt_Destinatarios.Location = new System.Drawing.Point(371, 157);
             this.Txt_Destinatarios.MaxLength = 32767;
             this.Txt_Destinatarios.MouseState = MaterialSkin.MouseState.OUT;
             this.Txt_Destinatarios.Name = "Txt_Destinatarios";
@@ -5208,7 +5208,7 @@
             // 
             this.Check_ssl.AutoSize = true;
             this.Check_ssl.Depth = 0;
-            this.Check_ssl.Location = new System.Drawing.Point(21, 271);
+            this.Check_ssl.Location = new System.Drawing.Point(21, 294);
             this.Check_ssl.Margin = new System.Windows.Forms.Padding(0);
             this.Check_ssl.MouseLocation = new System.Drawing.Point(-1, -1);
             this.Check_ssl.MouseState = MaterialSkin.MouseState.HOVER;
@@ -5223,7 +5223,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = global::Tablero.Properties.Resources._5172968_disable_eye_hidden_hide_internet_icon;
-            this.pictureBox4.Location = new System.Drawing.Point(277, 204);
+            this.pictureBox4.Location = new System.Drawing.Point(277, 227);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(50, 48);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -5244,7 +5244,7 @@
             this.Txt_Password_SMTP.HideSelection = true;
             this.Txt_Password_SMTP.Hint = "Contraseña";
             this.Txt_Password_SMTP.LeadingIcon = null;
-            this.Txt_Password_SMTP.Location = new System.Drawing.Point(21, 204);
+            this.Txt_Password_SMTP.Location = new System.Drawing.Point(21, 227);
             this.Txt_Password_SMTP.MaxLength = 32767;
             this.Txt_Password_SMTP.MouseState = MaterialSkin.MouseState.OUT;
             this.Txt_Password_SMTP.Name = "Txt_Password_SMTP";
@@ -5275,7 +5275,7 @@
             this.Txt_Remitente.HideSelection = true;
             this.Txt_Remitente.Hint = "Remitente";
             this.Txt_Remitente.LeadingIcon = null;
-            this.Txt_Remitente.Location = new System.Drawing.Point(21, 134);
+            this.Txt_Remitente.Location = new System.Drawing.Point(21, 157);
             this.Txt_Remitente.MaxLength = 32767;
             this.Txt_Remitente.MouseState = MaterialSkin.MouseState.OUT;
             this.Txt_Remitente.Name = "Txt_Remitente";
@@ -5307,7 +5307,7 @@
             this.Txt_server_Smtp.HideSelection = true;
             this.Txt_server_Smtp.Hint = "Servidor SMTP";
             this.Txt_server_Smtp.LeadingIcon = null;
-            this.Txt_server_Smtp.Location = new System.Drawing.Point(21, 64);
+            this.Txt_server_Smtp.Location = new System.Drawing.Point(21, 87);
             this.Txt_server_Smtp.MaxLength = 32767;
             this.Txt_server_Smtp.MouseState = MaterialSkin.MouseState.OUT;
             this.Txt_server_Smtp.Name = "Txt_server_Smtp";
@@ -5329,7 +5329,7 @@
             // 
             // radSeparator1
             // 
-            this.radSeparator1.Location = new System.Drawing.Point(21, 37);
+            this.radSeparator1.Location = new System.Drawing.Point(21, 49);
             this.radSeparator1.Name = "radSeparator1";
             this.radSeparator1.Size = new System.Drawing.Size(600, 4);
             this.radSeparator1.TabIndex = 10;
@@ -6909,7 +6909,6 @@
         private MaterialSkin.Controls.MaterialCard materialCard17;
         private System.Windows.Forms.DataGridView dgv_reporte_merma_S;
         private MaterialSkin.Controls.MaterialCard materialCard18;
-        private System.Windows.Forms.Label label1;
         private Telerik.WinControls.UI.RadSeparator radSeparator1;
         private MaterialSkin.Controls.MaterialTextBox2 Txt_server_Smtp;
         private MaterialSkin.Controls.MaterialTextBox2 Txt_Remitente;
@@ -6996,6 +6995,7 @@
         private System.Windows.Forms.Panel panel11;
         private Telerik.WinControls.UI.RadMultiColumnComboBox radMultiColumnComboBox1;
         private Telerik.WinControls.Themes.Windows11Theme windows11Theme1;
+        private System.Windows.Forms.Label label1;
     }
 }
 
