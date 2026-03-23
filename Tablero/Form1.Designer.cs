@@ -2000,7 +2000,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 0;
+            this.tapcontrol.SelectedIndex = 1;
             this.tapcontrol.Size = new System.Drawing.Size(1682, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2351,7 +2351,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -2503,6 +2503,7 @@
             this.dgv_reporte_concentrado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_reporte_concentrado.Size = new System.Drawing.Size(1646, 764);
             this.dgv_reporte_concentrado.TabIndex = 7;
+            this.dgv_reporte_concentrado.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_reporte_concentrado_CellFormatting);
             // 
             // tabPage17
             // 

@@ -11786,11 +11786,11 @@ ORDER BY f.""OP"" ASC;";
     COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
     COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
     COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
+    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
     -- Horas Reales calculadas como Horas Programadas - Tiempo Muerto Mecánico
     COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Horas Reales"",
-    COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
-    COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) AS ""Suma de Tiempo Muerto Operativo"",
     COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Suma de Tiempo Muerto Mecanico"",
+    COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) AS ""Suma de Tiempo Muerto Operativo"",
 
     CASE 
         WHEN COALESCE(q2.""Horas Programadas"", 0) > 0 THEN
@@ -11945,6 +11945,8 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, null);
+            // Quitar selección inicial
+            dgv_reporte_concentrado.ClearSelection();
         }
         private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
         {
@@ -16692,6 +16694,36 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                         Txt_Read_4.Text = kgFrescoEnterSecador;
                         buscar_Meta_hr();
                     }
+                }
+            }
+        }
+
+        private void dgv_reporte_concentrado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Verificar que la columna exista y sea la correcta
+            if (dgv_reporte_concentrado.Columns[e.ColumnIndex].Name != "%Cumplimiento Tiempo Efectivo")
+                return;
+
+            // Ignorar el encabezado
+            if (e.Value == null || e.Value == DBNull.Value)
+                return;
+
+            if (decimal.TryParse(e.Value.ToString(), out decimal valor))
+            {
+                if (valor >= 90)
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(76, 175, 80);   // Verde
+                    e.CellStyle.ForeColor = Color.White;
+                }
+                else if (valor >= 80)
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(255, 235, 59);  // Amarillo
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(244, 67, 54);   // Rojo
+                    e.CellStyle.ForeColor = Color.White;
                 }
             }
         }
