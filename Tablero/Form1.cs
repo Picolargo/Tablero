@@ -12212,8 +12212,8 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
             string querySimple = @"SELECT 
     EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. de Semana"",
     EXTRACT(MONTH FROM f.""Fecha"") AS ""Mes"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. de Semana"",
     f.""Area"",
     f.""OP"",
     SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
