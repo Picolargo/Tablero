@@ -11787,7 +11787,6 @@ ORDER BY f.""OP"" ASC;";
     COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
     COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") AS ""OP"",
     COALESCE(q2.""Horas Programadas"", 0) AS ""Horas Programadas"",
-    -- Horas Reales calculadas como Horas Programadas - Tiempo Muerto Mecánico
     COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Horas Reales"",
     COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0) AS ""Suma de Tiempo Muerto Mecanico"",
     COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) AS ""Suma de Tiempo Muerto Operativo"",
@@ -11811,9 +11810,57 @@ ORDER BY f.""OP"" ASC;";
     END AS ""Kg Fresco Meta / Hras Reales"",
 
     COALESCE(q3.""Kg Fresco Real"", 0) AS ""Kg Fresco Real"",
+
+    CASE 
+        WHEN (COALESCE(d.""Kg_fresco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))) > 0 THEN
+            LEAST(
+                ROUND(
+                    (COALESCE(q3.""Kg Fresco Real"", 0) /
+                    (COALESCE(d.""Kg_fresco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))
+                    * 100
+                , 2),
+            100)
+        ELSE 0
+    END AS ""%Cumplimiento Fresco"",
+	CASE 
+        WHEN (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) > 0 THEN
+            ROUND(COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)), 2)
+        ELSE 0
+    END AS ""Kg Seco Meta / Hras Reales"",
     COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
+	CASE 
+        WHEN (COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))) > 0 THEN
+            LEAST(
+                ROUND(
+                    (COALESCE(q3.""Kg Seco Real"", 0) /
+                    (COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))
+                    * 100
+                , 2),
+            100)
+        ELSE 0
+    END AS ""%Cumplimiento Secos"",
+	COALESCE(d.""Relacion_fr_seco"", 0) AS ""Relación Fresco-Seco Meta"",
+	CASE 
+        WHEN (COALESCE(q3.""Kg Seco Real"", 0)) > 0 THEN
+                ROUND(
+                    (COALESCE(q3.""Kg Fresco Real"", 0) /
+                    (COALESCE(q3.""Kg Seco Real"", 0))), 2)
+        ELSE 0
+    END AS ""Relación Fresco-Seco Real"",
+	CASE 
+        WHEN (COALESCE(q3.""Kg Seco Real"", 0)) > 0 THEN
+            LEAST(
+                ROUND(
+                    (((COALESCE(q3.""Kg Fresco Real"", 0) /
+                    (COALESCE(q3.""Kg Seco Real"", 0)))) /
+                    (COALESCE(d.""Relacion_fr_seco"", 0)))
+                    * 100
+                , 2),
+            100)
+        ELSE 0
+    END AS ""%Cumplimiento Relación Fresco-Seco"",
     COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg Fuera de Especificación"",
-    
+
     CASE 
         WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
             ROUND(
@@ -11825,11 +11872,9 @@ ORDER BY f.""OP"" ASC;";
     END AS ""FTT"",
 
     COALESCE(q3.""Personal Operativo Promedio"", 0)::integer AS ""Personal Operativo Promedio"",
-    -- Horas Hombre calculadas con las nuevas Horas Reales
     COALESCE(q3.""Personal Operativo Promedio"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) AS ""Horas Hombre""
 
 FROM (
-    -- q1: Tiempos muertos para Despegue
     SELECT 
         EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
@@ -11865,7 +11910,6 @@ FROM (
 ) q1
 
 FULL JOIN (
-    -- q2: Horas para Tunel/Sumergidor
     SELECT 
         EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
@@ -11900,7 +11944,6 @@ AND q1.""Mes"" = q2.""Mes""
 AND q1.""OP"" = q2.""OP""
 
 FULL JOIN (
-    -- q3: Producción para Despegue
     SELECT 
         EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
         EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
@@ -16700,11 +16743,11 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
         private void dgv_reporte_concentrado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // Verificar que la columna exista y sea la correcta
-            if (dgv_reporte_concentrado.Columns[e.ColumnIndex].Name != "%Cumplimiento Tiempo Efectivo")
+            string colName = dgv_reporte_concentrado.Columns[e.ColumnIndex].Name;
+
+            if (colName != "%Cumplimiento Tiempo Efectivo" && colName != "%Cumplimiento Fresco" && colName != "%Cumplimiento Secos" && colName != "%Cumplimiento Relación Fresco-Seco" && colName != "FTT")
                 return;
 
-            // Ignorar el encabezado
             if (e.Value == null || e.Value == DBNull.Value)
                 return;
 
