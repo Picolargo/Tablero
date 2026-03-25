@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using LiveCharts;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using Npgsql;
@@ -6,11 +7,9 @@ using System;
 using System.Collections.Generic; // ¡Agrega esta línea!
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -18,27 +17,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 //using System.Windows.Forms.DataVisualization.Charting;
-using Telerik.Charting;
-using Telerik.WinControls;
-using Telerik.WinControls.Export;
 using Telerik.WinControls.UI;
-using Telerik.WinControls.UI.Export;
-using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
-using Telerik.WinForms.Documents.Model.Notes;
-using static System.Net.WebRequestMethods;
-using LiveCharts;
-using LiveCharts.Wpf;
 
 // ALIAS para evitar ambigüedades (USA SOLO ESTOS, NO los using directos de LiveCharts.Wpf)
-using LiveChartsSeries = LiveCharts.Wpf.Series;
-using LiveColumnSeries = LiveCharts.Wpf.ColumnSeries;
-using LiveLineSeries = LiveCharts.Wpf.LineSeries;
-using LiveChartValues = LiveCharts.ChartValues<double>; // Alias para ChartValues<double>
 
 // Alias para colores
-using WpfColor = System.Windows.Media.Color;
-using WpfBrushes = System.Windows.Media.Brushes;
-using WpfBrush = System.Windows.Media.SolidColorBrush;
 
 
 namespace Tablero
@@ -5180,13 +5163,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     string textoPorcentCumplimiento = Txt_Read_5.Text.Replace("%", "").Trim();
                     decimal PorcentCumplimiento = System.Convert.ToDecimal(textoPorcentCumplimiento) / 100m;
                     //decimal Kg_secos_meta = System.Convert.ToDecimal(Txt_Read_6.Text);
-                    decimal Relacion_Fresco_seco = System.Convert.ToDecimal(Txt_Read_7.Text);
+                    decimal Relacion_Fresco_seco = System.Convert.ToDecimal(Txt_Read_7.Text);//-------------------------------------adjuntar a resumen correo
                     string textoFTT = Txt_Read_8.Text.Replace("%", "").Trim();
                     decimal FTT = System.Convert.ToDecimal(textoFTT) / 100m;
                     string area = cb_Area.Text;
                     decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
                     string lote = radMultiColumnComboBox1.Text;
-                    decimal kgFrescosEnterSe = System.Convert.ToDecimal(Txt_Read_4.Text);
+                    decimal kgFrescosEnterSe = System.Convert.ToDecimal(Txt_Read_4.Text);//-------------------------------------adjuntar a resumen correo
                     string fecha_formateada = fecha.ToString("dd/MM/yyyy");
 
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
@@ -5225,7 +5208,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
-                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr),
+                                new KeyValuePair<string, string>("Kg que ingresan a Túnel", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Relación Fresco/Seco", Relacion_Fresco_seco.ToString())
                             };
 
                         string tablaResumen = GenerarTablaResumen(valoresResumen);
@@ -5318,7 +5303,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
                                 new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
                                 new KeyValuePair<string, string>("Kg producidos en turno", KgProdSeco.ToString()),
-                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr),
+                                new KeyValuePair<string, string>("Kg que ingresan a Túnel", kgFrescosEnterSe.ToString()),
+                                new KeyValuePair<string, string>("Relación Fresco/Seco", Relacion_Fresco_seco.ToString())
                             };
 
                         string tablaResumen = GenerarTablaResumen(valoresResumen);
@@ -12212,85 +12199,89 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
             string querySimple = @"SELECT 
     EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
-    EXTRACT(MONTH FROM f.""Fecha"") AS ""Mes"",
+    TO_CHAR(f.""Fecha"", 'TMMonth') AS ""Mes"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. de Semana"",
     f.""Area"",
     f.""OP"",
+
     SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
-    COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Mecánico(Hrs)"",
 	ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) As ""Hr Reales"",
+	COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Mecánico(Hrs)"",
+    COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
+
     ROUND(
         (1 - (
             (COALESCE(SUM(tmo.""Min_Detenidos"")/60.0, 0) + COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)) / 
             NULLIF(SUM(f.""Hr_programadas""), 0)
         ))*100, 
     2) AS ""% Cumplimiento Tiempo Efectivo"",
+
     ROUND(
         CASE 
-            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
+            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
+            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
+            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
+            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
             WHEN f.""Area"" = 'Polvos' THEN 
                 CASE 
-                    WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
-                        COALESCE(p.""Meta_kg_hr_hum"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    ELSE 
-                        COALESCE(p.""Meta_kg_hr_idon"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                    WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
+                    ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
                 END
-            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
             ELSE 0
-        END,
-    2) AS ""Kg Meta Hr Reales"",
+        END
+        * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+    ,2) AS ""Kg Meta Hr Reales"",
+
     SUM(f.""Kg_prod_term"") AS ""Kg Producidos"",
-    -- Nueva columna: % Cumplimiento Kg Terminados
+
     ROUND(
         CASE 
-            WHEN ROUND(
-                CASE 
-                    WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    WHEN f.""Area"" = 'Polvos' THEN 
-                        CASE 
-                            WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
-                                COALESCE(p.""Meta_kg_hr_hum"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                            ELSE 
-                                COALESCE(p.""Meta_kg_hr_idon"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                        END
-                    WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                    ELSE 0
-                END,
-            2) <= 0 THEN 0
-            ELSE LEAST(
-                (SUM(f.""Kg_prod_term"") / 
-                ROUND(
+            WHEN 
+                (
                     CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
                         WHEN f.""Area"" = 'Polvos' THEN 
                             CASE 
-                                WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN 
-                                    COALESCE(p.""Meta_kg_hr_hum"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                                ELSE 
-                                    COALESCE(p.""Meta_kg_hr_idon"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                                WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
+                                ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
                             END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0) * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
+                        ELSE 0
+                    END
+                    * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                ) <= 0 THEN 0
+            ELSE LEAST(
+                (SUM(f.""Kg_prod_term"") / 
+                (
+                    CASE 
+                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
+                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
+                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
+                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
+                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
+                        WHEN f.""Area"" = 'Polvos' THEN 
+                            CASE 
+                                WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
+                                ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
+                            END
+                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
                         ELSE 1
-                    END,
-                2)) * 100,
+                    END
+                    * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
+                )) * 100,
                 100
             )
         END,
     2) AS ""% Cumplimiento Kg Terminados"",
+
     SUM(f.""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
+
     ROUND(
         CASE 
             WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
@@ -12300,48 +12291,59 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
             )
         END,
     2) AS ""FTT"",
+
     ROUND(AVG(f.""Personal_Operativo""))::integer AS ""Personal"",
-    ROUND(ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) * ROUND(AVG(f.""Personal_Operativo""))::integer, 2) AS ""Horas Hombre"",
+
+    ROUND(
+        ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
+        * ROUND(AVG(f.""Personal_Operativo""))::integer, 2
+    ) AS ""Horas Hombre"",
+
     ROUND(
         CASE 
-            WHEN (ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) * ROUND(AVG(f.""Personal_Operativo""))::integer) <= 0 THEN 0
-            ELSE SUM(f.""Kg_prod_term"") / (ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) * ROUND(AVG(f.""Personal_Operativo""))::integer)
+            WHEN (
+                ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
+                * ROUND(AVG(f.""Personal_Operativo""))::integer
+            ) <= 0 THEN 0
+            ELSE SUM(f.""Kg_prod_term"") / (
+                ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
+                * ROUND(AVG(f.""Personal_Operativo""))::integer
+            )
         END,
     2) AS ""Kg Producidos por Persona"",
+
     SUM(f.""Merma_kg"") AS ""Kg de Merma"",
+
     ROUND(
         CASE 
             WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 0
             ELSE (SUM(f.""Merma_kg"") / SUM(f.""Kg_prod_term"")) * 100
         END,
     2) AS ""% Merma vs Producido""
-FROM 
-    public.""Ficha"" f
-LEFT JOIN 
-    public.""Tiempo_Muerto_Operativo"" tmo 
+
+FROM public.""Ficha"" f
+
+LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
     ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-LEFT JOIN 
-    public.""Tiempo_muerto_Mecanico"" tmm 
+
+LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
     ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-LEFT JOIN 
-    public.""Empacado"" e ON f.""OP"" = e.""OP""
-LEFT JOIN 
-    public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-LEFT JOIN 
-    public.""Grind"" g ON f.""OP"" = g.""OP""
-LEFT JOIN 
-    public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-LEFT JOIN 
-    public.""Maquinas"" m ON f.""OP"" = m.""OP""
-LEFT JOIN 
-    public.""Polvos"" p ON f.""OP"" = p.""OP""
-LEFT JOIN 
-    public.""Revolturas"" r ON f.""OP"" = r.""OP""
+
+LEFT JOIN public.""Empacado"" e ON f.""OP"" = e.""OP""
+LEFT JOIN public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
+LEFT JOIN public.""Grind"" g ON f.""OP"" = g.""OP""
+LEFT JOIN public.""Inspeccion"" i ON f.""OP"" = i.""OP""
+LEFT JOIN public.""Maquinas"" m ON f.""OP"" = m.""OP""
+LEFT JOIN public.""Polvos"" p ON f.""OP"" = p.""OP""
+LEFT JOIN public.""Revolturas"" r ON f.""OP"" = r.""OP""
+
 WHERE 
     f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+
 GROUP BY 
     EXTRACT(YEAR FROM f.""Fecha""),
     EXTRACT(MONTH FROM f.""Fecha""),
+    TO_CHAR(f.""Fecha"", 'TMMonth'),
     EXTRACT(WEEK FROM f.""Fecha""),
     f.""Area"",
     f.""OP"",
@@ -12353,12 +12355,18 @@ GROUP BY
     p.""Meta_kg_hr_hum"",
     p.""Meta_kg_hr_idon"",
     r.""Meta_Kg_Hr""
+
 ORDER BY 
-    ""Año"", ""Mes"", ""No. de Semana"", f.""Area"", f.""OP"";";
+    ""Año"",
+    EXTRACT(MONTH FROM f.""Fecha""),
+    ""No. de Semana"",
+    f.""Area"",
+    f.""OP"";";
 
             // Cargar los datos de la tabla Ficha en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, null);
             dgv_reporte_concentrado_otras.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgv_reporte_concentrado_otras.ClearSelection();
         }
         //dgv_reporte_concentrado_otras
         private async void btn_export_excel_concentrado_otras_Click(object sender, EventArgs e)
@@ -16746,6 +16754,36 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             string colName = dgv_reporte_concentrado.Columns[e.ColumnIndex].Name;
 
             if (colName != "%Cumplimiento Tiempo Efectivo" && colName != "%Cumplimiento Fresco" && colName != "%Cumplimiento Secos" && colName != "%Cumplimiento Relación Fresco-Seco" && colName != "FTT")
+                return;
+
+            if (e.Value == null || e.Value == DBNull.Value)
+                return;
+
+            if (decimal.TryParse(e.Value.ToString(), out decimal valor))
+            {
+                if (valor >= 90)
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(76, 175, 80);   // Verde
+                    e.CellStyle.ForeColor = Color.White;
+                }
+                else if (valor >= 80)
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(255, 235, 59);  // Amarillo
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.BackColor = Color.FromArgb(244, 67, 54);   // Rojo
+                    e.CellStyle.ForeColor = Color.White;
+                }
+            }
+        }
+
+        private void dgv_reporte_concentrado_otras_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            string colName = dgv_reporte_concentrado_otras.Columns[e.ColumnIndex].Name;
+
+            if (colName != "% Cumplimiento Tiempo Efectivo" && colName != "% Cumplimiento Kg Terminados" && colName != "FTT")
                 return;
 
             if (e.Value == null || e.Value == DBNull.Value)
