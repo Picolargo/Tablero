@@ -30,68 +30,68 @@ namespace Tablero
             this.connectionString = connectionString;
             editar = Editar;
             borrar = Borrar;
-            materialExpansionPanel1.SaveClick += MaterialExpansionPanel1_OnActionButtonClick;
-            materialExpansionPanel1.CancelClick += MaterialExpansionPanel1_OnCancelButtonClick;
+            //materialExpansionPanel1.SaveClick += MaterialExpansionPanel1_OnActionButtonClick;
+            //materialExpansionPanel1.CancelClick += MaterialExpansionPanel1_OnCancelButtonClick;
         }
-        private void limpiarCampos()
-        {
-            txt_user.Clear();
-            txt_password.Clear();
-            txt_user.Focus(); // Enfoca el campo de usuario
-        }
+        //private void limpiarCampos()
+        //{
+        //    txt_user.Clear();
+        //    txt_password.Clear();
+        //    txt_user.Focus(); // Enfoca el campo de usuario
+        //}
         // 🔹 Evento del botón "Validar"
-        private void MaterialExpansionPanel1_OnActionButtonClick(object sender, EventArgs e)
-        {
-            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+        //private void MaterialExpansionPanel1_OnActionButtonClick(object sender, EventArgs e)
+        //{
+        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            bool isValid = dbHelper.ValidateUser(txt_user.Text, txt_password.Text);
+        //    bool isValid = dbHelper.ValidateUser(txt_user.Text, txt_password.Text);
 
-            if (isValid)
-            {
-                // Obtener información adicional del usuario
-                DataRow userInfo = dbHelper.GetUserInfo(txt_user.Text);
+        //    if (isValid)
+        //    {
+        //        // Obtener información adicional del usuario
+        //        DataRow userInfo = dbHelper.GetUserInfo(txt_user.Text);
 
-                if (userInfo != null)
-                {
-                    int idUser = Convert.ToInt32(userInfo["ID_User"]);
-                    string nivel = userInfo["Nivel"].ToString();
-                    string noEmpleado = userInfo["No_Empleado"].ToString();
-                    if(nivel != "Super Administrador")
-                    {                         // Credenciales sin nivel asignado
-                        MetroFramework.MetroMessageBox.Show
-                            (
-                            this,
-                            "Solo el usuario Administrador tiene permiso para acceder a esta sección y realizar cambios.\n\nInicie sesión con la cuenta de Administrador para continuar.",
-                            "Acceso restringido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
-                            );
-                        limpiarCampos(); // Limpia los campos de texto
-                        return;
-                    }
-                    else
-                    {
-                        // Credenciales correctas y nivel asignado
-                        this.Controls.Remove(materialExpansionPanel1); // lo elimina visualmente
-                        materialExpansionPanel1.Dispose();              // libera recursos
-                        radGridView1.Visible = true;          // muestra el grid
-                        actualiza_fichas();
-                    }
-                }
-            }
-            else
-            {
-                // Credenciales incorrectas
-                MetroFramework.MetroMessageBox.Show(this, "El usuario y/o la contraseña son incorrectos. Por favor, verifique sus datos e intente nuevamente.\r\n\r\n", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                limpiarCampos(); // Limpia los campos de texto
-            }
-        }
+        //        if (userInfo != null)
+        //        {
+        //            int idUser = Convert.ToInt32(userInfo["ID_User"]);
+        //            string nivel = userInfo["Nivel"].ToString();
+        //            string noEmpleado = userInfo["No_Empleado"].ToString();
+        //            if(nivel != "Super Administrador")
+        //            {                         // Credenciales sin nivel asignado
+        //                MetroFramework.MetroMessageBox.Show
+        //                    (
+        //                    this,
+        //                    "Solo el usuario Administrador tiene permiso para acceder a esta sección y realizar cambios.\n\nInicie sesión con la cuenta de Administrador para continuar.",
+        //                    "Acceso restringido",
+        //                    MessageBoxButtons.OK,
+        //                    MessageBoxIcon.Warning
+        //                    );
+        //                limpiarCampos(); // Limpia los campos de texto
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                // Credenciales correctas y nivel asignado
+        //                this.Controls.Remove(materialExpansionPanel1); // lo elimina visualmente
+        //                materialExpansionPanel1.Dispose();              // libera recursos
+        //                radGridView1.Visible = true;          // muestra el grid
+                        
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Credenciales incorrectas
+        //        MetroFramework.MetroMessageBox.Show(this, "El usuario y/o la contraseña son incorrectos. Por favor, verifique sus datos e intente nuevamente.\r\n\r\n", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        limpiarCampos(); // Limpia los campos de texto
+        //    }
+        //}
 
-        // 🔹 Evento del botón "Cancelar"
-        private void MaterialExpansionPanel1_OnCancelButtonClick(object sender, EventArgs e)
-        {
-            this.Close(); // 🔹 Cierra el formulario actual
-        }
+        //// 🔹 Evento del botón "Cancelar"
+        //private void MaterialExpansionPanel1_OnCancelButtonClick(object sender, EventArgs e)
+        //{
+        //    this.Close(); // 🔹 Cierra el formulario actual
+        //}
         private void actualiza_fichas()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -116,56 +116,6 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
             radGridView1.Columns[0].IsVisible = false; // Ocultar la columna ID
             radGridView1.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
         }
-
-        //private void radGridView1_CellDoubleClick(object sender, GridViewCellEventArgs e)
-        //{
-        //    if (editar && !borrar)
-        //    {
-        //        if (e.RowIndex >= 0)
-        //        {
-        //            string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-        //            string area = radGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
-
-        //            // 🔹 Marca que sí se seleccionó una ficha
-        //            fichaSeleccionada = true;
-
-        //            // 🔹 Dispara el evento
-        //            FichaSeleccionada?.Invoke(id_global, area);
-
-        //            // 🔹 Cierra el formulario
-        //           // this.Close();
-        //        }
-        //    }
-        //    else if (!editar && borrar)
-        //    {
-        //        if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar esta Ficha?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-        //        {
-        //            if (e.RowIndex >= 0)
-        //            {
-        //                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-        //                string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-        //                // Verificar si ya existe
-        //                string queryChecklote = @"ROLLBACK;
-        //             BEGIN;
-        //             DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
-        //             DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
-        //             DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
-        //             DELETE FROM ""Tiempo_muerto_Mecanico"" WHERE ""ID_Ficha"" = @ID_Valor;
-        //             DELETE FROM ""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
-        //             COMMIT;";
-
-        //                NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
-        //                {
-        //                        new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
-        //                };
-        //                DataTable dtLote = dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
-        //                FichaSeleccionada?.Invoke(null, null);
-        //                // 🔹 Cierra el formulario
-        //                this.Close();
-        //            }
-        //        }   
-        //    }
-        //}
         private void radGridView1_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
             if (editar && !borrar)
@@ -380,15 +330,20 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
             }
         }
 
-        private void txt_password_KeyDown(object sender, KeyEventArgs e)
+        //private void txt_password_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        e.SuppressKeyPress = true; // evita beep
+        //        MaterialExpansionPanel1_OnActionButtonClick(
+        //            materialExpansionPanel1, EventArgs.Empty
+        //        );
+        //    }
+        //}
+
+        private void Editar_Load(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true; // evita beep
-                MaterialExpansionPanel1_OnActionButtonClick(
-                    materialExpansionPanel1, EventArgs.Empty
-                );
-            }
+            actualiza_fichas();
         }
     }
 }

@@ -397,10 +397,15 @@ namespace Tablero
                 // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
-                materialTabControl1.TabPages.Remove(tabPage10);
                 materialTabControl1.TabPages.Remove(tabPage11); 
 
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
+
+                tapcontrol.TabPages.Remove(tabPage16);
+                tapcontrol.TabPages.Remove(tabPage17);
+                tapcontrol.TabPages.Remove(metroTabPage10);
+                tapcontrol.TabPages.Remove(tabPage22);
+                tapcontrol.TabPages.Remove(tabPage33);
 
                 ActualizarAnioReportes();
                 CargarSemanasAnioActual();
