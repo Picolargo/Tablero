@@ -4,7 +4,7 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using Npgsql;
 using System;
-using System.Collections.Generic; // ¡Agrega esta línea!
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -16,12 +16,8 @@ using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using System.Windows.Forms.DataVisualization.Charting;
 using Telerik.WinControls.UI;
-
-// ALIAS para evitar ambigüedades (USA SOLO ESTOS, NO los using directos de LiveCharts.Wpf)
-
-// Alias para colores
+//using System.Windows.Forms.DataVisualization.Charting;
 
 
 namespace Tablero
@@ -15916,13 +15912,6 @@ ORDER BY
         {
             try
             {
-                //servidor_smtp
-                //RemitenteEMail
-                //PasswordEmail
-                //PuertoSMTP
-                //SSLCheck
-                //DestinatariosEmail
-                // Configuración del correo
                 MailMessage correo = new MailMessage();
                 correo.From = new MailAddress(RemitenteEMail);
                 string destinatarios = DestinatariosEmail;
@@ -16811,6 +16800,60 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                     e.CellStyle.BackColor = Color.FromArgb(244, 67, 54);   // Rojo
                     e.CellStyle.ForeColor = Color.White;
                 }
+            }
+        }
+
+        private void Generar_Report_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener la cadena de conexión desde tu configuración
+               // string connectionString = connectionString;
+
+                // Crear instancia del reporte
+                Reporte_Semanal reporte = new Reporte_Semanal(connectionString);
+
+                // Configurar datos de correo desde las variables guardadas en el registro
+                reporte.ServidorSMTP = servidor_smtp; // Tu variable
+                reporte.PuertoSMTP = PuertoSMTP;       // Tu variable
+                reporte.RemitenteEmail = RemitenteEMail; // Tu variable
+                reporte.PasswordEmail = PasswordEmail;   // Tu variable
+                reporte.DestinatariosEmail = DestinatariosEmail; // Tu variable
+                reporte.SSLCheck = SSLCheck;           // Tu variable
+
+                // Opcional: Configurar número de semanas (por defecto 4)
+                reporte.NumeroSemanas = 4;
+
+                // Opcional: Configurar nombre del reporte
+                //reporte.NombreReporte = "Reporte Semanal Evaporado";
+
+                // Generar y enviar el reporte
+                bool resultado = reporte.GenerarYEnviarReporte();
+
+                if (resultado)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Reporte generado y enviado correctamente por correo electrónico.",
+                        "Éxito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se pudo completar el envío del reporte.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al generar el reporte: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
     }
