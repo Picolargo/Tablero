@@ -403,6 +403,11 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage22);
                 tapcontrol.TabPages.Remove(tabPage33);
 
+                if(nivel_user == "Supervisor") 
+                {
+                    materialTabControl1.TabPages.Remove(tabPage10);
+                }
+
                 ActualizarAnioReportes();
                 CargarSemanasAnioActual();
                 actualiza_detalles_OP();
