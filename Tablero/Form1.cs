@@ -320,7 +320,112 @@ namespace Tablero
                 e.Handled = true;
             }
         }
+        // Configuración básica del ListView
+        private void ConfigurarListViewSimple()
+        {
+            // Configurar vista como lista (solo texto, sin columnas)
+            listView1.View = View.List;
 
+            // Permitir selección múltiple
+            listView1.MultiSelect = true;
+
+            // Habilitar checkboxes para selección más intuitiva
+            listView1.CheckBoxes = true;
+
+            // Opcional: Permitir selección completa del item
+            listView1.FullRowSelect = true;
+
+            // Opcional: Eliminar líneas de cuadrícula (más limpio)
+            listView1.GridLines = false;
+        }
+
+        // Cargar las semanas desde la 1 hasta la semana actual
+        private void CargarSemanasSimple()
+        {
+            // Limpiar items existentes
+            listView1.Items.Clear();
+
+            // Obtener fecha actual
+            DateTime fechaActual = DateTime.Now;
+
+            // Obtener número de semana actual (semana empieza en lunes)
+            int semanaActual = ObtenerNumeroSemana(fechaActual);
+
+            // Cargar semanas del 1 al número de semana actual
+            for (int semana = 1; semana <= semanaActual; semana++)
+            {
+                // Crear el item con el número de semana
+                ListViewItem item = new ListViewItem(semana.ToString());
+
+                // Guardar el número de semana en Tag para usarlo después
+                item.Tag = semana;
+
+                // Agregar al ListView
+                listView1.Items.Add(item);
+            }
+
+            // Opcional: Seleccionar todas las semanas por defecto
+            foreach (ListViewItem item in listView1.Items)
+            {
+                item.Selected = false;  // Selecciona visualmente
+                item.Checked = false;    // Marca el checkbox
+            }
+        }
+
+        // Método para obtener el número de semana (Lunes a Domingo)
+        private int ObtenerNumeroSemana(DateTime fecha)
+        {
+            // Usar cultura invariable
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            Calendar calendar = culture.Calendar;
+
+            // Semana comienza en LUNES, usando estándar ISO
+            return calendar.GetWeekOfYear(fecha, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
+        // Método para obtener las semanas seleccionadas (usando selección normal)
+        private List<int> ObtenerSemanasSeleccionadas()
+        {
+            List<int> semanas = new List<int>();
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                // Obtener el número de semana del Tag o del texto
+                if (item.Tag != null)
+                {
+                    semanas.Add((int)item.Tag);
+                }
+                else
+                {
+                    semanas.Add(int.Parse(item.Text));
+                }
+            }
+
+            return semanas;
+        }
+
+        // Método para obtener las semanas seleccionadas (usando checkboxes)
+        private List<int> ObtenerSemanasSeleccionadasConCheckbox()
+        {
+            List<int> semanas = new List<int>();
+
+            foreach (ListViewItem item in listView1.Items)
+            {
+                if (item.Checked)
+                {
+                    if (item.Tag != null)
+                    {
+                        semanas.Add((int)item.Tag);
+                    }
+                    else
+                    {
+                        semanas.Add(int.Parse(item.Text));
+                    }
+                }
+            }
+
+            return semanas;
+        }
         private void Form_principal_Load(object sender, EventArgs e)
         {
             materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo
@@ -353,6 +458,12 @@ namespace Tablero
                 ActualizarAnioReportes();
                 carga_Jefes();
                 ConfigurarTooltipParaComboBox();
+
+                // Configurar el ListView
+                ConfigurarListViewSimple();
+
+                // Cargar las semanas
+                CargarSemanasSimple();
 
                 menuStrip1.Visible = true; // Mostrar el menú para el administrador
             }
@@ -16808,32 +16919,36 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             }
         }
 
-        private void Generar_Report_Click(object sender, EventArgs e)
+        private void btn_generar_Click(object sender, EventArgs e)
         {
             try
             {
-                // Obtener la cadena de conexión desde tu configuración
-               // string connectionString = connectionString;
+                // Obtener las semanas seleccionadas del ListView
+                List<int> semanasSeleccionadas = ObtenerSemanasSeleccionadasConCheckbox();
+
+                if (semanasSeleccionadas.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, seleccione al menos una semana para generar el reporte.",
+                        "Advertencia",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
 
                 // Crear instancia del reporte
                 Reporte_Semanal reporte = new Reporte_Semanal(connectionString);
 
                 // Configurar datos de correo desde las variables guardadas en el registro
-                reporte.ServidorSMTP = servidor_smtp; // Tu variable
-                reporte.PuertoSMTP = PuertoSMTP;       // Tu variable
-                reporte.RemitenteEmail = RemitenteEMail; // Tu variable
-                reporte.PasswordEmail = PasswordEmail;   // Tu variable
-                reporte.DestinatariosEmail = DestinatariosEmail; // Tu variable
-                reporte.SSLCheck = SSLCheck;           // Tu variable
+                reporte.ServidorSMTP = servidor_smtp;
+                reporte.PuertoSMTP = PuertoSMTP;
+                reporte.RemitenteEmail = RemitenteEMail;
+                reporte.PasswordEmail = PasswordEmail;
+                reporte.DestinatariosEmail = DestinatariosEmail;
+                reporte.SSLCheck = SSLCheck;
 
-                // Opcional: Configurar número de semanas (por defecto 4)
-                reporte.NumeroSemanas = 4;
-
-                // Opcional: Configurar nombre del reporte
-                //reporte.NombreReporte = "Reporte Semanal Evaporado";
-
-                // Generar y enviar el reporte
-                bool resultado = reporte.GenerarYEnviarReporte();
+                // Generar y enviar el reporte con las semanas seleccionadas
+                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
 
                 if (resultado)
                 {
@@ -16859,6 +16974,15 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+            }
+        }
+
+        private void bnt_limpiar_check_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listView1.Items)
+            {
+                item.Selected = false;
+                item.Checked = false;
             }
         }
     }
