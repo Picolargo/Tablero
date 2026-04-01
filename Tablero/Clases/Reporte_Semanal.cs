@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -65,346 +66,566 @@ namespace Tablero
         public ReporteColores ColoresReporte { get; set; }
 
         /// <summary>
-        /// Obtiene los datos de Evaporado para las últimas N semanas
+        /// Obtiene los datos de Evaporado para las semanas completas del mes actual
         /// </summary>
         public DataTable GetDataEvaporado()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Evaporado'
-                AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(e.""Meta_kg_hr""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Evaporado"" e ON f.""OP"" = e.""OP""
-            WHERE f.""Area"" = 'Evaporado'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Evaporado'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Evaporado'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
 
         /// <summary>
-        /// Obtiene los datos de Grind para las últimas N semanas
+        /// Obtiene los datos de Grind para las semanas completas del mes actual
         /// </summary>
         public DataTable GetDataGrind()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Grind'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(g.""Meta_Kg_hr""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Grind"" g ON f.""OP"" = g.""OP""
-            WHERE f.""Area"" = 'Grind'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Grind'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Grind'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
+        /// <summary>
+        /// Obtiene los datos de Inspeccion para las semanas completas del mes actual
+        /// </summary>
         public DataTable GetDataInspeccion()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Inspeccion'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(g.""Meta_kg_hr_line""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Inspeccion"" g ON f.""OP"" = g.""OP""
-            WHERE f.""Area"" = 'Inspeccion'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    -- Obtener el primer y último día del mes actual
+    rango_mes AS (
+        SELECT 
+            DATE_TRUNC('month', CURRENT_DATE) as inicio_mes,
+            DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day' as fin_mes
+    ),
+    -- Obtener todas las semanas que tienen al menos un día en el mes actual
+    semanas_del_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            MIN(f.""Fecha"") as min_fecha,
+            MAX(f.""Fecha"") as max_fecha
+        FROM public.""Ficha"" f
+        CROSS JOIN rango_mes rm
+        WHERE f.""Area"" = 'Inspeccion'
+            AND f.""Fecha"" >= rm.inicio_mes
+            AND f.""Fecha"" <= rm.fin_mes
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    ),
+    -- Filtrar solo semanas completas (que terminan dentro del mes actual)
+    semanas_completas AS (
+        SELECT semana
+        FROM semanas_del_mes
+        CROSS JOIN rango_mes rm
+        WHERE max_fecha <= rm.fin_mes
+            -- Excluir la semana actual si es lunes antes de 10:00 am
+            AND NOT (
+                (SELECT excluir_semana_actual FROM condiciones_tiempo) = true 
+                AND semana = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Inspeccion'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_completas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_completas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
 
         /// <summary>
-        /// Obtiene los datos de Polvos para las últimas N semanas con meta condicional por mes
+        /// Obtiene los datos de Polvos para las semanas completas del mes actual
         /// </summary>
         public DataTable GetDataPolvos()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Polvos'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(
-                    CASE 
-                        WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN p.""Meta_kg_hr_hum""
-                        ELSE p.""Meta_kg_hr_idon""
-                    END
-                ), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Polvos"" p ON f.""OP"" = p.""OP""
-            WHERE f.""Area"" = 'Polvos'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Polvos'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Polvos'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
+        /// <summary>
+        /// Obtiene los datos de Empacado para las semanas completas del mes actual
+        /// </summary>
         public DataTable GetDataEmpacado()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Empacado'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(e.""Meta_kg_hr_line""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Empacado"" e ON f.""OP"" = e.""OP""
-            WHERE f.""Area"" = 'Empacado'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Empacado'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Empacado'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
+        /// <summary>
+        /// Obtiene los datos de Revolturas para las semanas completas del mes actual
+        /// </summary>
         public DataTable GetDataRevolturas()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Revolturas'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(e.""Meta_Kg_Hr""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Revolturas"" e ON f.""OP"" = e.""OP""
-            WHERE f.""Area"" = 'Revolturas'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Revolturas'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Revolturas'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
+        /// <summary>
+        /// Obtiene los datos de Maquinas para las semanas completas del mes actual
+        /// </summary>
         public DataTable GetDataMaquinas()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Maquinas'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(e.""Meta_Kg_Hr""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Maquinas"" e ON f.""OP"" = e.""OP""
-            WHERE f.""Area"" = 'Maquinas'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Máquinas'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_term""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Máquinas'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
+        /// <summary>
+        /// Obtiene los datos de Deshidratado para las semanas completas del mes actual
+        /// </summary>
         public DataTable GetDataDeshidratado()
         {
             string query = $@"
-        WITH semanas AS (
-            SELECT DISTINCT 
-                EXTRACT(WEEK FROM ""Fecha"") as semana,
-                DATE_TRUNC('week', ""Fecha"") as inicio_semana
-            FROM public.""Ficha""
-            WHERE ""Area"" = 'Despegue'
-                    AND ""Fecha"" < DATE_TRUNC('week', CURRENT_DATE)
-            ORDER BY inicio_semana DESC
-            LIMIT {NumeroSemanas}
-        ),
-        datos_semana AS (
-            SELECT 
-                EXTRACT(WEEK FROM f.""Fecha"") as semana,
-                COALESCE(SUM(e.""Kg_seco_hr""), 0) as meta,
-                COALESCE(SUM(f.""Kg_prod_seco""), 0) as producido,
-                COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
-            FROM public.""Ficha"" f
-            INNER JOIN public.""Deshidratado"" e ON f.""OP"" = e.""OP""
-            WHERE f.""Area"" = 'Despegue'
-                AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas)
-            GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
-        )
+    WITH condiciones_tiempo AS (
         SELECT 
-            s.semana,
-            COALESCE(ds.meta, 0) as meta,
-            COALESCE(ds.producido, 0) as producido,
-            COALESCE(ds.fuera_espec, 0) as fuera_espec,
             CASE 
-                WHEN COALESCE(ds.meta, 0) > 0 THEN 
-                    LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
-                ELSE 0
-            END as cumplimiento
-        FROM semanas s
-        LEFT JOIN datos_semana ds ON s.semana = ds.semana
-        ORDER BY s.semana ASC";
+                WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 AND EXTRACT(HOUR FROM CURRENT_TIME) <= 10 THEN true
+                ELSE false
+            END as excluir_semana_actual
+    ),
+    semanas_mes AS (
+        SELECT DISTINCT 
+            EXTRACT(WEEK FROM ""Fecha"") as semana,
+            DATE_TRUNC('week', ""Fecha"") as inicio_semana,
+            DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days' as fin_semana
+        FROM public.""Ficha""
+        CROSS JOIN condiciones_tiempo ct
+        WHERE ""Area"" = 'Despegue'
+            AND (
+                EXTRACT(MONTH FROM DATE_TRUNC('week', ""Fecha"")) = EXTRACT(MONTH FROM CURRENT_DATE)
+                OR EXTRACT(MONTH FROM (DATE_TRUNC('week', ""Fecha"") + INTERVAL '6 days')) = EXTRACT(MONTH FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day'
+            AND NOT (
+                ct.excluir_semana_actual = true 
+                AND EXTRACT(WEEK FROM ""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
+            )
+            AND DATE_TRUNC('week', ""Fecha"") < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+        ORDER BY inicio_semana DESC
+    ),
+    semanas_filtradas AS (
+        SELECT semana, inicio_semana
+        FROM semanas_mes
+        WHERE 
+            (EXTRACT(MONTH FROM inicio_semana) = EXTRACT(MONTH FROM CURRENT_DATE)
+             AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+            OR (EXTRACT(MONTH FROM inicio_semana) != EXTRACT(MONTH FROM CURRENT_DATE)
+                AND EXTRACT(MONTH FROM fin_semana) = EXTRACT(MONTH FROM CURRENT_DATE))
+    ),
+    datos_semana AS (
+        SELECT 
+            EXTRACT(WEEK FROM f.""Fecha"") as semana,
+            COALESCE(SUM(f.""Kg_meta""), 0) as meta,
+            COALESCE(SUM(f.""Kg_prod_seco""), 0) as producido,
+            COALESCE(SUM(f.""Kg_fuera_espec""), 0) as fuera_espec
+        FROM public.""Ficha"" f
+        WHERE f.""Area"" = 'Despegue'
+            AND EXTRACT(WEEK FROM f.""Fecha"") IN (SELECT semana FROM semanas_filtradas)
+            AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(WEEK FROM f.""Fecha"")
+    )
+    SELECT 
+        s.semana,
+        COALESCE(ds.meta, 0) as meta,
+        COALESCE(ds.producido, 0) as producido,
+        COALESCE(ds.fuera_espec, 0) as fuera_espec,
+        CASE 
+            WHEN COALESCE(ds.meta, 0) > 0 THEN 
+                LEAST(ROUND(((COALESCE(ds.producido, 0) - COALESCE(ds.fuera_espec, 0)) / COALESCE(ds.meta, 0)) * 100, 2),100)
+            ELSE 0
+        END as cumplimiento
+    FROM semanas_filtradas s
+    LEFT JOIN datos_semana ds ON s.semana = ds.semana
+    ORDER BY s.semana ASC";
 
             return dbHelper.ExecuteSelectQuery(query);
         }
@@ -412,7 +633,7 @@ namespace Tablero
         {
             try
             {
-                // Obtener datos de ambas áreas
+                // Obtener datos de todas las áreas
                 DataTable datosEvaporado = GetDataEvaporado();
                 DataTable datosGrind = GetDataGrind();
                 DataTable datosInspeccion = GetDataInspeccion();
@@ -446,53 +667,53 @@ namespace Tablero
                     GenerarTablaArea(worksheet, datosEvaporado, "EVAPORADO", filaInicioEvaporado);
 
                     // Calcular la fila donde termina la tabla de Evaporado
-                    int filaFinEvaporado = filaInicioEvaporado + 3 + datosEvaporado.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioGrind = filaFinEvaporado + 1; // Dejar un renglón de espacio
+                    int filaFinEvaporado = filaInicioEvaporado + 3 + datosEvaporado.Rows.Count;
+                    int filaInicioGrind = filaFinEvaporado + 2;
 
                     // ==================== TABLA 2: ÁREA GRIND ====================
                     GenerarTablaArea(worksheet, datosGrind, "GRIND", filaInicioGrind);
 
-                    // Calcular la fila donde termina la tabla de Grind
-                    int filaFinGrind = filaInicioGrind + 3 + datosGrind.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioInspeccion = filaFinGrind + 1; // Dejar un renglón de espacio
+                    int filaFinGrind = filaInicioGrind + 3 + datosGrind.Rows.Count;
+                    int filaInicioInspeccion = filaFinGrind + 2;
 
                     // ==================== TABLA 3: ÁREA INSPECCION ====================
                     GenerarTablaArea(worksheet, datosInspeccion, "Inspeccion", filaInicioInspeccion);
 
-                    // Calcular la fila donde termina la tabla de Inspección
-                    int filaFinInspeccion = filaInicioInspeccion + 3 + datosInspeccion.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioPolvos = filaFinInspeccion + 1; // Dejar un renglón de espacio
+                    int filaFinInspeccion = filaInicioInspeccion + 3 + datosInspeccion.Rows.Count;
+                    int filaInicioPolvos = filaFinInspeccion + 2;
 
                     // ==================== TABLA 4: ÁREA POLVOS ====================
                     GenerarTablaArea(worksheet, datosPolvos, "Polvos", filaInicioPolvos);
 
-                    // Calcular la fila donde termina la tabla de Polvos
-                    int filaFinPolvos = filaInicioPolvos + 3 + datosPolvos.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioEmpacado = filaFinPolvos + 1; // Dejar un renglón de espacio
+                    int filaFinPolvos = filaInicioPolvos + 3 + datosPolvos.Rows.Count;
+                    int filaInicioEmpacado = filaFinPolvos + 2;
 
                     // ==================== TABLA 5: ÁREA EMPACADO ====================
                     GenerarTablaArea(worksheet, datosEmpacado, "Empacado", filaInicioEmpacado);
 
-                    // Calcular la fila donde termina la tabla de Empacado
-                    int filaFinEmpacado = filaInicioEmpacado + 3 + datosEmpacado.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioRevolturas = filaFinEmpacado + 1; // Dejar un renglón de espacio
+                    int filaFinEmpacado = filaInicioEmpacado + 3 + datosEmpacado.Rows.Count;
+                    int filaInicioRevolturas = filaFinEmpacado + 2;
 
                     // ==================== TABLA 6: ÁREA Revolturas ====================
                     GenerarTablaArea(worksheet, datosRevolturas, "Revolturas", filaInicioRevolturas);
 
-                    // Calcular la fila donde termina la tabla de Revolturas
-                    int filaFinRevolturas = filaInicioRevolturas + 3 + datosRevolturas.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioMaquinas = filaFinRevolturas + 1; // Dejar un renglón de espacio
+                    int filaFinRevolturas = filaInicioRevolturas + 3 + datosRevolturas.Rows.Count;
+                    int filaInicioMaquinas = filaFinRevolturas + 2;
 
                     // ==================== TABLA 7: ÁREA Maquinas ====================
-                    GenerarTablaArea(worksheet, datosMaquinas, "Maquinas", filaInicioMaquinas);
+                    GenerarTablaArea(worksheet, datosMaquinas, "Máquinas", filaInicioMaquinas);
 
-                    // Calcular la fila donde termina la tabla de Deshidratado
-                    int filaFinMaquinas = filaInicioMaquinas + 3 + datosMaquinas.Rows.Count; // Título + subtítulo + encabezados + datos
-                    int filaInicioDeshidratado = filaFinMaquinas + 1; // Dejar un renglón de espacio
+                    int filaFinMaquinas = filaInicioMaquinas + 3 + datosMaquinas.Rows.Count;
+                    int filaInicioDeshidratado = filaFinMaquinas + 2;
 
                     // ==================== TABLA 8: ÁREA Deshidratado ====================
                     GenerarTablaArea(worksheet, datosDeshidratado, "Deshidratado", filaInicioDeshidratado);
+
+                    // ==================== TABLA 9: PORCENTAJE DE CUMPLIMIENTO SEMANAL ====================
+                    GenerarTablaCumplimientoSemanal(worksheet,
+                        datosEvaporado, datosGrind, datosInspeccion,
+                        datosPolvos, datosEmpacado, datosRevolturas,
+                        datosMaquinas, datosDeshidratado);
 
                     // Ajustar automáticamente el ancho de las columnas
                     worksheet.Columns().AdjustToContents();
@@ -599,7 +820,7 @@ namespace Tablero
                 if (cumplimiento >= 0.90m)
                 {
                     worksheet.Cell(filaActual, 5).Style.Fill.SetBackgroundColor(ColoresReporte.ColorCumplimientoAlto);
-                    worksheet.Cell(filaActual, 5).Style.Font.SetFontColor(ColoresReporte.ColorFuenteBlanca);
+                    worksheet.Cell(filaActual, 5).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
                 }
                 else if (cumplimiento >= 0.80m)
                 {
@@ -609,7 +830,7 @@ namespace Tablero
                 else
                 {
                     worksheet.Cell(filaActual, 5).Style.Fill.SetBackgroundColor(ColoresReporte.ColorCumplimientoBajo);
-                    worksheet.Cell(filaActual, 5).Style.Font.SetFontColor(ColoresReporte.ColorFuenteBlanca);
+                    worksheet.Cell(filaActual, 5).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
                 }
 
                 worksheet.Cell(filaActual, 5).Style.Font.SetBold(true);
@@ -622,6 +843,234 @@ namespace Tablero
                 }
 
                 filaActual++;
+            }
+        }
+        /// <summary>
+        /// Genera la tabla de porcentaje de cumplimiento semanal combinado
+        /// </summary>
+        private void GenerarTablaCumplimientoSemanal(IXLWorksheet worksheet,
+            DataTable datosEvaporado, DataTable datosGrind, DataTable datosInspeccion,
+            DataTable datosPolvos, DataTable datosEmpacado, DataTable datosRevolturas,
+            DataTable datosMaquinas, DataTable datosDeshidratado)
+        {
+            // Obtener todas las semanas únicas de todas las tablas
+            var todasSemanas = new List<int>();
+
+            void AgregarSemanas(DataTable tabla)
+            {
+                foreach (DataRow row in tabla.Rows)
+                {
+                    int semana = Convert.ToInt32(row["semana"]);
+                    if (!todasSemanas.Contains(semana))
+                        todasSemanas.Add(semana);
+                }
+            }
+
+            AgregarSemanas(datosEvaporado);
+            AgregarSemanas(datosGrind);
+            AgregarSemanas(datosInspeccion);
+            AgregarSemanas(datosPolvos);
+            AgregarSemanas(datosEmpacado);
+            AgregarSemanas(datosRevolturas);
+            AgregarSemanas(datosMaquinas);
+            AgregarSemanas(datosDeshidratado);
+
+            // Ordenar semanas ascendentemente
+            todasSemanas.Sort();
+
+            // Crear un diccionario para acceder rápidamente a los valores de cumplimiento por área y semana
+            var cumplimientoDeshidratado = new Dictionary<int, decimal>();
+            foreach (DataRow row in datosDeshidratado.Rows)
+            {
+                int semana = Convert.ToInt32(row["semana"]);
+                decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+                cumplimientoDeshidratado[semana] = cumplimiento;
+            }
+
+            // Diccionario para almacenar cumplimientos de todas las áreas (excepto Deshidratado)
+            var areasCumplimiento = new Dictionary<int, List<decimal>>();
+
+            void AgregarCumplimiento(DataTable tabla, Dictionary<int, List<decimal>> dict)
+            {
+                foreach (DataRow row in tabla.Rows)
+                {
+                    int semana = Convert.ToInt32(row["semana"]);
+                    decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+
+                    if (!dict.ContainsKey(semana))
+                        dict[semana] = new List<decimal>();
+
+                    dict[semana].Add(cumplimiento);
+                }
+            }
+
+            AgregarCumplimiento(datosEvaporado, areasCumplimiento);
+            AgregarCumplimiento(datosGrind, areasCumplimiento);
+            AgregarCumplimiento(datosInspeccion, areasCumplimiento);
+            AgregarCumplimiento(datosPolvos, areasCumplimiento);
+            AgregarCumplimiento(datosEmpacado, areasCumplimiento);
+            AgregarCumplimiento(datosRevolturas, areasCumplimiento);
+            AgregarCumplimiento(datosMaquinas, areasCumplimiento);
+
+            // Configurar la posición inicial de la tabla (columna G = columna 7)
+            int columnaInicio = 7; // Columna G
+            int filaActual = 1;
+
+            // 1. Título de la tabla
+            worksheet.Cell(filaActual, columnaInicio).Value = "PORCENTAJE DE CUMPLIMIENTO SEMANAL";
+            worksheet.Cell(filaActual, columnaInicio).Style.Font.SetBold(true);
+            worksheet.Cell(filaActual, columnaInicio).Style.Font.SetFontSize(14);
+            worksheet.Cell(filaActual, columnaInicio).Style.Font.SetFontColor(ColoresReporte.ColorFuenteBlanca);
+            worksheet.Cell(filaActual, columnaInicio).Style.Fill.SetBackgroundColor(ColoresReporte.ColorTitulo);
+            worksheet.Cell(filaActual, columnaInicio).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            worksheet.Cell(filaActual, columnaInicio).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            worksheet.Cell(filaActual, columnaInicio).Style.Alignment.SetWrapText(true);
+            worksheet.Range(filaActual, columnaInicio, filaActual, columnaInicio + 3).Merge();
+            worksheet.Range(filaActual, columnaInicio, filaActual, columnaInicio + 3).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            worksheet.Range(filaActual, columnaInicio, filaActual, columnaInicio + 3).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            worksheet.Row(filaActual).Height = 30;
+            filaActual++;
+
+            // 2. Encabezados de la tabla
+            string[] encabezadosTabla = { "Semana", "Deshidratado", "Demás Áreas", "Total" };
+            for (int i = 0; i < encabezadosTabla.Length; i++)
+            {
+                var celda = worksheet.Cell(filaActual, columnaInicio + i);
+                celda.Value = encabezadosTabla[i];
+                celda.Style.Font.SetBold(true);
+                celda.Style.Font.SetFontColor(ColoresReporte.ColorFuenteBlanca);
+                celda.Style.Fill.SetBackgroundColor(ColoresReporte.ColorEncabezado);
+                celda.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                celda.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                celda.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                celda.Style.Border.SetOutsideBorderColor(XLColor.Gray);
+            }
+            worksheet.Row(filaActual).Height = 25;
+            filaActual++;
+
+            // 3. Datos de la tabla por cada semana
+            foreach (int semana in todasSemanas)
+            {
+                // Verificar si Deshidratado tiene valor
+                bool tieneDeshidratado = cumplimientoDeshidratado.ContainsKey(semana);
+
+                // Calcular Deshidratado (si tiene valor, se multiplica por 50%)
+                decimal valorDeshidratado = 0;
+                if (tieneDeshidratado)
+                {
+                    valorDeshidratado = cumplimientoDeshidratado[semana] * 0.5m;
+                }
+
+                // Calcular Demás Áreas
+                decimal valorDemasAreas = 0;
+                if (areasCumplimiento.ContainsKey(semana) && areasCumplimiento[semana].Count > 0)
+                {
+                    decimal suma = 0;
+                    foreach (var cumplimiento in areasCumplimiento[semana])
+                    {
+                        suma += cumplimiento;
+                    }
+                    decimal promedioDemasAreas = suma / areasCumplimiento[semana].Count;
+
+                    // Si Deshidratado tiene valor, se multiplica por 50%, si no, se muestra el promedio directo
+                    if (tieneDeshidratado)
+                    {
+                        valorDemasAreas = promedioDemasAreas * 0.5m;
+                    }
+                    else
+                    {
+                        valorDemasAreas = promedioDemasAreas;
+                    }
+                }
+
+                // Calcular Total (suma de Deshidratado y Demás Áreas)
+                decimal valorTotal = valorDeshidratado + valorDemasAreas;
+
+                // Semana
+                worksheet.Cell(filaActual, columnaInicio).Value = semana;
+                worksheet.Cell(filaActual, columnaInicio).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                worksheet.Cell(filaActual, columnaInicio).Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                // Deshidratado
+                if (valorDeshidratado > 0)
+                {
+                    worksheet.Cell(filaActual, columnaInicio + 1).Value = valorDeshidratado / 100;
+                    worksheet.Cell(filaActual, columnaInicio + 1).Style.NumberFormat.SetFormat("0.00%");
+                }
+                else
+                {
+                    worksheet.Cell(filaActual, columnaInicio + 1).Value = "";
+                }
+                worksheet.Cell(filaActual, columnaInicio + 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                worksheet.Cell(filaActual, columnaInicio + 1).Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                // Demás Áreas
+                if (valorDemasAreas > 0)
+                {
+                    worksheet.Cell(filaActual, columnaInicio + 2).Value = valorDemasAreas / 100;
+                    worksheet.Cell(filaActual, columnaInicio + 2).Style.NumberFormat.SetFormat("0.00%");
+                }
+                else
+                {
+                    worksheet.Cell(filaActual, columnaInicio + 2).Value = "";
+                }
+                worksheet.Cell(filaActual, columnaInicio + 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                worksheet.Cell(filaActual, columnaInicio + 2).Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                // Total con formato condicional
+                if (valorTotal > 0)
+                {
+                    decimal cumplimientoPorcentaje = valorTotal / 100;
+
+                    // Limitar el valor mostrado al 100% para no pasar del 100% en la visualización
+                    decimal valorMostrar = cumplimientoPorcentaje > 1.0m ? 1.0m : cumplimientoPorcentaje;
+
+                    worksheet.Cell(filaActual, columnaInicio + 3).Value = valorMostrar;
+                    worksheet.Cell(filaActual, columnaInicio + 3).Style.NumberFormat.SetFormat("0.00%");
+
+                    // Color condicional para el total basado en el valor original (antes de limitar)
+                    if (cumplimientoPorcentaje >= 0.90m)
+                    {
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Fill.SetBackgroundColor(ColoresReporte.ColorCumplimientoAlto);
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
+                    }
+                    else if (cumplimientoPorcentaje >= 0.80m)
+                    {
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Fill.SetBackgroundColor(ColoresReporte.ColorCumplimientoMedio);
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
+                    }
+                    else
+                    {
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Fill.SetBackgroundColor(ColoresReporte.ColorCumplimientoBajo);
+                        worksheet.Cell(filaActual, columnaInicio + 3).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
+                    }
+
+                    worksheet.Cell(filaActual, columnaInicio + 3).Style.Font.SetBold(true);
+                }
+                else
+                {
+                    worksheet.Cell(filaActual, columnaInicio + 3).Value = "";
+                }
+                worksheet.Cell(filaActual, columnaInicio + 3).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                worksheet.Cell(filaActual, columnaInicio + 3).Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                // Color alternativo para filas
+                if (Array.IndexOf(todasSemanas.ToArray(), semana) % 2 == 1)
+                {
+                    worksheet.Range(filaActual, columnaInicio, filaActual, columnaInicio + 3).Style.Fill.SetBackgroundColor(ColoresReporte.ColorFondoAlternativo);
+                }
+
+                filaActual++;
+            }
+
+            // Ajustar el ancho de las columnas de la tabla
+            for (int i = 0; i < 4; i++)
+            {
+                worksheet.Column(columnaInicio + i).AdjustToContents();
+                if (worksheet.Column(columnaInicio + i).Width < 12)
+                {
+                    worksheet.Column(columnaInicio + i).Width = 12;
+                }
             }
         }
         /// <summary>
