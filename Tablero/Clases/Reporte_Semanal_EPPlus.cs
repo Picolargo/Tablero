@@ -519,28 +519,28 @@ ORDER BY semana ASC";
                     filaActual = GenerarTablaCumplimientoSemanalEPPlus(worksheet,
                         datosEvaporado, datosGrind, datosInspeccion,
                         datosPolvos, datosEmpacado, datosRevolturas,
-                        datosMaquinas, datosDeshidratado, semanasSeleccionadas, filaActual + 2);
+                        datosMaquinas, datosDeshidratado, semanasSeleccionadas, 26);
 
                     // Título de la gráfica
-                    worksheet.Cells[8, 7].Value = "GRÁFICA DE CUMPLIMIENTO SEMANAL";
-                    worksheet.Cells[8, 7, 8, 14].Merge = true;
-                    worksheet.Cells[8, 7, 8, 14].Style.Font.Bold = true;
-                    worksheet.Cells[8, 7, 8, 14].Style.Font.Size = 12;
-                    worksheet.Cells[8, 7, 8, 14].Style.Font.Color.SetColor(ColorFuenteBlanca);
-                    worksheet.Cells[8, 7, 8, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    worksheet.Cells[8, 7, 8, 14].Style.Fill.BackgroundColor.SetColor(ColorTitulo);
-                    worksheet.Cells[8, 7, 8, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[3, 7].Value = "GRÁFICA DE CUMPLIMIENTO SEMANAL";
+                    worksheet.Cells[3, 7, 3, 14].Merge = true;
+                    worksheet.Cells[3, 7, 3, 14].Style.Font.Bold = true;
+                    worksheet.Cells[3, 7, 3, 14].Style.Font.Size = 12;
+                    worksheet.Cells[3, 7, 3, 14].Style.Font.Color.SetColor(ColorFuenteBlanca);
+                    worksheet.Cells[3, 7, 3, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[3, 7, 3, 14].Style.Fill.BackgroundColor.SetColor(ColorTitulo);
+                    worksheet.Cells[3, 7, 3, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     worksheet.Row(8).Height = 25;
 
                     // Subtítulo
-                    worksheet.Cells[9, 7].Value = $"Reporte generado el {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
-                    worksheet.Cells[9, 7, 9, 14].Merge = true;
-                    worksheet.Cells[9, 7, 9, 14].Style.Font.Size = 8;
-                    worksheet.Cells[9, 7, 9, 14].Style.Font.Color.SetColor(ColorFuenteOscura);
-                    worksheet.Cells[9, 7, 9, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[4, 7].Value = $"Reporte generado el {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+                    worksheet.Cells[4, 7, 4, 14].Merge = true;
+                    worksheet.Cells[4, 7, 4, 14].Style.Font.Size = 8;
+                    worksheet.Cells[4, 7, 4, 14].Style.Font.Color.SetColor(ColorFuenteOscura);
+                    worksheet.Cells[4, 7, 4, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
                     // Generar gráfica
-                    GenerarGraficaEPPlus(worksheet, datosGrafica, 10, 7);
+                    GenerarGraficaEPPlus(worksheet, datosGrafica, 7, 6);
 
                     // Autoajustar columnas
                     worksheet.Cells[1, 1, filaActual + 20, 20].AutoFitColumns();
@@ -559,7 +559,7 @@ ORDER BY semana ASC";
         private int GenerarTablaAreaEPPlus(ExcelWorksheet worksheet, DataTable datos, string nombreArea, int filaInicio)
         {
             if (datos.Rows.Count == 0)
-                return filaInicio;
+                return filaInicio-2;
 
             int filaActual = filaInicio;
             int colInicio = 1;
@@ -710,6 +710,7 @@ ORDER BY semana ASC";
             worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
             worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 3].Style.Fill.BackgroundColor.SetColor(ColorTitulo);
             worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 3].Style.WrapText = true;
             worksheet.Row(filaActual).Height = 30;
             filaActual++;
 
@@ -786,7 +787,7 @@ ORDER BY semana ASC";
                     {
                         worksheet.Cells[filaActual, colInicio + 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                         worksheet.Cells[filaActual, colInicio + 3].Style.Fill.BackgroundColor.SetColor(ColorCumplimientoAlto);
-                        worksheet.Cells[filaActual, colInicio + 3].Style.Font.Color.SetColor(ColorFuenteBlanca);
+                        worksheet.Cells[filaActual, colInicio + 3].Style.Font.Color.SetColor(ColorFuenteOscura);
                     }
                     else if (cumplimientoPorcentaje >= 0.80m)
                     {
@@ -798,7 +799,7 @@ ORDER BY semana ASC";
                     {
                         worksheet.Cells[filaActual, colInicio + 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                         worksheet.Cells[filaActual, colInicio + 3].Style.Fill.BackgroundColor.SetColor(ColorCumplimientoBajo);
-                        worksheet.Cells[filaActual, colInicio + 3].Style.Font.Color.SetColor(ColorFuenteBlanca);
+                        worksheet.Cells[filaActual, colInicio + 3].Style.Font.Color.SetColor(ColorFuenteOscura);
                     }
                 }
 
