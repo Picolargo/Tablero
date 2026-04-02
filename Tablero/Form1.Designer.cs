@@ -194,6 +194,7 @@
             this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
             this.tabPage18 = new System.Windows.Forms.TabPage();
             this.materialCard28 = new MaterialSkin.Controls.MaterialCard();
+            this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
             this.btn_generar = new MaterialSkin.Controls.MaterialButton();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -3289,6 +3290,7 @@
             // 
             this.materialCard28.AutoScroll = true;
             this.materialCard28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard28.Controls.Add(this.materialButton8);
             this.materialCard28.Controls.Add(this.bnt_limpiar_check);
             this.materialCard28.Controls.Add(this.btn_generar);
             this.materialCard28.Controls.Add(this.listView1);
@@ -3301,6 +3303,28 @@
             this.materialCard28.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard28.Size = new System.Drawing.Size(407, 379);
             this.materialCard28.TabIndex = 39;
+            // 
+            // materialButton8
+            // 
+            this.materialButton8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton8.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton8.Depth = 0;
+            this.materialButton8.HighEmphasis = true;
+            this.materialButton8.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.materialButton8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.materialButton8.Location = new System.Drawing.Point(213, 268);
+            this.materialButton8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton8.Name = "materialButton8";
+            this.materialButton8.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton8.Size = new System.Drawing.Size(135, 36);
+            this.materialButton8.TabIndex = 7;
+            this.materialButton8.Text = "Generar sl";
+            this.materialButton8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.materialButton8.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton8.UseAccentColor = false;
+            this.materialButton8.UseVisualStyleBackColor = true;
+            this.materialButton8.Click += new System.EventHandler(this.materialButton8_Click);
             // 
             // bnt_limpiar_check
             // 
@@ -7096,6 +7120,7 @@
         private System.Windows.Forms.ListView listView1;
         private MaterialSkin.Controls.MaterialButton bnt_limpiar_check;
         private MaterialSkin.Controls.MaterialButton btn_generar;
+        private MaterialSkin.Controls.MaterialButton materialButton8;
     }
 }
 

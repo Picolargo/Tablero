@@ -16985,5 +16985,60 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                 item.Checked = false;
             }
         }
+
+        private void materialButton8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<int> semanasSeleccionadas = ObtenerSemanasSeleccionadasConCheckbox();
+
+                if (semanasSeleccionadas.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, seleccione al menos una semana para generar el reporte.",
+                        "Advertencia",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Usar la nueva clase con EPPlus
+                Reporte_Semanal_EPPlus reporte = new Reporte_Semanal_EPPlus(connectionString);
+
+                reporte.ServidorSMTP = servidor_smtp;
+                reporte.PuertoSMTP = PuertoSMTP;
+                reporte.RemitenteEmail = RemitenteEMail;
+                reporte.PasswordEmail = PasswordEmail;
+                reporte.DestinatariosEmail = DestinatariosEmail;
+                reporte.SSLCheck = SSLCheck;
+
+                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
+
+                if (resultado)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Reporte generado y enviado correctamente por correo electrónico.",
+                        "Éxito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se pudo completar el envío del reporte.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al generar el reporte: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
     }
 }

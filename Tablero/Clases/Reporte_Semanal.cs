@@ -25,7 +25,6 @@ namespace Tablero
 
         // Configuración del reporte
         public string NombreReporte { get; set; } = "Reporte Semanal";
-        public int NumeroSemanas { get; set; } = 4;
 
         public Reporte_Semanal(string connectionString)
         {
@@ -466,14 +465,14 @@ ORDER BY semana ASC";
                 CalendarWeekRule weekRule = culture.DateTimeFormat.CalendarWeekRule;
                 DayOfWeek firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
 
-                int semanaActual = calendar.GetWeekOfYear(DateTime.Now, weekRule, firstDayOfWeek);
+                //int semanaActual = calendar.GetWeekOfYear(DateTime.Now, weekRule, firstDayOfWeek);
 
                 // Crear nombre de archivo temporal
                 string carpetaTemp = Path.Combine(Path.GetTempPath(), "ReportesTablero");
                 if (!Directory.Exists(carpetaTemp))
                     Directory.CreateDirectory(carpetaTemp);
 
-                string archivoExcel = Path.Combine(carpetaTemp, $"Reporte_semanal_No_{semanaActual}.xlsx");
+                string archivoExcel = Path.Combine(carpetaTemp, $"Reporte_Cumplimiento.xlsx");
 
                 using (var workbook = new XLWorkbook())
                 {
@@ -574,7 +573,7 @@ ORDER BY semana ASC";
             filaActual++;
 
             // 2. Subtítulo con fecha de generación
-            worksheet.Cell(filaActual, 1).Value = $"Fecha de generación: {DateTime.Now:dd/MM/yyyy HH:mm:ss} | Últimas {NumeroSemanas} semanas";
+            worksheet.Cell(filaActual, 1).Value = $"Fecha de generación: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
             worksheet.Cell(filaActual, 1).Style.Font.SetFontSize(10);
             worksheet.Cell(filaActual, 1).Style.Font.SetFontColor(ColoresReporte.ColorFuenteOscura);
             worksheet.Range(filaActual, 1, filaActual, 5).Merge();
@@ -869,19 +868,17 @@ ORDER BY semana ASC";
         /// <summary>
         /// Envía el reporte por correo electrónico
         /// </summary>
-        public bool EnviarReportePorCorreo(string archivoExcel, string area = null, string cuerpoHtml = null)
+        public bool EnviarReportePorCorreo(string archivoExcel, List<int> semanasSeleccionadas)
         {
             try
             {
                 if (string.IsNullOrEmpty(archivoExcel) || !File.Exists(archivoExcel))
                     throw new Exception("El archivo Excel no existe o no se pudo generar.");
 
-                //string nombreArea = area ?? "Evaporado";
-
+                string semanasStr = string.Join(",", semanasSeleccionadas);
+                string cuerpoHtml;
                 // Cuerpo HTML del correo
-                if (string.IsNullOrEmpty(cuerpoHtml))
-                {
-                    cuerpoHtml = $@"
+                cuerpoHtml = $@"
                         <html>
                         <head>
                             <style>
@@ -897,11 +894,11 @@ ORDER BY semana ASC";
                         </head>
                         <body>
                             <div class='header'>
-                                <h2>Reporte Automático de Cumplimiento Semanal</h2>
+                                <h2>Reporte de Cumplimiento Semanal</h2>
                             </div>
                             <div class='content'>
                                 <p>Estimado usuario,</p>
-                                <p>Se adjunta el reporte general semanal de porcentajes de cumplimiento correspondiente a las últimas {NumeroSemanas} semanas.</p>
+                                <p>Se adjunta el reporte general semanal de porcentajes de cumplimiento correspondiente a las semanas {semanasStr}.</p>
                                 <p><strong>Fecha de generación:</strong> {DateTime.Now:dd/MM/yyyy HH:mm:ss}</p>
                                 <p>El reporte contiene la siguiente información por semana:</p>
                                 <ul>
@@ -919,7 +916,6 @@ ORDER BY semana ASC";
                             </div>
                         </body>
                         </html>";
-                }
 
                 // Configurar correo
                 using (MailMessage correo = new MailMessage())
@@ -938,10 +934,10 @@ ORDER BY semana ASC";
                     CalendarWeekRule weekRule = culture.DateTimeFormat.CalendarWeekRule;
                     DayOfWeek firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
 
-                    int semanaActual = calendar.GetWeekOfYear(DateTime.Now, weekRule, firstDayOfWeek);
+                    
 
                     // Usarlo en el asunto
-                    correo.Subject = $"Reporte Semana No. {semanaActual} - {DateTime.Now:dd/MM/yyyy}";
+                    correo.Subject = $"Reporte de Cumplimiento generado la fecha {DateTime.Now:dd/MM/yyyy}";
                     correo.Body = cuerpoHtml;
                     correo.IsBodyHtml = true;
 
@@ -982,7 +978,7 @@ ORDER BY semana ASC";
                 archivoExcel = GenerarExcel(semanasSeleccionadas);
 
                 // Enviar por correo
-                bool enviado = EnviarReportePorCorreo(archivoExcel, "Evaporado");
+                bool enviado = EnviarReportePorCorreo(archivoExcel, semanasSeleccionadas);
 
                 return enviado;
             }
