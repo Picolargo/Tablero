@@ -470,7 +470,81 @@ ORDER BY semana ASC";
         }
 
         #endregion
+        /// <summary>
+        /// Calcula el promedio de la columna Total de la tabla PORCENTAJE DE CUMPLIMIENTO SEMANAL
+        /// </summary>
+        private decimal CalcularPromedioMensual(
+            DataTable datosEvaporado, DataTable datosGrind, DataTable datosInspeccion,
+            DataTable datosPolvos, DataTable datosEmpacado, DataTable datosRevolturas,
+            DataTable datosMaquinas, DataTable datosDeshidratado, List<int> semanasSeleccionadas)
+        {
+            var todasSemanas = semanasSeleccionadas.OrderBy(s => s).ToList();
 
+            var cumplimientoDeshidratado = new Dictionary<int, decimal>();
+            foreach (DataRow row in datosDeshidratado.Rows)
+            {
+                int semana = Convert.ToInt32(row["semana"]);
+                decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+                cumplimientoDeshidratado[semana] = cumplimiento;
+            }
+
+            var areasCumplimiento = new Dictionary<int, List<decimal>>();
+
+            void AgregarCumplimiento(DataTable tabla, Dictionary<int, List<decimal>> dict)
+            {
+                foreach (DataRow row in tabla.Rows)
+                {
+                    int semana = Convert.ToInt32(row["semana"]);
+                    decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+                    if (!dict.ContainsKey(semana))
+                        dict[semana] = new List<decimal>();
+                    dict[semana].Add(cumplimiento);
+                }
+            }
+
+            AgregarCumplimiento(datosEvaporado, areasCumplimiento);
+            AgregarCumplimiento(datosGrind, areasCumplimiento);
+            AgregarCumplimiento(datosInspeccion, areasCumplimiento);
+            AgregarCumplimiento(datosPolvos, areasCumplimiento);
+            AgregarCumplimiento(datosEmpacado, areasCumplimiento);
+            AgregarCumplimiento(datosRevolturas, areasCumplimiento);
+            AgregarCumplimiento(datosMaquinas, areasCumplimiento);
+
+            decimal sumaTotales = 0;
+            int contadorTotales = 0;
+
+            foreach (int semana in todasSemanas)
+            {
+                bool tieneDeshidratado = cumplimientoDeshidratado.ContainsKey(semana);
+
+                decimal valorDeshidratado = 0;
+                if (tieneDeshidratado)
+                    valorDeshidratado = cumplimientoDeshidratado[semana] * 0.5m;
+
+                decimal valorDemasAreas = 0;
+                if (areasCumplimiento.ContainsKey(semana) && areasCumplimiento[semana].Count > 0)
+                {
+                    decimal suma = 0;
+                    foreach (var cumplimiento in areasCumplimiento[semana])
+                        suma += cumplimiento;
+                    decimal promedioDemasAreas = suma / areasCumplimiento[semana].Count;
+
+                    if (tieneDeshidratado)
+                        valorDemasAreas = promedioDemasAreas * 0.5m;
+                    else
+                        valorDemasAreas = promedioDemasAreas;
+                }
+
+                decimal valorTotal = valorDeshidratado + valorDemasAreas;
+                if (valorTotal > 0)
+                {
+                    sumaTotales += valorTotal;
+                    contadorTotales++;
+                }
+            }
+
+            return contadorTotales > 0 ? sumaTotales / contadorTotales : 0;
+        }
         #region Métodos para generar el Excel con EPPlus
 
         public string GenerarExcel(List<int> semanasSeleccionadas)
@@ -520,6 +594,38 @@ ORDER BY semana ASC";
                         datosEvaporado, datosGrind, datosInspeccion,
                         datosPolvos, datosEmpacado, datosRevolturas,
                         datosMaquinas, datosDeshidratado, semanasSeleccionadas, 26);
+
+                    // Calcular promedio mensual
+                    decimal promedioMensual = CalcularPromedioMensual(
+                        datosEvaporado, datosGrind, datosInspeccion,
+                        datosPolvos, datosEmpacado, datosRevolturas,
+                        datosMaquinas, datosDeshidratado, semanasSeleccionadas);
+                    decimal promedioMensualMostrar = promedioMensual / 100;
+
+                    Color verdePastel = Color.FromArgb(198, 224, 180);
+
+                    // Título "CUMPLIMIENTO MENSUAL" desde G6 hasta M6
+                    worksheet.Cells[6, 7].Value = "CUMPLIMIENTO MENSUAL";
+                    worksheet.Cells[6, 7, 6, 13].Merge = true;
+                    worksheet.Cells[6, 7, 6, 13].Style.Font.Bold = true;
+                    worksheet.Cells[6, 7, 6, 13].Style.Font.Size = 12;
+                    worksheet.Cells[6, 7, 6, 13].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[6, 7, 6, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[6, 7, 6, 13].Style.Fill.BackgroundColor.SetColor(verdePastel);
+                    worksheet.Cells[6, 7, 6, 13].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[6, 7, 6, 13].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                    worksheet.Row(6).Height = 25;
+
+                    // Valor del promedio en N6
+                    worksheet.Cells[6, 14].Value = promedioMensualMostrar;
+                    worksheet.Cells[6, 14].Style.Numberformat.Format = "0.00%";
+                    worksheet.Cells[6, 14].Style.Font.Bold = true;
+                    worksheet.Cells[6, 14].Style.Font.Size = 12;
+                    worksheet.Cells[6, 14].Style.Font.Color.SetColor(Color.Black);
+                    worksheet.Cells[6, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[6, 14].Style.Fill.BackgroundColor.SetColor(verdePastel);
+                    worksheet.Cells[6, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[6, 14].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
 
                     // Título de la gráfica
                     worksheet.Cells[3, 7].Value = "GRÁFICA DE CUMPLIMIENTO SEMANAL";
