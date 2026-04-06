@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Drawing.Chart;
 using System;
 using System.Collections.Generic;
@@ -388,7 +389,189 @@ ORDER BY semana ASC";
         }
 
         #endregion
+        /// <summary>
+        /// Genera la tabla PROMEDIO DEMÁS ÁREAS
+        /// </summary>
+        private int GenerarTablaPromedioDemasAreasEPPlus(ExcelWorksheet worksheet,
+            DataTable datosEvaporado, DataTable datosGrind, DataTable datosInspeccion,
+            DataTable datosPolvos, DataTable datosEmpacado, DataTable datosRevolturas,
+            DataTable datosMaquinas, DataTable datosDeshidratado, List<int> semanasSeleccionadas, int filaInicio)
+        {
+            var todasSemanas = semanasSeleccionadas.OrderBy(s => s).ToList();
 
+            // Obtener el valor de "Demás Áreas" de la tabla "PORCENTAJE DE CUMPLIMIENTO SEMANAL"
+            var valorDemasAreasPorSemana = new Dictionary<int, decimal>();
+
+            // Primero calculamos los valores de "Demás Áreas" igual que en GenerarTablaCumplimientoSemanalEPPlus
+            var cumplimientoDeshidratado = new Dictionary<int, decimal>();
+            foreach (DataRow row in datosDeshidratado.Rows)
+            {
+                int semana = Convert.ToInt32(row["semana"]);
+                decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+                cumplimientoDeshidratado[semana] = cumplimiento;
+            }
+
+            var areasCumplimiento = new Dictionary<int, List<decimal>>();
+
+            void AgregarCumplimiento(DataTable tabla, Dictionary<int, List<decimal>> dict)
+            {
+                foreach (DataRow row in tabla.Rows)
+                {
+                    int semana = Convert.ToInt32(row["semana"]);
+                    decimal cumplimiento = Convert.ToDecimal(row["cumplimiento"]);
+                    if (!dict.ContainsKey(semana))
+                        dict[semana] = new List<decimal>();
+                    dict[semana].Add(cumplimiento);
+                }
+            }
+
+            AgregarCumplimiento(datosEvaporado, areasCumplimiento);
+            AgregarCumplimiento(datosGrind, areasCumplimiento);
+            AgregarCumplimiento(datosInspeccion, areasCumplimiento);
+            AgregarCumplimiento(datosPolvos, areasCumplimiento);
+            AgregarCumplimiento(datosEmpacado, areasCumplimiento);
+            AgregarCumplimiento(datosRevolturas, areasCumplimiento);
+            AgregarCumplimiento(datosMaquinas, areasCumplimiento);
+
+            // Calcular el valor de "Demás Áreas" para cada semana (igual que en la tabla)
+            foreach (int semana in todasSemanas)
+            {
+                bool tieneDeshidratado = cumplimientoDeshidratado.ContainsKey(semana);
+
+                decimal valorDemasAreas = 0;
+                if (areasCumplimiento.ContainsKey(semana) && areasCumplimiento[semana].Count > 0)
+                {
+                    decimal suma = 0;
+                    foreach (var cumplimiento in areasCumplimiento[semana])
+                    {
+                        suma += cumplimiento;
+                    }
+                    decimal promedioDemasAreas = suma / areasCumplimiento[semana].Count;
+
+                    if (tieneDeshidratado)
+                    {
+                        // Si hay Deshidratado, el valor se multiplicó por 50%
+                        valorDemasAreas = promedioDemasAreas * 0.5m;
+                    }
+                    else
+                    {
+                        valorDemasAreas = promedioDemasAreas;
+                    }
+                }
+                valorDemasAreasPorSemana[semana] = valorDemasAreas;
+            }
+
+            int filaActual = filaInicio;
+            int colInicio = 12; // Columna L
+
+            // Título de la tabla
+            worksheet.Cells[filaActual, colInicio].Value = "PROMEDIO DEMÁS ÁREAS";
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Merge = true;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.Font.Bold = true;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.Font.Size = 12;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.Font.Color.SetColor(ColorFuenteBlanca);
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.Fill.BackgroundColor.SetColor(ColorTitulo);
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Cells[filaActual, colInicio, filaActual, colInicio + 1].Style.WrapText = true;
+            worksheet.Row(filaActual).Height = 30;
+            filaActual++;
+
+            // Encabezados
+            worksheet.Cells[filaActual, colInicio].Value = "Semana";
+            worksheet.Cells[filaActual, colInicio].Style.Font.Bold = true;
+            worksheet.Cells[filaActual, colInicio].Style.Font.Color.SetColor(ColorFuenteBlanca);
+            worksheet.Cells[filaActual, colInicio].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[filaActual, colInicio].Style.Fill.BackgroundColor.SetColor(ColorEncabezado);
+            worksheet.Cells[filaActual, colInicio].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Cells[filaActual, colInicio].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+            worksheet.Cells[filaActual, colInicio + 1].Value = "Promedio";
+            worksheet.Cells[filaActual, colInicio + 1].Style.Font.Bold = true;
+            worksheet.Cells[filaActual, colInicio + 1].Style.Font.Color.SetColor(ColorFuenteBlanca);
+            worksheet.Cells[filaActual, colInicio + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[filaActual, colInicio + 1].Style.Fill.BackgroundColor.SetColor(ColorEncabezado);
+            worksheet.Cells[filaActual, colInicio + 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            worksheet.Cells[filaActual, colInicio + 1].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+            worksheet.Row(filaActual).Height = 25;
+            filaActual++;
+
+            // Datos
+            foreach (int semana in todasSemanas)
+            {
+                bool tieneDeshidratado = cumplimientoDeshidratado.ContainsKey(semana);
+
+                // Obtener el valor de "Demás Áreas" de la tabla
+                decimal valorDemasAreas = valorDemasAreasPorSemana.ContainsKey(semana) ? valorDemasAreasPorSemana[semana] : 0;
+
+                // Calcular el promedio original
+                decimal promedioOriginal = 0;
+
+                if (tieneDeshidratado)
+                {
+                    // Si había Deshidratado, el valor en "Demás Áreas" ya está multiplicado por 50%
+                    // Para obtener el promedio original, dividimos entre 0.5 (multiplicamos por 2)
+                    promedioOriginal = valorDemasAreas / 0.5m;
+                }
+                else
+                {
+                    // Si no había Deshidratado, el valor es directo
+                    promedioOriginal = valorDemasAreas;
+                }
+
+                // Limitar a 100% máximo
+                if (promedioOriginal > 100)
+                    promedioOriginal = 100;
+
+                // Semana
+                worksheet.Cells[filaActual, colInicio].Value = semana;
+                worksheet.Cells[filaActual, colInicio].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells[filaActual, colInicio].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                // Promedio (convertir a porcentaje dividiendo entre 100)
+                worksheet.Cells[filaActual, colInicio + 1].Value = promedioOriginal / 100;
+                worksheet.Cells[filaActual, colInicio + 1].Style.Numberformat.Format = "0.00%";
+                worksheet.Cells[filaActual, colInicio + 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells[filaActual, colInicio + 1].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                // Color condicional para el promedio
+                decimal cumplimientoPorcentaje = promedioOriginal / 100;
+                if (cumplimientoPorcentaje >= 0.90m)
+                {
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.BackgroundColor.SetColor(ColorCumplimientoAlto);
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Font.Color.SetColor(ColorFuenteOscura);
+                }
+                else if (cumplimientoPorcentaje >= 0.80m)
+                {
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.BackgroundColor.SetColor(ColorCumplimientoMedio);
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Font.Color.SetColor(ColorFuenteOscura);
+                }
+                else
+                {
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Fill.BackgroundColor.SetColor(ColorCumplimientoBajo);
+                    worksheet.Cells[filaActual, colInicio + 1].Style.Font.Color.SetColor(ColorFuenteOscura);
+                }
+
+                worksheet.Cells[filaActual, colInicio + 1].Style.Font.Bold = true;
+
+                // Color alternativo para filas
+                if (Array.IndexOf(todasSemanas.ToArray(), semana) % 2 == 1)
+                {
+                    for (int c = 0; c < 2; c++)
+                    {
+                        worksheet.Cells[filaActual, colInicio + c].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        worksheet.Cells[filaActual, colInicio + c].Style.Fill.BackgroundColor.SetColor(ColorFondoAlternativo);
+                    }
+                }
+
+                filaActual++;
+            }
+
+            return filaActual;
+        }
         #region Métodos para obtener datos de la gráfica
 
         private System.Data.DataTable ObtenerDatosParaGrafica(
@@ -591,6 +774,13 @@ ORDER BY semana ASC";
                     filaActual = GenerarTablaAreaEPPlus(worksheet, datosDeshidratado, "Deshidratado", filaActual + 2);
 
                     filaActual = GenerarTablaCumplimientoSemanalEPPlus(worksheet,
+                        datosEvaporado, datosGrind, datosInspeccion,
+                        datosPolvos, datosEmpacado, datosRevolturas,
+                        datosMaquinas, datosDeshidratado, semanasSeleccionadas, 26);
+
+                    // ==================== TABLA PROMEDIO DEMÁS ÁREAS ====================
+                    // La tabla comenzará en la celda L26 (columna 12, fila 26)
+                    filaActual = GenerarTablaPromedioDemasAreasEPPlus(worksheet,
                         datosEvaporado, datosGrind, datosInspeccion,
                         datosPolvos, datosEmpacado, datosRevolturas,
                         datosMaquinas, datosDeshidratado, semanasSeleccionadas, 26);
@@ -931,6 +1121,48 @@ ORDER BY semana ASC";
             return filaActual;
         }
 
+        //private void GenerarGraficaEPPlus(ExcelWorksheet worksheet, DataTable datosGrafica, int filaInicio, int columnaInicio)
+        //{
+        //    if (datosGrafica.Rows.Count == 0) return;
+
+        //    var tempSheet = worksheet.Workbook.Worksheets.Add("TempData");
+        //    tempSheet.Cells[1, 1].Value = "Semana";
+        //    tempSheet.Cells[1, 2].Value = "Cumplimiento";
+        //    tempSheet.Cells[1, 1].Style.Font.Bold = true;
+        //    tempSheet.Cells[1, 2].Style.Font.Bold = true;
+
+        //    for (int i = 0; i < datosGrafica.Rows.Count; i++)
+        //    {
+        //        tempSheet.Cells[i + 2, 1].Value = Convert.ToInt32(datosGrafica.Rows[i]["Semana"]);
+        //        tempSheet.Cells[i + 2, 2].Value = Convert.ToDecimal(datosGrafica.Rows[i]["Total"]);
+        //        tempSheet.Cells[i + 2, 2].Style.Numberformat.Format = "0%";
+        //    }
+
+        //    var chart = worksheet.Drawings.AddChart("CumplimientoChart", eChartType.ColumnClustered);
+        //    chart.SetPosition(filaInicio, 0, columnaInicio, 0);
+        //    chart.SetSize(600, 400);
+
+        //    var serie = chart.Series.Add(tempSheet.Cells[2, 2, datosGrafica.Rows.Count + 1, 2],
+        //                                 tempSheet.Cells[2, 1, datosGrafica.Rows.Count + 1, 1]) as ExcelBarChartSerie;
+
+        //    if (serie != null)
+        //    {
+        //        serie.Header = "Cumplimiento Semanal";
+
+        //        serie.DataLabel.ShowValue = true;
+        //    }
+
+        //    chart.Title.Text = "Cumplimiento Semanal";
+        //    chart.Title.Font.Bold = true;
+        //    chart.Title.Font.Size = 14;
+        //    chart.XAxis.Title.Text = "Semana";
+        //    chart.XAxis.Title.Font.Bold = true;
+        //    chart.YAxis.Title.Text = "Cumplimiento (%)";
+        //    chart.YAxis.Title.Font.Bold = true;
+        //    chart.YAxis.Format = "0%";
+        //    chart.Legend.Remove();
+        //    chart.Style = eChartStyle.Style1;
+        //}
         private void GenerarGraficaEPPlus(ExcelWorksheet worksheet, DataTable datosGrafica, int filaInicio, int columnaInicio)
         {
             if (datosGrafica.Rows.Count == 0) return;
@@ -952,19 +1184,24 @@ ORDER BY semana ASC";
             chart.SetPosition(filaInicio, 0, columnaInicio, 0);
             chart.SetSize(600, 400);
 
-            // --- Código modificado aquí ---
             var serie = chart.Series.Add(tempSheet.Cells[2, 2, datosGrafica.Rows.Count + 1, 2],
                                          tempSheet.Cells[2, 1, datosGrafica.Rows.Count + 1, 1]) as ExcelBarChartSerie;
 
             if (serie != null)
             {
                 serie.Header = "Cumplimiento Semanal";
-                
-                // Intenta con DataLabel (singular) o DataLabels (plural)
                 serie.DataLabel.ShowValue = true;
-                // serie.DataLabels.ShowValue = true; // Alternativa si la de arriba falla
+
+                // ==================== MODIFICAR COLOR DE LAS BARRAS ====================
+                // Color azul corporativo (puedes cambiarlo al color que prefieras)
+                serie.Fill.Style = eFillStyle.GradientFill;
+                serie.Fill.Color = System.Drawing.Color.FromArgb(198, 224, 180);
+
+                // Opcional: También puedes modificar el borde de las barras
+                //serie.Border.Fill.Style = eFillStyle.SolidFill;
+                //serie.Border.Fill.Color = System.Drawing.Color.FromArgb(41, 128, 185); // Azul pastel para el borde
+                //serie.Border.Width = 1;
             }
-            // --- Fin código modificado ---
 
             chart.Title.Text = "Cumplimiento Semanal";
             chart.Title.Font.Bold = true;
