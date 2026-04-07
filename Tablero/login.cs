@@ -338,7 +338,8 @@ namespace Tablero
                 connectionString = $"Host={var_servidor};Port=5433;Username={var_usuario};Password={var_password};Database=Reporteo";
 
                 string nombreEquipo = Environment.MachineName;
-                if (nombreEquipo == "SV-PICOLARGO-01")
+
+                if (nombreEquipo.ToUpper() == var_servidor.ToUpper())
                 {
                     // Tu código aquí
                     //MessageBox.Show("Este es el equipo correcto");

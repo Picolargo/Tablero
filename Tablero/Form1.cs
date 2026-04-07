@@ -435,9 +435,9 @@ namespace Tablero
                 lbl_Nom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
-
+                string var_servidor = Tablero.Properties.Settings.Default.Servidor;
                 string nombreEquipo = Environment.MachineName;
-                if (nombreEquipo == "SV-PICOLARGO-01")
+                if (nombreEquipo.ToUpper() == var_servidor.ToUpper())
                 {
                     materialTabControl1.TabPages.Remove(tabPage1);
                     materialTabControl1.TabPages.Remove(tabPage2);
