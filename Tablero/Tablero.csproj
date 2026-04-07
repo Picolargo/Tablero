@@ -223,6 +223,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Automatico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Automatico.Designer.cs">
+      <DependentUpon>Automatico.cs</DependentUpon>
+    </Compile>
     <Compile Include="Clases\DatabaseHelper.cs" />
     <Compile Include="Clases\Reporte_Semanal.cs" />
     <Compile Include="Clases\Reporte_Semanal_EPPlus.cs" />
@@ -266,6 +272,9 @@
     <Compile Include="Tiempo_Muerto.Designer.cs">
       <DependentUpon>Tiempo_Muerto.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Automatico.resx">
+      <DependentUpon>Automatico.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Coneccion_Server.resx">
       <DependentUpon>Coneccion_Server.cs</DependentUpon>
     </EmbeddedResource>
@@ -311,6 +320,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\short-broom.png" />
     <None Include="Resources\print-solid.png" />
     <None Include="Resources\logo1.gif" />
     <None Include="Resources\logopicolargo.png" />

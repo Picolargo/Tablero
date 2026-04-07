@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn20 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn21 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition25 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition26 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition27 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition28 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -196,7 +196,6 @@
             this.materialCard28 = new MaterialSkin.Controls.MaterialCard();
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
-            this.btn_generar = new MaterialSkin.Controls.MaterialButton();
             this.listView1 = new System.Windows.Forms.ListView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tap_control_metas = new MetroFramework.Controls.MetroTabControl();
@@ -375,6 +374,11 @@
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
             this.windows11Theme1 = new Telerik.WinControls.Themes.Windows11Theme();
+            this.materialCard29 = new MaterialSkin.Controls.MaterialCard();
+            this.radPictureBox3 = new Telerik.WinControls.UI.RadPictureBox();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.panel14 = new System.Windows.Forms.Panel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -529,6 +533,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            this.materialCard29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).BeginInit();
+            this.panel12.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.panel14.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1202,20 +1211,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn1.HeaderText = "column1";
-            gridViewTextBoxColumn1.IsVisible = false;
-            gridViewTextBoxColumn1.Name = "column1";
-            gridViewTextBoxColumn2.HeaderText = "column2";
-            gridViewTextBoxColumn2.Name = "column2";
-            gridViewTextBoxColumn3.HeaderText = "column3";
-            gridViewTextBoxColumn3.Name = "column3";
+            gridViewTextBoxColumn19.HeaderText = "column1";
+            gridViewTextBoxColumn19.IsVisible = false;
+            gridViewTextBoxColumn19.Name = "column1";
+            gridViewTextBoxColumn20.HeaderText = "column2";
+            gridViewTextBoxColumn20.Name = "column2";
+            gridViewTextBoxColumn21.HeaderText = "column3";
+            gridViewTextBoxColumn21.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn1,
-            gridViewTextBoxColumn2,
-            gridViewTextBoxColumn3});
+            gridViewTextBoxColumn19,
+            gridViewTextBoxColumn20,
+            gridViewTextBoxColumn21});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition25;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2191,7 +2200,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -2255,7 +2264,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition26;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1583, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -3206,7 +3215,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(81, 12);
@@ -3271,7 +3280,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition27;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1583, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -3279,7 +3288,7 @@
             // 
             // tabPage18
             // 
-            this.tabPage18.Controls.Add(this.materialCard28);
+            this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
             this.tabPage18.Size = new System.Drawing.Size(1534, 732);
@@ -3292,16 +3301,16 @@
             this.materialCard28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard28.Controls.Add(this.materialButton8);
             this.materialCard28.Controls.Add(this.bnt_limpiar_check);
-            this.materialCard28.Controls.Add(this.btn_generar);
             this.materialCard28.Controls.Add(this.listView1);
             this.materialCard28.Depth = 0;
+            this.materialCard28.Dock = System.Windows.Forms.DockStyle.Top;
             this.materialCard28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard28.Location = new System.Drawing.Point(0, 0);
-            this.materialCard28.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard28.Location = new System.Drawing.Point(5, 5);
+            this.materialCard28.Margin = new System.Windows.Forms.Padding(18);
             this.materialCard28.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard28.Name = "materialCard28";
-            this.materialCard28.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard28.Size = new System.Drawing.Size(407, 379);
+            this.materialCard28.Padding = new System.Windows.Forms.Padding(15);
+            this.materialCard28.Size = new System.Drawing.Size(427, 439);
             this.materialCard28.TabIndex = 39;
             // 
             // materialButton8
@@ -3310,16 +3319,16 @@
             this.materialButton8.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.materialButton8.Depth = 0;
             this.materialButton8.HighEmphasis = true;
-            this.materialButton8.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.materialButton8.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.materialButton8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.materialButton8.Location = new System.Drawing.Point(213, 268);
+            this.materialButton8.Location = new System.Drawing.Point(164, 21);
             this.materialButton8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton8.Name = "materialButton8";
             this.materialButton8.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton8.Size = new System.Drawing.Size(135, 36);
+            this.materialButton8.Size = new System.Drawing.Size(182, 36);
             this.materialButton8.TabIndex = 7;
-            this.materialButton8.Text = "Generar sl";
+            this.materialButton8.Text = "Generar Reporte";
             this.materialButton8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.materialButton8.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton8.UseAccentColor = false;
@@ -3332,9 +3341,9 @@
             this.bnt_limpiar_check.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.bnt_limpiar_check.Depth = 0;
             this.bnt_limpiar_check.HighEmphasis = true;
-            this.bnt_limpiar_check.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
+            this.bnt_limpiar_check.Icon = global::Tablero.Properties.Resources.short_broom;
             this.bnt_limpiar_check.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.bnt_limpiar_check.Location = new System.Drawing.Point(163, 68);
+            this.bnt_limpiar_check.Location = new System.Drawing.Point(164, 69);
             this.bnt_limpiar_check.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.bnt_limpiar_check.MouseState = MaterialSkin.MouseState.HOVER;
             this.bnt_limpiar_check.Name = "bnt_limpiar_check";
@@ -3348,34 +3357,12 @@
             this.bnt_limpiar_check.UseVisualStyleBackColor = true;
             this.bnt_limpiar_check.Click += new System.EventHandler(this.bnt_limpiar_check_Click);
             // 
-            // btn_generar
-            // 
-            this.btn_generar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btn_generar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btn_generar.Depth = 0;
-            this.btn_generar.HighEmphasis = true;
-            this.btn_generar.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
-            this.btn_generar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_generar.Location = new System.Drawing.Point(163, 20);
-            this.btn_generar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btn_generar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btn_generar.Name = "btn_generar";
-            this.btn_generar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_generar.Size = new System.Drawing.Size(115, 36);
-            this.btn_generar.TabIndex = 5;
-            this.btn_generar.Text = "Generar";
-            this.btn_generar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_generar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btn_generar.UseAccentColor = false;
-            this.btn_generar.UseVisualStyleBackColor = true;
-            this.btn_generar.Click += new System.EventHandler(this.btn_generar_Click);
-            // 
             // listView1
             // 
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(17, 17);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(139, 345);
+            this.listView1.Size = new System.Drawing.Size(139, 380);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -6550,7 +6537,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition4;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition28;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1489, 751);
             this.radGridView1.TabIndex = 0;
@@ -6574,6 +6561,62 @@
             this.metroContextMenu2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.metroContextMenu2.Name = "metroContextMenu2";
             this.metroContextMenu2.Size = new System.Drawing.Size(61, 4);
+            // 
+            // materialCard29
+            // 
+            this.materialCard29.AutoScroll = true;
+            this.materialCard29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.materialCard29.Controls.Add(this.panel13);
+            this.materialCard29.Controls.Add(this.panel12);
+            this.materialCard29.Depth = 0;
+            this.materialCard29.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialCard29.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard29.Location = new System.Drawing.Point(0, 0);
+            this.materialCard29.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard29.Name = "materialCard29";
+            this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard29.Size = new System.Drawing.Size(1534, 732);
+            this.materialCard29.TabIndex = 40;
+            // 
+            // radPictureBox3
+            // 
+            this.radPictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radPictureBox3.Image = global::Tablero.Properties.Resources._5ecf0bf1fd9cb2672c1cbdc8_icon256_fw;
+            this.radPictureBox3.Location = new System.Drawing.Point(6, 6);
+            this.radPictureBox3.Name = "radPictureBox3";
+            this.radPictureBox3.Size = new System.Drawing.Size(624, 432);
+            this.radPictureBox3.TabIndex = 0;
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.materialCard28);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel12.Location = new System.Drawing.Point(14, 14);
+            this.panel12.Name = "panel12";
+            this.panel12.Padding = new System.Windows.Forms.Padding(5);
+            this.panel12.Size = new System.Drawing.Size(437, 704);
+            this.panel12.TabIndex = 40;
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.panel14);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel13.Location = new System.Drawing.Point(884, 14);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(636, 704);
+            this.panel13.TabIndex = 41;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.radPictureBox3);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel14.Location = new System.Drawing.Point(0, 0);
+            this.panel14.Name = "panel14";
+            this.panel14.Padding = new System.Windows.Forms.Padding(6);
+            this.panel14.Size = new System.Drawing.Size(636, 444);
+            this.panel14.TabIndex = 0;
             // 
             // Form_principal
             // 
@@ -6777,6 +6820,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            this.materialCard29.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).EndInit();
+            this.panel12.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -7119,8 +7167,12 @@
         private MaterialSkin.Controls.MaterialCard materialCard28;
         private System.Windows.Forms.ListView listView1;
         private MaterialSkin.Controls.MaterialButton bnt_limpiar_check;
-        private MaterialSkin.Controls.MaterialButton btn_generar;
         private MaterialSkin.Controls.MaterialButton materialButton8;
+        private MaterialSkin.Controls.MaterialCard materialCard29;
+        private Telerik.WinControls.UI.RadPictureBox radPictureBox3;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.Panel panel14;
     }
 }
 

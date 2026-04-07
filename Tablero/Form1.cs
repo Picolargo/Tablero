@@ -16919,64 +16919,6 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             }
         }
 
-        private void btn_generar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Obtener las semanas seleccionadas del ListView
-                List<int> semanasSeleccionadas = ObtenerSemanasSeleccionadasConCheckbox();
-
-                if (semanasSeleccionadas.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "Por favor, seleccione al menos una semana para generar el reporte.",
-                        "Advertencia",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Crear instancia del reporte
-                Reporte_Semanal reporte = new Reporte_Semanal(connectionString);
-
-                // Configurar datos de correo desde las variables guardadas en el registro
-                reporte.ServidorSMTP = servidor_smtp;
-                reporte.PuertoSMTP = PuertoSMTP;
-                reporte.RemitenteEmail = RemitenteEMail;
-                reporte.PasswordEmail = PasswordEmail;
-                reporte.DestinatariosEmail = DestinatariosEmail;
-                reporte.SSLCheck = SSLCheck;
-
-                // Generar y enviar el reporte con las semanas seleccionadas
-                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
-
-                if (resultado)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "Reporte generado y enviado correctamente por correo electrónico.",
-                        "Éxito",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "No se pudo completar el envío del reporte.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                    $"Error al generar el reporte: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
         private void bnt_limpiar_check_Click(object sender, EventArgs e)
         {
             foreach (ListViewItem item in listView1.Items)
