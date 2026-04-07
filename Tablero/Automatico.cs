@@ -53,35 +53,83 @@ namespace Tablero
                 ToolTipIcon.Info);
         }
 
+        //private void CrearTrayIcon()
+        //{
+        //    trayIcon = new NotifyIcon
+        //    {
+        //        Icon = SystemIcons.Application,
+        //        Text = "Tablero - Tarea Semanal (Lunes 10 AM)",
+        //        Visible = true
+        //    };
+
+        //    trayMenu = new ContextMenuStrip();
+
+        //    // Opciones del menú
+        //    trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => Automatico_Email("manual"));
+        //    trayMenu.Items.Add("Ver log de ejecuciones", null, (s, ev) => VerLog());
+        //    trayMenu.Items.Add("Reiniciar estado semanal", null, (s, ev) => ReiniciarEstado());
+        //    trayMenu.Items.Add("Configurar Email", null, (s, ev) => AbrirConfiguracionEmail());
+        //    trayMenu.Items.Add("-"); // Separador
+
+        //    // Opción para habilitar/deshabilitar inicio automático
+        //    inicioAutomaticoMenuItem = new ToolStripMenuItem();
+        //    ActualizarTextoInicioAutomatico();
+        //    inicioAutomaticoMenuItem.Click += (s, ev) => ToggleInicioAutomatico();
+        //    trayMenu.Items.Add(inicioAutomaticoMenuItem);
+
+        //    trayMenu.Items.Add("-"); // Separador
+        //    trayMenu.Items.Add("Salir", null, (s, ev) => Salir());
+
+        //    trayIcon.ContextMenuStrip = trayMenu;
+        //    trayIcon.DoubleClick += (s, ev) => VerLog();
+        //}
         private void CrearTrayIcon()
         {
-            trayIcon = new NotifyIcon
+            try
             {
-                Icon = SystemIcons.Application,
-                Text = "Tablero - Tarea Semanal (Lunes 10 AM)",
-                Visible = true
-            };
+                // Cargar el ícono desde el archivo
+                Icon appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            trayMenu = new ContextMenuStrip();
+                // O si tienes el archivo .ico en la carpeta del proyecto:
+                // Icon appIcon = new Icon("formulario_icono.ico");
 
-            // Opciones del menú
-            trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => Automatico_Email("manual"));
-            trayMenu.Items.Add("Ver log de ejecuciones", null, (s, ev) => VerLog());
-            trayMenu.Items.Add("Reiniciar estado semanal", null, (s, ev) => ReiniciarEstado());
-            trayMenu.Items.Add("Configurar Email", null, (s, ev) => AbrirConfiguracionEmail());
-            trayMenu.Items.Add("-"); // Separador
+                trayIcon = new NotifyIcon
+                {
+                    Icon = appIcon, // Usar el ícono de la aplicación
+                    Text = "Tablero - Tarea Semanal (Lunes 10 AM)",
+                    Visible = true
+                };
 
-            // Opción para habilitar/deshabilitar inicio automático
-            inicioAutomaticoMenuItem = new ToolStripMenuItem();
-            ActualizarTextoInicioAutomatico();
-            inicioAutomaticoMenuItem.Click += (s, ev) => ToggleInicioAutomatico();
-            trayMenu.Items.Add(inicioAutomaticoMenuItem);
+                // Resto del código del menú...
+                trayMenu = new ContextMenuStrip();
+                trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => Automatico_Email("manual"));
+                trayMenu.Items.Add("Ver log de ejecuciones", null, (s, ev) => VerLog());
+                trayMenu.Items.Add("Reiniciar estado semanal", null, (s, ev) => ReiniciarEstado());
+                trayMenu.Items.Add("Configurar Email", null, (s, ev) => AbrirConfiguracionEmail());
+                trayMenu.Items.Add("-");
 
-            trayMenu.Items.Add("-"); // Separador
-            trayMenu.Items.Add("Salir", null, (s, ev) => Salir());
+                inicioAutomaticoMenuItem = new ToolStripMenuItem();
+                ActualizarTextoInicioAutomatico();
+                inicioAutomaticoMenuItem.Click += (s, ev) => ToggleInicioAutomatico();
+                trayMenu.Items.Add(inicioAutomaticoMenuItem);
 
-            trayIcon.ContextMenuStrip = trayMenu;
-            trayIcon.DoubleClick += (s, ev) => VerLog();
+                trayMenu.Items.Add("-");
+                trayMenu.Items.Add("Salir", null, (s, ev) => Salir());
+
+                trayIcon.ContextMenuStrip = trayMenu;
+                trayIcon.DoubleClick += (s, ev) => VerLog();
+            }
+            catch (Exception ex)
+            {
+                // Si falla, usar el ícono por defecto
+                trayIcon = new NotifyIcon
+                {
+                    Icon = SystemIcons.Application,
+                    Text = "Tablero - Tarea Semanal (Lunes 10 AM)",
+                    Visible = true
+                };
+                File.AppendAllText(logPath, $"[ERROR] Cargando ícono: {ex.Message}{Environment.NewLine}");
+            }
         }
         private void ActualizarTextoInicioAutomatico()
         {

@@ -319,6 +319,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\Icon1.ico" />
+    <None Include="Resources\icono_principal.bmp" />
+    <None Include="Resources\Iconprincipal.ico" />
     <None Include="Resources\short-broom.png" />
     <None Include="Resources\print-solid.png" />
     <None Include="Resources\logo1.gif" />
