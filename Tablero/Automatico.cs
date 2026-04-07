@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace Tablero
 {
@@ -15,11 +17,23 @@ namespace Tablero
         private string logPath = Path.Combine(Application.StartupPath, "log_semanal.txt");
         private string estadoPath = Path.Combine(Application.StartupPath, "estado_semanal.json");
         private SemanalEstado estado;
+        string connectionString = string.Empty;
 
-        public Automatico()
+        private ToolStripMenuItem inicioAutomaticoMenuItem; // Para cambiar el texto dinámicamente
+
+        // Variables para el envío de correos
+        private string servidor_smtp = string.Empty;
+        private string RemitenteEMail = string.Empty;
+        private string PasswordEmail = string.Empty;
+        private int PuertoSMTP = 0;
+        private string DestinatariosEmail = string.Empty;
+        private bool SSLCheck = false;
+        // Fin de variables para el envío de correos
+
+        public Automatico(string conexionstring)
         {
             InitializeComponent();
-
+            connectionString = conexionstring;
             // Configurar para que NO sea visible como ventana
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
@@ -41,7 +55,6 @@ namespace Tablero
 
         private void CrearTrayIcon()
         {
-            // Puedes cambiar el ícono por uno propio
             trayIcon = new NotifyIcon
             {
                 Icon = SystemIcons.Application,
@@ -50,16 +63,101 @@ namespace Tablero
             };
 
             trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => EjecutarMiCodigo("manual"));
+
+            // Opciones del menú
+            trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => Automatico_Email("manual"));
             trayMenu.Items.Add("Ver log de ejecuciones", null, (s, ev) => VerLog());
             trayMenu.Items.Add("Reiniciar estado semanal", null, (s, ev) => ReiniciarEstado());
-            trayMenu.Items.Add("-");
+            trayMenu.Items.Add("Configurar Email", null, (s, ev) => AbrirConfiguracionEmail());
+            trayMenu.Items.Add("-"); // Separador
+
+            // Opción para habilitar/deshabilitar inicio automático
+            inicioAutomaticoMenuItem = new ToolStripMenuItem();
+            ActualizarTextoInicioAutomatico();
+            inicioAutomaticoMenuItem.Click += (s, ev) => ToggleInicioAutomatico();
+            trayMenu.Items.Add(inicioAutomaticoMenuItem);
+
+            trayMenu.Items.Add("-"); // Separador
             trayMenu.Items.Add("Salir", null, (s, ev) => Salir());
 
             trayIcon.ContextMenuStrip = trayMenu;
             trayIcon.DoubleClick += (s, ev) => VerLog();
         }
+        private void ActualizarTextoInicioAutomatico()
+        {
+            bool estaHabilitado = VerificarInicioAutomatico();
+            if (estaHabilitado)
+            {
+                inicioAutomaticoMenuItem.Text = "✓ Deshabilitar inicio automático";
+                inicioAutomaticoMenuItem.ForeColor = Color.Green;
+            }
+            else
+            {
+                inicioAutomaticoMenuItem.Text = "Habilitar inicio automático";
+                inicioAutomaticoMenuItem.ForeColor = Color.Black;
+            }
+        }
 
+        private bool VerificarInicioAutomatico()
+        {
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", false))
+                {
+                    if (key != null)
+                    {
+                        string valor = key.GetValue("TableroAutomatico") as string;
+                        return !string.IsNullOrEmpty(valor);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText(logPath, $"[ERROR] Verificando inicio automático: {ex.Message}{Environment.NewLine}");
+            }
+            return false;
+        }
+
+        private void ToggleInicioAutomatico()
+        {
+            try
+            {
+                bool estaHabilitado = VerificarInicioAutomatico();
+
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    if (key != null)
+                    {
+                        if (estaHabilitado)
+                        {
+                            // Deshabilitar - eliminar la entrada del registro
+                            key.DeleteValue("TableroAutomatico", false);
+                            string mensaje = "Inicio automático deshabilitado. El programa no se iniciará con Windows.";
+                            trayIcon.ShowBalloonTip(2000, "Configuración cambiada", mensaje, ToolTipIcon.Info);
+                            File.AppendAllText(logPath, $"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - Inicio automático deshabilitado{Environment.NewLine}");
+                        }
+                        else
+                        {
+                            // Habilitar - agregar la entrada del registro
+                            string appPath = Application.ExecutablePath;
+                            key.SetValue("TableroAutomatico", appPath);
+                            string mensaje = "Inicio automático habilitado. El programa se iniciará con Windows.";
+                            trayIcon.ShowBalloonTip(2000, "Configuración cambiada", mensaje, ToolTipIcon.Info);
+                            File.AppendAllText(logPath, $"[INFO] {DateTime.Now:yyyy-MM-dd HH:mm:ss} - Inicio automático habilitado{Environment.NewLine}");
+                        }
+
+                        // Actualizar el texto del menú
+                        ActualizarTextoInicioAutomatico();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cambiar inicio automático: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                File.AppendAllText(logPath, $"[ERROR] Cambiando inicio automático: {ex.Message}{Environment.NewLine}");
+            }
+        }
         private void ConfigurarTimer()
         {
             checkTimer = new Timer();
@@ -100,29 +198,39 @@ namespace Tablero
             // Si es horario o ya pasaron las 10 AM (pero no se ejecutó aún)
             if (esHorario || ahora.Hour >= 10)
             {
-                EjecutarMiCodigo("automatico");
+                Automatico_Email("automático");
             }
         }
+        private void email_varibles()
+        {
+            servidor_smtp = Tablero.Properties.Settings.Default.ServerSMTP;
+            RemitenteEMail = Tablero.Properties.Settings.Default.RemitenteEMail;
+            PasswordEmail = Tablero.Properties.Settings.Default.PasswordEmail;
+            PuertoSMTP = Tablero.Properties.Settings.Default.PuertoSMTP;
+            SSLCheck = Tablero.Properties.Settings.Default.SSLCheck;
+            DestinatariosEmail = Tablero.Properties.Settings.Default.DestinatariosEmail;
+        }
 
-        private void EjecutarMiCodigo(string origen)
+        private void Automatico_Email(string origen)
         {
             try
             {
-                MessageBox.Show("se ejecuto");
-                // *********************************************************************
-                // AQUÍ COLOCAS TU CÓDIGO PERSONALIZADO
-                // *********************************************************************
-                // Ejemplo de lo que puedes hacer:
+                Reporte_Semanal_EPPlus reporte = new Reporte_Semanal_EPPlus(connectionString);
+                reporte.IncluirCumplimientoMensual = false;
 
-                // 1. Actualizar alguna tabla en PostgreSQL
-                // using var conn = new NpgsqlConnection(connectionString);
-                // conn.Open();
-                // etc...
+                // Obtener automáticamente la semana anterior
+                List<int> semanasSeleccionadas = reporte.ObtenerSemanaAnterior();
 
-                // 2. Generar un reporte
-                // 3. Enviar correos automáticos
-                // 4. Procesar archivos
-                // 5. Llamar a una API
+                email_varibles();
+                reporte.ServidorSMTP = servidor_smtp;
+                reporte.PuertoSMTP = PuertoSMTP;
+                reporte.RemitenteEmail = RemitenteEMail;
+                reporte.PasswordEmail = PasswordEmail;
+                reporte.DestinatariosEmail = DestinatariosEmail;
+                reporte.SSLCheck = SSLCheck;
+                // Generar y enviar el reporte
+                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
+                
 
                 // Variable para indicar si tu código se ejecutó correctamente
                 bool exito = true; // <--- CAMBIA ESTO SEGÚN EL RESULTADO DE TU CÓDIGO
@@ -229,20 +337,31 @@ namespace Tablero
 
         private void ConfigurarInicioAutomatico()
         {
-            try
+            // Este método ya no configura automáticamente, solo verifica el estado actual
+            // La configuración se hace manual desde el menú contextual
+            bool estaHabilitado = VerificarInicioAutomatico();
+            if (estaHabilitado)
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                // Asegurar que la entrada exista (por si alguien la borró manualmente)
+                try
                 {
-                    if (key != null)
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
                     {
-                        string appPath = Application.ExecutablePath;
-                        key.SetValue("TableroAutomatico", appPath);
+                        if (key != null)
+                        {
+                            string appPath = Application.ExecutablePath;
+                            string existingValue = key.GetValue("TableroAutomatico") as string;
+                            if (string.IsNullOrEmpty(existingValue))
+                            {
+                                key.SetValue("TableroAutomatico", appPath);
+                            }
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                File.AppendAllText(logPath, $"[ERROR] No se pudo configurar inicio automático: {ex.Message}{Environment.NewLine}");
+                catch (Exception ex)
+                {
+                    File.AppendAllText(logPath, $"[ERROR] Configurando inicio automático: {ex.Message}{Environment.NewLine}");
+                }
             }
         }
 

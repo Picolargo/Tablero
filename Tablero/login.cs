@@ -338,11 +338,11 @@ namespace Tablero
                 connectionString = $"Host={var_servidor};Port=5433;Username={var_usuario};Password={var_password};Database=Reporteo";
 
                 string nombreEquipo = Environment.MachineName;
-                if (nombreEquipo == "SV-PICOLARGO-01" || nombreEquipo == "SISTEMAS_TI")
+                if (nombreEquipo == "SV-PICOLARGO-01")
                 {
                     // Tu código aquí
                     //MessageBox.Show("Este es el equipo correcto");
-                    var formulario_automatico = new Automatico();
+                    var formulario_automatico = new Automatico(connectionString);
                     formulario_automatico.Show();
                     this.Hide();
                 }

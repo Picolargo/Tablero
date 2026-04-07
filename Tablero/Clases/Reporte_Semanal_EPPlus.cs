@@ -25,7 +25,7 @@ namespace Tablero
         public string PasswordEmail { get; set; }
         public string DestinatariosEmail { get; set; }
         public bool SSLCheck { get; set; }
-
+        public bool IncluirCumplimientoMensual { get; set; } = true;
         // Colores profesionales
         private readonly Color ColorTitulo = Color.FromArgb(52, 73, 94);
         private readonly Color ColorEncabezado = Color.FromArgb(41, 128, 185);
@@ -40,6 +40,26 @@ namespace Tablero
         {
             this.connectionString = connectionString;
             this.dbHelper = new DatabaseHelper(connectionString);
+        }
+        // Método helper para obtener la semana anterior automáticamente
+        public List<int> ObtenerSemanaAnterior()
+        {
+            var listaSemanas = new List<int>();
+
+            // Obtener la fecha actual y calcular la semana anterior
+            DateTime fechaActual = DateTime.Now;
+            // Ir al lunes de la semana actual y restar 7 días para obtener el lunes de la semana anterior
+            int diff = (fechaActual.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)fechaActual.DayOfWeek) - 1;
+            DateTime lunesSemanaActual = fechaActual.AddDays(-diff).Date;
+            DateTime lunesSemanaAnterior = lunesSemanaActual.AddDays(-7);
+
+            // Obtener el número de semana
+            CultureInfo ci = CultureInfo.CurrentCulture;
+            Calendar cal = ci.Calendar;
+            int semanaNum = cal.GetWeekOfYear(lunesSemanaAnterior, ci.DateTimeFormat.CalendarWeekRule, ci.DateTimeFormat.FirstDayOfWeek);
+
+            listaSemanas.Add(semanaNum);
+            return listaSemanas;
         }
 
         #region Métodos de obtención de datos (iguales a tu clase original)
@@ -461,7 +481,7 @@ ORDER BY semana ASC";
                 valorDemasAreasPorSemana[semana] = valorDemasAreas;
             }
 
-            int filaActual = filaInicio;
+            int filaActual = filaInicio+3;
             int colInicio = 12; // Columna L
 
             // Título de la tabla
@@ -785,37 +805,40 @@ ORDER BY semana ASC";
                         datosPolvos, datosEmpacado, datosRevolturas,
                         datosMaquinas, datosDeshidratado, semanasSeleccionadas, 26);
 
-                    // Calcular promedio mensual
-                    decimal promedioMensual = CalcularPromedioMensual(
+                    if (IncluirCumplimientoMensual) 
+                    {
+                        // Calcular promedio mensual
+                        decimal promedioMensual = CalcularPromedioMensual(
                         datosEvaporado, datosGrind, datosInspeccion,
                         datosPolvos, datosEmpacado, datosRevolturas,
                         datosMaquinas, datosDeshidratado, semanasSeleccionadas);
-                    decimal promedioMensualMostrar = promedioMensual / 100;
+                        decimal promedioMensualMostrar = promedioMensual / 100;
 
-                    Color verdePastel = Color.FromArgb(198, 224, 180);
+                        Color verdePastel = Color.FromArgb(198, 224, 180);
 
-                    // Título "CUMPLIMIENTO MENSUAL" desde G6 hasta M6
-                    worksheet.Cells[6, 7].Value = "CUMPLIMIENTO MENSUAL";
-                    worksheet.Cells[6, 7, 6, 13].Merge = true;
-                    worksheet.Cells[6, 7, 6, 13].Style.Font.Bold = true;
-                    worksheet.Cells[6, 7, 6, 13].Style.Font.Size = 12;
-                    worksheet.Cells[6, 7, 6, 13].Style.Font.Color.SetColor(Color.Black);
-                    worksheet.Cells[6, 7, 6, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    worksheet.Cells[6, 7, 6, 13].Style.Fill.BackgroundColor.SetColor(verdePastel);
-                    worksheet.Cells[6, 7, 6, 13].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[6, 7, 6, 13].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                    worksheet.Row(6).Height = 25;
+                        // Título "CUMPLIMIENTO MENSUAL" desde G6 hasta M6
+                        worksheet.Cells[6, 7].Value = "CUMPLIMIENTO MENSUAL";
+                        worksheet.Cells[6, 7, 6, 13].Merge = true;
+                        worksheet.Cells[6, 7, 6, 13].Style.Font.Bold = true;
+                        worksheet.Cells[6, 7, 6, 13].Style.Font.Size = 12;
+                        worksheet.Cells[6, 7, 6, 13].Style.Font.Color.SetColor(Color.Black);
+                        worksheet.Cells[6, 7, 6, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        worksheet.Cells[6, 7, 6, 13].Style.Fill.BackgroundColor.SetColor(verdePastel);
+                        worksheet.Cells[6, 7, 6, 13].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[6, 7, 6, 13].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        worksheet.Row(6).Height = 25;
 
-                    // Valor del promedio en N6
-                    worksheet.Cells[6, 14].Value = promedioMensualMostrar;
-                    worksheet.Cells[6, 14].Style.Numberformat.Format = "0.00%";
-                    worksheet.Cells[6, 14].Style.Font.Bold = true;
-                    worksheet.Cells[6, 14].Style.Font.Size = 12;
-                    worksheet.Cells[6, 14].Style.Font.Color.SetColor(Color.Black);
-                    worksheet.Cells[6, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    worksheet.Cells[6, 14].Style.Fill.BackgroundColor.SetColor(verdePastel);
-                    worksheet.Cells[6, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[6, 14].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        // Valor del promedio en N6
+                        worksheet.Cells[6, 14].Value = promedioMensualMostrar;
+                        worksheet.Cells[6, 14].Style.Numberformat.Format = "0.00%";
+                        worksheet.Cells[6, 14].Style.Font.Bold = true;
+                        worksheet.Cells[6, 14].Style.Font.Size = 12;
+                        worksheet.Cells[6, 14].Style.Font.Color.SetColor(Color.Black);
+                        worksheet.Cells[6, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        worksheet.Cells[6, 14].Style.Fill.BackgroundColor.SetColor(verdePastel);
+                        worksheet.Cells[6, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[6, 14].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                    }
 
                     // Título de la gráfica
                     worksheet.Cells[3, 7].Value = "GRÁFICA DE CUMPLIMIENTO SEMANAL";
@@ -994,7 +1017,7 @@ ORDER BY semana ASC";
             AgregarCumplimiento(datosRevolturas, areasCumplimiento);
             AgregarCumplimiento(datosMaquinas, areasCumplimiento);
 
-            int filaActual = filaInicio;
+            int filaActual = filaInicio+3;
             int colInicio = 7;
 
             // Título
@@ -1243,7 +1266,7 @@ ORDER BY semana ASC";
                         </div>
                         <div class='content'>
                             <p>Estimado usuario,</p>
-                            <p>Se adjunta el reporte general semanal de porcentajes de cumplimiento correspondiente a las semanas {semanasStr}.</p>
+                            <p>Se adjunta el reporte general semanal de porcentajes de cumplimiento correspondiente a las semana(s) {semanasStr}.</p>
                             <p><strong>Fecha de generación:</strong> {DateTime.Now:dd/MM/yyyy HH:mm:ss}</p>
                             <p>El reporte contiene la siguiente información por semana:</p>
                             <ul>

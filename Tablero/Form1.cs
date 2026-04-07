@@ -428,7 +428,7 @@ namespace Tablero
         }
         private void Form_principal_Load(object sender, EventArgs e)
         {
-            materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo
+            materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo es el modulo de productos o fichas de producción
             if (nivel_user == "Super Administrador")
             {
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -436,36 +436,54 @@ namespace Tablero
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
 
-                // Obtener y mostrar el número de semana inicial
-                ActualizarNumeroSemana();
+                string nombreEquipo = Environment.MachineName;
+                if (nombreEquipo == "SV-PICOLARGO-01")
+                {
+                    materialTabControl1.TabPages.Remove(tabPage1);
+                    materialTabControl1.TabPages.Remove(tabPage2);
+                    materialTabControl1.TabPages.Remove(tabPage10);
+                    materialTabControl1.TabPages.Remove(tabPage4);
+                    materialTabControl1.TabPages.Remove(tabPage9);
+                    materialTabControl1.TabPages.Remove(tabPage11);
+                    materialCardtab_users.Visible = false;
+                    materialCard_users.Visible = false;
+                    materialCard18.Location = new Point(14, 14);
+                    emaildatos();
+                    email_varibles();
+                }
+                else 
+                {
+                    actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
+                    emaildatos();
+                    email_varibles();
 
-                actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
-                actualiza_grid_Deshitratado();
-                actualiza_grid_Empacado();
-                actualiza_grid_inspec();
-                actualiza_grid_evaporado();
-                actualiza_grid_grind();
-                actualiza_revolturas();
-                actualiza_maquinas();
-                actualiza_polvos();
-                actualiza_polvos_calidad();
-                actualiza_detalles_OP();
-                actualiza_tunel_calidad();
-                configurar_limpieza();
-                CargarSemanasAnioActual();
-                emaildatos();
-                email_varibles();
-                ActualizarAnioReportes();
-                carga_Jefes();
-                ConfigurarTooltipParaComboBox();
+                    // Obtener y mostrar el número de semana inicial
+                    ActualizarNumeroSemana();
+                    actualiza_grid_Deshitratado();
+                    actualiza_grid_Empacado();
+                    actualiza_grid_inspec();
+                    actualiza_grid_evaporado();
+                    actualiza_grid_grind();
+                    actualiza_revolturas();
+                    actualiza_maquinas();
+                    actualiza_polvos();
+                    actualiza_polvos_calidad();
+                    actualiza_detalles_OP();
+                    actualiza_tunel_calidad();
+                    configurar_limpieza();
+                    CargarSemanasAnioActual();
+                    ActualizarAnioReportes();
+                    carga_Jefes();
+                    ConfigurarTooltipParaComboBox();
 
-                // Configurar el ListView
-                ConfigurarListViewSimple();
+                    // Configurar el ListView
+                    ConfigurarListViewSimple();
 
-                // Cargar las semanas
-                CargarSemanasSimple();
+                    // Cargar las semanas
+                    CargarSemanasSimple();
 
-                menuStrip1.Visible = true; // Mostrar el menú para el administrador
+                    menuStrip1.Visible = true; // Mostrar el menú para el administrador
+                }
             }
             if (nivel_user == "Administrador")
             {
@@ -16946,6 +16964,7 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
                 // Usar la nueva clase con EPPlus
                 Reporte_Semanal_EPPlus reporte = new Reporte_Semanal_EPPlus(connectionString);
+                reporte.IncluirCumplimientoMensual = true;
 
                 reporte.ServidorSMTP = servidor_smtp;
                 reporte.PuertoSMTP = PuertoSMTP;

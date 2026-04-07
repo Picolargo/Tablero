@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn20 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn21 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition25 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition26 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition27 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition28 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn7 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn8 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn9 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition11 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition12 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -193,6 +193,11 @@
             this.materialCard22 = new MaterialSkin.Controls.MaterialCard();
             this.rgv_reporte_Tiempos = new Telerik.WinControls.UI.RadGridView();
             this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.materialCard29 = new MaterialSkin.Controls.MaterialCard();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.radPictureBox3 = new Telerik.WinControls.UI.RadPictureBox();
+            this.panel12 = new System.Windows.Forms.Panel();
             this.materialCard28 = new MaterialSkin.Controls.MaterialCard();
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
@@ -374,11 +379,6 @@
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
             this.windows11Theme1 = new Telerik.WinControls.Themes.Windows11Theme();
-            this.materialCard29 = new MaterialSkin.Controls.MaterialCard();
-            this.radPictureBox3 = new Telerik.WinControls.UI.RadPictureBox();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.panel14 = new System.Windows.Forms.Panel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -465,6 +465,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).BeginInit();
             this.tabPage18.SuspendLayout();
+            this.materialCard29.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.panel14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).BeginInit();
+            this.panel12.SuspendLayout();
             this.materialCard28.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tap_control_metas.SuspendLayout();
@@ -533,11 +538,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            this.materialCard29.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).BeginInit();
-            this.panel12.SuspendLayout();
-            this.panel13.SuspendLayout();
-            this.panel14.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -1211,20 +1211,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn19.HeaderText = "column1";
-            gridViewTextBoxColumn19.IsVisible = false;
-            gridViewTextBoxColumn19.Name = "column1";
-            gridViewTextBoxColumn20.HeaderText = "column2";
-            gridViewTextBoxColumn20.Name = "column2";
-            gridViewTextBoxColumn21.HeaderText = "column3";
-            gridViewTextBoxColumn21.Name = "column3";
+            gridViewTextBoxColumn7.HeaderText = "column1";
+            gridViewTextBoxColumn7.IsVisible = false;
+            gridViewTextBoxColumn7.Name = "column1";
+            gridViewTextBoxColumn8.HeaderText = "column2";
+            gridViewTextBoxColumn8.Name = "column2";
+            gridViewTextBoxColumn9.HeaderText = "column3";
+            gridViewTextBoxColumn9.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn19,
-            gridViewTextBoxColumn20,
-            gridViewTextBoxColumn21});
+            gridViewTextBoxColumn7,
+            gridViewTextBoxColumn8,
+            gridViewTextBoxColumn9});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition25;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition9;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2200,7 +2200,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
@@ -2264,7 +2264,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition26;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition10;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1583, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -3215,7 +3215,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(81, 12);
@@ -3280,7 +3280,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition27;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition11;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1583, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -3294,6 +3294,62 @@
             this.tabPage18.Size = new System.Drawing.Size(1534, 732);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
+            // 
+            // materialCard29
+            // 
+            this.materialCard29.AutoScroll = true;
+            this.materialCard29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.materialCard29.Controls.Add(this.panel13);
+            this.materialCard29.Controls.Add(this.panel12);
+            this.materialCard29.Depth = 0;
+            this.materialCard29.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialCard29.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialCard29.Location = new System.Drawing.Point(0, 0);
+            this.materialCard29.Margin = new System.Windows.Forms.Padding(14);
+            this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialCard29.Name = "materialCard29";
+            this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard29.Size = new System.Drawing.Size(1534, 732);
+            this.materialCard29.TabIndex = 40;
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.panel14);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel13.Location = new System.Drawing.Point(884, 14);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(636, 704);
+            this.panel13.TabIndex = 41;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.radPictureBox3);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel14.Location = new System.Drawing.Point(0, 0);
+            this.panel14.Name = "panel14";
+            this.panel14.Padding = new System.Windows.Forms.Padding(6);
+            this.panel14.Size = new System.Drawing.Size(636, 444);
+            this.panel14.TabIndex = 0;
+            // 
+            // radPictureBox3
+            // 
+            this.radPictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radPictureBox3.Image = global::Tablero.Properties.Resources._5ecf0bf1fd9cb2672c1cbdc8_icon256_fw;
+            this.radPictureBox3.Location = new System.Drawing.Point(6, 6);
+            this.radPictureBox3.Name = "radPictureBox3";
+            this.radPictureBox3.Size = new System.Drawing.Size(624, 432);
+            this.radPictureBox3.TabIndex = 0;
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.materialCard28);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel12.Location = new System.Drawing.Point(14, 14);
+            this.panel12.Name = "panel12";
+            this.panel12.Padding = new System.Windows.Forms.Padding(5);
+            this.panel12.Size = new System.Drawing.Size(437, 704);
+            this.panel12.TabIndex = 40;
             // 
             // materialCard28
             // 
@@ -5817,7 +5873,7 @@
             this.materialCard_users.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard_users.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard_users.Name = "materialCard_users";
-            this.materialCard_users.Padding = new System.Windows.Forms.Padding(14);
+            this.materialCard_users.Padding = new System.Windows.Forms.Padding(1);
             this.materialCard_users.Size = new System.Drawing.Size(1681, 543);
             this.materialCard_users.TabIndex = 0;
             // 
@@ -5827,12 +5883,13 @@
             this.dgv_users.AllowUserToDeleteRows = false;
             this.dgv_users.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_users.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_users.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgv_users.Location = new System.Drawing.Point(0, 0);
+            this.dgv_users.Location = new System.Drawing.Point(1, 1);
             this.dgv_users.Name = "dgv_users";
             this.dgv_users.ReadOnly = true;
             this.dgv_users.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_users.Size = new System.Drawing.Size(1681, 543);
+            this.dgv_users.Size = new System.Drawing.Size(1679, 541);
             this.dgv_users.TabIndex = 0;
             this.dgv_users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_users_CellClick);
             // 
@@ -6537,7 +6594,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition28;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition12;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1489, 751);
             this.radGridView1.TabIndex = 0;
@@ -6561,62 +6618,6 @@
             this.metroContextMenu2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.metroContextMenu2.Name = "metroContextMenu2";
             this.metroContextMenu2.Size = new System.Drawing.Size(61, 4);
-            // 
-            // materialCard29
-            // 
-            this.materialCard29.AutoScroll = true;
-            this.materialCard29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.materialCard29.Controls.Add(this.panel13);
-            this.materialCard29.Controls.Add(this.panel12);
-            this.materialCard29.Depth = 0;
-            this.materialCard29.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialCard29.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard29.Location = new System.Drawing.Point(0, 0);
-            this.materialCard29.Margin = new System.Windows.Forms.Padding(14);
-            this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard29.Name = "materialCard29";
-            this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1534, 732);
-            this.materialCard29.TabIndex = 40;
-            // 
-            // radPictureBox3
-            // 
-            this.radPictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radPictureBox3.Image = global::Tablero.Properties.Resources._5ecf0bf1fd9cb2672c1cbdc8_icon256_fw;
-            this.radPictureBox3.Location = new System.Drawing.Point(6, 6);
-            this.radPictureBox3.Name = "radPictureBox3";
-            this.radPictureBox3.Size = new System.Drawing.Size(624, 432);
-            this.radPictureBox3.TabIndex = 0;
-            // 
-            // panel12
-            // 
-            this.panel12.Controls.Add(this.materialCard28);
-            this.panel12.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel12.Location = new System.Drawing.Point(14, 14);
-            this.panel12.Name = "panel12";
-            this.panel12.Padding = new System.Windows.Forms.Padding(5);
-            this.panel12.Size = new System.Drawing.Size(437, 704);
-            this.panel12.TabIndex = 40;
-            // 
-            // panel13
-            // 
-            this.panel13.Controls.Add(this.panel14);
-            this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(884, 14);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(636, 704);
-            this.panel13.TabIndex = 41;
-            // 
-            // panel14
-            // 
-            this.panel14.Controls.Add(this.radPictureBox3);
-            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel14.Location = new System.Drawing.Point(0, 0);
-            this.panel14.Name = "panel14";
-            this.panel14.Padding = new System.Windows.Forms.Padding(6);
-            this.panel14.Size = new System.Drawing.Size(636, 444);
-            this.panel14.TabIndex = 0;
             // 
             // Form_principal
             // 
@@ -6739,6 +6740,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgv_reporte_Tiempos)).EndInit();
             this.tabPage18.ResumeLayout(false);
+            this.materialCard29.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).EndInit();
+            this.panel12.ResumeLayout(false);
             this.materialCard28.ResumeLayout(false);
             this.materialCard28.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -6820,11 +6826,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            this.materialCard29.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.radPictureBox3)).EndInit();
-            this.panel12.ResumeLayout(false);
-            this.panel13.ResumeLayout(false);
-            this.panel14.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

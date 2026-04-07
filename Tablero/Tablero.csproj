@@ -230,7 +230,6 @@
       <DependentUpon>Automatico.cs</DependentUpon>
     </Compile>
     <Compile Include="Clases\DatabaseHelper.cs" />
-    <Compile Include="Clases\Reporte_Semanal.cs" />
     <Compile Include="Clases\Reporte_Semanal_EPPlus.cs" />
     <Compile Include="Coneccion_Server.cs">
       <SubType>Form</SubType>
