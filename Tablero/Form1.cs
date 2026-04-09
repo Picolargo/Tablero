@@ -80,6 +80,7 @@ namespace Tablero
         List<ValueTuple<string, string, string>> valores_operativos =
         new List<(string, string, string)>();
         private Editar _editarForm = null;
+        private string Kg_pz_str = string.Empty;
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -4684,11 +4685,20 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void calcular_meta_programada()
         {
-            double hr_programada, meta_programada, meta_x_hr;
+            double hr_programada, meta_programada, meta_x_hr, kg_pz_double;
 
             hr_programada = double.TryParse(Txt_Read_1.Text, out hr_programada) ? hr_programada : 0;
             meta_x_hr = double.TryParse(Txt_meta.Text, out meta_x_hr) ? meta_x_hr : 0;
-            meta_programada = hr_programada * meta_x_hr;
+            if (cb_Area.SelectedIndex == 8)
+            {
+                kg_pz_double = double.TryParse(Kg_pz_str, out kg_pz_double) ? kg_pz_double : 0;
+                meta_programada = (meta_x_hr* kg_pz_double) *hr_programada;
+            }
+            else
+            {
+                meta_programada = hr_programada * meta_x_hr;
+            }
+            
             Txt_Read_2.Text = meta_programada.ToString("0.##");
         }
         private void calcular_turno()
@@ -8056,7 +8066,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (cb_Area.SelectedIndex == 8)
             {
                 // Consulta para buscar donde OP = valor_buscado
-                string query = "SELECT \"Meta_Kg_Hr\" FROM public.\"Maquinas\" WHERE \"OP\" = @valorBuscado;";
+                string query = "SELECT \"Meta_Kg_Hr\", \"Kg_pz\" FROM public.\"Maquinas\" WHERE \"OP\" = @valorBuscado;";
 
                 // Crear parámetro
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -8074,6 +8084,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     resultado = dt.Rows[0]["Meta_Kg_Hr"].ToString();
+                    Kg_pz_str  = dt.Rows[0]["Kg_pz"].ToString();
                     Txt_meta.Text = resultado;
                 }
             }

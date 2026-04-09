@@ -559,7 +559,7 @@
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1550, 817);
+            this.materialTabControl1.Size = new System.Drawing.Size(1694, 983);
             this.materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -576,7 +576,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage1.Size = new System.Drawing.Size(1686, 940);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
@@ -1774,7 +1774,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage2.Size = new System.Drawing.Size(1686, 940);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Graficas";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1787,7 +1787,7 @@
             this.pnl_graficas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_graficas.Location = new System.Drawing.Point(3, 3);
             this.pnl_graficas.Name = "pnl_graficas";
-            this.pnl_graficas.Size = new System.Drawing.Size(1536, 768);
+            this.pnl_graficas.Size = new System.Drawing.Size(1680, 934);
             this.pnl_graficas.TabIndex = 0;
             // 
             // panel7
@@ -1798,7 +1798,7 @@
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel7.Location = new System.Drawing.Point(0, 0);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1534, 766);
+            this.panel7.Size = new System.Drawing.Size(1678, 932);
             this.panel7.TabIndex = 39;
             // 
             // materialCard26
@@ -1808,12 +1808,12 @@
             this.materialCard26.Depth = 0;
             this.materialCard26.Dock = System.Windows.Forms.DockStyle.Right;
             this.materialCard26.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard26.Location = new System.Drawing.Point(294, 0);
+            this.materialCard26.Location = new System.Drawing.Point(367, 0);
             this.materialCard26.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard26.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard26.Name = "materialCard26";
             this.materialCard26.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard26.Size = new System.Drawing.Size(1311, 749);
+            this.materialCard26.Size = new System.Drawing.Size(1311, 932);
             this.materialCard26.TabIndex = 42;
             this.materialCard26.Visible = false;
             // 
@@ -1829,7 +1829,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.411504F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.58849F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1283, 721);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1283, 904);
             this.tableLayoutPanel1.TabIndex = 42;
             // 
             // panel10
@@ -1839,7 +1839,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 3);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1277, 47);
+            this.panel10.Size = new System.Drawing.Size(1277, 60);
             this.panel10.TabIndex = 0;
             // 
             // labelTitulo
@@ -1864,9 +1864,9 @@
             // 
             this.panel11.Controls.Add(this.cartesianChart1);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel11.Location = new System.Drawing.Point(3, 56);
+            this.panel11.Location = new System.Drawing.Point(3, 69);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1277, 662);
+            this.panel11.Size = new System.Drawing.Size(1277, 832);
             this.panel11.TabIndex = 1;
             // 
             // cartesianChart1
@@ -1876,7 +1876,7 @@
             this.cartesianChart1.Margin = new System.Windows.Forms.Padding(10);
             this.cartesianChart1.Name = "cartesianChart1";
             this.cartesianChart1.Padding = new System.Windows.Forms.Padding(10);
-            this.cartesianChart1.Size = new System.Drawing.Size(1277, 662);
+            this.cartesianChart1.Size = new System.Drawing.Size(1277, 832);
             this.cartesianChart1.TabIndex = 39;
             // 
             // materialCard19
@@ -1895,7 +1895,7 @@
             this.materialCard19.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard19.Name = "materialCard19";
             this.materialCard19.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard19.Size = new System.Drawing.Size(294, 749);
+            this.materialCard19.Size = new System.Drawing.Size(294, 932);
             this.materialCard19.TabIndex = 38;
             // 
             // cb_tipo_grafica
@@ -2002,7 +2002,7 @@
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage10.Size = new System.Drawing.Size(1686, 940);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2020,7 +2020,7 @@
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
             this.tapcontrol.SelectedIndex = 6;
-            this.tapcontrol.Size = new System.Drawing.Size(1542, 774);
+            this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
             this.tapcontrol.UseCustomForeColor = true;
@@ -3291,7 +3291,7 @@
             this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(1534, 732);
+            this.tabPage18.Size = new System.Drawing.Size(1678, 898);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
             // 
@@ -3310,16 +3310,16 @@
             this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard29.Name = "materialCard29";
             this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1534, 732);
+            this.materialCard29.Size = new System.Drawing.Size(1678, 898);
             this.materialCard29.TabIndex = 40;
             // 
             // panel13
             // 
             this.panel13.Controls.Add(this.panel14);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(884, 14);
+            this.panel13.Location = new System.Drawing.Point(1028, 14);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(636, 704);
+            this.panel13.Size = new System.Drawing.Size(636, 870);
             this.panel13.TabIndex = 41;
             // 
             // panel14
@@ -3348,7 +3348,7 @@
             this.panel12.Location = new System.Drawing.Point(14, 14);
             this.panel12.Name = "panel12";
             this.panel12.Padding = new System.Windows.Forms.Padding(5);
-            this.panel12.Size = new System.Drawing.Size(437, 704);
+            this.panel12.Size = new System.Drawing.Size(437, 870);
             this.panel12.TabIndex = 40;
             // 
             // materialCard28
@@ -3430,7 +3430,7 @@
             this.tabPage4.ImageKey = "flag_icon";
             this.tabPage4.Location = new System.Drawing.Point(4, 39);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage4.Size = new System.Drawing.Size(1686, 940);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Metas";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3449,10 +3449,10 @@
             this.tap_control_metas.Controls.Add(this.metroTabPage8);
             this.tap_control_metas.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tap_control_metas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
-            this.tap_control_metas.Location = new System.Drawing.Point(0, 379);
+            this.tap_control_metas.Location = new System.Drawing.Point(0, 395);
             this.tap_control_metas.Name = "tap_control_metas";
             this.tap_control_metas.SelectedIndex = 0;
-            this.tap_control_metas.Size = new System.Drawing.Size(1525, 545);
+            this.tap_control_metas.Size = new System.Drawing.Size(1686, 545);
             this.tap_control_metas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tap_control_metas.Style = MetroFramework.MetroColorStyle.Black;
             this.tap_control_metas.TabIndex = 4;
@@ -3476,7 +3476,7 @@
             this.metroTabPage1.HorizontalScrollbarSize = 10;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(1517, 503);
+            this.metroTabPage1.Size = new System.Drawing.Size(1678, 503);
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Deshidratado";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
@@ -3494,7 +3494,7 @@
             this.dgv_metas_des.Name = "dgv_metas_des";
             this.dgv_metas_des.ReadOnly = true;
             this.dgv_metas_des.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_metas_des.Size = new System.Drawing.Size(1517, 496);
+            this.dgv_metas_des.Size = new System.Drawing.Size(1678, 496);
             this.dgv_metas_des.TabIndex = 0;
             this.dgv_metas_des.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_metas_des_CellClick);
             // 
@@ -4143,7 +4143,7 @@
             this.tabPage9.ImageKey = "box_open.png";
             this.tabPage9.Location = new System.Drawing.Point(4, 39);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage9.Size = new System.Drawing.Size(1686, 940);
             this.tabPage9.TabIndex = 4;
             this.tabPage9.Text = "Detalles OP";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -4156,7 +4156,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1542, 774);
+            this.panel3.Size = new System.Drawing.Size(1686, 940);
             this.panel3.TabIndex = 6;
             // 
             // materialCard6
@@ -4166,12 +4166,12 @@
             this.materialCard6.Depth = 0;
             this.materialCard6.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard6.Location = new System.Drawing.Point(0, 379);
+            this.materialCard6.Location = new System.Drawing.Point(0, 407);
             this.materialCard6.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard6.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard6.Name = "materialCard6";
             this.materialCard6.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard6.Size = new System.Drawing.Size(1525, 533);
+            this.materialCard6.Size = new System.Drawing.Size(1686, 533);
             this.materialCard6.TabIndex = 6;
             // 
             // dgv_detalles_op
@@ -4185,7 +4185,7 @@
             this.dgv_detalles_op.Name = "dgv_detalles_op";
             this.dgv_detalles_op.ReadOnly = true;
             this.dgv_detalles_op.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_detalles_op.Size = new System.Drawing.Size(1497, 505);
+            this.dgv_detalles_op.Size = new System.Drawing.Size(1658, 505);
             this.dgv_detalles_op.TabIndex = 8;
             this.dgv_detalles_op.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_detalles_op_CellClick);
             // 
@@ -4727,7 +4727,7 @@
             this.tabPage11.ImageKey = "award_prize.png";
             this.tabPage11.Location = new System.Drawing.Point(4, 39);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage11.Size = new System.Drawing.Size(1686, 940);
             this.tabPage11.TabIndex = 6;
             this.tabPage11.Text = "Calidad";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -4740,10 +4740,10 @@
             this.tab_limpiezas.Controls.Add(this.metroTabPage12);
             this.tab_limpiezas.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tab_limpiezas.FontWeight = MetroFramework.MetroTabControlWeight.Regular;
-            this.tab_limpiezas.Location = new System.Drawing.Point(0, 378);
+            this.tab_limpiezas.Location = new System.Drawing.Point(0, 395);
             this.tab_limpiezas.Name = "tab_limpiezas";
             this.tab_limpiezas.SelectedIndex = 1;
-            this.tab_limpiezas.Size = new System.Drawing.Size(1525, 545);
+            this.tab_limpiezas.Size = new System.Drawing.Size(1686, 545);
             this.tab_limpiezas.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tab_limpiezas.Style = MetroFramework.MetroColorStyle.Black;
             this.tab_limpiezas.TabIndex = 5;
@@ -4792,7 +4792,7 @@
             this.metroTabPage12.HorizontalScrollbarSize = 0;
             this.metroTabPage12.Location = new System.Drawing.Point(4, 4);
             this.metroTabPage12.Name = "metroTabPage12";
-            this.metroTabPage12.Size = new System.Drawing.Size(1517, 503);
+            this.metroTabPage12.Size = new System.Drawing.Size(1678, 503);
             this.metroTabPage12.TabIndex = 1;
             this.metroTabPage12.Text = "Túnel";
             this.metroTabPage12.VerticalScrollbarBarColor = false;
@@ -4810,7 +4810,7 @@
             this.dgv_Tunel_calidad.Name = "dgv_Tunel_calidad";
             this.dgv_Tunel_calidad.ReadOnly = true;
             this.dgv_Tunel_calidad.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Tunel_calidad.Size = new System.Drawing.Size(1517, 496);
+            this.dgv_Tunel_calidad.Size = new System.Drawing.Size(1678, 496);
             this.dgv_Tunel_calidad.TabIndex = 2;
             this.dgv_Tunel_calidad.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Tunel_calidad_CellClick);
             // 
@@ -5214,7 +5214,7 @@
             this.tabPage3.ImageKey = "gear_fill";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage3.Size = new System.Drawing.Size(1686, 940);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Configuración";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -5899,7 +5899,7 @@
             this.tabPage36.ImageKey = "features";
             this.tabPage36.Location = new System.Drawing.Point(4, 39);
             this.tabPage36.Name = "tabPage36";
-            this.tabPage36.Size = new System.Drawing.Size(1542, 774);
+            this.tabPage36.Size = new System.Drawing.Size(1686, 940);
             this.tabPage36.TabIndex = 7;
             this.tabPage36.Text = "Producto";
             this.tabPage36.UseVisualStyleBackColor = true;
@@ -5912,7 +5912,7 @@
             this.metroTabControl1.Location = new System.Drawing.Point(0, 0);
             this.metroTabControl1.Name = "metroTabControl1";
             this.metroTabControl1.SelectedIndex = 1;
-            this.metroTabControl1.Size = new System.Drawing.Size(1542, 774);
+            this.metroTabControl1.Size = new System.Drawing.Size(1686, 940);
             this.metroTabControl1.TabIndex = 9;
             this.metroTabControl1.UseSelectable = true;
             // 
@@ -6444,7 +6444,7 @@
             this.metroTabPage14.HorizontalScrollbarSize = 10;
             this.metroTabPage14.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage14.Name = "metroTabPage14";
-            this.metroTabPage14.Size = new System.Drawing.Size(1534, 732);
+            this.metroTabPage14.Size = new System.Drawing.Size(1678, 898);
             this.metroTabPage14.TabIndex = 1;
             this.metroTabPage14.Text = "Buscar";
             this.metroTabPage14.VerticalScrollbarBarColor = true;
@@ -6459,7 +6459,7 @@
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel9.Location = new System.Drawing.Point(0, 0);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(1534, 732);
+            this.panel9.Size = new System.Drawing.Size(1678, 898);
             this.panel9.TabIndex = 8;
             // 
             // materialCard25
@@ -6575,12 +6575,12 @@
             this.materialCard27.Depth = 0;
             this.materialCard27.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard27.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard27.Location = new System.Drawing.Point(0, 91);
+            this.materialCard27.Location = new System.Drawing.Point(0, 119);
             this.materialCard27.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard27.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard27.Name = "materialCard27";
             this.materialCard27.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard27.Size = new System.Drawing.Size(1517, 779);
+            this.materialCard27.Size = new System.Drawing.Size(1678, 779);
             this.materialCard27.TabIndex = 4;
             // 
             // radGridView1
@@ -6596,7 +6596,7 @@
             this.radGridView1.MasterTemplate.AllowEditRow = false;
             this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.radGridView1.Name = "radGridView1";
-            this.radGridView1.Size = new System.Drawing.Size(1489, 751);
+            this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
             // 
             // radTaskbarButton1
@@ -6623,7 +6623,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1556, 884);
+            this.ClientSize = new System.Drawing.Size(1700, 1050);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
