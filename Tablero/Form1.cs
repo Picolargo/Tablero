@@ -75,8 +75,8 @@ namespace Tablero
         private string DestinatariosEmail = string.Empty;
         private bool SSLCheck = false;
         // Fin de variables para el envío de correos
-        List<ValueTuple<string, string>> valores_mecanico =
-        new List<(string, string)>();
+        List<ValueTuple<string, string, string>> valores_mecanico =
+        new List<(string, string, string)>();
         List<ValueTuple<string, string, string>> valores_operativos =
         new List<(string, string, string)>();
         private Editar _editarForm = null;
@@ -4979,6 +4979,56 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
             }
         }
+        private bool ValidarTodasLasFilas_operativo()
+        {
+            int count_vacios = 0;
+            foreach (DataGridViewRow row in dgv_operativo.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value == null || string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                    {
+                        count_vacios++;
+                    }
+                }
+            }
+
+            if (count_vacios > 0)
+            {
+                return false;
+            }
+            else 
+            {
+                return true;
+            }
+        }
+        private bool ValidarTodasLasFilas_mecanico()
+        {
+            int count_vacios = 0;
+            foreach (DataGridViewRow row in dgv_mecanico.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value == null || string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                    {
+                        count_vacios++;
+                    }
+                }
+            }
+
+            if (count_vacios > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
@@ -5039,7 +5089,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
                         && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) 
                         && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text)
-                        && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                        && !string.IsNullOrEmpty(cb_jefe_turno.Text)&& ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -5289,7 +5339,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
                     && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) 
                     && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Despegue
                     int idUsuarioActual = id_user;
@@ -5553,7 +5603,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
                     && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
                     && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Evaporado
                     int idUsuarioActual = id_user;
@@ -5792,7 +5842,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
                     && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
                     && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Grind
                     int idUsuarioActual = id_user;
@@ -6025,7 +6075,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (cb_proceso.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
                     && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
                     && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
-                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Inspeccion
                     int idUsuarioActual = id_user;
@@ -6258,7 +6308,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
                     && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
                     && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Polvos
                     int idUsuarioActual = id_user;
@@ -6500,7 +6550,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
                     && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
                     && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text))
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
                 {
                     //Revolturas
                     int idUsuarioActual = id_user;
@@ -7384,7 +7434,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         // Insertar en Tiempo_muerto_Mecanico desde DataGridView
         private void InsertarTiemposMuertosMecanicos(DatabaseHelper dbHelper, int idFicha)
         {
-           
+            valores_mecanico.Clear(); // Limpiar la lista antes de agregar nuevos valores
             foreach (DataGridViewRow row in dgv_mecanico.Rows)
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
@@ -7406,10 +7456,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     };
 
                     dbHelper.ExecuteNonQuery(query, parameters);
-                    valores_mecanico.Add((
-                        row.Cells[0].Value.ToString(),
-                        motivos
-                    ));
+                    valores_mecanico.Add((row.Cells[0].Value.ToString(), tipo, motivos));
                 }
             }
         }
@@ -7417,6 +7464,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         // Insertar en Tiempo_Muerto_Operativo desde DataGridView
         private void InsertarTiemposMuertosOperativos(DatabaseHelper dbHelper, int idFicha)
         {
+            valores_operativos.Clear(); // Limpiar la lista antes de agregar nuevos valores
             foreach (DataGridViewRow row in dgv_operativo.Rows)
             {
                 if (!row.IsNewRow && row.Cells[0].Value != null && row.Cells[1].Value != null)
@@ -16182,6 +16230,7 @@ ORDER BY
     <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
         <tr style='background: #e9ecef;'>
             <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Minutos Detenidos</th>
+            <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Tipo</th>
             <th style='border: 1px solid #ccc; padding: 8px; text-align: left;'>Motivos</th>
         </tr>";
 
@@ -16191,6 +16240,7 @@ ORDER BY
         <tr>
             <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item1}</td>
             <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item2}</td>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{item.Item3}</td>
         </tr>";
             }
 
@@ -16232,10 +16282,6 @@ ORDER BY
         }
         public string GenerarTablaDetallesOP()
         {
-            // Verifica si la lista está vacía o es nula
-            if (valores_operativos == null || valores_operativos.Count == 0)
-                return "<p>No se encontró registro en la tabla de detalles OP, favor de contactar al usuario Administrador y registrar los detalles del OP.</p>";
-
             string valorBuscado = cb_OP.Text;
             string Orden_Produccion = string.Empty;
             string Producto = string.Empty;
@@ -16285,6 +16331,10 @@ ORDER BY
                 OP_Origen = dt.Rows[0]["OP_Origen"].ToString();
                 Destino = dt.Rows[0]["Destino"].ToString();
                 Clasificacion = dt.Rows[0]["Clasificacion"].ToString();
+            }
+            else
+            {
+                return "<p>No se encontró registro en la tabla de detalles OP, favor de contactar al usuario Administrador y registrar los detalles del OP.</p>";
             }
 
 
