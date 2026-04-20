@@ -379,6 +379,10 @@
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
             this.windows11Theme1 = new Telerik.WinControls.Themes.Windows11Theme();
+            this.materialLabel13 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialLabel14 = new MaterialSkin.Controls.MaterialLabel();
+            this.DTP_Consolidado_1 = new MetroFramework.Controls.MetroDateTime();
+            this.DTP_Consolidado_2 = new MetroFramework.Controls.MetroDateTime();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -2019,7 +2023,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 6;
+            this.tapcontrol.SelectedIndex = 0;
             this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2058,6 +2062,10 @@
             // 
             this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard3.Controls.Add(this.DTP_Consolidado_2);
+            this.materialCard3.Controls.Add(this.DTP_Consolidado_1);
+            this.materialCard3.Controls.Add(this.materialLabel14);
+            this.materialCard3.Controls.Add(this.materialLabel13);
             this.materialCard3.Controls.Add(this.cb_area_reporte);
             this.materialCard3.Controls.Add(this.btn_clean_consolidado);
             this.materialCard3.Controls.Add(this.btn_export_excel_consolidado);
@@ -2069,7 +2077,7 @@
             this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard3.Name = "materialCard3";
             this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(1043, 77);
+            this.materialCard3.Size = new System.Drawing.Size(1077, 99);
             this.materialCard3.TabIndex = 5;
             // 
             // cb_area_reporte
@@ -2097,11 +2105,11 @@
             "Polvos",
             "Revolturas",
             "Máquinas"});
-            this.cb_area_reporte.Location = new System.Drawing.Point(121, 13);
+            this.cb_area_reporte.Location = new System.Drawing.Point(17, 12);
             this.cb_area_reporte.MaxDropDownItems = 4;
             this.cb_area_reporte.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_area_reporte.Name = "cb_area_reporte";
-            this.cb_area_reporte.Size = new System.Drawing.Size(296, 49);
+            this.cb_area_reporte.Size = new System.Drawing.Size(250, 49);
             this.cb_area_reporte.StartIndex = -1;
             this.cb_area_reporte.TabIndex = 32;
             this.cb_area_reporte.SelectedIndexChanged += new System.EventHandler(this.cb_area_reporte_SelectedIndexChanged);
@@ -2116,7 +2124,7 @@
             this.btn_clean_consolidado.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
             this.btn_clean_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_clean_consolidado.ImageKey = "save_icon";
-            this.btn_clean_consolidado.Location = new System.Drawing.Point(806, 20);
+            this.btn_clean_consolidado.Location = new System.Drawing.Point(905, 19);
             this.btn_clean_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_clean_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_clean_consolidado.Name = "btn_clean_consolidado";
@@ -2140,7 +2148,7 @@
             this.btn_export_excel_consolidado.Icon = global::Tablero.Properties.Resources.excel_icon;
             this.btn_export_excel_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_export_excel_consolidado.ImageKey = "save_icon";
-            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(614, 20);
+            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(713, 19);
             this.btn_export_excel_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_export_excel_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_export_excel_consolidado.Name = "btn_export_excel_consolidado";
@@ -2164,7 +2172,7 @@
             this.btn_new_report_consolidado.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_consolidado.ImageKey = "save_icon";
-            this.btn_new_report_consolidado.Location = new System.Drawing.Point(424, 20);
+            this.btn_new_report_consolidado.Location = new System.Drawing.Point(523, 19);
             this.btn_new_report_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_consolidado.Name = "btn_new_report_consolidado";
@@ -2186,12 +2194,12 @@
             this.materialCard9.Controls.Add(this.btn_filtro_consolidado);
             this.materialCard9.Depth = 0;
             this.materialCard9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard9.Location = new System.Drawing.Point(1085, 14);
+            this.materialCard9.Location = new System.Drawing.Point(1119, 14);
             this.materialCard9.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard9.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard9.Name = "materialCard9";
             this.materialCard9.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard9.Size = new System.Drawing.Size(526, 77);
+            this.materialCard9.Size = new System.Drawing.Size(527, 77);
             this.materialCard9.TabIndex = 6;
             // 
             // txt_filtro_report_consolidado
@@ -2200,10 +2208,10 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
-            this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(81, 12);
+            this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(17, 12);
             this.txt_filtro_report_consolidado.MaxLength = 50;
             this.txt_filtro_report_consolidado.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_filtro_report_consolidado.Multiline = false;
@@ -2224,7 +2232,7 @@
             this.btn_filtro_consolidado.Icon = global::Tablero.Properties.Resources.filter_remove;
             this.btn_filtro_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_filtro_consolidado.ImageKey = "save_icon";
-            this.btn_filtro_consolidado.Location = new System.Drawing.Point(316, 19);
+            this.btn_filtro_consolidado.Location = new System.Drawing.Point(252, 19);
             this.btn_filtro_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_filtro_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_filtro_consolidado.Name = "btn_filtro_consolidado";
@@ -6619,6 +6627,56 @@
             this.metroContextMenu2.Name = "metroContextMenu2";
             this.metroContextMenu2.Size = new System.Drawing.Size(61, 4);
             // 
+            // materialLabel13
+            // 
+            this.materialLabel13.AutoSize = true;
+            this.materialLabel13.Depth = 0;
+            this.materialLabel13.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel13.Location = new System.Drawing.Point(273, 12);
+            this.materialLabel13.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel13.Name = "materialLabel13";
+            this.materialLabel13.Size = new System.Drawing.Size(86, 19);
+            this.materialLabel13.TabIndex = 35;
+            this.materialLabel13.Text = "Fecha Inicio";
+            // 
+            // materialLabel14
+            // 
+            this.materialLabel14.AutoSize = true;
+            this.materialLabel14.Depth = 0;
+            this.materialLabel14.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel14.Location = new System.Drawing.Point(289, 52);
+            this.materialLabel14.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel14.Name = "materialLabel14";
+            this.materialLabel14.Size = new System.Drawing.Size(70, 19);
+            this.materialLabel14.TabIndex = 36;
+            this.materialLabel14.Text = "Fecha Fin";
+            // 
+            // DTP_Consolidado_1
+            // 
+            this.DTP_Consolidado_1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DTP_Consolidado_1.Enabled = false;
+            this.DTP_Consolidado_1.FontSize = MetroFramework.MetroDateTimeSize.Tall;
+            this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
+            this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
+            this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
+            this.DTP_Consolidado_1.TabIndex = 37;
+            // 
+            // DTP_Consolidado_2
+            // 
+            this.DTP_Consolidado_2.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DTP_Consolidado_2.Enabled = false;
+            this.DTP_Consolidado_2.FontSize = MetroFramework.MetroDateTimeSize.Tall;
+            this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
+            this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
+            this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
+            this.DTP_Consolidado_2.TabIndex = 38;
+            // 
             // Form_principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -7174,6 +7232,10 @@
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.Panel panel12;
         private System.Windows.Forms.Panel panel14;
+        private MaterialSkin.Controls.MaterialLabel materialLabel14;
+        private MaterialSkin.Controls.MaterialLabel materialLabel13;
+        private MetroFramework.Controls.MetroDateTime DTP_Consolidado_1;
+        private MetroFramework.Controls.MetroDateTime DTP_Consolidado_2;
     }
 }
 
