@@ -12568,13 +12568,16 @@ ORDER BY f.""OP"" ASC;";
             100)
         ELSE 0
     END AS ""%Cumplimiento Fresco"",
-	CASE 
+	
+    CASE 
         WHEN (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) > 0 THEN
             ROUND(COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)), 2)
         ELSE 0
     END AS ""Kg Seco Meta / Hras Reales"",
+	
     COALESCE(q3.""Kg Seco Real"", 0) AS ""Kg Seco Real"",
-	CASE 
+	
+    CASE 
         WHEN (COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))) > 0 THEN
             LEAST(
                 ROUND(
@@ -12585,15 +12588,18 @@ ORDER BY f.""OP"" ASC;";
             100)
         ELSE 0
     END AS ""%Cumplimiento Secos"",
-	COALESCE(d.""Relacion_fr_seco"", 0) AS ""Relación Fresco-Seco Meta"",
-	CASE 
+	
+    COALESCE(d.""Relacion_fr_seco"", 0) AS ""Relación Fresco-Seco Meta"",
+	
+    CASE 
         WHEN (COALESCE(q3.""Kg Seco Real"", 0)) > 0 THEN
-                ROUND(
-                    (COALESCE(q3.""Kg Fresco Real"", 0) /
-                    (COALESCE(q3.""Kg Seco Real"", 0))), 2)
+            ROUND(
+                (COALESCE(q3.""Kg Fresco Real"", 0) /
+                (COALESCE(q3.""Kg Seco Real"", 0))), 2)
         ELSE 0
     END AS ""Relación Fresco-Seco Real"",
-	CASE 
+	
+    CASE 
         WHEN (COALESCE(q3.""Kg Seco Real"", 0)) > 0 THEN
             LEAST(
                 ROUND(
@@ -12605,6 +12611,7 @@ ORDER BY f.""OP"" ASC;";
             100)
         ELSE 0
     END AS ""%Cumplimiento Relación Fresco-Seco"",
+	
     COALESCE(q3.""Kg Fuera de Especificación"", 0) AS ""Kg Fuera de Especificación"",
 
     CASE 
@@ -12617,8 +12624,24 @@ ORDER BY f.""OP"" ASC;";
         ELSE 0
     END AS ""FTT"",
 
-    COALESCE(q3.""Personal Operativo Promedio"", 0)::integer AS ""Personal Operativo Promedio"",
-    COALESCE(q3.""Personal Operativo Promedio"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0)) AS ""Horas Hombre""
+    -- Personal Operativo Promedio: Promedio de (Personal Despegue + Personal Tunel/Sumergidor)
+    CASE 
+        WHEN COALESCE(q3.""Personal Operativo Suma Despegue"", 0) = 0 AND COALESCE(q4.""Personal Operativo Suma Tunel"", 0) = 0 THEN 0
+        ELSE ROUND(
+            (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0)) /
+            NULLIF(COALESCE(q3.""Cantidad Registros Despegue"", 0) + COALESCE(q4.""Cantidad Registros Tunel"", 0), 0)
+        )::integer
+    END AS ""Personal Operativo Promedio"",
+
+    -- Horas Hombre (redondeado a 2 decimales)
+    ROUND(
+        CASE 
+            WHEN COALESCE(q3.""Personal Operativo Suma Despegue"", 0) = 0 AND COALESCE(q4.""Personal Operativo Suma Tunel"", 0) = 0 THEN 0
+            ELSE (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0)) /
+                  NULLIF(COALESCE(q3.""Cantidad Registros Despegue"", 0) + COALESCE(q4.""Cantidad Registros Tunel"", 0), 0) *
+                  (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))
+        END,
+    2) AS ""Horas Hombre""
 
 FROM (
     SELECT 
@@ -12712,7 +12735,8 @@ FULL JOIN (
         SUM(""kg_frescos_enter_se"") AS ""Kg Fresco Real"",
         SUM(""Kg_prod_seco"") AS ""Kg Seco Real"",
         SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
-        ROUND(AVG(""Personal_Operativo""))::integer AS ""Personal Operativo Promedio"",
+        SUM(""Personal_Operativo"") AS ""Personal Operativo Suma Despegue"",
+        COUNT(""Personal_Operativo"") AS ""Cantidad Registros Despegue"",
         SUM(""Merma_kg"") AS ""Kg Merma en Despegue""
     FROM public.""Ficha""
     WHERE ""Area"" = 'Despegue'
@@ -12727,8 +12751,43 @@ AND COALESCE(q1.""No. Semana"", q2.""No. Semana"") = q3.""No. Semana""
 AND COALESCE(q1.""Mes"", q2.""Mes"") = q3.""Mes""
 AND COALESCE(q1.""OP"", q2.""OP"") = q3.""OP""
 
+LEFT JOIN (
+    SELECT 
+        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        EXTRACT(MONTH FROM ""Fecha"") AS ""MesNum"",
+        CASE EXTRACT(MONTH FROM ""Fecha"")
+            WHEN 1 THEN 'Enero'
+            WHEN 2 THEN 'Febrero'
+            WHEN 3 THEN 'Marzo'
+            WHEN 4 THEN 'Abril'
+            WHEN 5 THEN 'Mayo'
+            WHEN 6 THEN 'Junio'
+            WHEN 7 THEN 'Julio'
+            WHEN 8 THEN 'Agosto'
+            WHEN 9 THEN 'Septiembre'
+            WHEN 10 THEN 'Octubre'
+            WHEN 11 THEN 'Noviembre'
+            WHEN 12 THEN 'Diciembre'
+        END AS ""Mes"",
+        ""OP"",
+        SUM(""Personal_Operativo"") AS ""Personal Operativo Suma Tunel"",
+        COUNT(""Personal_Operativo"") AS ""Cantidad Registros Tunel""
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Tunel/Sumergidor'
+    GROUP BY 
+        EXTRACT(YEAR FROM ""Fecha""),
+        EXTRACT(WEEK FROM ""Fecha""),
+        EXTRACT(MONTH FROM ""Fecha""),
+        ""OP""
+) q4
+ON COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") = q4.""Año""
+AND COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") = q4.""No. Semana""
+AND COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") = q4.""Mes""
+AND COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = q4.""OP""
+
 LEFT JOIN public.""Deshidratado"" d
-ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = d.""OP""
+ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"", q4.""OP"") = d.""OP""
 
 ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
