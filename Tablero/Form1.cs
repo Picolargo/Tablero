@@ -26,6 +26,7 @@ namespace Tablero
     {
         private string id_global_users = string.Empty; // Variable para almacenar el ID del usuario seleccionado en el DataGridView
         private string id_global_meta_deshidratado = string.Empty;
+        private string id_global_costo = string.Empty;
         private string id_global_meta_empacado = string.Empty;
         private string id_global_meta_inspec = string.Empty;
         private string id_global_meta_evaporado = string.Empty;
@@ -90,6 +91,13 @@ namespace Tablero
             rgv_reporte_consolidado.ShowFilteringRow = false;
             rgv_reporte_consolidado.EnableFiltering = true;
             rgv_reporte_consolidado.EnableCustomFiltering = true;
+
+            // Configurar propiedades similares al ejemplo
+           // rgv_reporte_costo.EnableGrouping = false;
+            rgv_reporte_costo.EnableHotTracking = true;
+            rgv_reporte_costo.ShowFilteringRow = false;
+            rgv_reporte_costo.EnableFiltering = true;
+            rgv_reporte_costo.EnableCustomFiltering = true;
 
             // Configurar propiedades similares al ejemplo
             rgv_reporte_Tiempos.EnableGrouping = false;
@@ -11636,6 +11644,8 @@ ORDER BY f.""OP"" ASC;";
                 };
             }
 
+            
+
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_consolidado, parameters);
 
@@ -11752,526 +11762,8 @@ ORDER BY f.""OP"" ASC;";
 
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_consolidado.Clear();
+            rgv_reporte_costo.ClearSelection();
         }
-
-//        private void reporte_consolidado()
-//        {
-//            string var1 = cb_area_reporte.Text;
-//            string querySimple= string.Empty;
-//            rgv_reporte_consolidado.DataSource = null;
-//            rgv_reporte_consolidado.Rows.Clear();
-//            rgv_reporte_consolidado.Columns.Clear();
-//            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-//            if (var1 == "Tunel/Sumergidor")
-//            {
-//                querySimple = @"
-//WITH turnos_trabajados AS (
-//    SELECT 
-//        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-//        EXTRACT(YEAR FROM ""Fecha"") AS año,
-//        COUNT(*) AS total_turnos_trabajados
-//    FROM public.""Ficha""
-//    WHERE ""Area"" = 'Tunel/Sumergidor'
-//    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-//),
-//merma_semanal AS (
-//    SELECT 
-//        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-//        EXTRACT(YEAR FROM ""Fecha"") AS año,
-//        SUM(""Kg_merma"") AS merma_total_semanal
-//    FROM public.""Limpieza_tunel""
-//    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-//)
-//SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""Lote"",
-//    f.""OP"",
-//    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-//    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-//    f.""Merma_canica"" AS ""Canica(Kg)"",
-//    f.""Merma_podrido"" AS ""Merma Podrido(Kg)"",
-//    f.""Merma_tina"" AS ""Merma Tina(Kg)"",
-//    f.""Merma_piso"" AS ""Merma Piso(Kg)"",
-//    f.""Merma_canaletas"" AS ""Merma Canaletas(Kg)"",
-//    f.""Merma_lavado_bandas"" AS ""Merma Lavado Bandas(Kg)"",
-//    f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
-//    f.""Personal_Operativo"" as ""Personal Operativo"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Limpieza Túnel (distribuida por turnos trabajados)
-//    CASE 
-//        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-//        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-//        ELSE 0 
-//    END AS ""Limpieza Túnel"",
-    
-//    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-//    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN turnos_trabajados tt 
-//    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-//    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-//LEFT JOIN merma_semanal ms 
-//    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-//    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = 'Tunel/Sumergidor'
-//ORDER BY f.""OP"" ASC;";
-//            }
-//            if (var1 == "Despegue")
-//            {
-//                querySimple = @"
-//SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""Lote"",
-//    f.""OP"",
-//    f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
-//    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-//    f.""Kg_prod_seco"" AS ""Kilos Producto Seco"",
-//    f.""Merma_kg"" AS ""Merma(Kg)"",
-//    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-//    f.""Kg_resecar"" AS ""Kg para Resecar"",
-//    f.""Relacion_Fr_seco"" AS ""Relación Fresco-Seco"",
-//    f.""Personal_Operativo"" as ""Personal Operativo"",
-//    f.""FTT"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-//    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = 'Despegue'
-//ORDER BY f.""OP"" ASC;";
-//            }
-
-//            if (var1 == "Evaporado")
-//            {
-//                querySimple = @"
-//SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""OP"",
-//    f.""Kg_meta"" as ""Meta(Kg)"",
-//    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-//    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-//    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-//    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-//    f.""Merma_kg"" AS ""Merma(Kg)"",
-//    f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
-//    f.""Personal_Operativo"" as ""Personal Operativo"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-//    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = 'Evaporado'
-//ORDER BY f.""OP"" ASC;";
-//            }
-
-//            if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
-//            {
-//                querySimple = @"
-//                SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""OP"",
-//    f.""Kg_meta"" as ""Meta(Kg)"",
-//    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-//    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-//    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-//    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-//    f.""Merma_kg"" AS ""Merma(Kg)"",
-//    f.""Personal_Operativo"" as ""Personal Operativo"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Totales de tiempo muerto
-//    COALESCE(tmo.total_min_operativo, 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-//    COALESCE(tmm.total_min_mecanico, 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        Round(SUM(""Min_Detenidos"")/60,2) AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//       Round(SUM(""Min_Detenidos"")/60,2) AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = @Area
-//ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
-//            }
-
-//            if (var1 == "Máquinas")
-//            {
-//                querySimple = @"
-//SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""OP"",
-//    f.""Kg_meta"" as ""Meta(Kg)"",
-//    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-//    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-//    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-//    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-//    f.""Merma_kg"" AS ""Merma(Kg)"",
-//    f.""Personal_Operativo"" AS ""Personal Operativo"",
-//    f.""Bobina_kg_enter"" AS ""Bobina Kg Entrada"",
-//    f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
-//    f.""Bobina_merma"" AS ""Bobina Merma"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-//    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = 'Máquinas'
-//ORDER BY f.""OP"" ASC;";
-//            }
-
-//            if (var1 == "Polvos")
-//            {
-//                querySimple = @"
-//WITH turnos_trabajados AS (
-//    SELECT 
-//        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-//        EXTRACT(YEAR FROM ""Fecha"") AS año,
-//        COUNT(*) AS total_turnos_trabajados
-//    FROM public.""Ficha""
-//    WHERE ""Area"" = 'Polvos'
-//    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-//),
-//merma_semanal AS (
-//    SELECT 
-//        EXTRACT(WEEK FROM ""Fecha"") AS semana,
-//        EXTRACT(YEAR FROM ""Fecha"") AS año,
-//        SUM(""Kg_merma"") AS merma_total_semanal
-//    FROM public.""Limpieza_polvos""
-//    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-//)
-//SELECT
-//    f.""ID_Ficha"",
-//    f.""Fecha"",
-//    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-//    f.""Turno"",
-//    u.""Usuario"" AS ""Supervisor"",
-//    jefe.""Usuario"" AS ""Jefe de Turno"",
-//    f.""OP"",
-//    f.""Kg_meta"" as ""Meta(Kg)"",
-//    f.""porcent_cump_meta"" AS ""% Cumplimiento a Metas"",
-//    f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
-//    f.""Kg_prod_term"" as ""Kg Producto Terminado"",
-//    f.""Kg_fuera_espec"" AS ""Kg Fuera de Especificación"",
-//    f.""Merma_kg"" AS ""Merma(Kg)"",
-//    f.""Polvo_colector"" AS ""Polvo Colector(Kg)"",
-//    f.""Granulo"",
-//    f.""Personal_Operativo"" as ""Personal Operativo"",
-//    f.""Hr_efectivas"" as ""Horas Reales"",
-    
-//    -- Limpieza Polvos (distribuida por turnos trabajados)
-//    CASE 
-//        WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
-//        THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
-//        ELSE 0 
-//    END AS ""Limpieza Polvos"",
-    
-//    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-//    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
-//    COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
-
-//FROM public.""Ficha"" f
-//LEFT JOIN turnos_trabajados tt 
-//    ON EXTRACT(WEEK FROM f.""Fecha"") = tt.semana 
-//    AND EXTRACT(YEAR FROM f.""Fecha"") = tt.año
-//LEFT JOIN merma_semanal ms 
-//    ON EXTRACT(WEEK FROM f.""Fecha"") = ms.semana 
-//    AND EXTRACT(YEAR FROM f.""Fecha"") = ms.año
-//LEFT JOIN public.""Usuarios"" u 
-//    ON f.""ID_user"" = u.""ID_User""
-//LEFT JOIN public.""Usuarios"" jefe
-//    ON f.""ID_Jefe"" = jefe.""ID_User""
-    
-//-- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_operativo
-//    FROM public.""Tiempo_Muerto_Operativo""
-//    GROUP BY ""ID_Ficha""
-//) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
-//-- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
-//LEFT JOIN (
-//    SELECT 
-//        ""ID_Ficha"",
-//        SUM(""Min_Detenidos"") AS total_min_mecanico
-//    FROM public.""Tiempo_muerto_Mecanico""
-//    GROUP BY ""ID_Ficha""
-//) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-//WHERE f.""Area"" = 'Polvos'
-//ORDER BY f.""OP"" ASC;";
-//            }
-
-//            NpgsqlParameter[] parameters = new NpgsqlParameter[]
-//                    {
-//                        new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
-//                    };
-//            // Cargar los datos de la tabla Usuarios en el DataGridView
-//            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_consolidado, parameters);
-
-//            // Configurar el DataGridView
-//            rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar la columna ID
-//            rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
-
-
-//            rgv_reporte_consolidado.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Supervisor"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Jefe de Turno"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Personal Operativo"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo(Hrs)"].TextAlignment = ContentAlignment.MiddleCenter;
-//            rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico(Hrs)"].TextAlignment = ContentAlignment.MiddleCenter;
-
-//            if (var1 == "Despegue")
-//            {
-//                rgv_reporte_consolidado.Columns["Kg Frescos Entrada a Secador"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Kilos Producto Seco"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Kg Fuera de Especificación"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Kg para Resecar"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Relación Fresco-Seco"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["FTT"].TextAlignment = ContentAlignment.MiddleCenter;
-
-//            }
-//            if (var1 == "Tunel/Sumergidor")
-//            {
-//                rgv_reporte_consolidado.Columns["Kg Entrada(Proceso)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Kg Frescos Entrada a Secador"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Limpieza Túnel"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Canica(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma Podrido(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma Tina(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma Piso(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma Canaletas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Merma Lavado Bandas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Cáscara Carrete(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-
-//            }
-
-//            if (var1 == "Máquinas")
-//            {
-//                rgv_reporte_consolidado.Columns["Bobina Kg Entrada"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Bobina Utilizada"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Bobina Merma"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-//            if (var1 == "Polvos")
-//            {
-//                rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Granulo"].TextAlignment = ContentAlignment.MiddleCenter;
-//                rgv_reporte_consolidado.Columns["Limpieza Polvos"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            // 🔹 Formato de porcentaje para las columnas de tipo decimal
-//            if (rgv_reporte_consolidado.Columns.Contains("% Cumplimiento a Metas"))
-//            {
-//                var colMeta = rgv_reporte_consolidado.Columns["% Cumplimiento a Metas"];
-//                colMeta.DataType = typeof(decimal);
-//                colMeta.FormatString = "{0:P0}"; // ejemplo: 0.85 → 85%
-//                colMeta.TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("FTT"))
-//            {
-//                var colFTT = rgv_reporte_consolidado.Columns["FTT"];
-//                colFTT.DataType = typeof(decimal);
-//                colFTT.FormatString = "{0:P0}";
-//                colFTT.TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("% Aumento de Humedad"))
-//            {
-//                var colFTT = rgv_reporte_consolidado.Columns["% Aumento de Humedad"];
-//                colFTT.DataType = typeof(decimal);
-//                colFTT.FormatString = "{0:P0}";
-//                colFTT.TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("Meta(Kg)"))
-//            {
-//                rgv_reporte_consolidado.Columns["Meta(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("Kg Entrada(Proceso)"))
-//            {
-//                rgv_reporte_consolidado.Columns["Kg Entrada(Proceso)"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("Kg Producto Terminado"))
-//            {
-//                rgv_reporte_consolidado.Columns["Kg Producto Terminado"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("Kg Fuera de Especificación"))
-//            {
-//                rgv_reporte_consolidado.Columns["Kg Fuera de Especificación"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-
-//            if (rgv_reporte_consolidado.Columns.Contains("Merma(Kg)"))
-//            {
-//                rgv_reporte_consolidado.Columns["Merma(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-//            }
-//            rgv_reporte_consolidado.BestFitColumns(BestFitColumnMode.DisplayedCells);
-//            // Limpiar el filtro al cargar nuevos datos
-//            txt_filtro_report_consolidado.Clear();
-//        }
 
         private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
         {
@@ -17684,6 +17176,507 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_new_report_costo_Click(object sender, EventArgs e)
+        {
+            // Validar que la fecha inicial no sea mayor que la final
+            if (DTP_Costo_1.Value.Date > DTP_Costo_2.Value.Date)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "La fecha inicial no puede ser mayor que la fecha final.",
+                                "Validación de Fechas",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
+            reporte_costo();
+            btn_export_excel_costo.Enabled = true;
+            btn_clean_costo.Enabled = true;
+            txt_filtro_report_costo.Enabled = true;
+            btn_filtro_costo.Enabled = true;
+        }
+        private void reporte_costo()
+        {
+            string var1 = cb_area_costo.Text;
+            string querySimple = string.Empty;
+
+            // Obtener las fechas de los controles MetroDateTime
+            DateTime fechaInicio = DTP_Costo_1.Value.Date;
+            DateTime fechaFin = DTP_Costo_2.Value.Date;
+
+            rgv_reporte_costo.DataSource = null;
+            rgv_reporte_costo.Rows.Clear();
+            rgv_reporte_costo.Columns.Clear();
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Crear parámetros para las fechas
+            NpgsqlParameter[] parameters = null;
+
+            if (var1 == "Despegue")
+            {
+                querySimple = @"
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""Lote"",
+    f.""OP"",
+    c.""Costo""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
+WHERE f.""Area"" = 'Despegue'
+AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY f.""OP"" ASC;";
+
+                parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                };
+            }
+            else if (var1 == "Evaporado")
+            {
+                querySimple = @"
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""OP"",
+    c.""Costo""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
+WHERE f.""Area"" = 'Evaporado'
+AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY f.""OP"" ASC;";
+
+                parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                };
+            }
+            else if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
+            {
+                querySimple = @"
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""OP"",
+    c.""Costo""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
+WHERE f.""Area"" = @Area
+AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
+
+                parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                };
+            }
+            else if (var1 == "Máquinas")
+            {
+                querySimple = @"
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""OP"",
+    c.""Costo""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
+WHERE f.""Area"" = 'Máquinas'
+AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY f.""OP"" ASC;";
+
+                parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                };
+            }
+            else if (var1 == "Polvos")
+            {
+                querySimple = @"
+SELECT
+    f.""ID_Ficha"",
+    f.""Fecha"",
+    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+    f.""Turno"",
+    f.""OP"",
+    c.""Costo""
+FROM public.""Ficha"" f
+LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
+WHERE f.""Area"" = 'Polvos'
+AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY f.""OP"" ASC;";
+
+                parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                };
+            }
+
+            // Cargar los datos en el RadGridView
+            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_costo, parameters);
+
+            // Verificar si hay datos antes de configurar columnas
+            if (rgv_reporte_costo.Columns.Count > 0)
+            {
+                // Configurar el DataGridView
+                rgv_reporte_costo.Columns[0].IsVisible = false; // Ocultar la columna ID
+                rgv_reporte_costo.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+                rgv_reporte_costo.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_costo.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_costo.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
+                rgv_reporte_costo.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
+
+                // Configurar la columna Costo (si existe)
+                if (rgv_reporte_costo.Columns.Contains("Costo"))
+                {
+                    rgv_reporte_costo.Columns["Costo"].TextAlignment = ContentAlignment.MiddleRight;
+                    rgv_reporte_costo.Columns["Costo"].FormatString = "{0:N2}"; // Formato con 2 decimales
+                }
+
+                if (var1 == "Despegue")
+                {
+                    if (rgv_reporte_costo.Columns.Contains("Lote"))
+                    {
+                        rgv_reporte_costo.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
+                    }
+                }
+            }
+
+            // Limpiar el filtro al cargar nuevos datos
+            txt_filtro_report_costo.Clear();
+        }
+        //        private void reporte_costo()
+        //        {
+        //            string var1 = cb_area_costo.Text;
+        //            string querySimple = string.Empty;
+
+        //            // Obtener las fechas de los controles MetroDateTime
+        //            DateTime fechaInicio = DTP_Costo_1.Value.Date;
+        //            DateTime fechaFin = DTP_Costo_2.Value.Date; // Incluye todo el día final
+
+        //            rgv_reporte_costo.DataSource = null;
+        //            rgv_reporte_costo.Rows.Clear();
+        //            rgv_reporte_costo.Columns.Clear();
+        //            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+        //            // Crear parámetros para las fechas
+        //            NpgsqlParameter[] parameters = null;
+
+        //            if (var1 == "Despegue")
+        //            {
+        //                querySimple = @"
+        //SELECT
+        //    ""ID_Ficha"",
+        //    ""Fecha"",
+        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        //    ""Turno"",
+        //    ""Lote"",
+        //    ""OP""
+        //FROM public.""Ficha""
+
+        //WHERE ""Area"" = 'Despegue'
+        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+        //ORDER BY ""OP"" ASC;";
+
+        //                parameters = new NpgsqlParameter[]
+        //                {
+        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+        //                };
+        //            }
+        //            else if (var1 == "Evaporado")
+        //            {
+        //                querySimple = @"
+        //SELECT
+        //    ""ID_Ficha"",
+        //    ""Fecha"",
+        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        //    ""Turno"",
+        //    ""OP""
+        //FROM public.""Ficha""
+
+        //WHERE ""Area"" = 'Evaporado'
+        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+        //ORDER BY ""OP"" ASC;";
+
+        //                parameters = new NpgsqlParameter[]
+        //                {
+        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+        //                };
+        //            }
+        //            else if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
+        //            {
+        //                querySimple = @"
+        //SELECT
+        //    ""ID_Ficha"",
+        //    ""Fecha"",
+        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        //    ""Turno"",
+        //    ""OP""
+
+        //FROM public.""Ficha""
+
+        //WHERE ""Area"" = @Area
+        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+        //ORDER BY ""ID_Ficha"", ""OP"" ASC;";
+
+        //                parameters = new NpgsqlParameter[]
+        //                {
+        //            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+        //                };
+        //            }
+        //            else if (var1 == "Máquinas")
+        //            {
+        //                querySimple = @"
+        //SELECT
+        //    ""ID_Ficha"",
+        //    ""Fecha"",
+        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        //    ""Turno"",
+        //    ""OP""
+
+        //FROM public.""Ficha""
+
+        //WHERE ""Area"" = 'Máquinas'
+        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+        //ORDER BY ""OP"" ASC;";
+
+        //                parameters = new NpgsqlParameter[]
+        //                {
+        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+        //                };
+        //            }
+        //            else if (var1 == "Polvos")
+        //            {
+        //                querySimple = @"
+        //SELECT
+        //    ""ID_Ficha"",
+        //    ""Fecha"",
+        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        //    ""Turno"",
+        //    ""OP""
+
+        //FROM public.""Ficha""
+
+        //WHERE ""Area"" = 'Polvos'
+        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+        //ORDER BY ""OP"" ASC;";
+
+        //                parameters = new NpgsqlParameter[]
+        //                {
+        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+        //                };
+        //            }
+
+        //            // Cargar los datos de la tabla Usuarios en el DataGridView
+        //            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_costo, parameters);
+
+        //            // Verificar si hay datos antes de configurar columnas
+        //            if (rgv_reporte_costo.Columns.Count > 0)
+        //            {
+        //                // Configurar el DataGridView
+        //                rgv_reporte_costo.Columns[0].IsVisible = false; // Ocultar la columna ID
+        //                rgv_reporte_costo.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+        //                rgv_reporte_costo.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
+        //                rgv_reporte_costo.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
+        //                rgv_reporte_costo.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
+        //                rgv_reporte_costo.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
+        //                if (var1 == "Despegue")
+        //                {
+        //                    rgv_reporte_costo.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
+        //                }
+        //            }
+
+        //            // Limpiar el filtro al cargar nuevos datos
+        //            txt_filtro_report_costo.Clear();
+        //        }
+
+        private void cb_area_costo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_area_costo.SelectedIndex != -1)
+            {
+                btn_new_report_costo.Enabled = true;
+                DTP_Costo_1.Enabled = true;
+                DTP_Costo_2.Enabled = true;
+            }
+        }
+
+        private async void btn_export_excel_costo_Click(object sender, EventArgs e)
+        {
+
+            LoadingScreen.ShowLoading();
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx",
+                    Title = "Guardar archivo de Excel"
+                };
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveFileDialog.FileName;
+
+                    await Task.Run(() =>
+                    {
+                        ExportarRadGridViewFiltradoAExcel_ClosedXML(
+                            rgv_reporte_costo,
+                            filePath
+                        );
+                    });
+
+                    MetroFramework.MetroMessageBox.Show(
+                        this,
+                        "La exportación fue completada con éxito.",
+                        "Exportación a Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(
+                    this,
+                    "Error durante la exportación: " + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            finally
+            {
+                LoadingScreen.HideLoading();
+            }
+        }
+
+        private void btn_clean_costo_Click(object sender, EventArgs e)
+        {
+            // Limpiar el DataGridView
+            rgv_reporte_costo.DataSource = null;
+            rgv_reporte_costo.Rows.Clear();
+            rgv_reporte_costo.Columns.Clear();
+            // Limpiar el filtro al cargar nuevos datos
+            txt_filtro_report_costo.Clear();
+            // Deshabilitar botones hasta que se seleccione un reporte y área
+            btn_export_excel_costo.Enabled = false;
+            btn_clean_costo.Enabled = false;
+            txt_filtro_report_costo.Enabled = false;
+            btn_filtro_costo.Enabled = false;
+            btn_new_report_costo.Enabled = false;
+            DTP_Costo_1.Enabled = false;
+            DTP_Costo_2.Enabled = false;
+            cb_area_costo.SelectedIndex = -1;
+        }
+
+        private void btn_filtro_costo_Click(object sender, EventArgs e)
+        {
+            txt_filtro_report_costo.Clear();
+        }
+
+        private void rgv_reporte_costo_CustomFiltering(object sender, GridViewCustomFilteringEventArgs e)
+        {
+            string textoFiltro = txt_filtro_report_costo.Text.Trim();
+
+            // Si no hay texto de filtro, mostrar todas las filas
+            if (string.IsNullOrEmpty(textoFiltro))
+            {
+                e.Visible = true;
+                ResetearEstiloCeldas(e);
+                return;
+            }
+
+            // Iniciar actualización para mejor rendimiento
+            rgv_reporte_costo.BeginUpdate();
+
+            // Por defecto ocultar la fila
+            e.Visible = false;
+
+            // Buscar en todas las celdas de la fila
+            for (int i = 0; i < e.Row.Cells.Count; i++)
+            {
+                GridViewCellInfo celda = e.Row.Cells[i];
+
+                // Verificar si la celda tiene valor
+                if (celda.Value != null)
+                {
+                    string textoCelda = celda.Value.ToString();
+
+                    // Buscar coincidencia (case-insensitive)
+                    if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    {
+                        e.Visible = true; // Mostrar la fila si hay coincidencia
+
+                        // Resaltar la celda que coincide
+                        celda.Style.CustomizeFill = true;
+                        celda.Style.DrawFill = true;
+                        celda.Style.BackColor = Color.FromArgb(201, 252, 254); // Color azul claro
+                    }
+                    else
+                    {
+                        // Resetear estilo si no coincide
+                        celda.Style.Reset();
+                    }
+                }
+                else
+                {
+                    // Resetear estilo si la celda es nula
+                    celda.Style.Reset();
+                }
+            }
+
+            rgv_reporte_costo.EndUpdate(false);
+        }
+
+        private void txt_filtro_report_costo_TextChanged(object sender, EventArgs e)
+        {
+            // Refrescar el grid para aplicar el filtro
+            if (rgv_reporte_costo != null)
+            {
+                rgv_reporte_costo.MasterTemplate.Refresh();
+            }
+        }
+
+        private void rgv_reporte_costo_CellClick(object sender, GridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                string var1 = cb_area_costo.Text;
+                DateTime Fecha = DateTime.MinValue;
+
+                //habilitar controles
+                //txt_OP_costo_edit.Enabled = true;
+                //cb_turno_costo_edit.Enabled = true;
+                txt_costo.Enabled = true;
+
+                id_global_costo = rgv_reporte_costo.Rows[e.RowIndex].Cells[0].Value.ToString();
+                if (var1 == "Despegue") 
+                {
+                    txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[6].Value.ToString();
+                }else
+                {
+                    txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[5].Value.ToString();
+                }
             }
         }
     }
