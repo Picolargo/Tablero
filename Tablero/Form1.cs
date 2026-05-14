@@ -3193,7 +3193,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     cmb_area.Enabled = false;
                 }
             }
-            ///Maquinas
+            ///Máquinas
             ///
             if (cmb_area.SelectedIndex == 7 && (txt_op.Text == string.Empty || txt_Meta_1.Text == string.Empty || txt_Meta_2.Text == string.Empty || txt_Meta_3.Text == string.Empty || txt_Meta_5.Text == string.Empty))
             {
@@ -3997,9 +3997,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     MetroFramework.MetroMessageBox.Show(this, "No se pudo eliminar el OP", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            ///Maquinas
+            ///Máquinas
             ///
-            if (cmb_area.SelectedIndex == 7 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Maquinas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            if (cmb_area.SelectedIndex == 7 && (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confimar ó Presione No para cancelar", "¿Esta realmente seguro que desea borrar este OP de la tabla Máquinas?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
                 int id_OP = System.Convert.ToInt32(id_global_meta_maquinas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -12514,84 +12514,33 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
     f.""Area"",
     f.""OP"",
 
+    -- AHORA dará 41.08, no 246.48
     SUM(f.""Hr_programadas"") AS ""Hr Programadas"",
-	ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) As ""Hr Reales"",
-	COALESCE(ROUND(SUM(tmm.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Mecánico(Hrs)"",
-    COALESCE(ROUND(SUM(tmo.""Min_Detenidos"")/60.0,2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
+    
+    -- Horas Reales
+    ROUND(SUM(f.""Hr_programadas"") - COALESCE(SUM(tmm.total_min_mecanico) / 60.0, 0), 2) AS ""Hr Reales"",
+    
+    -- Tiempo Muerto Mecánico (sumado ANTES del JOIN)
+    COALESCE(ROUND(SUM(tmm.total_min_mecanico) / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)"",
+    
+    -- Tiempo Muerto Operativo (sumado ANTES del JOIN)
+    COALESCE(ROUND(SUM(tmo.total_min_operativo) / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
 
+    -- Porcentaje de cumplimiento
     ROUND(
         (1 - (
-            (COALESCE(SUM(tmo.""Min_Detenidos"")/60.0, 0) + COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)) / 
+            (COALESCE(SUM(tmo.total_min_operativo) / 60.0, 0) + COALESCE(SUM(tmm.total_min_mecanico) / 60.0, 0)) / 
             NULLIF(SUM(f.""Hr_programadas""), 0)
-        ))*100, 
+        )) * 100, 
     2) AS ""% Cumplimiento Tiempo Efectivo"",
 
-    ROUND(
-        CASE 
-            WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
-            WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
-            WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
-            WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
-            WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
-            WHEN f.""Area"" = 'Polvos' THEN 
-                CASE 
-                    WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
-                    ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
-                END
-            WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
-            ELSE 0
-        END
-        * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-    ,2) AS ""Kg Meta Hr Reales"",
-
+    -- Kg producidos
     SUM(f.""Kg_prod_term"") AS ""Kg Producidos"",
 
-    ROUND(
-        CASE 
-            WHEN 
-                (
-                    CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
-                                ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
-                        ELSE 0
-                    END
-                    * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                ) <= 0 THEN 0
-            ELSE LEAST(
-                (SUM(f.""Kg_prod_term"") / 
-                (
-                    CASE 
-                        WHEN f.""Area"" = 'Empacado' THEN COALESCE(e.""Meta_kg_hr_line"", 0)
-                        WHEN f.""Area"" = 'Evaporado' THEN COALESCE(ev.""Meta_kg_hr"", 0)
-                        WHEN f.""Area"" = 'Grind' THEN COALESCE(g.""Meta_Kg_hr"", 0)
-                        WHEN f.""Area"" = 'Inspeccion' THEN COALESCE(i.""Meta_kg_hr_line"", 0)
-                        WHEN f.""Area"" = 'Maquinas' THEN COALESCE(m.""Meta_Kg_Hr"", 0)
-                        WHEN f.""Area"" = 'Polvos' THEN 
-                            CASE 
-                                WHEN EXTRACT(MONTH FROM f.""Fecha"") BETWEEN 5 AND 9 THEN COALESCE(p.""Meta_kg_hr_hum"", 0)
-                                ELSE COALESCE(p.""Meta_kg_hr_idon"", 0)
-                            END
-                        WHEN f.""Area"" = 'Revolturas' THEN COALESCE(r.""Meta_Kg_Hr"", 0)
-                        ELSE 1
-                    END
-                    * ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2)
-                )) * 100,
-                100
-            )
-        END,
-    2) AS ""% Cumplimiento Kg Terminados"",
-
+    -- Kg fuera de especificación
     SUM(f.""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
 
+    -- FTT
     ROUND(
         CASE 
             WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
@@ -12602,28 +12551,33 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
         END,
     2) AS ""FTT"",
 
+    -- Personal promedio
     ROUND(AVG(f.""Personal_Operativo""))::integer AS ""Personal"",
 
+    -- Horas Hombre
     ROUND(
-        ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
-        * ROUND(AVG(f.""Personal_Operativo""))::integer, 2
-    ) AS ""Horas Hombre"",
+        ROUND(SUM(f.""Hr_programadas"") - COALESCE(SUM(tmm.total_min_mecanico) / 60.0, 0), 2) 
+        * ROUND(AVG(f.""Personal_Operativo""))::integer, 
+    2) AS ""Horas Hombre"",
 
+    -- Kg producidos por persona
     ROUND(
         CASE 
             WHEN (
-                ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
+                ROUND(SUM(f.""Hr_programadas"") - COALESCE(SUM(tmm.total_min_mecanico) / 60.0, 0), 2) 
                 * ROUND(AVG(f.""Personal_Operativo""))::integer
             ) <= 0 THEN 0
             ELSE SUM(f.""Kg_prod_term"") / (
-                ROUND((SUM(f.""Hr_programadas"")-COALESCE(SUM(tmm.""Min_Detenidos"")/60.0, 0)),2) 
+                ROUND(SUM(f.""Hr_programadas"") - COALESCE(SUM(tmm.total_min_mecanico) / 60.0, 0), 2) 
                 * ROUND(AVG(f.""Personal_Operativo""))::integer
             )
         END,
     2) AS ""Kg Producidos por Persona"",
 
+    -- Kg de merma
     SUM(f.""Merma_kg"") AS ""Kg de Merma"",
 
+    -- % Merma vs Producido
     ROUND(
         CASE 
             WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 0
@@ -12633,19 +12587,23 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
 FROM public.""Ficha"" f
 
-LEFT JOIN public.""Tiempo_Muerto_Operativo"" tmo 
-    ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+-- Subconsulta para tiempos muertos operativos (suma ANTES del JOIN)
+LEFT JOIN (
+    SELECT 
+        ""ID_Ficha"",
+        SUM(""Min_Detenidos"") AS total_min_operativo
+    FROM public.""Tiempo_Muerto_Operativo""
+    GROUP BY ""ID_Ficha""
+) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
 
-LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
-    ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-
-LEFT JOIN public.""Empacado"" e ON f.""OP"" = e.""OP""
-LEFT JOIN public.""Evaporado"" ev ON f.""OP"" = ev.""OP""
-LEFT JOIN public.""Grind"" g ON f.""OP"" = g.""OP""
-LEFT JOIN public.""Inspeccion"" i ON f.""OP"" = i.""OP""
-LEFT JOIN public.""Maquinas"" m ON f.""OP"" = m.""OP""
-LEFT JOIN public.""Polvos"" p ON f.""OP"" = p.""OP""
-LEFT JOIN public.""Revolturas"" r ON f.""OP"" = r.""OP""
+-- Subconsulta para tiempos muertos mecánicos (suma ANTES del JOIN)
+LEFT JOIN (
+    SELECT 
+        ""ID_Ficha"",
+        SUM(""Min_Detenidos"") AS total_min_mecanico
+    FROM public.""Tiempo_muerto_Mecanico""
+    GROUP BY ""ID_Ficha""
+) tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
 
 WHERE 
     f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
@@ -12656,15 +12614,7 @@ GROUP BY
     TO_CHAR(f.""Fecha"", 'TMMonth'),
     EXTRACT(WEEK FROM f.""Fecha""),
     f.""Area"",
-    f.""OP"",
-    e.""Meta_kg_hr_line"",
-    ev.""Meta_kg_hr"",
-    g.""Meta_Kg_hr"",
-    i.""Meta_kg_hr_line"",
-    m.""Meta_Kg_Hr"",
-    p.""Meta_kg_hr_hum"",
-    p.""Meta_kg_hr_idon"",
-    r.""Meta_Kg_Hr""
+    f.""OP""
 
 ORDER BY 
     ""Año"",
@@ -12812,8 +12762,8 @@ ORDER BY
                 if (!string.IsNullOrEmpty(semanaSeleccionada))
                 {
                     // Verificar la segunda columna (índice 1) para la semana
-                    if (row.Cells[1].Value != null &&
-                        row.Cells[1].Value.ToString().Equals(semanaSeleccionada))
+                    if (row.Cells[2].Value != null &&
+                        row.Cells[2].Value.ToString().Equals(semanaSeleccionada))
                     {
                         coincideSemana = true;
                     }
@@ -17209,6 +17159,7 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             rgv_reporte_costo.DataSource = null;
             rgv_reporte_costo.Rows.Clear();
             rgv_reporte_costo.Columns.Clear();
+            
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
             // Crear parámetros para las fechas
@@ -17356,160 +17307,10 @@ ORDER BY f.""OP"" ASC;";
                     }
                 }
             }
-
+            rgv_reporte_costo.ClearSelection();
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_costo.Clear();
         }
-        //        private void reporte_costo()
-        //        {
-        //            string var1 = cb_area_costo.Text;
-        //            string querySimple = string.Empty;
-
-        //            // Obtener las fechas de los controles MetroDateTime
-        //            DateTime fechaInicio = DTP_Costo_1.Value.Date;
-        //            DateTime fechaFin = DTP_Costo_2.Value.Date; // Incluye todo el día final
-
-        //            rgv_reporte_costo.DataSource = null;
-        //            rgv_reporte_costo.Rows.Clear();
-        //            rgv_reporte_costo.Columns.Clear();
-        //            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-        //            // Crear parámetros para las fechas
-        //            NpgsqlParameter[] parameters = null;
-
-        //            if (var1 == "Despegue")
-        //            {
-        //                querySimple = @"
-        //SELECT
-        //    ""ID_Ficha"",
-        //    ""Fecha"",
-        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-        //    ""Turno"",
-        //    ""Lote"",
-        //    ""OP""
-        //FROM public.""Ficha""
-
-        //WHERE ""Area"" = 'Despegue'
-        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-        //ORDER BY ""OP"" ASC;";
-
-        //                parameters = new NpgsqlParameter[]
-        //                {
-        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
-        //                };
-        //            }
-        //            else if (var1 == "Evaporado")
-        //            {
-        //                querySimple = @"
-        //SELECT
-        //    ""ID_Ficha"",
-        //    ""Fecha"",
-        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-        //    ""Turno"",
-        //    ""OP""
-        //FROM public.""Ficha""
-
-        //WHERE ""Area"" = 'Evaporado'
-        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-        //ORDER BY ""OP"" ASC;";
-
-        //                parameters = new NpgsqlParameter[]
-        //                {
-        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
-        //                };
-        //            }
-        //            else if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
-        //            {
-        //                querySimple = @"
-        //SELECT
-        //    ""ID_Ficha"",
-        //    ""Fecha"",
-        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-        //    ""Turno"",
-        //    ""OP""
-
-        //FROM public.""Ficha""
-
-        //WHERE ""Area"" = @Area
-        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-        //ORDER BY ""ID_Ficha"", ""OP"" ASC;";
-
-        //                parameters = new NpgsqlParameter[]
-        //                {
-        //            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
-        //                };
-        //            }
-        //            else if (var1 == "Máquinas")
-        //            {
-        //                querySimple = @"
-        //SELECT
-        //    ""ID_Ficha"",
-        //    ""Fecha"",
-        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-        //    ""Turno"",
-        //    ""OP""
-
-        //FROM public.""Ficha""
-
-        //WHERE ""Area"" = 'Máquinas'
-        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-        //ORDER BY ""OP"" ASC;";
-
-        //                parameters = new NpgsqlParameter[]
-        //                {
-        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
-        //                };
-        //            }
-        //            else if (var1 == "Polvos")
-        //            {
-        //                querySimple = @"
-        //SELECT
-        //    ""ID_Ficha"",
-        //    ""Fecha"",
-        //    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
-        //    ""Turno"",
-        //    ""OP""
-
-        //FROM public.""Ficha""
-
-        //WHERE ""Area"" = 'Polvos'
-        //AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-        //ORDER BY ""OP"" ASC;";
-
-        //                parameters = new NpgsqlParameter[]
-        //                {
-        //            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-        //            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
-        //                };
-        //            }
-
-        //            // Cargar los datos de la tabla Usuarios en el DataGridView
-        //            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_costo, parameters);
-
-        //            // Verificar si hay datos antes de configurar columnas
-        //            if (rgv_reporte_costo.Columns.Count > 0)
-        //            {
-        //                // Configurar el DataGridView
-        //                rgv_reporte_costo.Columns[0].IsVisible = false; // Ocultar la columna ID
-        //                rgv_reporte_costo.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
-        //                rgv_reporte_costo.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
-        //                rgv_reporte_costo.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
-        //                rgv_reporte_costo.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
-        //                rgv_reporte_costo.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
-        //                if (var1 == "Despegue")
-        //                {
-        //                    rgv_reporte_costo.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
-        //                }
-        //            }
-
-        //            // Limpiar el filtro al cargar nuevos datos
-        //            txt_filtro_report_costo.Clear();
-        //        }
 
         private void cb_area_costo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -17664,9 +17465,6 @@ ORDER BY f.""OP"" ASC;";
                 string var1 = cb_area_costo.Text;
                 DateTime Fecha = DateTime.MinValue;
 
-                //habilitar controles
-                //txt_OP_costo_edit.Enabled = true;
-                //cb_turno_costo_edit.Enabled = true;
                 txt_costo.Enabled = true;
 
                 id_global_costo = rgv_reporte_costo.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -17677,6 +17475,8 @@ ORDER BY f.""OP"" ASC;";
                 {
                     txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[5].Value.ToString();
                 }
+                btn_save_costo.Enabled = true;
+                btn_cancel_costo.Enabled = true;
             }
         }
     }
