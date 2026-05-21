@@ -491,6 +491,13 @@ namespace Tablero
 
                     // Cargar las semanas
                     CargarSemanasSimple();
+                    //cargar años en los combos de los reportes
+                    llenado_anios_concentrado_Des();
+                    llenado_anios_concentrado_otras_areas();
+                    llenado_anios_mermas_areas();
+                    llenado_anios_mermas_Sup();
+                    llenado_anios_tiempos();
+                    llenado_anios_cumplimientos();
 
                     menuStrip1.Visible = true; // Mostrar el menú para el administrador
                 }
@@ -529,6 +536,14 @@ namespace Tablero
 
                     // Cargar las semanas
                     CargarSemanasSimple();
+                //cargar años en los combos de los reportes
+                llenado_anios_concentrado_Des();
+                llenado_anios_concentrado_otras_areas();
+                llenado_anios_mermas_areas();
+                llenado_anios_mermas_Sup();
+                llenado_anios_tiempos();
+                llenado_anios_cumplimientos();
+
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
                 menuStrip1.Visible = false; // Mostrar el menú para el administrador
@@ -577,6 +592,7 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(metroTabPage9);
                 tapcontrol.TabPages.Remove(tabPage16);
                 tapcontrol.TabPages.Remove(tabPage17);
+                tapcontrol.TabPages.Remove(tabPage18);
 
                 dtp_polvos.Value = DateTime.Now;
                 dtp_tunel.Value = DateTime.Now;
@@ -588,6 +604,11 @@ namespace Tablero
                 actualiza_tunel_calidad();
                 configurar_limpieza();
                 ConfigurarTooltipParaComboBox();
+
+                //CARGAR COMBOS AÑOS
+                llenado_anios_mermas_areas();
+                llenado_anios_mermas_Sup();
+                llenado_anios_tiempos();
             }
             if (nivel_user == "Mantenimiento")
             {
@@ -606,6 +627,7 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage17);
                 tapcontrol.TabPages.Remove(metroTabPage10);
                 tapcontrol.TabPages.Remove(tabPage22);
+                llenado_anios_tiempos();
             }
         }
         private void ConfigurarTooltipParaComboBox()
@@ -638,7 +660,7 @@ namespace Tablero
         }
         private void ActualizarAnioReportes()
         {
-            // Cargar combobox OP
+            // Cargar combobox
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
             string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
@@ -646,6 +668,72 @@ namespace Tablero
             CB_Anio_grafica.SelectedIndex = 0;
             CB_Anio_grafica.Focus();
             cb_Area.Focus();
+        }
+        private void llenado_anios_concentrado_Des()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Con_Des, "Año", null);
+            CB_Anio_Con_Des.SelectedIndex = 0;
+            CB_Anio_Con_Des.Focus();
+            CB_Anio_Con_Des.Focus();
+        }
+        private void llenado_anios_concentrado_otras_areas()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Con_Otras_A, "Año", null);
+            CB_Anio_Con_Otras_A.SelectedIndex = 0;
+            CB_Anio_Con_Otras_A.Focus();
+            CB_Anio_Con_Otras_A.Focus();
+        }
+        private void llenado_anios_mermas_areas()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Mer_Area, "Año", null);
+            CB_Anio_Mer_Area.SelectedIndex = 0;
+            CB_Anio_Mer_Area.Focus();
+            CB_Anio_Mer_Area.Focus();
+        }
+        private void llenado_anios_mermas_Sup()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Mer_Sup, "Año", null);
+            CB_Anio_Mer_Sup.SelectedIndex = 0;
+            CB_Anio_Mer_Sup.Focus();
+            CB_Anio_Mer_Sup.Focus();
+        }
+        private void llenado_anios_tiempos()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Tiempos, "Año", null);
+            CB_Anio_Tiempos.SelectedIndex = 0;
+            CB_Anio_Tiempos.Focus();
+            CB_Anio_Tiempos.Focus();
+        }
+        private void llenado_anios_cumplimientos()
+        {
+            // Cargar combobox
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            string query = @"SELECT EXTRACT(YEAR FROM ""Fecha"") AS ""Año"" FROM public.""Ficha"" group by ""Año"" ORDER BY ""Año"" DESC ";
+            dbHelper.LoadDataIntoComboBox(query, CB_Anio_Cumplimiento, "Año", null);
+            CB_Anio_Cumplimiento.SelectedIndex = 0;
+            CB_Anio_Cumplimiento.Focus();
+            CB_Anio_Cumplimiento.Focus();
         }
         private void emaildatos() 
         {
@@ -1001,104 +1089,151 @@ namespace Tablero
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            string querySimple = @"WITH semanas AS (SELECT ""Area"", EXTRACT(WEEK FROM ""Fecha"") AS numero_semana, EXTRACT(YEAR FROM ""Fecha"") AS año,
-                                    -- Cálculo para Tunel/Sumergidor
-                                    CASE 
-                                        WHEN ""Area"" = 'Tunel/Sumergidor' THEN
-                                            SUM(""Merma_podrido"" + ""Merma_tina"" + ""Merma_piso"" + ""Merma_canaletas"" + ""Merma_lavado_bandas"") / 
-                                            NULLIF(SUM(""Kg_enter_proceso"" - ""Merma_canica""), 0)
-                                    END AS merma_tunel,
-        
-                                    -- Cálculo para Despegue (se unirá con Limpieza_tunel)
-                                    CASE 
-                                        WHEN ""Area"" = 'Despegue' THEN
-                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
-                                    END AS merma_despegue_base,
-        
-                                    -- Cálculo para otras áreas
-                                    CASE 
-                                        WHEN ""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
-                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_enter_proceso""), 0)
-                                    END AS merma_otras_areas,
-        
-                                    -- Cálculo para Polvos (se unirá con Limpieza_polvos)
-                                    CASE 
-                                        WHEN ""Area"" = 'Polvos' THEN
-                                            SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
-                                    END AS merma_polvos_base,
-        
-                                    -- Sumas para Despegue
-                                    SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_despegue,
-                                    SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_despegue,
-        
-                                    -- Sumas para Polvos
-                                    SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_polvos,
-                                    SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_polvos
-        
-                                FROM public.""Ficha""
-                                GROUP BY ""Area"", EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                            ),
+            // Obtener el año seleccionado del ComboBox
+            string añoSeleccionado = CB_Anio_Mer_Area.Text;
 
-                            limpieza_tunel_semanal AS (
-                                SELECT 
-                                    EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
-                                    EXTRACT(YEAR FROM ""Fecha"") AS año,
-                                    SUM(""Kg_merma"") AS kg_merma_tunel_semana
-                                FROM public.""Limpieza_tunel""
-                                GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                            ),
+            // Validar que se haya seleccionado un año
+            if (string.IsNullOrEmpty(añoSeleccionado))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un año antes de generar el reporte de mermas.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
-                            limpieza_polvos_semanal AS (
-                                SELECT 
-                                    EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
-                                    EXTRACT(YEAR FROM ""Fecha"") AS año,
-                                    SUM(""Kg_merma"") AS kg_merma_polvos_semana
-                                FROM public.""Limpieza_polvos""
-                                GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
-                            )
+            string querySimple = @"
+WITH semanas AS (
+    SELECT 
+        ""Area"", 
+        EXTRACT(WEEK FROM ""Fecha"") AS numero_semana, 
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        
+        -- Cálculo para Tunel/Sumergidor
+        CASE 
+            WHEN ""Area"" = 'Tunel/Sumergidor' THEN
+                SUM(""Merma_podrido"" + ""Merma_tina"" + ""Merma_piso"" + ""Merma_canaletas"" + ""Merma_lavado_bandas"") / 
+                NULLIF(SUM(""Kg_enter_proceso"" - ""Merma_canica""), 0)
+        END AS merma_tunel,
 
-                            SELECT 
-                                s.""Area"",
-                                s.numero_semana as ""Numero de Semana"",
-                                s.año as ""Año"",
-                                CASE 
-                                    WHEN s.""Area"" = 'Tunel/Sumergidor' THEN
-                                        ROUND(COALESCE(s.merma_tunel, 0) * 100, 2)
-            
-                                    WHEN s.""Area"" = 'Despegue' THEN
-                                        ROUND(
-                                            COALESCE(
-                                                (s.suma_merma_despegue + COALESCE(lt.kg_merma_tunel_semana, 0)) / 
-                                                NULLIF(s.suma_kg_seco_despegue, 0), 0) * 100, 2)
-            
-                                    WHEN s.""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
-                                        ROUND(COALESCE(s.merma_otras_areas, 0) * 100, 2)
-            
-                                    WHEN s.""Area"" = 'Polvos' THEN
-                                        ROUND(COALESCE((s.suma_merma_polvos + COALESCE(lp.kg_merma_polvos_semana, 0)) / NULLIF(s.suma_kg_seco_polvos, 0), 0) * 100, 2)
-                                    ELSE 0
-                                END AS ""Porcentaje de Merma""
-    
-                            FROM semanas s
-                            LEFT JOIN limpieza_tunel_semanal lt ON s.numero_semana = lt.numero_semana AND s.año = lt.año
-                            LEFT JOIN limpieza_polvos_semanal lp ON s.numero_semana = lp.numero_semana AND s.año = lp.año
-                            WHERE s.""Area"" IS NOT NULL
-                            ORDER BY s.año, s.numero_semana, s.""Area"";";
+        -- Cálculo para Despegue (se unirá con Limpieza_tunel)
+        CASE 
+            WHEN ""Area"" = 'Despegue' THEN
+                SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
+        END AS merma_despegue_base,
 
-            // Cargar los datos de la tabla Ficha en el DataGridView
-            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma, null);
+        -- Cálculo para otras áreas
+        CASE 
+            WHEN ""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
+                SUM(""Merma_kg"") / NULLIF(SUM(""Kg_enter_proceso""), 0)
+        END AS merma_otras_areas,
+
+        -- Cálculo para Polvos (se unirá con Limpieza_polvos)
+        CASE 
+            WHEN ""Area"" = 'Polvos' THEN
+                SUM(""Merma_kg"") / NULLIF(SUM(""Kg_prod_seco""), 0)
+        END AS merma_polvos_base,
+
+        -- Sumas para Despegue
+        SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_despegue,
+        SUM(CASE WHEN ""Area"" = 'Despegue' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_despegue,
+
+        -- Sumas para Polvos
+        SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Merma_kg"" ELSE 0 END) AS suma_merma_polvos,
+        SUM(CASE WHEN ""Area"" = 'Polvos' THEN ""Kg_prod_seco"" ELSE 0 END) AS suma_kg_seco_polvos
+
+    FROM public.""Ficha""
+    WHERE EXTRACT(YEAR FROM ""Fecha"") = @Anio
+    GROUP BY ""Area"", EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+),
+
+limpieza_tunel_semanal AS (
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        SUM(""Kg_merma"") AS kg_merma_tunel_semana
+    FROM public.""Limpieza_tunel""
+    WHERE EXTRACT(YEAR FROM ""Fecha"") = @Anio
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+),
+
+limpieza_polvos_semanal AS (
+    SELECT 
+        EXTRACT(WEEK FROM ""Fecha"") AS numero_semana,
+        EXTRACT(YEAR FROM ""Fecha"") AS año,
+        SUM(""Kg_merma"") AS kg_merma_polvos_semana
+    FROM public.""Limpieza_polvos""
+    WHERE EXTRACT(YEAR FROM ""Fecha"") = @Anio
+    GROUP BY EXTRACT(WEEK FROM ""Fecha""), EXTRACT(YEAR FROM ""Fecha"")
+)
+
+SELECT 
+    s.""Area"",
+    s.numero_semana as ""Numero de Semana"",
+    s.año as ""Año"",
+    CASE 
+        WHEN s.""Area"" = 'Tunel/Sumergidor' THEN
+            ROUND(COALESCE(s.merma_tunel, 0) * 100, 2)
+
+        WHEN s.""Area"" = 'Despegue' THEN
+            ROUND(
+                COALESCE(
+                    (s.suma_merma_despegue + COALESCE(lt.kg_merma_tunel_semana, 0)) / 
+                    NULLIF(s.suma_kg_seco_despegue, 0), 0) * 100, 2)
+
+        WHEN s.""Area"" IN ('Evaporado', 'Grind', 'Inspección', 'Empacado', 'Revolturas', 'Máquinas') THEN
+            ROUND(COALESCE(s.merma_otras_areas, 0) * 100, 2)
+
+        WHEN s.""Area"" = 'Polvos' THEN
+            ROUND(COALESCE((s.suma_merma_polvos + COALESCE(lp.kg_merma_polvos_semana, 0)) / NULLIF(s.suma_kg_seco_polvos, 0), 0) * 100, 2)
+        ELSE 0
+    END AS ""Porcentaje de Merma""
+
+FROM semanas s
+LEFT JOIN limpieza_tunel_semanal lt ON s.numero_semana = lt.numero_semana AND s.año = lt.año
+LEFT JOIN limpieza_polvos_semanal lp ON s.numero_semana = lp.numero_semana AND s.año = lp.año
+WHERE s.""Area"" IS NOT NULL
+ORDER BY s.año, s.numero_semana, s.""Area"";";
+
+            // Crear el parámetro para el año
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+        {
+            Value = Convert.ToInt32(añoSeleccionado)
+        }
+            };
+
+            // Cargar los datos de la tabla Ficha en el DataGridView con el filtro de año
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma, parameters);
         }
         private void actualiza_reporte_merma_S()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
+            // Obtener el año seleccionado del ComboBox
+            string añoSeleccionado = CB_Anio_Mer_Sup.Text;
+
+            // Validar que se haya seleccionado un año
+            if (string.IsNullOrEmpty(añoSeleccionado))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un año antes de generar el reporte de mermas por supervisor.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
-            string querySimple = @"WITH merma_usuario AS (
+            string querySimple = @"
+WITH merma_usuario AS (
     SELECT 
         u.""Usuario"" as ""Nombre_Usuario"",
         EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
         EXTRACT(YEAR FROM f.""Fecha"") AS año,
-		f.""Area"" As Area,
+        f.""Area"" As Area,
         SUM(
             CASE 
                 WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
@@ -1109,6 +1244,7 @@ namespace Tablero
     FROM public.""Ficha"" f
     INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
     WHERE f.""Area"" IS NOT NULL
+        AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
     GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha""), f.""Area""
 )
 
@@ -1116,13 +1252,22 @@ SELECT
     ""Nombre_Usuario"" AS ""Supervisor"",
     numero_semana as ""Numero de Semana"",
     año as ""Año"",
-	Area as ""Área"",
+    Area as ""Área"",
     COALESCE(total_merma_kg, 0) as ""Merma(Kg)""
 FROM merma_usuario
 ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
-            // Cargar los datos de la tabla Ficha en el DataGridView
-            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma_S, null);
+            // Crear el parámetro para el año
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+        {
+            Value = Convert.ToInt32(añoSeleccionado)
+        }
+            };
+
+            // Cargar los datos de la tabla Ficha en el DataGridView con el filtro de año
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_merma_S, parameters);
         }
         private void cb_Area_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -12026,10 +12171,24 @@ ORDER BY f.""OP"" ASC;";
         private void actualiza_reporte_concentrado()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////// la formula END AS ""Kg Fresco Meta / Hras Reales"", 
-            /////////////////////////////////////////////////////////////////////////////esta mal ya que debe ser meta*hras reales
-            // Consulta para la tabla Ficha filtrando por Área = 'Polvos'
-            string querySimple = @"SELECT 
+
+            // Obtener el año seleccionado del ComboBox
+            string añoSeleccionado = CB_Anio_Con_Des.Text;
+
+            // Validar que se haya seleccionado un año
+            if (string.IsNullOrEmpty(añoSeleccionado))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un año antes de generar el reporte.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Construir la consulta con filtro de año usando parámetros
+            string querySimple = @"
+SELECT 
     COALESCE(q1.""Año"", q2.""Año"", q3.""Año"") AS ""Año"",
     COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") AS ""No. Semana"",
     COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") AS ""Mes"",
@@ -12046,7 +12205,7 @@ ORDER BY f.""OP"" ASC;";
                     (COALESCE(q1.""Suma de Tiempo Muerto Operativo"", 0) +
                      COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))
                      / COALESCE(q2.""Horas Programadas"", 0) * 100
-                )
+                )::numeric
             , 2)
         ELSE 0
     END AS ""%Cumplimiento Tiempo Efectivo"",
@@ -12064,7 +12223,7 @@ ORDER BY f.""OP"" ASC;";
             LEAST(
                 ROUND(
                     (COALESCE(q3.""Kg Fresco Real"", 0) /
-                    (COALESCE(d.""Kg_fresco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))
+                    (COALESCE(d.""Kg_fresco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))::numeric
                     * 100
                 , 2),
             100)
@@ -12084,7 +12243,7 @@ ORDER BY f.""OP"" ASC;";
             LEAST(
                 ROUND(
                     (COALESCE(q3.""Kg Seco Real"", 0) /
-                    (COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))
+                    (COALESCE(d.""Kg_seco_hr"", 0) * (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))))::numeric
                     * 100
                 , 2),
             100)
@@ -12097,7 +12256,7 @@ ORDER BY f.""OP"" ASC;";
         WHEN (COALESCE(q3.""Kg Seco Real"", 0)) > 0 THEN
             ROUND(
                 (COALESCE(q3.""Kg Fresco Real"", 0) /
-                (COALESCE(q3.""Kg Seco Real"", 0))), 2)
+                (COALESCE(q3.""Kg Seco Real"", 0)))::numeric, 2)
         ELSE 0
     END AS ""Relación Fresco-Seco Real"",
 	
@@ -12107,7 +12266,7 @@ ORDER BY f.""OP"" ASC;";
                 ROUND(
                     (((COALESCE(q3.""Kg Fresco Real"", 0) /
                     (COALESCE(q3.""Kg Seco Real"", 0)))) /
-                    (COALESCE(d.""Relacion_fr_seco"", 0)))
+                    (COALESCE(d.""Relacion_fr_seco"", 0)))::numeric
                     * 100
                 , 2),
             100)
@@ -12121,29 +12280,41 @@ ORDER BY f.""OP"" ASC;";
             ROUND(
                 ((COALESCE(q3.""Kg Seco Real"", 0) - 
                   COALESCE(q3.""Kg Fuera de Especificación"", 0))
-                  / COALESCE(q3.""Kg Seco Real"", 0)) * 100
+                  / COALESCE(q3.""Kg Seco Real"", 0))::numeric * 100
             , 2)
         ELSE 0
     END AS ""FTT"",
 
-    -- Personal Operativo Promedio: Promedio de (Personal Despegue + Personal Tunel/Sumergidor)
+    COALESCE(q3.""Kg para Resecar"", 0) AS ""Kg para Resecar"",
+
+    CASE 
+        WHEN COALESCE(q3.""Kg Seco Real"", 0) > 0 THEN
+            LEAST(
+                ROUND(
+                    ((COALESCE(q3.""Kg Seco Real"", 0) - COALESCE(q3.""Kg para Resecar"", 0)) / COALESCE(q3.""Kg Seco Real"", 0))::numeric * 100
+                , 2),
+            100)
+        ELSE 0
+    END AS ""%Cumplimiento Resecado"",
+
     CASE 
         WHEN COALESCE(q3.""Personal Operativo Suma Despegue"", 0) = 0 AND COALESCE(q4.""Personal Operativo Suma Tunel"", 0) = 0 THEN 0
         ELSE ROUND(
-            (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0)) /
+            (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0))::numeric /
             NULLIF(COALESCE(q3.""Cantidad Registros Despegue"", 0) + COALESCE(q4.""Cantidad Registros Tunel"", 0), 0)
         )::integer
     END AS ""Personal Operativo Promedio"",
 
-    -- Horas Hombre (redondeado a 2 decimales)
     ROUND(
         CASE 
             WHEN COALESCE(q3.""Personal Operativo Suma Despegue"", 0) = 0 AND COALESCE(q4.""Personal Operativo Suma Tunel"", 0) = 0 THEN 0
-            ELSE (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0)) /
+            ELSE (COALESCE(q3.""Personal Operativo Suma Despegue"", 0) + COALESCE(q4.""Personal Operativo Suma Tunel"", 0))::numeric /
                   NULLIF(COALESCE(q3.""Cantidad Registros Despegue"", 0) + COALESCE(q4.""Cantidad Registros Tunel"", 0), 0) *
                   (COALESCE(q2.""Horas Programadas"", 0) - COALESCE(q1.""Suma de Tiempo Muerto Mecanico"", 0))
         END,
-    2) AS ""Horas Hombre""
+    2) AS ""Horas Hombre"",
+
+    COALESCE(q5.""Kg Merma en Fresco"", 0) AS ""Kg Merma en Fresco""
 
 FROM (
     SELECT 
@@ -12173,6 +12344,7 @@ FROM (
     LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
         ON f.""ID_Ficha"" = tmm.""ID_Ficha""
     WHERE f.""Area"" IN ('Despegue')
+        AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
     GROUP BY 
         EXTRACT(YEAR FROM f.""Fecha""),
         EXTRACT(WEEK FROM f.""Fecha""),
@@ -12203,6 +12375,7 @@ FULL JOIN (
         SUM(""Hr_programadas"") AS ""Horas Programadas""
     FROM public.""Ficha""
     WHERE ""Area"" = 'Tunel/Sumergidor'
+        AND EXTRACT(YEAR FROM ""Fecha"") = @Anio
     GROUP BY 
         EXTRACT(YEAR FROM ""Fecha""),
         EXTRACT(WEEK FROM ""Fecha""),
@@ -12237,11 +12410,13 @@ FULL JOIN (
         SUM(""kg_frescos_enter_se"") AS ""Kg Fresco Real"",
         SUM(""Kg_prod_seco"") AS ""Kg Seco Real"",
         SUM(""Kg_fuera_espec"") AS ""Kg Fuera de Especificación"",
+        SUM(""Kg_resecar"") AS ""Kg para Resecar"",
         SUM(""Personal_Operativo"") AS ""Personal Operativo Suma Despegue"",
         COUNT(""Personal_Operativo"") AS ""Cantidad Registros Despegue"",
         SUM(""Merma_kg"") AS ""Kg Merma en Despegue""
     FROM public.""Ficha""
     WHERE ""Area"" = 'Despegue'
+        AND EXTRACT(YEAR FROM ""Fecha"") = @Anio
     GROUP BY 
         EXTRACT(YEAR FROM ""Fecha""),
         EXTRACT(WEEK FROM ""Fecha""),
@@ -12277,6 +12452,7 @@ LEFT JOIN (
         COUNT(""Personal_Operativo"") AS ""Cantidad Registros Tunel""
     FROM public.""Ficha""
     WHERE ""Area"" = 'Tunel/Sumergidor'
+        AND EXTRACT(YEAR FROM ""Fecha"") = @Anio
     GROUP BY 
         EXTRACT(YEAR FROM ""Fecha""),
         EXTRACT(WEEK FROM ""Fecha""),
@@ -12288,13 +12464,62 @@ AND COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"") = q4.""No.
 AND COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"") = q4.""Mes""
 AND COALESCE(q1.""OP"", q2.""OP"", q3.""OP"") = q4.""OP""
 
+LEFT JOIN (
+    SELECT 
+        EXTRACT(YEAR FROM ""Fecha"") AS ""Año"",
+        EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+        EXTRACT(MONTH FROM ""Fecha"") AS ""MesNum"",
+        CASE EXTRACT(MONTH FROM ""Fecha"")
+            WHEN 1 THEN 'Enero'
+            WHEN 2 THEN 'Febrero'
+            WHEN 3 THEN 'Marzo'
+            WHEN 4 THEN 'Abril'
+            WHEN 5 THEN 'Mayo'
+            WHEN 6 THEN 'Junio'
+            WHEN 7 THEN 'Julio'
+            WHEN 8 THEN 'Agosto'
+            WHEN 9 THEN 'Septiembre'
+            WHEN 10 THEN 'Octubre'
+            WHEN 11 THEN 'Noviembre'
+            WHEN 12 THEN 'Diciembre'
+        END AS ""Mes"",
+        ""OP"",
+        COALESCE(SUM(""Merma_podrido""), 0) + 
+        COALESCE(SUM(""Merma_tina""), 0) + 
+        COALESCE(SUM(""Merma_piso""), 0) + 
+        COALESCE(SUM(""Merma_canaletas""), 0) + 
+        COALESCE(SUM(""Merma_lavado_bandas""), 0) AS ""Kg Merma en Fresco""
+    FROM public.""Ficha""
+    WHERE ""Area"" = 'Tunel/Sumergidor'
+        AND EXTRACT(YEAR FROM ""Fecha"") = @Anio
+    GROUP BY 
+        EXTRACT(YEAR FROM ""Fecha""),
+        EXTRACT(WEEK FROM ""Fecha""),
+        EXTRACT(MONTH FROM ""Fecha""),
+        ""OP""
+) q5
+ON COALESCE(q1.""Año"", q2.""Año"", q3.""Año"", q4.""Año"") = q5.""Año""
+AND COALESCE(q1.""No. Semana"", q2.""No. Semana"", q3.""No. Semana"", q4.""No. Semana"") = q5.""No. Semana""
+AND COALESCE(q1.""Mes"", q2.""Mes"", q3.""Mes"", q4.""Mes"") = q5.""Mes""
+AND COALESCE(q1.""OP"", q2.""OP"", q3.""OP"", q4.""OP"") = q5.""OP""
+
 LEFT JOIN public.""Deshidratado"" d
-ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"", q4.""OP"") = d.""OP""
+ON COALESCE(q1.""OP"", q2.""OP"", q3.""OP"", q4.""OP"", q5.""OP"") = d.""OP""
 
 ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
-            // Cargar los datos de la tabla Ficha en el DataGridView
-            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, null);
+            // Crear el parámetro para el año
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+        {
+            Value = Convert.ToInt32(añoSeleccionado)
+        }
+            };
+
+            // Cargar los datos con el filtro de año
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado, parameters);
+
             // Quitar selección inicial
             dgv_reporte_concentrado.ClearSelection();
         }
@@ -12515,9 +12740,25 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
         private void actualiza_reporte_concentrado_otras()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+            // Obtener el año seleccionado del ComboBox
+            string añoSeleccionado = CB_Anio_Con_Otras_A.Text;
+
+            // Validar que se haya seleccionado un año
+            if (string.IsNullOrEmpty(añoSeleccionado))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un año antes de generar el reporte de otras áreas.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             //////////////aqui tengo que hace una modificacion las horas efectivas en el reporte solo se restan horas mecanicas de tiempo muerto y esto afecta a todo
 
-            string querySimple = @"SELECT 
+            string querySimple = @"
+SELECT 
     EXTRACT(YEAR FROM f.""Fecha"") AS ""Año"",
     TO_CHAR(f.""Fecha"", 'TMMonth') AS ""Mes"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. de Semana"",
@@ -12617,6 +12858,7 @@ LEFT JOIN (
 
 WHERE 
     f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
 GROUP BY 
     EXTRACT(YEAR FROM f.""Fecha""),
@@ -12633,9 +12875,24 @@ ORDER BY
     f.""Area"",
     f.""OP"";";
 
-            // Cargar los datos de la tabla Ficha en el DataGridView
-            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, null);
-            dgv_reporte_concentrado_otras.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            // Crear el parámetro para el año
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+        {
+            Value = Convert.ToInt32(añoSeleccionado)
+        }
+            };
+
+            // Cargar los datos de la tabla Ficha en el DataGridView con el filtro de año
+            dbHelper.LoadDataIntoDataGridView(querySimple, dgv_reporte_concentrado_otras, parameters);
+
+            // Configurar el AutoSizeMode de la columna Area (índice 3)
+            if (dgv_reporte_concentrado_otras.Columns.Count > 3)
+            {
+                dgv_reporte_concentrado_otras.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+
             dgv_reporte_concentrado_otras.ClearSelection();
         }
         //dgv_reporte_concentrado_otras
@@ -14424,37 +14681,6 @@ ORDER BY
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-        //        string query = @"
-        //WITH FTT_Por_Area AS (
-        //    SELECT 
-        //        EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
-        //        f.""Area"",
-        //        CASE 
-        //            WHEN SUM(f.""Kg_prod_term"") <= 0 THEN 100
-        //            ELSE LEAST(
-        //                ((SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / SUM(f.""Kg_prod_term"")) * 100,
-        //                100
-        //            )
-        //        END AS ""FTT""
-        //    FROM 
-        //        public.""Ficha"" f
-        //    WHERE 
-        //        f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-        //        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-        //        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-        //    GROUP BY 
-        //        EXTRACT(WEEK FROM f.""Fecha""),
-        //        f.""Area""
-        //)
-        //SELECT 
-        //    ""No_Semana"",
-        //    ROUND(AVG(""FTT""), 2) AS ""FTT""
-        //FROM 
-        //    FTT_Por_Area
-        //GROUP BY 
-        //    ""No_Semana""
-        //ORDER BY 
-        //    ""No_Semana""";
                 string query = @"SELECT 
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No_Semana"",
     
@@ -14619,34 +14845,6 @@ ORDER BY
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-                //        string query = @"
-                //WITH merma_usuario AS (
-                //    SELECT 
-                //        u.""Usuario"" as ""Nombre_Usuario"",
-                //        EXTRACT(WEEK FROM f.""Fecha"") AS numero_semana, 
-                //        EXTRACT(YEAR FROM f.""Fecha"") AS año,
-                //        SUM(
-                //            CASE 
-                //                WHEN f.""Area"" = 'Tunel/Sumergidor' THEN
-                //                    f.""Merma_podrido"" + f.""Merma_tina"" + f.""Merma_piso"" + f.""Merma_canaletas"" + f.""Merma_lavado_bandas""
-                //                ELSE f.""Merma_kg""
-                //            END
-                //        ) AS total_merma_kg
-                //    FROM public.""Ficha"" f
-                //    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
-                //    WHERE f.""Area"" IS NOT NULL
-                //        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-                //        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-                //    GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
-                //)
-
-                //SELECT 
-                //    ""Nombre_Usuario"" AS ""Supervisor"",
-                //    numero_semana as ""No_Semana"",
-                //    año as ""Año"",
-                //    COALESCE(total_merma_kg, 0) as ""Merma_Kg""
-                //FROM merma_usuario
-                //ORDER BY año, numero_semana, ""Nombre_Usuario""";
                 string query = @"
 WITH merma_usuario AS (
     SELECT 
@@ -16674,9 +16872,23 @@ ORDER BY
             rgv_reporte_Tiempos.Columns.Clear();
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
+            // Obtener el año seleccionado del ComboBox
+            string añoSeleccionado = CB_Anio_Tiempos.Text;
+
+            // Validar que se haya seleccionado un año
+            if (string.IsNullOrEmpty(añoSeleccionado))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un año antes de generar el reporte de tiempos.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (var1 == "Todos")
             {
-                // Consulta para TODAS las áreas - ACTUALIZADA con columnas Tipo
+                // Consulta para TODAS las áreas - ACTUALIZADA con filtro de año
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
@@ -16688,6 +16900,7 @@ ORDER BY
 FROM ""Ficha"" f
 LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
 WHERE tmo.""Min_Detenidos"" IS NOT NULL
+    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
 UNION ALL
 
@@ -16695,22 +16908,30 @@ SELECT
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"", -- Usa la columna Tipo real
+    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
     (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmm.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
 FROM ""Ficha"" f
 LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
 WHERE tmm.""Min_Detenidos"" IS NOT NULL
+    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
 ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
 
-                NpgsqlParameter[] parameters = new NpgsqlParameter[0]; // Sin parámetros
+                // Crear parámetro para el año
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+            {
+                Value = Convert.ToInt32(añoSeleccionado)
+            }
+                };
                 dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
             }
             else
             {
-                // Consulta para un área específica - ACTUALIZADA con columnas Tipo
+                // Consulta para un área específica - ACTUALIZADA con filtro de año
                 querySimple = @"SELECT 
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
@@ -16723,6 +16944,7 @@ FROM ""Ficha"" f
 LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
 WHERE (f.""Area"" = @Area)
    AND tmo.""Min_Detenidos"" IS NOT NULL
+   AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
 UNION ALL
 
@@ -16730,7 +16952,7 @@ SELECT
     f.""OP"" AS ""OP"",
     f.""Fecha"" AS ""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"", -- Usa la columna Tipo real
+    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
     (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
     tmm.""Motivos"" AS ""Motivos"",
     f.""Area"" AS ""Area""
@@ -16738,19 +16960,28 @@ FROM ""Ficha"" f
 LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
 WHERE (f.""Area"" = @Area)
    AND tmm.""Min_Detenidos"" IS NOT NULL
+   AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
 ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
+                // Crear parámetros para área y año
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value }
+            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+            new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+            {
+                Value = Convert.ToInt32(añoSeleccionado)
+            }
                 };
                 dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
             }
 
-            // Formato solo fecha
-            rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
-            rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
+            // Formato solo fecha (verificar que la columna existe)
+            if (rgv_reporte_Tiempos.Columns.Contains("Fecha"))
+            {
+                rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+                rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
+            }
         }
         private void cb_area_reporte_Tiempos_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -17018,7 +17249,7 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
         {
             string colName = dgv_reporte_concentrado.Columns[e.ColumnIndex].Name;
 
-            if (colName != "%Cumplimiento Tiempo Efectivo" && colName != "%Cumplimiento Fresco" && colName != "%Cumplimiento Secos" && colName != "%Cumplimiento Relación Fresco-Seco" && colName != "FTT")
+            if (colName != "%Cumplimiento Tiempo Efectivo" && colName != "%Cumplimiento Fresco" && colName != "%Cumplimiento Secos" && colName != "%Cumplimiento Relación Fresco-Seco" && colName != "FTT" && colName != "%Cumplimiento Resecado")
                 return;
 
             if (e.Value == null || e.Value == DBNull.Value)
@@ -17109,8 +17340,8 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                 reporte.PasswordEmail = PasswordEmail;
                 reporte.DestinatariosEmail = DestinatariosEmail;
                 reporte.SSLCheck = SSLCheck;
-
-                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
+                string anio_select = CB_Anio_Cumplimiento.Text;
+                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas, anio_select);
 
                 if (resultado)
                 {

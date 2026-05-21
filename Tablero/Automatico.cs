@@ -268,6 +268,7 @@ namespace Tablero
 
                 // Obtener automáticamente la semana anterior
                 List<int> semanasSeleccionadas = reporte.ObtenerSemanaAnterior();
+                string anio_semana_anterior = reporte.ObtenerAnioSemanaAnterior();
 
                 email_varibles();
                 reporte.ServidorSMTP = servidor_smtp;
@@ -277,7 +278,7 @@ namespace Tablero
                 reporte.DestinatariosEmail = DestinatariosEmail;
                 reporte.SSLCheck = SSLCheck;
                 // Generar y enviar el reporte
-                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas);
+                bool resultado = reporte.GenerarYEnviarReporte(semanasSeleccionadas, anio_semana_anterior);
                 
 
                 // Variable para indicar si tu código se ejecutó correctamente

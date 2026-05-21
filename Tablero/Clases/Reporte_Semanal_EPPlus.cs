@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Windows.Forms;
 
 namespace Tablero
 {
@@ -61,10 +62,32 @@ namespace Tablero
             listaSemanas.Add(semanaNum);
             return listaSemanas;
         }
+        public string ObtenerAnioSemanaAnterior()
+        {
+            // Obtener la fecha actual y calcular la semana anterior
+            DateTime fechaActual = DateTime.Now;
+
+            // Ir al lunes de la semana actual y restar 7 días para obtener el lunes de la semana anterior
+            int diff = (fechaActual.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)fechaActual.DayOfWeek) - 1;
+            DateTime lunesSemanaActual = fechaActual.AddDays(-diff).Date;
+            DateTime lunesSemanaAnterior = lunesSemanaActual.AddDays(-7);
+
+            // Obtener el año correspondiente a esa fecha
+            int año = lunesSemanaAnterior.Year;
+
+            // Opcional: También podrías obtener el año según la cultura si la semana cruza años
+            // Por ejemplo, si quieres seguir la misma lógica que GetWeekOfYear:
+            CultureInfo ci = CultureInfo.CurrentCulture;
+            Calendar cal = ci.Calendar;
+            int añoSegunCultura = cal.GetYear(lunesSemanaAnterior);
+
+            // Retornar el año como string
+            return añoSegunCultura.ToString();
+        }
 
         #region Métodos de obtención de datos (iguales a tu clase original)
 
-        public DataTable GetDataEvaporado(List<int> semanasSeleccionadas)
+        public DataTable GetDataEvaporado(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -80,7 +103,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Evaporado'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -107,7 +130,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataGrind(List<int> semanasSeleccionadas)
+        public DataTable GetDataGrind(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -123,7 +146,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Grind'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -150,7 +173,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataInspeccion(List<int> semanasSeleccionadas)
+        public DataTable GetDataInspeccion(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -166,7 +189,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Inspeccion'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -193,7 +216,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataPolvos(List<int> semanasSeleccionadas)
+        public DataTable GetDataPolvos(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -209,7 +232,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Polvos'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -236,7 +259,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataEmpacado(List<int> semanasSeleccionadas)
+        public DataTable GetDataEmpacado(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -252,7 +275,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Empacado'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -279,7 +302,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataRevolturas(List<int> semanasSeleccionadas)
+        public DataTable GetDataRevolturas(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -295,7 +318,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Revolturas'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -322,7 +345,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataMaquinas(List<int> semanasSeleccionadas)
+        public DataTable GetDataMaquinas(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -338,7 +361,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Máquinas'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -365,7 +388,7 @@ ORDER BY semana ASC";
             return dbHelper.ExecuteSelectQuery(query);
         }
 
-        public DataTable GetDataDeshidratado(List<int> semanasSeleccionadas)
+        public DataTable GetDataDeshidratado(List<int> semanasSeleccionadas, string anio)
         {
             if (semanasSeleccionadas == null || semanasSeleccionadas.Count == 0)
                 return new DataTable();
@@ -381,7 +404,7 @@ WITH fechas_con_semana AS (
         f.""Kg_fuera_espec""
     FROM public.""Ficha"" f
     WHERE f.""Area"" = 'Despegue'
-        AND EXTRACT(YEAR FROM f.""Fecha"") = EXTRACT(YEAR FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {Convert.ToInt32(anio)}
 ),
 datos_por_semana AS (
     SELECT 
@@ -750,7 +773,7 @@ ORDER BY semana ASC";
         }
         #region Métodos para generar el Excel con EPPlus
 
-        public string GenerarExcel(List<int> semanasSeleccionadas)
+        public string GenerarExcel(List<int> semanasSeleccionadas, string anio)
         {
             try
             {
@@ -758,14 +781,14 @@ ORDER BY semana ASC";
                 ExcelPackage.License.SetNonCommercialPersonal("ReporteSemanal");
 
                 // Obtener datos
-                DataTable datosEvaporado = GetDataEvaporado(semanasSeleccionadas);
-                DataTable datosGrind = GetDataGrind(semanasSeleccionadas);
-                DataTable datosInspeccion = GetDataInspeccion(semanasSeleccionadas);
-                DataTable datosPolvos = GetDataPolvos(semanasSeleccionadas);
-                DataTable datosEmpacado = GetDataEmpacado(semanasSeleccionadas);
-                DataTable datosRevolturas = GetDataRevolturas(semanasSeleccionadas);
-                DataTable datosMaquinas = GetDataMaquinas(semanasSeleccionadas);
-                DataTable datosDeshidratado = GetDataDeshidratado(semanasSeleccionadas);
+                DataTable datosEvaporado = GetDataEvaporado(semanasSeleccionadas, anio);
+                DataTable datosGrind = GetDataGrind(semanasSeleccionadas, anio);
+                DataTable datosInspeccion = GetDataInspeccion(semanasSeleccionadas, anio);
+                DataTable datosPolvos = GetDataPolvos(semanasSeleccionadas, anio);
+                DataTable datosEmpacado = GetDataEmpacado(semanasSeleccionadas, anio);
+                DataTable datosRevolturas = GetDataRevolturas(semanasSeleccionadas, anio);
+                DataTable datosMaquinas = GetDataMaquinas(semanasSeleccionadas, anio);
+                DataTable datosDeshidratado = GetDataDeshidratado(semanasSeleccionadas, anio);
 
                 System.Data.DataTable datosGrafica = ObtenerDatosParaGrafica(
                     datosEvaporado, datosGrind, datosInspeccion,
@@ -1143,49 +1166,6 @@ ORDER BY semana ASC";
 
             return filaActual;
         }
-
-        //private void GenerarGraficaEPPlus(ExcelWorksheet worksheet, DataTable datosGrafica, int filaInicio, int columnaInicio)
-        //{
-        //    if (datosGrafica.Rows.Count == 0) return;
-
-        //    var tempSheet = worksheet.Workbook.Worksheets.Add("TempData");
-        //    tempSheet.Cells[1, 1].Value = "Semana";
-        //    tempSheet.Cells[1, 2].Value = "Cumplimiento";
-        //    tempSheet.Cells[1, 1].Style.Font.Bold = true;
-        //    tempSheet.Cells[1, 2].Style.Font.Bold = true;
-
-        //    for (int i = 0; i < datosGrafica.Rows.Count; i++)
-        //    {
-        //        tempSheet.Cells[i + 2, 1].Value = Convert.ToInt32(datosGrafica.Rows[i]["Semana"]);
-        //        tempSheet.Cells[i + 2, 2].Value = Convert.ToDecimal(datosGrafica.Rows[i]["Total"]);
-        //        tempSheet.Cells[i + 2, 2].Style.Numberformat.Format = "0%";
-        //    }
-
-        //    var chart = worksheet.Drawings.AddChart("CumplimientoChart", eChartType.ColumnClustered);
-        //    chart.SetPosition(filaInicio, 0, columnaInicio, 0);
-        //    chart.SetSize(600, 400);
-
-        //    var serie = chart.Series.Add(tempSheet.Cells[2, 2, datosGrafica.Rows.Count + 1, 2],
-        //                                 tempSheet.Cells[2, 1, datosGrafica.Rows.Count + 1, 1]) as ExcelBarChartSerie;
-
-        //    if (serie != null)
-        //    {
-        //        serie.Header = "Cumplimiento Semanal";
-
-        //        serie.DataLabel.ShowValue = true;
-        //    }
-
-        //    chart.Title.Text = "Cumplimiento Semanal";
-        //    chart.Title.Font.Bold = true;
-        //    chart.Title.Font.Size = 14;
-        //    chart.XAxis.Title.Text = "Semana";
-        //    chart.XAxis.Title.Font.Bold = true;
-        //    chart.YAxis.Title.Text = "Cumplimiento (%)";
-        //    chart.YAxis.Title.Font.Bold = true;
-        //    chart.YAxis.Format = "0%";
-        //    chart.Legend.Remove();
-        //    chart.Style = eChartStyle.Style1;
-        //}
         private void GenerarGraficaEPPlus(ExcelWorksheet worksheet, DataTable datosGrafica, int filaInicio, int columnaInicio)
         {
             if (datosGrafica.Rows.Count == 0) return;
@@ -1321,12 +1301,12 @@ ORDER BY semana ASC";
             }
         }
 
-        public bool GenerarYEnviarReporte(List<int> semanasSeleccionadas)
+        public bool GenerarYEnviarReporte(List<int> semanasSeleccionadas, string anio)
         {
             string archivoExcel = null;
             try
             {
-                archivoExcel = GenerarExcel(semanasSeleccionadas);
+                archivoExcel = GenerarExcel(semanasSeleccionadas, anio);
                 bool enviado = EnviarReportePorCorreo(archivoExcel, semanasSeleccionadas);
                 return enviado;
             }
