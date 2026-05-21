@@ -438,6 +438,7 @@ namespace Tablero
         private void Form_principal_Load(object sender, EventArgs e)
         {
             materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo es el modulo de productos o fichas de producción
+            
             if (nivel_user == "Super Administrador")
             {
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -523,7 +524,13 @@ namespace Tablero
                 ActualizarAnioReportes();
                 carga_Jefes();
                 ConfigurarTooltipParaComboBox();
+                // Configurar el ListView
+                    ConfigurarListViewSimple();
+
+                    // Cargar las semanas
+                    CargarSemanasSimple();
                 materialTabControl1.TabPages.Remove(tabPage3);
+                materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
                 menuStrip1.Visible = false; // Mostrar el menú para el administrador
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
@@ -531,7 +538,8 @@ namespace Tablero
                 // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
-                materialTabControl1.TabPages.Remove(tabPage11); 
+                materialTabControl1.TabPages.Remove(tabPage11);
+                materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
 
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
 
@@ -564,6 +572,7 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
                 materialTabControl1.TabPages.Remove(tabPage9);
+                materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
 
                 tapcontrol.TabPages.Remove(metroTabPage9);
                 tapcontrol.TabPages.Remove(tabPage16);
@@ -590,6 +599,7 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage9);
                 materialTabControl1.TabPages.Remove(tabPage11);
                 materialTabControl1.TabPages.Remove(tabPage36);
+                materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
 
                 tapcontrol.TabPages.Remove(metroTabPage9);
                 tapcontrol.TabPages.Remove(tabPage16);
@@ -17154,12 +17164,11 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
             // Obtener las fechas de los controles MetroDateTime
             DateTime fechaInicio = DTP_Costo_1.Value.Date;
-            DateTime fechaFin = DTP_Costo_2.Value.Date;
+            DateTime fechaFin = DTP_Costo_2.Value.Date; // Incluye todo el día final
 
             rgv_reporte_costo.DataSource = null;
             rgv_reporte_costo.Rows.Clear();
             rgv_reporte_costo.Columns.Clear();
-            
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
             // Crear parámetros para las fechas
@@ -17169,18 +17178,18 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             {
                 querySimple = @"
 SELECT
-    f.""ID_Ficha"",
-    f.""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    f.""Turno"",
-    f.""Lote"",
-    f.""OP"",
-    c.""Costo""
-FROM public.""Ficha"" f
-LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
-WHERE f.""Area"" = 'Despegue'
-AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-ORDER BY f.""OP"" ASC;";
+    ""ID_Ficha"",
+    ""Fecha"",
+    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+    ""Turno"",
+    ""Lote"",
+    ""OP"",
+    ""Costo""
+FROM public.""Ficha""
+
+WHERE ""Area"" = 'Despegue'
+AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY ""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -17192,17 +17201,17 @@ ORDER BY f.""OP"" ASC;";
             {
                 querySimple = @"
 SELECT
-    f.""ID_Ficha"",
-    f.""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    f.""Turno"",
-    f.""OP"",
-    c.""Costo""
-FROM public.""Ficha"" f
-LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
-WHERE f.""Area"" = 'Evaporado'
-AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-ORDER BY f.""OP"" ASC;";
+    ""ID_Ficha"",
+    ""Fecha"",
+    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+    ""Turno"",
+    ""OP"",
+    ""Costo""
+FROM public.""Ficha""
+
+WHERE ""Area"" = 'Evaporado'
+AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY ""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -17214,17 +17223,18 @@ ORDER BY f.""OP"" ASC;";
             {
                 querySimple = @"
 SELECT
-    f.""ID_Ficha"",
-    f.""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    f.""Turno"",
-    f.""OP"",
-    c.""Costo""
-FROM public.""Ficha"" f
-LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
-WHERE f.""Area"" = @Area
-AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
+    ""ID_Ficha"",
+    ""Fecha"",
+    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+    ""Turno"",
+    ""OP"",
+    ""Costo""
+
+FROM public.""Ficha""
+
+WHERE ""Area"" = @Area
+AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY ""ID_Ficha"", ""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -17237,17 +17247,18 @@ ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
             {
                 querySimple = @"
 SELECT
-    f.""ID_Ficha"",
-    f.""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    f.""Turno"",
-    f.""OP"",
-    c.""Costo""
-FROM public.""Ficha"" f
-LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
-WHERE f.""Area"" = 'Máquinas'
-AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-ORDER BY f.""OP"" ASC;";
+    ""ID_Ficha"",
+    ""Fecha"",
+    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+    ""Turno"",
+    ""OP"",
+    ""Costo""
+
+FROM public.""Ficha""
+
+WHERE ""Area"" = 'Máquinas'
+AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY ""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -17259,17 +17270,18 @@ ORDER BY f.""OP"" ASC;";
             {
                 querySimple = @"
 SELECT
-    f.""ID_Ficha"",
-    f.""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    f.""Turno"",
-    f.""OP"",
-    c.""Costo""
-FROM public.""Ficha"" f
-LEFT JOIN public.""Costos"" c ON f.""ID_Ficha"" = c.""ID_Ficha""
-WHERE f.""Area"" = 'Polvos'
-AND f.""Fecha"" BETWEEN @FechaInicio AND @FechaFin
-ORDER BY f.""OP"" ASC;";
+    ""ID_Ficha"",
+    ""Fecha"",
+    EXTRACT(WEEK FROM ""Fecha"") AS ""No. Semana"",
+    ""Turno"",
+    ""OP"",
+    ""Costo""
+
+FROM public.""Ficha""
+
+WHERE ""Area"" = 'Polvos'
+AND ""Fecha"" BETWEEN @FechaInicio AND @FechaFin
+ORDER BY ""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -17278,7 +17290,7 @@ ORDER BY f.""OP"" ASC;";
                 };
             }
 
-            // Cargar los datos en el RadGridView
+            // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_costo, parameters);
 
             // Verificar si hay datos antes de configurar columnas
@@ -17291,27 +17303,15 @@ ORDER BY f.""OP"" ASC;";
                 rgv_reporte_costo.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_costo.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_costo.Columns["OP"].TextAlignment = ContentAlignment.MiddleCenter;
-
-                // Configurar la columna Costo (si existe)
-                if (rgv_reporte_costo.Columns.Contains("Costo"))
-                {
-                    rgv_reporte_costo.Columns["Costo"].TextAlignment = ContentAlignment.MiddleRight;
-                    rgv_reporte_costo.Columns["Costo"].FormatString = "{0:N2}"; // Formato con 2 decimales
-                }
-
                 if (var1 == "Despegue")
                 {
-                    if (rgv_reporte_costo.Columns.Contains("Lote"))
-                    {
-                        rgv_reporte_costo.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
-                    }
+                    rgv_reporte_costo.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
                 }
             }
-            rgv_reporte_costo.ClearSelection();
+            rgv_reporte_costo.CurrentRow = null;
             // Limpiar el filtro al cargar nuevos datos
             txt_filtro_report_costo.Clear();
         }
-
         private void cb_area_costo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_area_costo.SelectedIndex != -1)
@@ -17388,6 +17388,8 @@ ORDER BY f.""OP"" ASC;";
             DTP_Costo_1.Enabled = false;
             DTP_Costo_2.Enabled = false;
             cb_area_costo.SelectedIndex = -1;
+            //limpiar edicion de costo
+            cancel_costo();
         }
 
         private void btn_filtro_costo_Click(object sender, EventArgs e)
@@ -17463,7 +17465,6 @@ ORDER BY f.""OP"" ASC;";
             if (e.RowIndex >= 0)
             {
                 string var1 = cb_area_costo.Text;
-                DateTime Fecha = DateTime.MinValue;
 
                 txt_costo.Enabled = true;
 
@@ -17475,9 +17476,79 @@ ORDER BY f.""OP"" ASC;";
                 {
                     txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[5].Value.ToString();
                 }
+                // habilitar controles
                 btn_save_costo.Enabled = true;
                 btn_cancel_costo.Enabled = true;
             }
+        }
+
+        private void btn_save_costo_Click(object sender, EventArgs e)
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            string queryInsertUpdate = string.Empty;
+            int result;
+            if (!string.IsNullOrEmpty(id_global_costo))
+            {
+                // actualizar
+                // Convertir el ID a entero ANTES de crear el parámetro
+                int idCosto = System.Convert.ToInt32(id_global_costo);
+
+                queryInsertUpdate = "UPDATE public.\"Ficha\" SET \"Costo\" = @Costo WHERE \"ID_Ficha\" = @ID_Ficha;";
+
+                NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
+                {
+                        new NpgsqlParameter("@Costo", NpgsqlTypes.NpgsqlDbType.Numeric)
+                        {
+                            Value = System.Convert.ToDecimal(txt_costo.Text)
+                        },
+                        new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer)
+                        {
+                            Value = idCosto  // variable convertida a int
+                        }
+                };
+
+                result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
+                reporte_costo();
+                cancel_costo();
+            }
+            else 
+            {
+                MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void txt_costo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permite el dígito, el punto decimal y el backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true; // Bloquea el carácter
+                return;
+            }
+
+            // Evita que se ingresen múltiples puntos decimales
+            if (e.KeyChar == '.' && (sender as RadTextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
+        private void btn_cancel_costo_Click(object sender, EventArgs e)
+        {
+            cancel_costo();
+        }
+
+        private void cancel_costo() 
+        {
+            // deshabilitar controles
+            txt_costo.Enabled = false;
+            btn_save_costo.Enabled = false;
+            btn_cancel_costo.Enabled = false;
+
+            txt_costo.Text = string.Empty;
+            id_global_costo = string.Empty;
+            rgv_reporte_costo.CurrentRow = null;
         }
     }
 }

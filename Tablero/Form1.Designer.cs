@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition5 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn10 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn11 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn12 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition16 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition17 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition18 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition19 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition20 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -1247,20 +1247,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn1.HeaderText = "column1";
-            gridViewTextBoxColumn1.IsVisible = false;
-            gridViewTextBoxColumn1.Name = "column1";
-            gridViewTextBoxColumn2.HeaderText = "column2";
-            gridViewTextBoxColumn2.Name = "column2";
-            gridViewTextBoxColumn3.HeaderText = "column3";
-            gridViewTextBoxColumn3.Name = "column3";
+            gridViewTextBoxColumn10.HeaderText = "column1";
+            gridViewTextBoxColumn10.IsVisible = false;
+            gridViewTextBoxColumn10.Name = "column1";
+            gridViewTextBoxColumn11.HeaderText = "column2";
+            gridViewTextBoxColumn11.Name = "column2";
+            gridViewTextBoxColumn12.HeaderText = "column3";
+            gridViewTextBoxColumn12.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn1,
-            gridViewTextBoxColumn2,
-            gridViewTextBoxColumn3});
+            gridViewTextBoxColumn10,
+            gridViewTextBoxColumn11,
+            gridViewTextBoxColumn12});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition16;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2055,7 +2055,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 0;
+            this.tapcontrol.SelectedIndex = 6;
             this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2354,7 +2354,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition17;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -3370,7 +3370,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition18;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -3545,7 +3545,7 @@
             this.materialCard33.Controls.Add(this.btn_save_costo);
             this.materialCard33.Depth = 0;
             this.materialCard33.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard33.Location = new System.Drawing.Point(622, 123);
+            this.materialCard33.Location = new System.Drawing.Point(665, 123);
             this.materialCard33.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard33.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard33.Name = "materialCard33";
@@ -3566,6 +3566,7 @@
             this.txt_costo.ShowEmbeddedLabel = true;
             this.txt_costo.Size = new System.Drawing.Size(170, 43);
             this.txt_costo.TabIndex = 29;
+            this.txt_costo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_costo_KeyPress);
             // 
             // btn_cancel_costo
             // 
@@ -3586,6 +3587,7 @@
             this.btn_cancel_costo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_cancel_costo.UseAccentColor = false;
             this.btn_cancel_costo.UseVisualStyleBackColor = true;
+            this.btn_cancel_costo.Click += new System.EventHandler(this.btn_cancel_costo_Click);
             // 
             // btn_save_costo
             // 
@@ -3609,6 +3611,7 @@
             this.btn_save_costo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_save_costo.UseAccentColor = false;
             this.btn_save_costo.UseVisualStyleBackColor = true;
+            this.btn_save_costo.Click += new System.EventHandler(this.btn_save_costo_Click);
             // 
             // materialCard30
             // 
@@ -3629,7 +3632,7 @@
             this.materialCard30.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard30.Name = "materialCard30";
             this.materialCard30.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard30.Size = new System.Drawing.Size(580, 202);
+            this.materialCard30.Size = new System.Drawing.Size(623, 202);
             this.materialCard30.TabIndex = 5;
             // 
             // DTP_Costo_2
@@ -3725,7 +3728,7 @@
             this.btn_clean_costo.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
             this.btn_clean_costo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_clean_costo.ImageKey = "save_icon";
-            this.btn_clean_costo.Location = new System.Drawing.Point(339, 108);
+            this.btn_clean_costo.Location = new System.Drawing.Point(372, 108);
             this.btn_clean_costo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_clean_costo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_clean_costo.Name = "btn_clean_costo";
@@ -3749,7 +3752,7 @@
             this.btn_export_excel_costo.Icon = global::Tablero.Properties.Resources.excel_icon;
             this.btn_export_excel_costo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_export_excel_costo.ImageKey = "save_icon";
-            this.btn_export_excel_costo.Location = new System.Drawing.Point(339, 60);
+            this.btn_export_excel_costo.Location = new System.Drawing.Point(372, 60);
             this.btn_export_excel_costo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_export_excel_costo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_export_excel_costo.Name = "btn_export_excel_costo";
@@ -3773,7 +3776,7 @@
             this.btn_new_report_costo.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_costo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_costo.ImageKey = "save_icon";
-            this.btn_new_report_costo.Location = new System.Drawing.Point(339, 12);
+            this.btn_new_report_costo.Location = new System.Drawing.Point(372, 12);
             this.btn_new_report_costo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_costo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_costo.Name = "btn_new_report_costo";
@@ -3795,7 +3798,7 @@
             this.materialCard31.Controls.Add(this.btn_filtro_costo);
             this.materialCard31.Depth = 0;
             this.materialCard31.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard31.Location = new System.Drawing.Point(622, 14);
+            this.materialCard31.Location = new System.Drawing.Point(665, 14);
             this.materialCard31.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard31.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard31.Name = "materialCard31";
@@ -3874,7 +3877,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition4;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition19;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -7053,7 +7056,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition5;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition20;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
