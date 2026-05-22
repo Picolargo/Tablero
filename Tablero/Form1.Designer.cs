@@ -151,6 +151,7 @@
             this.txt_filtro_report_consentrado = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_filtro_consentrado = new MaterialSkin.Controls.MaterialButton();
             this.materialCard10 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Con_Des = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_concentrado = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_concentrado = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_concentrado = new MaterialSkin.Controls.MaterialButton();
@@ -164,6 +165,7 @@
             this.txt_filtro_report_consentrado_otras = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_filtro_consentrado_otras = new MaterialSkin.Controls.MaterialButton();
             this.materialCard14 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Con_Otras_A = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_concentrado_otras = new MaterialSkin.Controls.MaterialButton();
@@ -172,6 +174,7 @@
             this.metroTabPage10 = new MetroFramework.Controls.MetroTabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.materialCard8 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Mer_Area = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_merma = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_merma = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_report_merma = new MaterialSkin.Controls.MaterialButton();
@@ -180,6 +183,7 @@
             this.tabPage22 = new System.Windows.Forms.TabPage();
             this.panel6 = new System.Windows.Forms.Panel();
             this.materialCard16 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Mer_Sup = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_merma_S = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_merma_S = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_report_merma_S = new MaterialSkin.Controls.MaterialButton();
@@ -188,6 +192,7 @@
             this.tabPage33 = new System.Windows.Forms.TabPage();
             this.panel8 = new System.Windows.Forms.Panel();
             this.materialCard20 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_area_reporte_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.btn_export_excel_Tiempos = new MaterialSkin.Controls.MaterialButton();
@@ -204,6 +209,7 @@
             this.radPictureBox3 = new Telerik.WinControls.UI.RadPictureBox();
             this.panel12 = new System.Windows.Forms.Panel();
             this.materialCard28 = new MaterialSkin.Controls.MaterialCard();
+            this.CB_Anio_Cumplimiento = new MaterialSkin.Controls.MaterialComboBox();
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -404,12 +410,6 @@
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.metroContextMenu2 = new MetroFramework.Controls.MetroContextMenu(this.components);
             this.windows11Theme1 = new Telerik.WinControls.Themes.Windows11Theme();
-            this.CB_Anio_Con_Des = new MaterialSkin.Controls.MaterialComboBox();
-            this.CB_Anio_Con_Otras_A = new MaterialSkin.Controls.MaterialComboBox();
-            this.CB_Anio_Mer_Area = new MaterialSkin.Controls.MaterialComboBox();
-            this.CB_Anio_Mer_Sup = new MaterialSkin.Controls.MaterialComboBox();
-            this.CB_Anio_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
-            this.CB_Anio_Cumplimiento = new MaterialSkin.Controls.MaterialComboBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -2126,7 +2126,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2139,7 +2139,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -2296,7 +2296,7 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
             this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(17, 12);
@@ -2466,7 +2466,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -2519,6 +2519,29 @@
             this.materialCard10.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard10.Size = new System.Drawing.Size(733, 77);
             this.materialCard10.TabIndex = 3;
+            // 
+            // CB_Anio_Con_Des
+            // 
+            this.CB_Anio_Con_Des.AutoResize = false;
+            this.CB_Anio_Con_Des.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Con_Des.Depth = 0;
+            this.CB_Anio_Con_Des.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Con_Des.DropDownHeight = 174;
+            this.CB_Anio_Con_Des.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Con_Des.DropDownWidth = 121;
+            this.CB_Anio_Con_Des.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Con_Des.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Con_Des.FormattingEnabled = true;
+            this.CB_Anio_Con_Des.Hint = "Año";
+            this.CB_Anio_Con_Des.IntegralHeight = false;
+            this.CB_Anio_Con_Des.ItemHeight = 43;
+            this.CB_Anio_Con_Des.Location = new System.Drawing.Point(17, 12);
+            this.CB_Anio_Con_Des.MaxDropDownItems = 4;
+            this.CB_Anio_Con_Des.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Con_Des.Name = "CB_Anio_Con_Des";
+            this.CB_Anio_Con_Des.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Con_Des.StartIndex = -1;
+            this.CB_Anio_Con_Des.TabIndex = 37;
             // 
             // btn_clean_concentrado
             // 
@@ -2710,7 +2733,7 @@
             this.txt_filtro_report_consentrado_otras.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado_otras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado_otras.Depth = 0;
-            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado_otras.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado_otras.LeadingIcon = null;
             this.txt_filtro_report_consentrado_otras.Location = new System.Drawing.Point(268, 11);
@@ -2763,6 +2786,29 @@
             this.materialCard14.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard14.Size = new System.Drawing.Size(733, 77);
             this.materialCard14.TabIndex = 3;
+            // 
+            // CB_Anio_Con_Otras_A
+            // 
+            this.CB_Anio_Con_Otras_A.AutoResize = false;
+            this.CB_Anio_Con_Otras_A.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Con_Otras_A.Depth = 0;
+            this.CB_Anio_Con_Otras_A.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Con_Otras_A.DropDownHeight = 174;
+            this.CB_Anio_Con_Otras_A.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Con_Otras_A.DropDownWidth = 121;
+            this.CB_Anio_Con_Otras_A.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Con_Otras_A.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Con_Otras_A.FormattingEnabled = true;
+            this.CB_Anio_Con_Otras_A.Hint = "Año";
+            this.CB_Anio_Con_Otras_A.IntegralHeight = false;
+            this.CB_Anio_Con_Otras_A.ItemHeight = 43;
+            this.CB_Anio_Con_Otras_A.Location = new System.Drawing.Point(17, 12);
+            this.CB_Anio_Con_Otras_A.MaxDropDownItems = 4;
+            this.CB_Anio_Con_Otras_A.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Con_Otras_A.Name = "CB_Anio_Con_Otras_A";
+            this.CB_Anio_Con_Otras_A.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Con_Otras_A.StartIndex = -1;
+            this.CB_Anio_Con_Otras_A.TabIndex = 38;
             // 
             // btn_clean_concentrado_otras
             // 
@@ -2909,6 +2955,29 @@
             this.materialCard8.Size = new System.Drawing.Size(733, 77);
             this.materialCard8.TabIndex = 3;
             // 
+            // CB_Anio_Mer_Area
+            // 
+            this.CB_Anio_Mer_Area.AutoResize = false;
+            this.CB_Anio_Mer_Area.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Mer_Area.Depth = 0;
+            this.CB_Anio_Mer_Area.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Mer_Area.DropDownHeight = 174;
+            this.CB_Anio_Mer_Area.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Mer_Area.DropDownWidth = 121;
+            this.CB_Anio_Mer_Area.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Mer_Area.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Mer_Area.FormattingEnabled = true;
+            this.CB_Anio_Mer_Area.Hint = "Año";
+            this.CB_Anio_Mer_Area.IntegralHeight = false;
+            this.CB_Anio_Mer_Area.ItemHeight = 43;
+            this.CB_Anio_Mer_Area.Location = new System.Drawing.Point(17, 12);
+            this.CB_Anio_Mer_Area.MaxDropDownItems = 4;
+            this.CB_Anio_Mer_Area.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Mer_Area.Name = "CB_Anio_Mer_Area";
+            this.CB_Anio_Mer_Area.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Mer_Area.StartIndex = -1;
+            this.CB_Anio_Mer_Area.TabIndex = 39;
+            // 
             // btn_clean_merma
             // 
             this.btn_clean_merma.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -3046,6 +3115,29 @@
             this.materialCard16.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard16.Size = new System.Drawing.Size(733, 77);
             this.materialCard16.TabIndex = 3;
+            // 
+            // CB_Anio_Mer_Sup
+            // 
+            this.CB_Anio_Mer_Sup.AutoResize = false;
+            this.CB_Anio_Mer_Sup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Mer_Sup.Depth = 0;
+            this.CB_Anio_Mer_Sup.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Mer_Sup.DropDownHeight = 174;
+            this.CB_Anio_Mer_Sup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Mer_Sup.DropDownWidth = 121;
+            this.CB_Anio_Mer_Sup.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Mer_Sup.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Mer_Sup.FormattingEnabled = true;
+            this.CB_Anio_Mer_Sup.Hint = "Año";
+            this.CB_Anio_Mer_Sup.IntegralHeight = false;
+            this.CB_Anio_Mer_Sup.ItemHeight = 43;
+            this.CB_Anio_Mer_Sup.Location = new System.Drawing.Point(17, 12);
+            this.CB_Anio_Mer_Sup.MaxDropDownItems = 4;
+            this.CB_Anio_Mer_Sup.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Mer_Sup.Name = "CB_Anio_Mer_Sup";
+            this.CB_Anio_Mer_Sup.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Mer_Sup.StartIndex = -1;
+            this.CB_Anio_Mer_Sup.TabIndex = 40;
             // 
             // btn_clean_merma_S
             // 
@@ -3187,6 +3279,29 @@
             this.materialCard20.Size = new System.Drawing.Size(1043, 77);
             this.materialCard20.TabIndex = 5;
             // 
+            // CB_Anio_Tiempos
+            // 
+            this.CB_Anio_Tiempos.AutoResize = false;
+            this.CB_Anio_Tiempos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Tiempos.Depth = 0;
+            this.CB_Anio_Tiempos.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Tiempos.DropDownHeight = 174;
+            this.CB_Anio_Tiempos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Tiempos.DropDownWidth = 121;
+            this.CB_Anio_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Tiempos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Tiempos.FormattingEnabled = true;
+            this.CB_Anio_Tiempos.Hint = "Año";
+            this.CB_Anio_Tiempos.IntegralHeight = false;
+            this.CB_Anio_Tiempos.ItemHeight = 43;
+            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(319, 13);
+            this.CB_Anio_Tiempos.MaxDropDownItems = 4;
+            this.CB_Anio_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Tiempos.Name = "CB_Anio_Tiempos";
+            this.CB_Anio_Tiempos.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Tiempos.StartIndex = -1;
+            this.CB_Anio_Tiempos.TabIndex = 41;
+            // 
             // cb_area_reporte_Tiempos
             // 
             this.cb_area_reporte_Tiempos.AutoResize = false;
@@ -3316,7 +3431,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(81, 12);
@@ -3470,6 +3585,30 @@
             this.materialCard28.Padding = new System.Windows.Forms.Padding(15);
             this.materialCard28.Size = new System.Drawing.Size(427, 439);
             this.materialCard28.TabIndex = 39;
+            // 
+            // CB_Anio_Cumplimiento
+            // 
+            this.CB_Anio_Cumplimiento.AutoResize = false;
+            this.CB_Anio_Cumplimiento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.CB_Anio_Cumplimiento.Depth = 0;
+            this.CB_Anio_Cumplimiento.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.CB_Anio_Cumplimiento.DropDownHeight = 174;
+            this.CB_Anio_Cumplimiento.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Anio_Cumplimiento.DropDownWidth = 121;
+            this.CB_Anio_Cumplimiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.CB_Anio_Cumplimiento.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CB_Anio_Cumplimiento.FormattingEnabled = true;
+            this.CB_Anio_Cumplimiento.Hint = "Año";
+            this.CB_Anio_Cumplimiento.IntegralHeight = false;
+            this.CB_Anio_Cumplimiento.ItemHeight = 43;
+            this.CB_Anio_Cumplimiento.Location = new System.Drawing.Point(226, 17);
+            this.CB_Anio_Cumplimiento.MaxDropDownItems = 4;
+            this.CB_Anio_Cumplimiento.MouseState = MaterialSkin.MouseState.OUT;
+            this.CB_Anio_Cumplimiento.Name = "CB_Anio_Cumplimiento";
+            this.CB_Anio_Cumplimiento.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Cumplimiento.StartIndex = -1;
+            this.CB_Anio_Cumplimiento.TabIndex = 42;
+            this.CB_Anio_Cumplimiento.SelectedIndexChanged += new System.EventHandler(this.CB_Anio_Cumplimiento_SelectedIndexChanged);
             // 
             // materialButton8
             // 
@@ -3655,7 +3794,7 @@
             this.DTP_Costo_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Costo_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Costo_2.Location = new System.Drawing.Point(109, 136);
-            this.DTP_Costo_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Costo_2.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Costo_2.Name = "DTP_Costo_2";
             this.DTP_Costo_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Costo_2.TabIndex = 38;
@@ -3668,7 +3807,7 @@
             this.DTP_Costo_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Costo_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Costo_1.Location = new System.Drawing.Point(109, 88);
-            this.DTP_Costo_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Costo_1.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Costo_1.Name = "DTP_Costo_1";
             this.DTP_Costo_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Costo_1.TabIndex = 37;
@@ -5382,7 +5521,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -7092,144 +7231,6 @@
             this.metroContextMenu2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.metroContextMenu2.Name = "metroContextMenu2";
             this.metroContextMenu2.Size = new System.Drawing.Size(61, 4);
-            // 
-            // CB_Anio_Con_Des
-            // 
-            this.CB_Anio_Con_Des.AutoResize = false;
-            this.CB_Anio_Con_Des.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Con_Des.Depth = 0;
-            this.CB_Anio_Con_Des.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Con_Des.DropDownHeight = 174;
-            this.CB_Anio_Con_Des.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Con_Des.DropDownWidth = 121;
-            this.CB_Anio_Con_Des.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Con_Des.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Con_Des.FormattingEnabled = true;
-            this.CB_Anio_Con_Des.Hint = "Año";
-            this.CB_Anio_Con_Des.IntegralHeight = false;
-            this.CB_Anio_Con_Des.ItemHeight = 43;
-            this.CB_Anio_Con_Des.Location = new System.Drawing.Point(17, 12);
-            this.CB_Anio_Con_Des.MaxDropDownItems = 4;
-            this.CB_Anio_Con_Des.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Con_Des.Name = "CB_Anio_Con_Des";
-            this.CB_Anio_Con_Des.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Con_Des.StartIndex = -1;
-            this.CB_Anio_Con_Des.TabIndex = 37;
-            // 
-            // CB_Anio_Con_Otras_A
-            // 
-            this.CB_Anio_Con_Otras_A.AutoResize = false;
-            this.CB_Anio_Con_Otras_A.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Con_Otras_A.Depth = 0;
-            this.CB_Anio_Con_Otras_A.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Con_Otras_A.DropDownHeight = 174;
-            this.CB_Anio_Con_Otras_A.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Con_Otras_A.DropDownWidth = 121;
-            this.CB_Anio_Con_Otras_A.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Con_Otras_A.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Con_Otras_A.FormattingEnabled = true;
-            this.CB_Anio_Con_Otras_A.Hint = "Año";
-            this.CB_Anio_Con_Otras_A.IntegralHeight = false;
-            this.CB_Anio_Con_Otras_A.ItemHeight = 43;
-            this.CB_Anio_Con_Otras_A.Location = new System.Drawing.Point(17, 12);
-            this.CB_Anio_Con_Otras_A.MaxDropDownItems = 4;
-            this.CB_Anio_Con_Otras_A.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Con_Otras_A.Name = "CB_Anio_Con_Otras_A";
-            this.CB_Anio_Con_Otras_A.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Con_Otras_A.StartIndex = -1;
-            this.CB_Anio_Con_Otras_A.TabIndex = 38;
-            // 
-            // CB_Anio_Mer_Area
-            // 
-            this.CB_Anio_Mer_Area.AutoResize = false;
-            this.CB_Anio_Mer_Area.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Mer_Area.Depth = 0;
-            this.CB_Anio_Mer_Area.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Mer_Area.DropDownHeight = 174;
-            this.CB_Anio_Mer_Area.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Mer_Area.DropDownWidth = 121;
-            this.CB_Anio_Mer_Area.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Mer_Area.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Mer_Area.FormattingEnabled = true;
-            this.CB_Anio_Mer_Area.Hint = "Año";
-            this.CB_Anio_Mer_Area.IntegralHeight = false;
-            this.CB_Anio_Mer_Area.ItemHeight = 43;
-            this.CB_Anio_Mer_Area.Location = new System.Drawing.Point(17, 12);
-            this.CB_Anio_Mer_Area.MaxDropDownItems = 4;
-            this.CB_Anio_Mer_Area.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Mer_Area.Name = "CB_Anio_Mer_Area";
-            this.CB_Anio_Mer_Area.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Mer_Area.StartIndex = -1;
-            this.CB_Anio_Mer_Area.TabIndex = 39;
-            // 
-            // CB_Anio_Mer_Sup
-            // 
-            this.CB_Anio_Mer_Sup.AutoResize = false;
-            this.CB_Anio_Mer_Sup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Mer_Sup.Depth = 0;
-            this.CB_Anio_Mer_Sup.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Mer_Sup.DropDownHeight = 174;
-            this.CB_Anio_Mer_Sup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Mer_Sup.DropDownWidth = 121;
-            this.CB_Anio_Mer_Sup.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Mer_Sup.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Mer_Sup.FormattingEnabled = true;
-            this.CB_Anio_Mer_Sup.Hint = "Año";
-            this.CB_Anio_Mer_Sup.IntegralHeight = false;
-            this.CB_Anio_Mer_Sup.ItemHeight = 43;
-            this.CB_Anio_Mer_Sup.Location = new System.Drawing.Point(17, 12);
-            this.CB_Anio_Mer_Sup.MaxDropDownItems = 4;
-            this.CB_Anio_Mer_Sup.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Mer_Sup.Name = "CB_Anio_Mer_Sup";
-            this.CB_Anio_Mer_Sup.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Mer_Sup.StartIndex = -1;
-            this.CB_Anio_Mer_Sup.TabIndex = 40;
-            // 
-            // CB_Anio_Tiempos
-            // 
-            this.CB_Anio_Tiempos.AutoResize = false;
-            this.CB_Anio_Tiempos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Tiempos.Depth = 0;
-            this.CB_Anio_Tiempos.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Tiempos.DropDownHeight = 174;
-            this.CB_Anio_Tiempos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Tiempos.DropDownWidth = 121;
-            this.CB_Anio_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Tiempos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Tiempos.FormattingEnabled = true;
-            this.CB_Anio_Tiempos.Hint = "Año";
-            this.CB_Anio_Tiempos.IntegralHeight = false;
-            this.CB_Anio_Tiempos.ItemHeight = 43;
-            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(319, 13);
-            this.CB_Anio_Tiempos.MaxDropDownItems = 4;
-            this.CB_Anio_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Tiempos.Name = "CB_Anio_Tiempos";
-            this.CB_Anio_Tiempos.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Tiempos.StartIndex = -1;
-            this.CB_Anio_Tiempos.TabIndex = 41;
-            // 
-            // CB_Anio_Cumplimiento
-            // 
-            this.CB_Anio_Cumplimiento.AutoResize = false;
-            this.CB_Anio_Cumplimiento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.CB_Anio_Cumplimiento.Depth = 0;
-            this.CB_Anio_Cumplimiento.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.CB_Anio_Cumplimiento.DropDownHeight = 174;
-            this.CB_Anio_Cumplimiento.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CB_Anio_Cumplimiento.DropDownWidth = 121;
-            this.CB_Anio_Cumplimiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.CB_Anio_Cumplimiento.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.CB_Anio_Cumplimiento.FormattingEnabled = true;
-            this.CB_Anio_Cumplimiento.Hint = "Año";
-            this.CB_Anio_Cumplimiento.IntegralHeight = false;
-            this.CB_Anio_Cumplimiento.ItemHeight = 43;
-            this.CB_Anio_Cumplimiento.Location = new System.Drawing.Point(226, 17);
-            this.CB_Anio_Cumplimiento.MaxDropDownItems = 4;
-            this.CB_Anio_Cumplimiento.MouseState = MaterialSkin.MouseState.OUT;
-            this.CB_Anio_Cumplimiento.Name = "CB_Anio_Cumplimiento";
-            this.CB_Anio_Cumplimiento.Size = new System.Drawing.Size(155, 49);
-            this.CB_Anio_Cumplimiento.StartIndex = -1;
-            this.CB_Anio_Cumplimiento.TabIndex = 42;
             // 
             // Form_principal
             // 

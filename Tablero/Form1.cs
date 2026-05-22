@@ -380,6 +380,32 @@ namespace Tablero
                 item.Checked = false;    // Marca el checkbox
             }
         }
+        // Cargar las semanas desde la 1 hasta la semana actual
+        private void CargartodasSemanas()
+        {
+            // Limpiar items existentes
+            listView1.Items.Clear();
+
+            // Cargar semanas del 1 al número de semana actual
+            for (int semana = 1; semana <= 52; semana++)
+            {
+                // Crear el item con el número de semana
+                ListViewItem item = new ListViewItem(semana.ToString());
+
+                // Guardar el número de semana en Tag para usarlo después
+                item.Tag = semana;
+
+                // Agregar al ListView
+                listView1.Items.Add(item);
+            }
+
+            // Opcional: Seleccionar todas las semanas por defecto
+            foreach (ListViewItem item in listView1.Items)
+            {
+                item.Selected = false;  // Selecciona visualmente
+                item.Checked = false;    // Marca el checkbox
+            }
+        }
 
         // Método para obtener el número de semana (Lunes a Domingo)
         private int ObtenerNumeroSemana(DateTime fecha)
@@ -17780,6 +17806,20 @@ ORDER BY ""OP"" ASC;";
             txt_costo.Text = string.Empty;
             id_global_costo = string.Empty;
             rgv_reporte_costo.CurrentRow = null;
+        }
+
+        private void CB_Anio_Cumplimiento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Obtener el año actual como string
+            string anioActual = DateTime.Now.Year.ToString();
+            if (anioActual == CB_Anio_Cumplimiento.Text)
+            {
+                CargarSemanasSimple();
+            }
+            else 
+            {
+                CargartodasSemanas(); 
+            }
         }
     }
 }
