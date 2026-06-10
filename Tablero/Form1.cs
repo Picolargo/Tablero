@@ -481,6 +481,7 @@ namespace Tablero
                     materialTabControl1.TabPages.Remove(tabPage4);
                     materialTabControl1.TabPages.Remove(tabPage9);
                     materialTabControl1.TabPages.Remove(tabPage11);
+                    materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
                     materialCardtab_users.Visible = false;
                     materialCard_users.Visible = false;
                     materialCard18.Location = new Point(14, 14);
@@ -13618,6 +13619,88 @@ ORDER BY
         /// <summary>
         /// Grafica de % Cumplimiento por Supervisor
         /// </summary>
+        //        private void GraficarCumplimientoGeneral(List<string> semanasSeleccionadas)
+        //        {
+        //            try
+        //            {
+        //                // Configurar títulos específicos para Cumplimiento
+        //                ConfigurarTitulosGrafico(
+        //                    "% CUMPLIMIENTO GENERAL - ANÁLISIS SEMANAL",
+        //                    "Porcentaje de cumplimiento"
+        //                );
+
+        //                // Construir la consulta 
+        //                string semanasParam = string.Join(",", semanasSeleccionadas);
+        //                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+        //                string añoSeleccionado = CB_Anio_grafica.Text;
+        //                string query = $@"
+        //WITH 
+        //despegue AS (
+        //    SELECT 
+        //        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
+        //        ROUND(LEAST(
+        //            (SUM(""Kg_prod_seco"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
+        //            100
+        //        ), 2) as despegue_valor
+        //    FROM public.""Ficha""
+        //    WHERE ""Area"" = 'Despegue'
+        //        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
+        //        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
+        //    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
+        //),
+        //otras_areas AS (
+        //    SELECT 
+        //        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
+        //        ROUND(LEAST(
+        //            (SUM(""Kg_prod_term"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
+        //            100
+        //        ), 2) as otras_valor
+        //    FROM public.""Ficha""
+        //    WHERE ""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        //        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
+        //        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
+        //    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
+        //)
+        //SELECT 
+        //    COALESCE(d.No_Semana, o.No_Semana) as No_Semana,
+        //    ROUND(
+        //        CASE 
+        //            WHEN COALESCE(d.despegue_valor, 0) > 0 THEN
+        //                (COALESCE(d.despegue_valor, 0) * 0.5) + (COALESCE(o.otras_valor, 0) * 0.5)
+        //            ELSE
+        //                COALESCE(o.otras_valor, 0)
+        //        END,
+        //        2
+        //    ) as ""% Cumplimiento General""
+        //FROM despegue d
+        //FULL OUTER JOIN otras_areas o ON d.No_Semana = o.No_Semana
+        //ORDER BY No_Semana;";
+
+        //                // Ejecutar la consulta
+        //                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+
+        //                if (datos == null || datos.Rows.Count == 0)
+        //                {
+        //                    MetroFramework.MetroMessageBox.Show(this,
+        //                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
+        //                        "Precaución",
+        //                        MessageBoxButtons.OK,
+        //                        MessageBoxIcon.Warning);
+        //                    return;
+        //                }
+
+        //                // Configurar el gráfico con LiveCharts
+        //                ConfigurarGraficoCumplimientoGeneral(datos);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MetroFramework.MetroMessageBox.Show(this,
+        //                    $"Error al graficar % Cumplimiento: {ex.Message}",
+        //                    "Error",
+        //                    MessageBoxButtons.OK,
+        //                    MessageBoxIcon.Error);
+        //            }
+        //        }
         private void GraficarCumplimientoGeneral(List<string> semanasSeleccionadas)
         {
             try
@@ -13628,52 +13711,17 @@ ORDER BY
                     "Porcentaje de cumplimiento"
                 );
 
-                // Construir la consulta SQL
-                string semanasParam = string.Join(",", semanasSeleccionadas);
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                // Convertir las semanas seleccionadas de string a int
+                List<int> semanasInt = semanasSeleccionadas.Select(int.Parse).ToList();
                 string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = $@"
-WITH 
-despegue AS (
-    SELECT 
-        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
-        ROUND(LEAST(
-            (SUM(""Kg_prod_seco"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
-            100
-        ), 2) as despegue_valor
-    FROM public.""Ficha""
-    WHERE ""Area"" = 'Despegue'
-        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
-        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
-    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
-),
-otras_areas AS (
-    SELECT 
-        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
-        ROUND(LEAST(
-            (SUM(""Kg_prod_term"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
-            100
-        ), 2) as otras_valor
-    FROM public.""Ficha""
-    WHERE ""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
-        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
-    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
-)
-SELECT 
-    COALESCE(d.No_Semana, o.No_Semana) as No_Semana,
-    ROUND(
-        (COALESCE(d.despegue_valor, 0) + COALESCE(o.otras_valor, 0)) / 2,
-        2
-    ) as ""% Cumplimiento General""
-FROM despegue d
-FULL OUTER JOIN otras_areas o ON d.No_Semana = o.No_Semana
-ORDER BY No_Semana;";
 
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+                // Crear instancia de Reporte_Semanal_EPPlus
+                Reporte_Semanal_EPPlus reporte = new Reporte_Semanal_EPPlus(connectionString);
 
-                if (datos == null || datos.Rows.Count == 0)
+                // Obtener los datos usando el mismo método que usa el Excel
+                DataTable datosGrafica = reporte.ObtenerDatosParaGraficaDesdeFechas(semanasInt, añoSeleccionado);
+
+                if (datosGrafica == null || datosGrafica.Rows.Count == 0)
                 {
                     MetroFramework.MetroMessageBox.Show(this,
                         "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
@@ -13683,8 +13731,22 @@ ORDER BY No_Semana;";
                     return;
                 }
 
+                // Convertir el DataTable al formato que espera ConfigurarGraficoCumplimientoGeneral
+                // El método espera columnas "No_Semana" y "% Cumplimiento General" en formato porcentaje (ej: 72.93)
+                DataTable datosParaGrafico = new DataTable();
+                datosParaGrafico.Columns.Add("No_Semana", typeof(int));
+                datosParaGrafico.Columns.Add("% Cumplimiento General", typeof(decimal));
+
+                foreach (DataRow row in datosGrafica.Rows)
+                {
+                    int semana = Convert.ToInt32(row["Semana"]);
+                    // Multiplicar por 100 para convertir de decimal (0.7293) a porcentaje (72.93)
+                    decimal total = Convert.ToDecimal(row["Total"]) * 100;
+                    datosParaGrafico.Rows.Add(semana, total);
+                }
+
                 // Configurar el gráfico con LiveCharts
-                ConfigurarGraficoCumplimientoGeneral(datos);
+                ConfigurarGraficoCumplimientoGeneral(datosParaGrafico);
             }
             catch (Exception ex)
             {

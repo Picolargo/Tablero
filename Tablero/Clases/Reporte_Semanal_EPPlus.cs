@@ -897,6 +897,34 @@ ORDER BY semana ASC";
                 throw new Exception($"Error al generar el archivo Excel: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Obtiene los datos para la gráfica de cumplimiento general usando la misma lógica que el Excel
+        /// </summary>
+        public DataTable ObtenerDatosParaGraficaDesdeFechas(List<int> semanasSeleccionadas, string anio)
+        {
+            try
+            {
+                // Obtener los mismos datos que usa el Excel
+                DataTable datosEvaporado = GetDataEvaporado(semanasSeleccionadas, anio);
+                DataTable datosGrind = GetDataGrind(semanasSeleccionadas, anio);
+                DataTable datosInspeccion = GetDataInspeccion(semanasSeleccionadas, anio);
+                DataTable datosPolvos = GetDataPolvos(semanasSeleccionadas, anio);
+                DataTable datosEmpacado = GetDataEmpacado(semanasSeleccionadas, anio);
+                DataTable datosRevolturas = GetDataRevolturas(semanasSeleccionadas, anio);
+                DataTable datosMaquinas = GetDataMaquinas(semanasSeleccionadas, anio);
+                DataTable datosDeshidratado = GetDataDeshidratado(semanasSeleccionadas, anio);
+
+                // Usar el método existente ObtenerDatosParaGrafica
+                return ObtenerDatosParaGrafica(
+                    datosEvaporado, datosGrind, datosInspeccion,
+                    datosPolvos, datosEmpacado, datosRevolturas,
+                    datosMaquinas, datosDeshidratado, semanasSeleccionadas);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener datos para gráfica: {ex.Message}");
+            }
+        }
 
         private int GenerarTablaAreaEPPlus(ExcelWorksheet worksheet, DataTable datos, string nombreArea, int filaInicio)
         {
