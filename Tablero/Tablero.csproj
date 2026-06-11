@@ -26,7 +26,7 @@
     <UpdateUrl>\\sv-picolargo-01\Archivos-Generales\Publica\1.Sistemas\1. Instalador Tablero\</UpdateUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>18</ApplicationRevision>
+    <ApplicationRevision>19</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -319,6 +319,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\mark_13914388.png" />
     <None Include="Resources\Icon1.ico" />
     <None Include="Resources\icono_principal.bmp" />
     <None Include="Resources\Iconprincipal.ico" />

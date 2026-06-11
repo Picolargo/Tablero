@@ -17279,6 +17279,15 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             };
 
             lista_semanas.Visible = indicesConSemanas.Contains(cb_tipo_grafica.SelectedIndex);
+            
+            if(lista_semanas.Visible == true)
+            {
+                pnl_filtro_graph.Enabled = true;
+            }
+            else 
+            {                 
+                pnl_filtro_graph.Enabled = false; 
+            }
         }
 
         private void radMultiColumnComboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -17881,6 +17890,324 @@ ORDER BY ""OP"" ASC;";
             else 
             {
                 CargartodasSemanas(); 
+            }
+        }
+
+        private void btn_select_cumpl_Click(object sender, EventArgs e)
+        {
+            // Recorrer todos los items del ListView y marcarlos como seleccionados
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                listView1.Items[i].Checked = true;
+            }
+        }
+
+        private void btn_select_personalizada_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validar que los textboxes no estén vacíos
+                if (string.IsNullOrWhiteSpace(txt_sem_inicial.Text) || string.IsNullOrWhiteSpace(txt_sem_final.Text))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese la semana inicial y final.",
+                        "Campos incompletos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que los valores sean números enteros válidos
+                if (!int.TryParse(txt_sem_inicial.Text, out int semanaInicial))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese un número válido en la semana inicial.",
+                        "Formato incorrecto",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!int.TryParse(txt_sem_final.Text, out int semanaFinal))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese un número válido en la semana final.",
+                        "Formato incorrecto",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que la semana inicial sea menor o igual que la semana final
+                if (semanaInicial > semanaFinal)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "La semana inicial debe ser menor o igual que la semana final.",
+                        "Rango inválido",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que el rango esté dentro de los elementos disponibles en el ListView
+                if (listView1.Items.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No hay elementos en la lista para seleccionar.",
+                        "Lista vacía",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Obtener el número de semana más alto disponible en el ListView
+                int semanaMaxima = ObtenerSemanaMaximaEnListView();
+
+                // Validar que las semanas estén dentro del rango disponible
+                if (semanaInicial < 1 || semanaFinal > semanaMaxima)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        $"Por favor, seleccione elementos dentro del rango de la lista.\nLas semanas disponibles son de la 1 a la {semanaMaxima}.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Seleccionar las semanas en el rango
+                int contadorSeleccionados = 0;
+                for (int i = 0; i < listView1.Items.Count; i++)
+                {
+                    // Obtener el texto del item (asumiendo que contiene el número de semana)
+                    if (int.TryParse(listView1.Items[i].Text, out int semanaItem))
+                    {
+                        if (semanaItem >= semanaInicial && semanaItem <= semanaFinal)
+                        {
+                            listView1.Items[i].Checked = true;
+                            contadorSeleccionados++;
+                        }
+                    }
+                }
+
+                if (contadorSeleccionados == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        $"No se encontraron semanas en el rango {semanaInicial} a {semanaFinal}.",
+                        "Sin coincidencias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al seleccionar el rango: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+        // Método auxiliar para obtener la semana máxima en el ListView
+        private int ObtenerSemanaMaximaEnListView()
+        {
+            int semanaMaxima = 0;
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (int.TryParse(listView1.Items[i].Text, out int semana))
+                {
+                    if (semana > semanaMaxima)
+                        semanaMaxima = semana;
+                }
+            }
+            return semanaMaxima;
+        }
+
+        private void txt_sem_inicial_TextChanging(object sender, Telerik.WinControls.TextChangingEventArgs e)
+        {
+            // Validar que solo se ingresen números
+            if (!string.IsNullOrEmpty(e.NewValue))
+            {
+                foreach (char c in e.NewValue)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void txt_sem_final_TextChanging(object sender, Telerik.WinControls.TextChangingEventArgs e)
+        {
+            // Validar que solo se ingresen números
+            if (!string.IsNullOrEmpty(e.NewValue))
+            {
+                foreach (char c in e.NewValue)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void txt_sem_inicial_graph_TextChanging(object sender, Telerik.WinControls.TextChangingEventArgs e)
+        {
+            // Validar que solo se ingresen números
+            if (!string.IsNullOrEmpty(e.NewValue))
+            {
+                foreach (char c in e.NewValue)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void txt_sem_final_graph_TextChanging(object sender, Telerik.WinControls.TextChangingEventArgs e)
+        {
+            // Validar que solo se ingresen números
+            if (!string.IsNullOrEmpty(e.NewValue))
+            {
+                foreach (char c in e.NewValue)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void btn_select_personalizada_graph_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validar que los textboxes no estén vacíos
+                if (string.IsNullOrWhiteSpace(txt_sem_inicial_graph.Text) || string.IsNullOrWhiteSpace(txt_sem_final_graph.Text))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese la semana inicial y final.",
+                        "Campos incompletos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que los valores sean números enteros válidos
+                if (!int.TryParse(txt_sem_inicial_graph.Text, out int semanaInicial))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese un número válido en la semana inicial.",
+                        "Formato incorrecto",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!int.TryParse(txt_sem_final_graph.Text, out int semanaFinal))
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "Por favor, ingrese un número válido en la semana final.",
+                        "Formato incorrecto",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que la semana inicial sea menor o igual que la semana final
+                if (semanaInicial > semanaFinal)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "La semana inicial debe ser menor o igual que la semana final.",
+                        "Rango inválido",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que el rango esté dentro de los elementos disponibles en el ListView
+                if (listView1.Items.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No hay elementos en la lista para seleccionar.",
+                        "Lista vacía",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Obtener el número de semana más alto disponible en el ListView
+                int semanaMaxima = ObtenerSemanaMaximaEnListView();
+
+                // Validar que las semanas estén dentro del rango disponible
+                if (semanaInicial < 1 || semanaFinal > semanaMaxima)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        $"Por favor, seleccione elementos dentro del rango de la lista.\nLas semanas disponibles son de la 1 a la {semanaMaxima}.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Seleccionar las semanas en el rango
+                int contadorSeleccionados = 0;
+                for (int i = 0; i < lista_semanas.Items.Count; i++)
+                {
+                    // Obtener el texto del item (asumiendo que contiene el número de semana)
+                    if (int.TryParse(lista_semanas.Items[i].Text, out int semanaItem))
+                    {
+                        if (semanaItem >= semanaInicial && semanaItem <= semanaFinal)
+                        {
+                            // Método 1: Usar CheckState (requiere que el CheckBoxes esté habilitado)
+                            lista_semanas.Items[i].CheckState = Telerik.WinControls.Enumerations.ToggleState.On;
+                            // O usando el método ToggleCheckState()
+                            // lista_semanas.Items[i].ToggleCheckState();
+                            contadorSeleccionados++;
+                        }
+                    }
+                }
+
+                if (contadorSeleccionados == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        $"No se encontraron semanas en el rango {semanaInicial} a {semanaFinal}.",
+                        "Sin coincidencias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al seleccionar el rango: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void bnt_limpiar_check_graph_Click(object sender, EventArgs e)
+        {
+            foreach (Telerik.WinControls.UI.ListViewDataItem item in lista_semanas.Items)
+            {
+                item.CheckState = Telerik.WinControls.Enumerations.ToggleState.Off;
+            }
+        }
+
+        private void btn_select_all_graph_Click(object sender, EventArgs e)
+        {
+            foreach (Telerik.WinControls.UI.ListViewDataItem item in lista_semanas.Items)
+            {
+                item.CheckState = Telerik.WinControls.Enumerations.ToggleState.On;
             }
         }
     }

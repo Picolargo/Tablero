@@ -172,6 +172,9 @@
   <data name="5172991_internet_lock_locked_padlock_password_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172991_internet_lock_locked_padlock_password_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="short-broom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\short-broom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="chart_graph_statistics_bar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\chart_graph_statistics_bar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -208,7 +211,7 @@
   <data name="5172988_door_internet_key_lock_password_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5172988_door_internet_key_lock_password_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="short-broom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\short-broom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="mark_13914388" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mark_13914388.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

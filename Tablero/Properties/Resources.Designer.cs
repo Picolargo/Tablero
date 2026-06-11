@@ -281,16 +281,6 @@ namespace Tablero.Properties {
         }
         
         /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
-        /// </summary>
-        internal static System.Drawing.Icon Icon1 {
-            get {
-                object obj = ResourceManager.GetObject("Icon1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap loader_14092_512 {
@@ -336,6 +326,16 @@ namespace Tablero.Properties {
         internal static System.Drawing.Bitmap logopicolargo_pet {
             get {
                 object obj = ResourceManager.GetObject("logopicolargo_pet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mark_13914388 {
+            get {
+                object obj = ResourceManager.GetObject("mark_13914388", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
