@@ -12370,7 +12370,7 @@ FROM (
         ON f.""ID_Ficha"" = tmo.""ID_Ficha""
     LEFT JOIN public.""Tiempo_muerto_Mecanico"" tmm 
         ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-    WHERE f.""Area"" IN ('Despegue')
+    WHERE f.""Area"" IN ('Despegue', 'Tunel/Sumergidor')
         AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
     GROUP BY 
         EXTRACT(YEAR FROM f.""Fecha""),
@@ -12538,10 +12538,10 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
             // Crear el parámetro para el año
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-        new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
-        {
-            Value = Convert.ToInt32(añoSeleccionado)
-        }
+                new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+                {
+                    Value = Convert.ToInt32(añoSeleccionado)
+                }
             };
 
             // Cargar los datos con el filtro de año
@@ -12549,6 +12549,220 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
             // Quitar selección inicial
             dgv_reporte_concentrado.ClearSelection();
+        }
+        //private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
+        //{
+        //    LoadingScreen.ShowLoading();
+        //    try
+        //    {
+        //        var saveFileDialog = new SaveFileDialog
+        //        {
+        //            Filter = "Excel Files|*.xlsx",
+        //            Title = "Guardar archivo de Excel"
+        //        };
+
+        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            string filePath = saveFileDialog.FileName;
+
+        //            await Task.Run(() =>
+        //            {
+        //                ExportarDataGridViewFiltradoAExcel_ClosedXML(
+        //                    dgv_reporte_concentrado,
+        //                    filePath
+        //                );
+        //            });
+
+        //            MetroFramework.MetroMessageBox.Show(
+        //                this,
+        //                "La exportación fue completada con éxito.",
+        //                "Exportación a Excel",
+        //                MessageBoxButtons.OK,
+        //                MessageBoxIcon.Information
+        //            );
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MetroFramework.MetroMessageBox.Show(
+        //            this,
+        //            "Error durante la exportación: " + ex.Message,
+        //            "Error",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error
+        //        );
+        //    }
+        //    finally
+        //    {
+        //        LoadingScreen.HideLoading();
+        //    }
+        //}
+        // Nueva función de exportación que preserva los colores del DataGridView
+        private void ExportarDataGridViewConColoresAExcel(DataGridView dgv, string filePath)
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Reporte");
+
+                // Variables para el rango
+                int colIndex = 1;
+                int rowIndex = 1;
+
+                // ==========================
+                // ENCABEZADOS
+                // ==========================
+                for (int i = 0; i < dgv.Columns.Count; i++)
+                {
+                    if (dgv.Columns[i].Visible)
+                    {
+                        var cell = worksheet.Cell(rowIndex, colIndex);
+                        cell.Value = dgv.Columns[i].HeaderText;
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        cell.Style.Fill.BackgroundColor = XLColor.FromArgb(52, 73, 94);
+                        cell.Style.Font.FontColor = XLColor.White;
+                        colIndex++;
+                    }
+                }
+
+                // ==========================
+                // FILAS CON COLORES (APLICANDO LA MISMA LÓGICA DE CellFormatting)
+                // ==========================
+                rowIndex = 2;
+                bool hayDatos = false;
+
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (!row.IsNewRow && row.Visible)
+                    {
+                        colIndex = 1;
+
+                        for (int j = 0; j < dgv.Columns.Count; j++)
+                        {
+                            if (dgv.Columns[j].Visible)
+                            {
+                                var cell = worksheet.Cell(rowIndex, colIndex);
+                                var dgvCell = row.Cells[j];
+                                string colName = dgv.Columns[j].Name;
+
+                                // ===== VALOR DE LA CELDA =====
+                                object cellValue = dgvCell.Value;
+                                string cellText = cellValue?.ToString() ?? string.Empty;
+
+                                // Intentar preservar el tipo de dato
+                                if (cellValue is decimal || cellValue is double || cellValue is float)
+                                {
+                                    if (double.TryParse(cellText, out double numericValue))
+                                        cell.Value = numericValue;
+                                    else
+                                        cell.Value = cellText;
+                                }
+                                else if (cellValue is int || cellValue is long)
+                                {
+                                    if (long.TryParse(cellText, out long numericValue))
+                                        cell.Value = numericValue;
+                                    else
+                                        cell.Value = cellText;
+                                }
+                                else
+                                {
+                                    cell.Value = cellText;
+                                }
+
+                                // ===== APLICAR COLORES SEGÚN LA MISMA LÓGICA DE CellFormatting =====
+                                // Verificar si la columna es de las que tienen colores
+                                bool esColumnaConColores = colName == "%Cumplimiento Tiempo Efectivo" ||
+                                                             colName == "%Cumplimiento Fresco" ||
+                                                             colName == "%Cumplimiento Secos" ||
+                                                             colName == "%Cumplimiento Relación Fresco-Seco" ||
+                                                             colName == "FTT" ||
+                                                             colName == "%Cumplimiento Resecado";
+
+                                if (esColumnaConColores && cellValue != null && cellValue != DBNull.Value)
+                                {
+                                    if (decimal.TryParse(cellValue.ToString(), out decimal valor))
+                                    {
+                                        // Aplicar los mismos colores que en CellFormatting
+                                        if (valor >= 90)
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(76, 175, 80);   // Verde
+                                            cell.Style.Font.FontColor = XLColor.White;
+                                            cell.Style.Font.Bold = true;
+                                        }
+                                        else if (valor >= 80)
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(255, 235, 59);  // Amarillo
+                                            cell.Style.Font.FontColor = XLColor.Black;
+                                        }
+                                        else
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(244, 67, 54);   // Rojo
+                                            cell.Style.Font.FontColor = XLColor.White;
+                                            cell.Style.Font.Bold = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // Color por defecto para columnas sin colores
+                                    cell.Style.Fill.BackgroundColor = XLColor.White;
+                                    cell.Style.Font.FontColor = XLColor.FromArgb(52, 73, 94);
+                                }
+
+                                // ===== BORDES =====
+                                cell.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.BottomBorderColor = XLColor.FromArgb(200, 200, 200);
+                                cell.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.RightBorderColor = XLColor.FromArgb(200, 200, 200);
+
+                                colIndex++;
+                            }
+                        }
+
+                        rowIndex++;
+                        hayDatos = true;
+                    }
+                }
+
+                // ==========================
+                // MENSAJE SI NO HAY DATOS
+                // ==========================
+                if (!hayDatos)
+                {
+                    worksheet.Cell(2, 1).Value = "No hay datos visibles para exportar";
+                    worksheet.Cell(2, 1).Style.Fill.BackgroundColor = XLColor.FromArgb(255, 240, 240);
+                    worksheet.Cell(2, 1).Style.Font.FontColor = XLColor.FromArgb(231, 76, 60);
+                    worksheet.Cell(2, 1).Style.Font.Bold = true;
+                }
+
+                // ==========================
+                // BORDES Y AJUSTES
+                // ==========================
+                int totalRows = Math.Max(rowIndex - 1, 2);
+                int totalCols = colIndex - 1;
+
+                if (totalRows > 0 && totalCols > 0)
+                {
+                    var usedRange = worksheet.Range(1, 1, totalRows, totalCols);
+                    usedRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    usedRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                }
+
+                // ==========================
+                // CONGELAR FILA DE ENCABEZADOS
+                // ==========================
+                worksheet.SheetView.FreezeRows(1);
+
+                // ==========================
+                // AUTO-AJUSTAR COLUMNAS
+                // ==========================
+                worksheet.Columns().AdjustToContents();
+
+                // ==========================
+                // GUARDAR ARCHIVO
+                // ==========================
+                workbook.SaveAs(filePath);
+            }
         }
         private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
         {
@@ -12567,7 +12781,8 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
 
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel_ClosedXML(
+                        // Usar la NUEVA función que preserva colores
+                        ExportarDataGridViewConColoresAExcel(
                             dgv_reporte_concentrado,
                             filePath
                         );
@@ -12922,6 +13137,169 @@ ORDER BY
 
             dgv_reporte_concentrado_otras.ClearSelection();
         }
+        private void ExportarDataGridViewConColoresAExcel_OtrasAreas(DataGridView dgv, string filePath)
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Reporte");
+
+                // Variables para el rango
+                int colIndex = 1;
+                int rowIndex = 1;
+
+                // ==========================
+                // ENCABEZADOS
+                // ==========================
+                for (int i = 0; i < dgv.Columns.Count; i++)
+                {
+                    if (dgv.Columns[i].Visible)
+                    {
+                        var cell = worksheet.Cell(rowIndex, colIndex);
+                        cell.Value = dgv.Columns[i].HeaderText;
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        cell.Style.Fill.BackgroundColor = XLColor.FromArgb(52, 73, 94);
+                        cell.Style.Font.FontColor = XLColor.White;
+                        colIndex++;
+                    }
+                }
+
+                // ==========================
+                // FILAS CON COLORES (APLICANDO LA MISMA LÓGICA DE CellFormatting)
+                // ==========================
+                rowIndex = 2;
+                bool hayDatos = false;
+
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (!row.IsNewRow && row.Visible)
+                    {
+                        colIndex = 1;
+
+                        for (int j = 0; j < dgv.Columns.Count; j++)
+                        {
+                            if (dgv.Columns[j].Visible)
+                            {
+                                var cell = worksheet.Cell(rowIndex, colIndex);
+                                var dgvCell = row.Cells[j];
+                                string colName = dgv.Columns[j].Name;
+
+                                // ===== VALOR DE LA CELDA =====
+                                object cellValue = dgvCell.Value;
+                                string cellText = cellValue?.ToString() ?? string.Empty;
+
+                                // Intentar preservar el tipo de dato
+                                if (cellValue is decimal || cellValue is double || cellValue is float)
+                                {
+                                    if (double.TryParse(cellText, out double numericValue))
+                                        cell.Value = numericValue;
+                                    else
+                                        cell.Value = cellText;
+                                }
+                                else if (cellValue is int || cellValue is long)
+                                {
+                                    if (long.TryParse(cellText, out long numericValue))
+                                        cell.Value = numericValue;
+                                    else
+                                        cell.Value = cellText;
+                                }
+                                else
+                                {
+                                    cell.Value = cellText;
+                                }
+
+                                // ===== APLICAR COLORES SEGÚN LA MISMA LÓGICA DE CellFormatting =====
+                                // Verificar si la columna es de las que tienen colores
+                                bool esColumnaConColores = colName == "% Cumplimiento Tiempo Efectivo" ||
+                                                             colName == "% Cumplimiento Kg Terminados" ||
+                                                             colName == "FTT";
+
+                                if (esColumnaConColores && cellValue != null && cellValue != DBNull.Value)
+                                {
+                                    if (decimal.TryParse(cellValue.ToString(), out decimal valor))
+                                    {
+                                        // Aplicar los mismos colores que en CellFormatting
+                                        if (valor >= 90)
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(76, 175, 80);   // Verde
+                                            cell.Style.Font.FontColor = XLColor.White;
+                                            cell.Style.Font.Bold = true;
+                                        }
+                                        else if (valor >= 80)
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(255, 235, 59);  // Amarillo
+                                            cell.Style.Font.FontColor = XLColor.Black;
+                                        }
+                                        else
+                                        {
+                                            cell.Style.Fill.BackgroundColor = XLColor.FromArgb(244, 67, 54);   // Rojo
+                                            cell.Style.Font.FontColor = XLColor.White;
+                                            cell.Style.Font.Bold = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // Color por defecto para columnas sin colores
+                                    cell.Style.Fill.BackgroundColor = XLColor.White;
+                                    cell.Style.Font.FontColor = XLColor.FromArgb(52, 73, 94);
+                                }
+
+                                // ===== BORDES =====
+                                cell.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.BottomBorderColor = XLColor.FromArgb(200, 200, 200);
+                                cell.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Border.RightBorderColor = XLColor.FromArgb(200, 200, 200);
+
+                                colIndex++;
+                            }
+                        }
+
+                        rowIndex++;
+                        hayDatos = true;
+                    }
+                }
+
+                // ==========================
+                // MENSAJE SI NO HAY DATOS
+                // ==========================
+                if (!hayDatos)
+                {
+                    worksheet.Cell(2, 1).Value = "No hay datos visibles para exportar";
+                    worksheet.Cell(2, 1).Style.Fill.BackgroundColor = XLColor.FromArgb(255, 240, 240);
+                    worksheet.Cell(2, 1).Style.Font.FontColor = XLColor.FromArgb(231, 76, 60);
+                    worksheet.Cell(2, 1).Style.Font.Bold = true;
+                }
+
+                // ==========================
+                // BORDES Y AJUSTES
+                // ==========================
+                int totalRows = Math.Max(rowIndex - 1, 2);
+                int totalCols = colIndex - 1;
+
+                if (totalRows > 0 && totalCols > 0)
+                {
+                    var usedRange = worksheet.Range(1, 1, totalRows, totalCols);
+                    usedRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    usedRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                }
+
+                // ==========================
+                // CONGELAR FILA DE ENCABEZADOS
+                // ==========================
+                worksheet.SheetView.FreezeRows(1);
+
+                // ==========================
+                // AUTO-AJUSTAR COLUMNAS
+                // ==========================
+                worksheet.Columns().AdjustToContents();
+
+                // ==========================
+                // GUARDAR ARCHIVO
+                // ==========================
+                workbook.SaveAs(filePath);
+            }
+        }
         //dgv_reporte_concentrado_otras
         private async void btn_export_excel_concentrado_otras_Click(object sender, EventArgs e)
         {
@@ -12940,7 +13318,8 @@ ORDER BY
 
                     await Task.Run(() =>
                     {
-                        ExportarDataGridViewFiltradoAExcel_ClosedXML(
+                        // Usar la NUEVA función para Otras Áreas
+                        ExportarDataGridViewConColoresAExcel_OtrasAreas(
                             dgv_reporte_concentrado_otras,
                             filePath
                         );
