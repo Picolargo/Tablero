@@ -175,7 +175,7 @@ namespace Tablero
 
         private void btn_iniciar_Click(object sender, EventArgs e)
         {
-            
+            isHovering = false;
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;
@@ -189,80 +189,139 @@ namespace Tablero
             {
                 // Si no hay configuración guardada, abrir el formulario de conexión
                 var frm = new Coneccion_Server();
-                frm.Owner = this;      // <-- importante
+                frm.Owner = this;
                 frm.TopMost = true;
                 frm.Show();
                 this.Hide();
-                return; // Salir aquí para no continuar
+                return;
             }
 
             try
             {
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-                // Usar la nueva versión que maneja errores de conexión
-                bool isValid = dbHelper.ValidateUser(txt_user_name.Text, txt_password.Text, out string errorMessage);
+                // Usar el nuevo método que retorna códigos de estado
+                int status = dbHelper.ValidateUserWithStatus(txt_user_name.Text, txt_password.Text, out string errorMessage);
 
                 // Verificar si hubo error de conexión
                 if (errorMessage == "CONNECTION_ERROR")
                 {
                     MetroFramework.MetroMessageBox.Show(this,
-                        "No hay conexión a Internet. Por favor, verifique su conexión de red e intente nuevamente.",
+                        "No se pudo establecer conexión con el servidor. Por favor, verifique su conexión de red e intente nuevamente.",
                         "Error de Conexión",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
-                    return; // Salir sin mostrar mensaje de credenciales incorrectas
+                    limpiarCampos();
+                    return;
                 }
 
-                if (isValid)
+                // Manejar los diferentes estados de validación
+                switch (status)
                 {
-                    // Obtener información adicional del usuario
-                    DataRow userInfo = dbHelper.GetUserInfo(txt_user_name.Text, out string userInfoError);
+                    case 1:
+                        // Usuario válido y activo - proceder con el login
+                        ProcesarLoginExitoso(dbHelper);
+                        break;
 
-                    // Verificar error de conexión al obtener información
-                    if (userInfoError == "CONNECTION_ERROR")
-                    {
+                    case -1:
+                        // Usuario no existe
                         MetroFramework.MetroMessageBox.Show(this,
-                            "No hay conexión a Internet. Por favor, verifique su conexión de red e intente nuevamente.",
-                            "Error de Conexión",
+                            "El usuario ingresado no existe en el sistema.\n\n" +
+                            "Por favor, verifique que está utilizando el usuario correcto.\n" +
+                            "Si el problema persiste, contacte a su administrador del sistema.",
+                            "Usuario No Encontrado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        limpiarCampos();
+                        break;
+
+                    case -2:
+                        // Usuario desactivado
+                        MetroFramework.MetroMessageBox.Show(this,
+                            "El usuario ha sido desactivado en el sistema.\n\n" +
+                            "Para reactivar su acceso, por favor contacte a su administrador del sistema.",
+                            "Usuario Desactivado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        limpiarCampos();
+                        break;
+
+                    case 0:
+                        // Credenciales incorrectas
+                        MetroFramework.MetroMessageBox.Show(this,
+                            "La contraseña ingresada es incorrecta.\n\n" +
+                            "Por favor, verifique su contraseña e intente nuevamente.\n" +
+                            "Si olvidó su contraseña, contacte a su administrador del sistema.",
+                            "Contraseña Incorrecta",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        limpiarCampos();
+                        break;
+
+                    default:
+                        // Otro error
+                        MetroFramework.MetroMessageBox.Show(this,
+                            "Ocurrió un error inesperado al validar el usuario.\n\n" +
+                            "Por favor, intente nuevamente. Si el problema persiste, contacte a su administrador del sistema.",
+                            "Error de Validación",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    if (userInfo != null)
-                    {
-                        int idUser = Convert.ToInt32(userInfo["ID_User"]);
-                        string nivel = userInfo["Nivel"].ToString();
-                        string noEmpleado = userInfo["No_Empleado"].ToString();
-                        string nomEmpleado = userInfo["Usuario"].ToString();
-
-                        // Usuario válido
-                        this.Visible = false;
-                        Form_principal principal = new Form_principal(noEmpleado, nomEmpleado, idUser, nivel, connectionString);
-                        principal.WindowState = FormWindowState.Maximized; // <-- Aquí fuerzas el modo maximizado
-                        principal.Show(); // Muestra el formulario principal
-                    }
-                }
-                else
-                {
-                    // Credenciales incorrectas (solo si no hubo error de conexión)
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "El usuario y/o la contraseña son incorrectos. Por favor, verifique sus datos e intente nuevamente.\r\n\r\n",
-                        "Advertencia",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    limpiarCampos(); // Limpia los campos de texto
+                        limpiarCampos();
+                        break;
                 }
             }
             catch (Exception ex)
             {
                 // Capturar cualquier otro error inesperado
                 MetroFramework.MetroMessageBox.Show(this,
-                    $"Error inesperado: {ex.Message}",
+                    $"Error inesperado: {ex.Message}\n\nPor favor, contacte a su administrador del sistema.",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                limpiarCampos();
+            }
+        }
+
+        // Método auxiliar para procesar el login exitoso
+        private void ProcesarLoginExitoso(DatabaseHelper dbHelper)
+        {
+            // Obtener información adicional del usuario
+            DataRow userInfo = dbHelper.GetUserInfo(txt_user_name.Text, out string userInfoError);
+
+            // Verificar error de conexión al obtener información
+            if (userInfoError == "CONNECTION_ERROR")
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "No se pudo obtener la información del usuario. Por favor, verifique su conexión de red e intente nuevamente.",
+                    "Error de Conexión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                limpiarCampos();
+                return;
+            }
+
+            if (userInfo != null)
+            {
+                int idUser = Convert.ToInt32(userInfo["ID_User"]);
+                string nivel = userInfo["Nivel"].ToString();
+                string noEmpleado = userInfo["No_Empleado"].ToString();
+                string nomEmpleado = userInfo["Usuario"].ToString();
+
+                // Usuario válido
+                this.Visible = false;
+                Form_principal principal = new Form_principal(noEmpleado, nomEmpleado, idUser, nivel, connectionString);
+                principal.WindowState = FormWindowState.Maximized;
+                principal.Show();
+            }
+            else
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "No se pudo obtener la información del usuario.\n\n" +
+                    "Por favor, intente nuevamente. Si el problema persiste, contacte a su administrador del sistema.",
+                    "Error de Datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                limpiarCampos();
             }
         }
 

@@ -159,26 +159,62 @@ namespace Tablero
                 MessageBox.Show("Error al cargar datos: " + ex.Message);
             }
         }
-        // Validación de usuario corregida para PostgreSQL - acepta Usuario o No_Empleado
-        public bool ValidateUser(string identificador, string password)
-        {
-            return ValidateUser(identificador, password, out _);
-        }
 
         // Nueva versión con manejo de error de conexión
-        public bool ValidateUser(string identificador, string password, out string errorMessage)
+        //public bool ValidateUser(string identificador, string password, out string errorMessage)
+        //{
+        //    errorMessage = string.Empty;
+
+        //    // Consulta que acepta tanto Usuario como No_Empleado
+        //    string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
+        //   WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+        //   AND ""Password"" = @password AND ""Activo"" = true";
+
+        //    NpgsqlParameter[] parameters = new NpgsqlParameter[]
+        //    {
+        //new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+        //new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+        //    };
+
+        //    try
+        //    {
+        //        using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+        //            using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddRange(parameters);
+
+        //                object result = command.ExecuteScalar();
+        //                return result != null ? Convert.ToInt32(result) > 0 : false;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (IsNetworkError(ex))
+        //        {
+        //            errorMessage = "CONNECTION_ERROR";
+        //        }
+        //        else
+        //        {
+        //            errorMessage = ex.Message;
+        //        }
+        //        return false;
+        //    }
+        //}
+        // Nueva versión que retorna un código de estado en lugar de solo bool
+        public int ValidateUserWithStatus(string identificador, string password, out string errorMessage)
         {
             errorMessage = string.Empty;
 
-            // Consulta que acepta tanto Usuario como No_Empleado
-            string query = @"SELECT COUNT(1) FROM public.""Usuarios"" 
-           WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
-           AND ""Password"" = @password";
+            // Primero verificar si el usuario existe
+            string queryCheckUser = @"SELECT ""Activo"" FROM public.""Usuarios"" 
+           WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador)";
 
             NpgsqlParameter[] parameters = new NpgsqlParameter[]
             {
-        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
-        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador }
             };
 
             try
@@ -186,12 +222,52 @@ namespace Tablero
                 using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
                 {
                     connection.Open();
-                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+
+                    // Verificar si el usuario existe
+                    using (NpgsqlCommand command = new NpgsqlCommand(queryCheckUser, connection))
                     {
                         command.Parameters.AddRange(parameters);
+                        object result = command.ExecuteScalar();
+
+                        // Si no existe el usuario
+                        if (result == null)
+                        {
+                            return -1; // Usuario no existe
+                        }
+
+                        // Verificar si está activo
+                        bool activo = Convert.ToBoolean(result);
+                        if (!activo)
+                        {
+                            return -2; // Usuario desactivado
+                        }
+                    }
+
+                    // Si existe y está activo, verificar la contraseña
+                    string queryValidate = @"SELECT COUNT(1) FROM public.""Usuarios"" 
+                   WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+                   AND ""Password"" = @password
+                   AND ""Activo"" = true";
+
+                    using (NpgsqlCommand command = new NpgsqlCommand(queryValidate, connection))
+                    {
+                        command.Parameters.AddRange(new NpgsqlParameter[]
+                        {
+                    new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+                    new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+                        });
 
                         object result = command.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) > 0 : false;
+                        int count = result != null ? Convert.ToInt32(result) : 0;
+
+                        if (count > 0)
+                        {
+                            return 1; // Usuario válido y activo
+                        }
+                        else
+                        {
+                            return 0; // Credenciales incorrectas
+                        }
                     }
                 }
             }
@@ -205,8 +281,15 @@ namespace Tablero
                 {
                     errorMessage = ex.Message;
                 }
-                return false;
+                return -3; // Error de conexión o excepción
             }
+        }
+
+        // Mantén el método original para compatibilidad si es necesario
+        public bool ValidateUser(string identificador, string password, out string errorMessage)
+        {
+            int status = ValidateUserWithStatus(identificador, password, out errorMessage);
+            return status == 1;
         }
         public DataRow GetUserInfo(string identificador)
         {

@@ -82,6 +82,7 @@ namespace Tablero
         new List<(string, string, string)>();
         private Editar _editarForm = null;
         private string Kg_pz_str = string.Empty;
+        private bool activo = false;
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -528,6 +529,7 @@ namespace Tablero
 
                     menuStrip1.Visible = true; // Mostrar el menú para el administrador
                 }
+                dgv_users.ClearSelection();
             }
             if (nivel_user == "Administrador")
             {
@@ -682,7 +684,7 @@ namespace Tablero
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            string query = "SELECT \"ID_User\",\"Usuario\" FROM public.\"Usuarios\" where \"Nivel\" = 'Jefe de Turno' ORDER BY \"Usuario\" ASC;";
+            string query = "SELECT \"ID_User\", \"Usuario\" FROM public.\"Usuarios\" WHERE \"Nivel\" = 'Jefe de Turno' AND \"Activo\" = true ORDER BY \"Usuario\" ASC;";
             dbHelper.LoadDataIntoComboBox(query, cb_jefe_turno, "Usuario", "ID_User");
         }
         private void ActualizarAnioReportes()
@@ -834,19 +836,41 @@ namespace Tablero
             tabControl1.SelectedIndex = 0;
             tab_limpiezas.SelectedIndex = 0;
         }
+        //private void actualiza_grid_users()
+        //{
+        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+        //    // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+        //    string querySimple = @"SELECT 
+        //                    ""ID_User"" as ""ID"", 
+        //                    ""No_Empleado"" as ""No Empleado"", 
+        //                    ""Usuario"" as ""Nombre de usuario"", 
+        //                    ""Password"" as ""Contraseña"", 
+        //                    ""Nivel""
+        //                  FROM public.""Usuarios""
+        //                  ORDER BY ""No_Empleado"" ASC;";  // ← ASC para orden ascendente
+
+        //    // Cargar los datos de la tabla Usuarios en el DataGridView
+        //    dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
+
+        //    // Configurar el DataGridView
+        //    dgv_users.Columns[0].Visible = false;
+        //    dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+        //}
         private void actualiza_grid_users()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
-            // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
+            // Consulta que incluye la columna Activo
             string querySimple = @"SELECT 
                             ""ID_User"" as ""ID"", 
                             ""No_Empleado"" as ""No Empleado"", 
                             ""Usuario"" as ""Nombre de usuario"", 
                             ""Password"" as ""Contraseña"", 
-                            ""Nivel""
+                            ""Nivel"",
+                            ""Activo"" as ""Activo""
                           FROM public.""Usuarios""
-                          ORDER BY ""No_Empleado"" ASC;";  // ← ASC para orden ascendente
+                          ORDER BY ""No_Empleado"" ASC;";
 
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
@@ -854,6 +878,14 @@ namespace Tablero
             // Configurar el DataGridView
             dgv_users.Columns[0].Visible = false;
             dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+
+            // Configurar la columna Activo como CheckBox
+            if (dgv_users.Columns["Activo"] != null)
+            {
+                dgv_users.Columns["Activo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                dgv_users.Columns["Activo"].Width = 70;
+            }
+            dgv_users.ClearSelection();
         }
 
         private void actualiza_grid_Deshitratado()
@@ -2110,6 +2142,17 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (e.RowIndex >= 0)
             {
+                txt_usuario.Enabled = false;
+                txt_contra.Enabled = false;
+                cmb_nivel_user.Enabled = false;
+                txt_no_emp.Text = string.Empty;
+                txt_usuario.Text = string.Empty;
+                txt_contra.Text = string.Empty;
+                cmb_nivel_user.SelectedIndex = -1;
+                id_global_users = string.Empty; // Limpiar la variable global
+                cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
+                cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+                txt_no_emp.Focus(); // Enfocar el campo de No Empleado
                 // Obtener el valor de la primera columna del renglón clicado
                 id_global_users = dgv_users.Rows[e.RowIndex].Cells[0].Value.ToString();
                 // Cargar los datos del usuario seleccionado en los campos de texto
@@ -2118,11 +2161,33 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 txt_contra.Text = dgv_users.Rows[e.RowIndex].Cells[3].Value.ToString(); // Contraseña
                 cmb_nivel_user.SelectedItem = dgv_users.Rows[e.RowIndex].Cells[4].Value.ToString(); // Nivel
 
+                // Obtener el estado Activo del checkbox
+                
+                if (dgv_users.Rows[e.RowIndex].Cells["Activo"].Value != null)
+                {
+                    activo = Convert.ToBoolean(dgv_users.Rows[e.RowIndex].Cells["Activo"].Value);
+                    if(activo)
+                    {
+                        btn_Desactivar.Enabled = true;
+                        btn_reactivate_user.Enabled = false;
+                    }
+                    else
+                    {
+                        btn_Desactivar.Enabled = false;
+                        btn_reactivate_user.Enabled = true;
+                    }
+                }
+
+                // Aquí puedes mostrar el estado en algún control si lo deseas
+                // Por ejemplo, un label o un checkbox separado
+
                 btn_edit.Enabled = true;
                 btn_delete_user.Enabled = true;
                 cmb_nivel_user.Enabled = true;
                 cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
                 cmb_nivel_user.Enabled = false;
+                btn_save.Enabled = false;
+                
             }
         }
         private void LimpiarComboBox(MaterialComboBox comboBox)
@@ -2146,63 +2211,84 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrEmpty(id_global_users))
                 {
                     // actualizar
-                    // Convertir el ID a entero ANTES de crear el parámetro
                     int idUsuario = System.Convert.ToInt32(id_global_users);
 
-                    queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel  WHERE \"ID_User\" = @ID_usuario;";
+                    // Obtener el estado actual del usuario desde el DataGridView
+                    bool activo = true;
+                    foreach (DataGridViewRow row in dgv_users.Rows)
+                    {
+                        if (row.Cells[0].Value != null && row.Cells[0].Value.ToString() == id_global_users)
+                        {
+                            if (row.Cells["Activo"].Value != null)
+                            {
+                                activo = Convert.ToBoolean(row.Cells["Activo"].Value);
+                            }
+                            break;
+                        }
+                    }
+
+                    queryInsertUpdate = "UPDATE public.\"Usuarios\" SET \"Usuario\" = @Usuario, \"Password\" = @Password, \"Nivel\" = @Nivel, \"Activo\" = @Activo WHERE \"ID_User\" = @ID_usuario;";
 
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@Usuario", NpgsqlTypes.NpgsqlDbType.Varchar)
-                        {
-                            Value = txt_usuario.Text
-                        },
-                        new NpgsqlParameter("@Password", NpgsqlTypes.NpgsqlDbType.Varchar)
-                        {
-                            Value = txt_contra.Text
-                        },
-                        new NpgsqlParameter("@Nivel", NpgsqlTypes.NpgsqlDbType.Varchar)
-                        {
-                            Value = cmb_nivel_user.SelectedItem?.ToString() ?? ""
-                        },
-                        new NpgsqlParameter("@ID_usuario", NpgsqlTypes.NpgsqlDbType.Integer)
-                        {
-                            Value = idUsuario  // variable convertida a int
-                        }
+                new NpgsqlParameter("@Usuario", NpgsqlTypes.NpgsqlDbType.Varchar)
+                {
+                    Value = txt_usuario.Text
+                },
+                new NpgsqlParameter("@Password", NpgsqlTypes.NpgsqlDbType.Varchar)
+                {
+                    Value = txt_contra.Text
+                },
+                new NpgsqlParameter("@Nivel", NpgsqlTypes.NpgsqlDbType.Varchar)
+                {
+                    Value = cmb_nivel_user.SelectedItem?.ToString() ?? ""
+                },
+                new NpgsqlParameter("@Activo", NpgsqlTypes.NpgsqlDbType.Boolean)
+                {
+                    Value = activo
+                },
+                new NpgsqlParameter("@ID_usuario", NpgsqlTypes.NpgsqlDbType.Integer)
+                {
+                    Value = idUsuario
+                }
                     };
 
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                     LimpiarComboBox(cb_jefe_turno);
                     carga_Jefes();
+                    btn_Desactivar.Enabled = false;
+                    btn_reactivate_user.Enabled = false;
                 }
                 else
                 {
-
                     // Verificar si el usuario ya existe
-                    string queryCheckUser = "SELECT COUNT(*) FROM public.\"Usuarios\" WHERE \"Usuario\"  ILIKE @Usuario or \"No_Empleado\" ILIKE @no_emp;";
+                    string queryCheckUser = "SELECT COUNT(*) FROM public.\"Usuarios\" WHERE \"Usuario\" ILIKE @Usuario OR \"No_Empleado\" ILIKE @no_emp;";
                     NpgsqlParameter[] parametersCheck = new NpgsqlParameter[]
                     {
-                    new NpgsqlParameter("@Usuario", txt_usuario.Text),
-                    new NpgsqlParameter("@no_emp", txt_no_emp.Text)
+                new NpgsqlParameter("@Usuario", txt_usuario.Text),
+                new NpgsqlParameter("@no_emp", txt_no_emp.Text)
                     };
                     System.Data.DataTable dtCheck = dbHelper.ExecuteSelectQuery(queryCheckUser, parametersCheck);
                     if (dtCheck != null && dtCheck.Rows.Count > 0 && System.Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
                     {
-                        MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o numero de emplado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MetroFramework.MetroMessageBox.Show(this, "El nombre de usuario y/o número de empleado ya existe. Por favor, elija otro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                     // Insertar
-                    queryInsertUpdate = "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel);";
+                    queryInsertUpdate = "INSERT INTO public.\"Usuarios\" (\"No_Empleado\", \"Usuario\", \"Password\", \"Nivel\", \"Activo\") VALUES (@No_Empleado, @Usuario, @Password, @Nivel, @Activo);";
                     NpgsqlParameter[] parametersInsertUpdate = new NpgsqlParameter[]
                     {
-                        new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
-                        new NpgsqlParameter("@Usuario", txt_usuario.Text),
-                        new NpgsqlParameter("@Password", txt_contra.Text),
-                        new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString())
+                new NpgsqlParameter("@No_Empleado", txt_no_emp.Text),
+                new NpgsqlParameter("@Usuario", txt_usuario.Text),
+                new NpgsqlParameter("@Password", txt_contra.Text),
+                new NpgsqlParameter("@Nivel", cmb_nivel_user.SelectedItem.ToString()),
+                new NpgsqlParameter("@Activo", true)
                     };
                     result = dbHelper.ExecuteNonQuery(queryInsertUpdate, parametersInsertUpdate);
                     LimpiarComboBox(cb_jefe_turno);
                     carga_Jefes();
+                    btn_Desactivar.Enabled = false;
+                    btn_reactivate_user.Enabled = false;
                 }
 
                 if (result > 0)
@@ -2232,6 +2318,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             id_global_users = string.Empty; // Limpiar la variable global
             cb_Area.SelectedIndex = -1; // Limpiar el ComboBox de áreas
             cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+            dgv_users.ClearSelection();
             txt_no_emp.Focus(); // Enfocar el campo de No Empleado
         }
         private void limpiarCampos_meta()
@@ -2305,7 +2392,9 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             btn_save.Enabled = false;
             btn_cancel.Enabled = false;
-            btn_delete_user.Enabled = true;
+            btn_delete_user.Enabled = false;
+            btn_Desactivar.Enabled = false;
+            btn_reactivate_user.Enabled = false;
             limpiarCampos();
             txt_no_emp.Enabled = false;
             txt_usuario.Enabled = false;
@@ -2316,18 +2405,45 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cmb_nivel_user.Enabled = true;
             cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
             cmb_nivel_user.Enabled = false;
+            
         }
 
         private void btn_edit_Click(object sender, EventArgs e)
         {
-            btn_save.Enabled = true;
+            btn_edit.Enabled = false;
+            
             btn_cancel.Enabled = true;
-            btn_delete_user.Enabled = false;
-            txt_usuario.Enabled = true;
-            txt_contra.Enabled = true;
-            cmb_nivel_user.Enabled = true;
-            cmb_nivel_user.Focus();
-            txt_usuario.Focus();
+            
+            //txt_usuario.Enabled = true;
+            //txt_contra.Enabled = true;
+            //cmb_nivel_user.Enabled = true;
+            //cmb_nivel_user.Focus();
+            if (activo) 
+            {
+                // El usuario está activo, permitir la edición
+                btn_delete_user.Enabled = false;
+                btn_save.Enabled = true;
+                txt_usuario.Enabled = true;
+                txt_contra.Enabled = true;
+                cmb_nivel_user.Enabled = true;
+                cmb_nivel_user.Focus();
+                btn_Desactivar.Enabled = true;
+                btn_reactivate_user.Enabled = false;
+                txt_usuario.Focus();
+            }
+            else
+            {
+                // El usuario está inactivo, mostrar mensaje y no permitir la edición
+                MetroFramework.MetroMessageBox.Show(this, "El usuario está inactivo. No se puede editar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btn_save.Enabled = false;
+                btn_delete_user.Enabled = true;
+                txt_usuario.Enabled = false;
+                txt_contra.Enabled = false;
+                cmb_nivel_user.Enabled = false;
+                btn_reactivate_user.Enabled = true;
+                btn_Desactivar.Enabled = false;
+            }
+            
         }
 
         private void txt_no_emp_KeyPress(object sender, KeyPressEventArgs e)
@@ -18587,6 +18703,134 @@ ORDER BY ""OP"" ASC;";
             foreach (Telerik.WinControls.UI.ListViewDataItem item in lista_semanas.Items)
             {
                 item.CheckState = Telerik.WinControls.Enumerations.ToggleState.On;
+            }
+        }
+
+
+        private void btn_reactivate_user_Click(object sender, EventArgs e)
+        {
+            if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confirmar ó Presione No para cancelar", "¿Está realmente seguro que desea reactivar este usuario?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                int id_user = System.Convert.ToInt32(id_global_users);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"UPDATE public.""Usuarios""
+                       SET ""Activo"" = TRUE
+                       WHERE ""ID_User"" = @idUser";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer)
+            {
+                Value = id_user
+            }
+                };
+
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+                    actualiza_grid_users();
+                    btn_save.Enabled = false;
+                    btn_cancel.Enabled = false;
+                    btn_delete_user.Enabled = false;
+                    btn_Desactivar.Enabled = false;
+                    btn_reactivate_user.Enabled = false;
+                    limpiarCampos();
+                    txt_no_emp.Enabled = false;
+                    txt_usuario.Enabled = false;
+                    txt_contra.Enabled = false;
+                    btn_edit.Enabled = false;
+                    id_global_users = string.Empty;
+
+                    cmb_nivel_user.Enabled = true;
+                    cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+                    cmb_nivel_user.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo reactivar el usuario", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void dgv_users_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Verificar que la fila sea válida y que la columna "Activo" exista
+            if (e.RowIndex >= 0 && dgv_users.Columns.Contains("Activo"))
+            {
+                // Obtener el valor de la columna "Activo"
+                bool activo = false;
+                var cellValue = dgv_users.Rows[e.RowIndex].Cells["Activo"].Value;
+
+                if (cellValue != null && cellValue != DBNull.Value)
+                {
+                    activo = Convert.ToBoolean(cellValue);
+                }
+
+                // Si el usuario está inactivo, colorear la fila en gris
+                if (!activo)
+                {
+                    e.CellStyle.BackColor = Color.LightGray;
+                    e.CellStyle.ForeColor = Color.DarkGray;
+                }
+            }
+        }
+
+        private void btn_Desactivar_Click(object sender, EventArgs e)
+        {
+            if (MetroFramework.MetroMessageBox.Show(this, "Presione Yes para confirmar ó Presione No para cancelar", "¿Está realmente seguro que desea desactivar este usuario?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                int id_user = System.Convert.ToInt32(id_global_users);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // En lugar de DELETE, hacemos UPDATE para desactivar el usuario
+                string query = @"UPDATE public.""Usuarios""
+                       SET ""Activo"" = FALSE
+                       WHERE ""ID_User"" = @idUser";
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            new NpgsqlParameter("@idUser", NpgsqlTypes.NpgsqlDbType.Integer)
+            {
+                Value = id_user
+            }
+                };
+
+                int result = dbHelper.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+                    actualiza_grid_users(); // Actualizar el DataGridView de usuarios
+
+                    btn_save.Enabled = false;
+                    btn_cancel.Enabled = false;
+                    btn_delete_user.Enabled = false;
+                    btn_Desactivar.Enabled = false;
+                    btn_reactivate_user.Enabled = false;
+                    limpiarCampos();
+                    txt_no_emp.Enabled = false;
+                    txt_usuario.Enabled = false;
+                    txt_contra.Enabled = false;
+                    btn_edit.Enabled = false;
+                    id_global_users = string.Empty;
+
+                    cmb_nivel_user.Enabled = true;
+                    cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
+                    cmb_nivel_user.Enabled = false;
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo desactivar el usuario", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(materialTabControl1.TabPages["tabPage3"] == materialTabControl1.SelectedTab)
+            {
+                dgv_users.ClearSelection();
             }
         }
     }
