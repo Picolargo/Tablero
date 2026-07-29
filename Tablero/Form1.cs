@@ -419,27 +419,6 @@ namespace Tablero
             return calendar.GetWeekOfYear(fecha, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        // Método para obtener las semanas seleccionadas (usando selección normal)
-        private List<int> ObtenerSemanasSeleccionadas()
-        {
-            List<int> semanas = new List<int>();
-
-            foreach (ListViewItem item in listView1.SelectedItems)
-            {
-                // Obtener el número de semana del Tag o del texto
-                if (item.Tag != null)
-                {
-                    semanas.Add((int)item.Tag);
-                }
-                else
-                {
-                    semanas.Add(int.Parse(item.Text));
-                }
-            }
-
-            return semanas;
-        }
-
         // Método para obtener las semanas seleccionadas (usando checkboxes)
         private List<int> ObtenerSemanasSeleccionadasConCheckbox()
         {
@@ -792,6 +771,7 @@ namespace Tablero
                 // Limpiar el ComboBox primero
                 cb_semana_concentrado_d.Items.Clear();
                 cb_semana_concentrado_otras.Items.Clear();
+                cb_semana_TM.Items.Clear();
 
                 // Obtener el año actual
                 int anioActual = DateTime.Now.Year;
@@ -804,6 +784,7 @@ namespace Tablero
                 {
                     cb_semana_concentrado_d.Items.Add(semana);
                     cb_semana_concentrado_otras.Items.Add(semana);
+                    cb_semana_TM.Items.Add(semana);
                     // Agregar al RadListView
                     lista_semanas.Items.Add(semana.ToString());
                 }
@@ -836,27 +817,6 @@ namespace Tablero
             tabControl1.SelectedIndex = 0;
             tab_limpiezas.SelectedIndex = 0;
         }
-        //private void actualiza_grid_users()
-        //{
-        //    DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-
-        //    // Consulta ordenada por No_Empleado de menor a mayor (ASCENDENTE)
-        //    string querySimple = @"SELECT 
-        //                    ""ID_User"" as ""ID"", 
-        //                    ""No_Empleado"" as ""No Empleado"", 
-        //                    ""Usuario"" as ""Nombre de usuario"", 
-        //                    ""Password"" as ""Contraseña"", 
-        //                    ""Nivel""
-        //                  FROM public.""Usuarios""
-        //                  ORDER BY ""No_Empleado"" ASC;";  // ← ASC para orden ascendente
-
-        //    // Cargar los datos de la tabla Usuarios en el DataGridView
-        //    dbHelper.LoadDataIntoDataGridView(querySimple, dgv_users, null);
-
-        //    // Configurar el DataGridView
-        //    dgv_users.Columns[0].Visible = false;
-        //    dgv_users.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-        //}
         private void actualiza_grid_users()
         {
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -5102,97 +5062,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
             }
         }
-        //private void calcular_turno()
-        //{
-        //    if (cb_Area.SelectedIndex != -1)
-        //    {
-        //        try
-        //        {
-        //            if (!string.IsNullOrWhiteSpace(Mask_txt_hr1.Text) && !string.IsNullOrWhiteSpace(Mask_txt_hr2.Text)
-        //                && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :")
-        //            {
-        //                // Crear copias de las horas para no modificar las originales
-        //                DateTime inicio = horaInicio;
-        //                DateTime fin = horaFin;
-
-        //                // Verificar si la hora de fin es menor que la de inicio
-        //                // Pero considerar que si la diferencia es muy grande (>12 horas),
-        //                // probablemente es porque pasó al día siguiente
-        //                if (fin < inicio)
-        //                {
-        //                    // Si la diferencia es más de 12 horas en negativo, asumimos que es del día siguiente
-        //                    if ((inicio - fin).TotalHours > 12)
-        //                    {
-        //                        fin = fin.AddDays(1);
-        //                    }
-        //                }
-
-        //                // Calcular diferencia inicial
-        //                TimeSpan diferencia = fin - inicio;
-
-        //                // Restar minutos energia
-        //                if (!string.IsNullOrEmpty(txt_Tiempo_energia.Text) && int.TryParse(txt_Tiempo_energia.Text, out int minutosEnergia))
-        //                {
-        //                    diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosEnergia));
-        //                }
-        //                //validar si el turno es menor a 6 horas
-        //                // Convertir la diferencia a minutos totales (como double)
-        //                double minutosTotales = diferencia.TotalMinutes;
-
-        //                // Comparar con 360 minutos (6 horas = 360 minutos)
-        //                if (minutosTotales < 360)
-        //                {
-        //                    txt_Tiempo_comida.Text = "0";
-        //                }
-        //                // Restar minutos comida
-        //                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && int.TryParse(txt_Tiempo_comida.Text, out int minutosComida1))
-        //                {
-        //                    diferencia = diferencia.Subtract(TimeSpan.FromMinutes(minutosComida1));
-        //                }
-
-        //                // Mostrar horas totales (con decimales si hay minutos)
-        //                Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
-
-        //                // Calcular la nueva diferencia restando los minutos
-        //                TimeSpan diferenciaConDescuento = diferencia;
-
-        //                // Restar minutos mecánicos
-        //                if (!string.IsNullOrEmpty(txt_TM_mecanico.Text) && int.TryParse(txt_TM_mecanico.Text, out int minutosMecanico))
-        //                {
-        //                    diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosMecanico));
-        //                }
-
-        //                // Restar minutos operativos
-        //                if (!string.IsNullOrEmpty(txt_TM_operativo.Text) && int.TryParse(txt_TM_operativo.Text, out int minutosOperativo))
-        //                {
-        //                    diferenciaConDescuento = diferenciaConDescuento.Subtract(TimeSpan.FromMinutes(minutosOperativo));
-        //                }
-
-        //                // Asegurar que no sea negativo
-        //                if (diferenciaConDescuento.TotalMinutes < 0)
-        //                {
-        //                    diferenciaConDescuento = TimeSpan.Zero;
-        //                }
-
-        //                if (!string.IsNullOrEmpty(Txt_meta.Text) && cb_Area.SelectedIndex != 4)
-        //                {
-        //                    calcular_meta_programada();
-        //                }
-
-        //                // Mostrar el resultado con descuento en Txt_Read_3
-        //                Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
-        //            }
-        //            btn_save_ficha.Enabled = true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            if (ex is FormatException)
-        //            {
-        //                btn_save_ficha.Enabled = false;
-        //            }
-        //        }
-        //    }
-        //}
         private void cb_Turno_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Turno.SelectedIndex != -1)
@@ -8482,11 +8351,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 errorProvider1.SetError(Mask_txt_hr1, ""); // Borra el error si es válido
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
-                //if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
-                //{
-                //    calcular_meta_programada();
-                //    porcentaje_logrado_planeacion();
-                //}
 
                 if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
                 {
@@ -11269,92 +11133,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             btn_export_excel_merma.Enabled = false;
             btn_clean_merma.Enabled = false;
         }
-        private void ExportarDataGridViewFiltradoAExcel_ClosedXML(
-    DataGridView dgv,
-    string filePath)
-        {
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("Reporte");
-
-                int colIndex = 1;
-
-                // ==========================
-                // ENCABEZADOS (COLUMNAS VISIBLES)
-                // ==========================
-                for (int i = 0; i < dgv.Columns.Count; i++)
-                {
-                    if (dgv.Columns[i].Visible)
-                    {
-                        var cell = worksheet.Cell(1, colIndex);
-                        cell.Value = dgv.Columns[i].HeaderText;
-
-                        cell.Style.Fill.BackgroundColor = XLColor.Orange;
-                        cell.Style.Font.Bold = true;
-                        cell.Style.Font.FontColor = XLColor.Black;
-                        cell.Style.Alignment.Horizontal =
-                            XLAlignmentHorizontalValues.Center;
-
-                        colIndex++;
-                    }
-                }
-
-                int rowIndex = 2;
-                bool hayDatos = false;
-
-                // ==========================
-                // FILAS VISIBLES (RESPETA FILTROS)
-                // ==========================
-                foreach (DataGridViewRow row in dgv.Rows)
-                {
-                    if (!row.IsNewRow && row.Visible)
-                    {
-                        colIndex = 1;
-
-                        for (int j = 0; j < dgv.Columns.Count; j++)
-                        {
-                            if (dgv.Columns[j].Visible)
-                            {
-                                worksheet.Cell(rowIndex, colIndex).Value =
-                                    row.Cells[j].Value?.ToString();
-
-                                colIndex++;
-                            }
-                        }
-
-                        rowIndex++;
-                        hayDatos = true;
-                    }
-                }
-
-                // ==========================
-                // MENSAJE SI NO HAY DATOS
-                // ==========================
-                if (!hayDatos)
-                {
-                    worksheet.Cell(2, 1).Value =
-                        "No hay datos visibles para exportar";
-                }
-
-                // ==========================
-                // BORDES Y AJUSTES
-                // ==========================
-                var usedRange = worksheet.Range(
-                    1, 1,
-                    Math.Max(rowIndex - 1, 2),
-                    colIndex - 1
-                );
-
-                usedRange.Style.Border.OutsideBorder =
-                    XLBorderStyleValues.Thin;
-                usedRange.Style.Border.InsideBorder =
-                    XLBorderStyleValues.Thin;
-
-                worksheet.Columns().AdjustToContents();
-
-                workbook.SaveAs(filePath);
-            }
-        }
 
         private async void btn_export_excel_merma_Click(object sender, EventArgs e)
         {
@@ -12666,54 +12444,6 @@ ORDER BY ""Año"", ""No. Semana"", ""OP"";";
             // Quitar selección inicial
             dgv_reporte_concentrado.ClearSelection();
         }
-        //private async void btn_export_excel_concentrado_Click(object sender, EventArgs e)
-        //{
-        //    LoadingScreen.ShowLoading();
-        //    try
-        //    {
-        //        var saveFileDialog = new SaveFileDialog
-        //        {
-        //            Filter = "Excel Files|*.xlsx",
-        //            Title = "Guardar archivo de Excel"
-        //        };
-
-        //        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            string filePath = saveFileDialog.FileName;
-
-        //            await Task.Run(() =>
-        //            {
-        //                ExportarDataGridViewFiltradoAExcel_ClosedXML(
-        //                    dgv_reporte_concentrado,
-        //                    filePath
-        //                );
-        //            });
-
-        //            MetroFramework.MetroMessageBox.Show(
-        //                this,
-        //                "La exportación fue completada con éxito.",
-        //                "Exportación a Excel",
-        //                MessageBoxButtons.OK,
-        //                MessageBoxIcon.Information
-        //            );
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MetroFramework.MetroMessageBox.Show(
-        //            this,
-        //            "Error durante la exportación: " + ex.Message,
-        //            "Error",
-        //            MessageBoxButtons.OK,
-        //            MessageBoxIcon.Error
-        //        );
-        //    }
-        //    finally
-        //    {
-        //        LoadingScreen.HideLoading();
-        //    }
-        //}
-        // Nueva función de exportación que preserva los colores del DataGridView
         private void ExportarDataGridViewConColoresAExcel(DataGridView dgv, string filePath)
         {
             using (var workbook = new XLWorkbook())
@@ -13630,8 +13360,8 @@ ORDER BY
             // Validar que se haya seleccionado un tipo de gráfica
             if (cb_tipo_grafica.SelectedIndex == -1)
             {
-                lista_semanas.Visible = false; // Ocultar la lista de semanas
-                materialCard26.Visible = false; // Ocultar el panel de gráficos
+                lista_semanas.Visible = false;
+                materialCard26.Visible = false;
                 MetroFramework.MetroMessageBox.Show(this, "Por favor seleccione un tipo de gráfica.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -13639,30 +13369,42 @@ ORDER BY
             // Validar que se haya seleccionado un año
             if (CB_Anio_grafica.SelectedItem == null)
             {
-                lista_semanas.Visible = false; // Ocultar la lista de semanas
-                materialCard26.Visible = false; // Ocultar el panel de gráficos
+                lista_semanas.Visible = false;
+                materialCard26.Visible = false;
                 MetroFramework.MetroMessageBox.Show(this, "Por favor seleccione un año para graficar.", "Año requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // ÍNDICES DE GRÁFICAS QUE NO REQUIEREN SEMANAS
-            int[] graficasSinSemanas = { 8, 10 }; // Case 8 = Cumplimiento Mensual
+            // Validar supervisores seleccionados para gráficas que los requieren
+            HashSet<int> indicesConSupervisores = new HashSet<int> { 4, 7, 8, 9, 10, 11, 12 };
+            if (indicesConSupervisores.Contains(cb_tipo_grafica.SelectedIndex))
+            {
+                List<int> idsSeleccionados = ObtenerSupervisoresSeleccionados();
+                if (idsSeleccionados.Count == 0)
+                {
+                    materialCard26.Visible = false;
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No hay supervisores/jefes seleccionados.\nPor favor, seleccione al menos uno en la lista de supervisores.",
+                        "Validación",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+            }
 
-            // Si la gráfica NO requiere semanas, llamar directamente
+            // ÍNDICES DE GRÁFICAS QUE NO REQUIEREN SEMANAS
+            int[] graficasSinSemanas = { 8 };
+
             if (graficasSinSemanas.Contains(cb_tipo_grafica.SelectedIndex))
             {
                 switch (cb_tipo_grafica.SelectedIndex)
                 {
-                    case 8: // Cumplimiento Mensual
+                    case 8:
                         GraficarCumplimientoMensualPorSupervisor();
-                        materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
-                        break;
-                    case 10: // Cumplimiento Mensual otras áreas
-                        GraficarCumplimientoMensualPorSupervisorOtrasAreas();
-                        materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
+                        materialCard26.Visible = true;
                         break;
                 }
-                return; // Importante: salir después de graficar
+                return;
             }
 
             // PARA LAS DEMÁS GRÁFICAS: Validar semanas seleccionadas
@@ -13729,26 +13471,18 @@ ORDER BY
                     materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
                     break;
                 case 9: // Cumplimiento por Supervisor (Semanal)
-                    GraficarCumplimientoPorSupervisorOtrasAreas(semanasSeleccionadas);
-                    materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
-                    break;
-                case 11: // Cumplimiento por Supervisor (Semanal)
                     GraficarCumplimientoPorJefe(semanasSeleccionadas);
                     materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
                     break;
-                case 12: // Cumplimiento por Supervisor (Semanal)
-                    GraficarCumplimientoPorJefeOtrasAreas(semanasSeleccionadas);
-                    materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
-                    break;
-                case 13: // Cumplimiento por Supervisor (Semanal)
+                case 10: // Cumplimiento General (Semanal)
                     GraficarCumplimientoGeneral(semanasSeleccionadas);
                     materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
                     break;
-                case 14: // Tiempo Efectivo (Semanal)
+                case 11: // Tiempo Efectivo (Semanal)
                     GraficarTiempoEfectivo(semanasSeleccionadas);
                     materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
                     break;
-                case 15: // Tiempo Efectivo (Semanal)
+                case 12: // Tiempo Efectivo Producción (Semanal)
                     GraficarTiempoEfectivoProduccion(semanasSeleccionadas);
                     materialCard26.Visible = true; // Asegurar que el panel de gráficos esté visible
                     break;
@@ -14111,91 +13845,6 @@ ORDER BY
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
             //cartesianChart1.DataTooltip = null;
         }
-        /// <summary>
-        /// Grafica de % Cumplimiento por Supervisor
-        /// </summary>
-        //        private void GraficarCumplimientoGeneral(List<string> semanasSeleccionadas)
-        //        {
-        //            try
-        //            {
-        //                // Configurar títulos específicos para Cumplimiento
-        //                ConfigurarTitulosGrafico(
-        //                    "% CUMPLIMIENTO GENERAL - ANÁLISIS SEMANAL",
-        //                    "Porcentaje de cumplimiento"
-        //                );
-
-        //                // Construir la consulta 
-        //                string semanasParam = string.Join(",", semanasSeleccionadas);
-        //                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-        //                string añoSeleccionado = CB_Anio_grafica.Text;
-        //                string query = $@"
-        //WITH 
-        //despegue AS (
-        //    SELECT 
-        //        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
-        //        ROUND(LEAST(
-        //            (SUM(""Kg_prod_seco"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
-        //            100
-        //        ), 2) as despegue_valor
-        //    FROM public.""Ficha""
-        //    WHERE ""Area"" = 'Despegue'
-        //        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
-        //        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
-        //    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
-        //),
-        //otras_areas AS (
-        //    SELECT 
-        //        EXTRACT(WEEK FROM ""Fecha"") as No_Semana,
-        //        ROUND(LEAST(
-        //            (SUM(""Kg_prod_term"") - SUM(""Kg_fuera_espec"")) / NULLIF(SUM(""Kg_meta""), 0) * 100,
-        //            100
-        //        ), 2) as otras_valor
-        //    FROM public.""Ficha""
-        //    WHERE ""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-        //        AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
-        //        AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
-        //    GROUP BY EXTRACT(WEEK FROM ""Fecha"")
-        //)
-        //SELECT 
-        //    COALESCE(d.No_Semana, o.No_Semana) as No_Semana,
-        //    ROUND(
-        //        CASE 
-        //            WHEN COALESCE(d.despegue_valor, 0) > 0 THEN
-        //                (COALESCE(d.despegue_valor, 0) * 0.5) + (COALESCE(o.otras_valor, 0) * 0.5)
-        //            ELSE
-        //                COALESCE(o.otras_valor, 0)
-        //        END,
-        //        2
-        //    ) as ""% Cumplimiento General""
-        //FROM despegue d
-        //FULL OUTER JOIN otras_areas o ON d.No_Semana = o.No_Semana
-        //ORDER BY No_Semana;";
-
-        //                // Ejecutar la consulta
-        //                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-        //                if (datos == null || datos.Rows.Count == 0)
-        //                {
-        //                    MetroFramework.MetroMessageBox.Show(this,
-        //                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
-        //                        "Precaución",
-        //                        MessageBoxButtons.OK,
-        //                        MessageBoxIcon.Warning);
-        //                    return;
-        //                }
-
-        //                // Configurar el gráfico con LiveCharts
-        //                ConfigurarGraficoCumplimientoGeneral(datos);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MetroFramework.MetroMessageBox.Show(this,
-        //                    $"Error al graficar % Cumplimiento: {ex.Message}",
-        //                    "Error",
-        //                    MessageBoxButtons.OK,
-        //                    MessageBoxIcon.Error);
-        //            }
-        //        }
         private void GraficarCumplimientoGeneral(List<string> semanasSeleccionadas)
         {
             try
@@ -14351,284 +14000,115 @@ ORDER BY
         /// <summary>
         /// Grafica de % Cumplimiento por Supervisor
         /// </summary>
-        private void GraficarCumplimientoPorJefeOtrasAreas(List<string> semanasSeleccionadas)
-        {
-            try
-            {
-                // Configurar títulos específicos para Cumplimiento
-                ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO POR JEFE DE TURNO - ANÁLISIS SEMANAL",
-                    "Porcentaje de cumplimiento(Excluyendo Despegue)"
-                );
-
-                // Construir la consulta SQL
-                string semanasParam = string.Join(",", semanasSeleccionadas);
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = @"
-SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
-    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
-    u.""Usuario"" as ""Jefe de Turno"",  -- Sin COALESCE, solo jefes reales
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_Jefe"" = u.""ID_User""  -- Cambiado a INNER JOIN
-WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-    AND u.""Nivel"" = 'Jefe de Turno'  -- Filtro por nivel Jefe de Turno
-    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(WEEK FROM f.""Fecha""),
-    u.""Usuario""
-ORDER BY 
-    año,
-    No_Semana,
-    ""Jefe de Turno"";";
-
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
-                        "Precaución",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Configurar el gráfico con LiveCharts
-                ConfigurarGraficoCumplimientoPorJefeOtrasAreas(datos);
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                    $"Error al graficar % Cumplimiento: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Configura el gráfico específico para % Cumplimiento por Supervisor (Líneas)
-        /// </summary>
-        private void ConfigurarGraficoCumplimientoPorJefeOtrasAreas(DataTable datos)
-        {
-            // Limpiar el chart de LiveCharts
-            cartesianChart1.Series.Clear();
-            cartesianChart1.AxisX.Clear();
-            cartesianChart1.AxisY.Clear();
-
-            // Obtener supervisores únicos y semanas únicas
-            var supervisores = datos.AsEnumerable()
-                                    .Select(row => row.Field<string>("Jefe de Turno"))
-                                    .Distinct()
-                                    .OrderBy(s => s)
-                                    .ToList();
-
-            var semanas = datos.AsEnumerable()
-                               .Select(row => $"Sem {row.Field<decimal>("No_Semana")}")
-                               .Distinct()
-                               .OrderBy(s => s)
-                               .ToList();
-
-            // Crear un diccionario para acceso rápido a los valores
-            var valoresPorSupervisor = new Dictionary<string, Dictionary<string, double>>();
-
-            foreach (var supervisor in supervisores)
-            {
-                valoresPorSupervisor[supervisor] = new Dictionary<string, double>();
-
-                // Inicializar todas las semanas con 0
-                foreach (var semana in semanas)
-                {
-                    valoresPorSupervisor[supervisor][semana] = 0;
-                }
-            }
-
-            // Llenar los valores reales
-            foreach (DataRow row in datos.Rows)
-            {
-                string supervisor = row["Jefe de Turno"].ToString();
-                string semana = $"Sem {row["No_Semana"]}";
-                double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
-
-                if (valoresPorSupervisor.ContainsKey(supervisor))
-                {
-                    valoresPorSupervisor[supervisor][semana] = cumplimiento;
-                }
-            }
-
-            // Array de colores para los supervisores (colores vibrantes para líneas)
-            var colores = new System.Windows.Media.Color[]
-            {
-        System.Windows.Media.Color.FromRgb(52, 152, 219),  // Azul
-        System.Windows.Media.Color.FromRgb(46, 204, 113),  // Verde
-        System.Windows.Media.Color.FromRgb(231, 76, 60),   // Rojo
-        System.Windows.Media.Color.FromRgb(155, 89, 182),  // Púrpura
-        System.Windows.Media.Color.FromRgb(241, 196, 15),  // Amarillo
-        System.Windows.Media.Color.FromRgb(230, 126, 34),  // Naranja
-        System.Windows.Media.Color.FromRgb(26, 188, 156),  // Turquesa
-        System.Windows.Media.Color.FromRgb(52, 73, 94),    // Azul oscuro
-        System.Windows.Media.Color.FromRgb(192, 57, 43),   // Rojo oscuro
-        System.Windows.Media.Color.FromRgb(41, 128, 185),  // Azul medio
-            };
-
-            // Crear una serie de línea por cada supervisor
-            int colorIndex = 0;
-            foreach (var supervisor in supervisores)
-            {
-                var valores = new LiveCharts.ChartValues<double>();
-
-                foreach (var semana in semanas)
-                {
-                    valores.Add(valoresPorSupervisor[supervisor][semana]);
-                }
-
-                var color = colores[colorIndex % colores.Length];
-
-                var serie = new LiveCharts.Wpf.LineSeries
-                {
-                    Title = supervisor,
-                    Values = valores,
-                    Stroke = new System.Windows.Media.SolidColorBrush(color),
-                    StrokeThickness = 3,
-                    Fill = System.Windows.Media.Brushes.Transparent,
-                    PointGeometrySize = 12,
-                    PointGeometry = LiveCharts.Wpf.DefaultGeometries.Circle,
-                    PointForeground = System.Windows.Media.Brushes.White,
-                    DataLabels = true,
-                    FontSize = 9,
-                    Foreground = System.Windows.Media.Brushes.Black,
-                    LabelPoint = point => point.Y.ToString("F2") + "%", // Formato con 2 decimales y %
-                    LineSmoothness = 0, // Suavizado moderado
-                };
-
-                cartesianChart1.Series.Add(serie);
-                colorIndex++;
-            }
-
-            // Configurar leyenda
-            cartesianChart1.LegendLocation = LegendLocation.Bottom;
-
-            // Eje X
-            cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "SEMANAS",
-                Labels = semanas.ToArray(),
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                Separator = new LiveCharts.Wpf.Separator { IsEnabled = false }
-            });
-
-            // Eje Y (para porcentajes)
-            cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "CUMPLIMIENTO (%)",
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                LabelFormatter = value => value.ToString("F2") + "%",
-                MinValue = 0,
-                MaxValue = 100, // Cumplimiento limitado al 100%
-                Separator = new LiveCharts.Wpf.Separator
-                {
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 220, 220)),
-                    StrokeThickness = 1,
-                    StrokeDashArray = new System.Windows.Media.DoubleCollection { 2 }
-                }
-            });
-
-            // Agregar una línea horizontal en el 100% (opcional - meta ideal)
-            // Nota: LiveCharts 1.x no tiene líneas de anotación fáciles, 
-            // pero podemos agregar un separador especial en el eje Y
-
-            // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
-            cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
-            {
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)), // Fondo oscuro
-                Foreground = System.Windows.Media.Brushes.White, // Texto blanco
-                FontSize = 12,
-                FontWeight = System.Windows.FontWeights.Bold,
-                BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 100, 100)),
-                BorderThickness = new System.Windows.Thickness(1),
-                CornerRadius = new System.Windows.CornerRadius(5), // Bordes redondeados
-                ShowSeries = true, // Mostrar el nombre de la serie
-            };
-
-            // Configuración general
-            cartesianChart1.Background = System.Windows.Media.Brushes.White;
-            cartesianChart1.DisableAnimations = false;
-            cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-            //cartesianChart1.DataTooltip = null;
-        }
-        /// <summary>
-        /// Grafica de % Cumplimiento por Supervisor
-        /// </summary>
         private void GraficarCumplimientoPorJefe(List<string> semanasSeleccionadas)
         {
             try
             {
-                // Configurar títulos específicos para Cumplimiento
-                ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO POR JEFE DE TURNO - ANÁLISIS SEMANAL",
-                    "Porcentaje de cumplimiento de Despegue"
-                );
+            ConfigurarTitulosGrafico(
+            "% CUMPLIMIENTO POR JEFE DE TURNO - ANÁLISIS SEMANAL",
+            "Porcentaje de cumplimiento"
+            );
 
-                // Construir la consulta SQL
-                string semanasParam = string.Join(",", semanasSeleccionadas);
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-                string query = @"
+            // Obtener jefes seleccionados
+            List<int> idsSeleccionados = ObtenerJefesSeleccionados();
+
+            if (idsSeleccionados.Count == 0)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                "No hay jefes de turno seleccionados. Por favor, seleccione al menos un jefe.",
+                "Precaución",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+                return;
+            }
+
+            string idsParam = string.Join(",", idsSeleccionados);
+            string semanasParam = string.Join(",", semanasSeleccionadas);
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            string añoSeleccionado = CB_Anio_grafica.Text;
+
+            string query = $@"
+WITH 
+-- 1. Calcular cumplimiento por área para cada jefe y semana
+cumplimiento_por_area AS (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") as año,
+        EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+        u.""ID_User"",
+        u.""Usuario"" as ""Jefe de Turno"",
+        f.""Area"",
+        -- Calcular cumplimiento según el área
+        CASE 
+            -- Para Despegue usar Kg_prod_seco
+            WHEN f.""Area"" = 'Despegue' THEN
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+            -- Para otras áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            ELSE
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+        END AS ""Cumplimiento_Area""
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_Jefe"" = u.""ID_User""
+    WHERE 
+        u.""Nivel"" = 'Jefe de Turno'
+        AND u.""Activo"" = true
+        AND u.""ID_User"" IN ({idsParam})
+        AND f.""Area"" != 'Tunel/Sumergidor'  -- Excluir siempre Tunel/Sumergidor
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN ({semanasParam})
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        EXTRACT(WEEK FROM f.""Fecha""),
+        u.""ID_User"",
+        u.""Usuario"",
+        f.""Area""
+),
+-- 2. Calcular el promedio por semana y jefe
+promedio_semanal AS (
+    SELECT 
+        año,
+        No_Semana,
+        ""ID_User"",
+        ""Jefe de Turno"",
+        ROUND(AVG(""Cumplimiento_Area""), 2) AS ""% Cumplimiento""
+    FROM cumplimiento_por_area
+    WHERE ""Cumplimiento_Area"" IS NOT NULL
+    GROUP BY 
+        año,
+        No_Semana,
+        ""ID_User"",
+        ""Jefe de Turno""
+)
+-- 3. Seleccionar los datos finales
 SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
-    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
-    u.""Usuario"" as ""Jefe de Turno"",  -- Sin COALESCE, solo jefes reales
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_Jefe"" = u.""ID_User""  -- Cambiado a INNER JOIN
-WHERE f.""Area"" = 'Despegue'
-    AND u.""Nivel"" = 'Jefe de Turno'  -- Filtro por nivel Jefe de Turno
-    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(WEEK FROM f.""Fecha""),
-    u.""Usuario""
+    año,
+    No_Semana,
+    ""Jefe de Turno"",
+    ""% Cumplimiento""
+FROM promedio_semanal
 ORDER BY 
     año,
     No_Semana,
     ""Jefe de Turno"";";
 
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
+            DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
-                        "Precaución",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
+            if (datos == null || datos.Rows.Count == 0)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
+                "Precaución",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+                return;
+            }
 
-                // Configurar el gráfico con LiveCharts
-                ConfigurarGraficoCumplimientoPorJefe(datos);
+            ConfigurarGraficoCumplimientoPorJefe(datos);
             }
             catch (Exception ex)
             {
@@ -14636,7 +14116,7 @@ ORDER BY
                     $"Error al graficar % Cumplimiento: {ex.Message}",
                     "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBoxIcon.Error);
             }
         }
 
@@ -14650,47 +14130,56 @@ ORDER BY
             cartesianChart1.AxisX.Clear();
             cartesianChart1.AxisY.Clear();
 
-            // Obtener supervisores únicos y semanas únicas
-            var supervisores = datos.AsEnumerable()
-                                    .Select(row => row.Field<string>("Jefe de Turno"))
-                                    .Distinct()
-                                    .OrderBy(s => s)
-                                    .ToList();
+            // Obtener jefe de turno únicos
+            var jefes = datos.AsEnumerable()
+                             .Select(row => row.Field<string>("Jefe de Turno"))
+                             .Distinct()
+                             .OrderBy(s => s)
+                             .ToList();
 
+            // --- CAMBIO AQUÍ: Ordenar numéricamente por No_Semana ---
             var semanas = datos.AsEnumerable()
-                               .Select(row => $"Sem {row.Field<decimal>("No_Semana")}")
+                               .Select(row => new {
+                                   Numero = row.Field<decimal>("No_Semana"),
+                                   Etiqueta = $"Sem {row.Field<decimal>("No_Semana")}"
+                               })
                                .Distinct()
-                               .OrderBy(s => s)
+                               .OrderBy(x => x.Numero) // Ordena por el número real (2, 7, 10...)
+                               .Select(x => x.Etiqueta) // Luego toma la etiqueta formateada
                                .ToList();
 
             // Crear un diccionario para acceso rápido a los valores
-            var valoresPorSupervisor = new Dictionary<string, Dictionary<string, double>>();
+            var valoresPorJefe = new Dictionary<string, Dictionary<string, double>>();
 
-            foreach (var supervisor in supervisores)
+            foreach (var jefe in jefes)
             {
-                valoresPorSupervisor[supervisor] = new Dictionary<string, double>();
+                valoresPorJefe[jefe] = new Dictionary<string, double>();
 
-                // Inicializar todas las semanas con 0
+                // Inicializar todas las semanas con 0 (ahora en el orden correcto)
                 foreach (var semana in semanas)
                 {
-                    valoresPorSupervisor[supervisor][semana] = 0;
+                    valoresPorJefe[jefe][semana] = 0;
                 }
             }
 
             // Llenar los valores reales
             foreach (DataRow row in datos.Rows)
             {
-                string supervisor = row["Jefe de Turno"].ToString();
+                string jefe = row["Jefe de Turno"].ToString();
                 string semana = $"Sem {row["No_Semana"]}";
                 double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
 
-                if (valoresPorSupervisor.ContainsKey(supervisor))
+                if (valoresPorJefe.ContainsKey(jefe))
                 {
-                    valoresPorSupervisor[supervisor][semana] = cumplimiento;
+                    // Solo actualizamos si existe (el diccionario ya tiene las semanas ordenadas)
+                    if (valoresPorJefe[jefe].ContainsKey(semana))
+                    {
+                        valoresPorJefe[jefe][semana] = cumplimiento;
+                    }
                 }
             }
 
-            // Array de colores para los supervisores (colores vibrantes para líneas)
+            // Array de colores para los jefes de turno
             var colores = new System.Windows.Media.Color[]
             {
         System.Windows.Media.Color.FromRgb(52, 152, 219),  // Azul
@@ -14705,22 +14194,23 @@ ORDER BY
         System.Windows.Media.Color.FromRgb(41, 128, 185),  // Azul medio
             };
 
-            // Crear una serie de línea por cada supervisor
+            // Crear una serie de línea por cada Jefe de Turno
             int colorIndex = 0;
-            foreach (var supervisor in supervisores)
+            foreach (var jefe in jefes)
             {
                 var valores = new LiveCharts.ChartValues<double>();
 
+                // --- CAMBIO AQUÍ: Agregar los valores en el orden de la lista 'semanas' ---
                 foreach (var semana in semanas)
                 {
-                    valores.Add(valoresPorSupervisor[supervisor][semana]);
+                    valores.Add(valoresPorJefe[jefe][semana]);
                 }
 
                 var color = colores[colorIndex % colores.Length];
 
                 var serie = new LiveCharts.Wpf.LineSeries
                 {
-                    Title = supervisor,
+                    Title = jefe,
                     Values = valores,
                     Stroke = new System.Windows.Media.SolidColorBrush(color),
                     StrokeThickness = 3,
@@ -14731,8 +14221,8 @@ ORDER BY
                     DataLabels = true,
                     FontSize = 9,
                     Foreground = System.Windows.Media.Brushes.Black,
-                    LabelPoint = point => point.Y.ToString("F2") + "%", // Formato con 2 decimales y %
-                    LineSmoothness = 0, // Suavizado moderado
+                    LabelPoint = point => point.Y.ToString("F2") + "%",
+                    LineSmoothness = 0,
                 };
 
                 cartesianChart1.Series.Add(serie);
@@ -14742,7 +14232,7 @@ ORDER BY
             // Configurar leyenda
             cartesianChart1.LegendLocation = LegendLocation.Bottom;
 
-            // Eje X
+            // Eje X (Usando la lista 'semanas' ya ordenada)
             cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis
             {
                 Title = "SEMANAS",
@@ -14760,7 +14250,7 @@ ORDER BY
                 Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
                 LabelFormatter = value => value.ToString("F2") + "%",
                 MinValue = 0,
-                MaxValue = 100, // Cumplimiento limitado al 100%
+                MaxValue = 100,
                 Separator = new LiveCharts.Wpf.Separator
                 {
                     Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 220, 220)),
@@ -14769,28 +14259,23 @@ ORDER BY
                 }
             });
 
-            // Agregar una línea horizontal en el 100% (opcional - meta ideal)
-            // Nota: LiveCharts 1.x no tiene líneas de anotación fáciles, 
-            // pero podemos agregar un separador especial en el eje Y
-
-            // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
+            // ToolTip
             cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
             {
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)), // Fondo oscuro
-                Foreground = System.Windows.Media.Brushes.White, // Texto blanco
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)),
+                Foreground = System.Windows.Media.Brushes.White,
                 FontSize = 12,
                 FontWeight = System.Windows.FontWeights.Bold,
                 BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 100, 100)),
                 BorderThickness = new System.Windows.Thickness(1),
-                CornerRadius = new System.Windows.CornerRadius(5), // Bordes redondeados
-                ShowSeries = true, // Mostrar el nombre de la serie
+                CornerRadius = new System.Windows.CornerRadius(5),
+                ShowSeries = true,
             };
 
             // Configuración general
             cartesianChart1.Background = System.Windows.Media.Brushes.White;
             cartesianChart1.DisableAnimations = false;
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-            //cartesianChart1.DataTooltip = null;
         }
         private void GraficarKgFresco(List<string> semanasSeleccionadas)
         {
@@ -15410,6 +14895,58 @@ ORDER BY
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
            // cartesianChart1.DataTooltip = null;
         }
+        private List<int> ObtenerSupervisoresSeleccionados()
+        {
+            List<int> ids = new List<int>();
+
+            // Usar un Dictionary o List para almacenar los IDs de los supervisores
+            // Asumiendo que guardamos los IDs en una lista paralela
+            if (_supervisoresIds == null || _supervisoresIds.Count == 0)
+            {
+                // Si no hay IDs cargados, cargarlos
+                CargarEmpleadosActivos("Supervisor");
+            }
+
+            for (int i = 0; i < chkSupervisores.Items.Count; i++)
+            {
+                if (chkSupervisores.GetItemChecked(i))
+                {
+                    if (i < _supervisoresIds.Count)
+                    {
+                        ids.Add(_supervisoresIds[i]);
+                    }
+                }
+            }
+
+            return ids;
+        }
+
+        private List<int> ObtenerJefesSeleccionados()
+        {
+            List<int> ids = new List<int>();
+
+            // Similar a ObtenerSupervisoresSeleccionados pero filtrando por Jefe de Turno
+            for (int i = 0; i < chkSupervisores.Items.Count; i++)
+            {
+                if (chkSupervisores.GetItemChecked(i))
+                {
+                    if (i < _supervisoresIds.Count)
+                    {
+                        // Verificar si es Jefe de Turno
+                        string itemText = chkSupervisores.Items[i].ToString();
+                        if (itemText.Contains("Jefe de Turno"))
+                        {
+                            ids.Add(_supervisoresIds[i]);
+                        }
+                    }
+                }
+            }
+
+            return ids;
+        }
+
+        // Variable de clase para almacenar los IDs
+        private List<int> _supervisoresIds = new List<int>();
         /// <summary>
         /// Grafica de Mermas por Supervisor
         /// </summary>
@@ -15417,18 +14954,32 @@ ORDER BY
         {
             try
             {
-                // Configurar títulos específicos para Mermas
                 ConfigurarTitulosGrafico(
                     "KILOGRAMOS DE MERMAS POR SUPERVISOR - ANÁLISIS SEMANAL",
                     "Comparativo de merma generada por cada supervisor"
                 );
 
-                // Construir la consulta SQL
+                // Obtener supervisores seleccionados del CheckedListBox
+                List<int> idsSeleccionados = ObtenerSupervisoresSeleccionados();
+
+                // Si no hay supervisores seleccionados, mostrar mensaje
+                if (idsSeleccionados.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No hay supervisores seleccionados. Por favor, seleccione al menos un supervisor.",
+                        "Precaución",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string idsParam = string.Join(",", idsSeleccionados);
+
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-                string query = @"
+                string query = $@"
 WITH merma_usuario AS (
     SELECT 
         u.""Usuario"" as ""Nombre_Usuario"",
@@ -15444,9 +14995,11 @@ WITH merma_usuario AS (
     FROM public.""Ficha"" f
     INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
     WHERE f.""Area"" IS NOT NULL
-        AND u.""Nivel"" = 'Supervisor'  -- Filtro por Nivel Supervisor
-        AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-        AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
+        AND u.""Nivel"" = 'Supervisor'
+        AND u.""Activo"" = true
+        AND u.""ID_User"" IN ({idsParam})
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN ({semanasParam})
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
     GROUP BY u.""Usuario"", EXTRACT(WEEK FROM f.""Fecha""), EXTRACT(YEAR FROM f.""Fecha"")
 )
 
@@ -15458,7 +15011,6 @@ SELECT
 FROM merma_usuario
 ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
-                // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
                 if (datos == null || datos.Rows.Count == 0)
@@ -15471,7 +15023,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     return;
                 }
 
-                // Configurar el gráfico con LiveCharts
                 ConfigurarGraficoMermasPorSupervisor(datos);
             }
             catch (Exception ex)
@@ -15960,67 +15511,119 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             try
             {
-                // Configurar títulos específicos para Cumplimiento
                 ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO POR SUPERVISOR - ANÁLISIS SEMANAL",
-                    "Porcentaje de cumplimiento"
+                "% CUMPLIMIENTO POR SUPERVISOR - ANÁLISIS SEMANAL",
+                "Porcentaje de cumplimiento"
                 );
 
-                // Construir la consulta SQL
+                List<int> idsSeleccionados = ObtenerSupervisoresSeleccionados();
+
+                if (idsSeleccionados.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                    "No hay supervisores seleccionados. Por favor, seleccione al menos un supervisor.",
+                    "Precaución",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string idsParam = string.Join(",", idsSeleccionados);
                 string semanasParam = string.Join(",", semanasSeleccionadas);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
-                string query = @"
+                // --- CONSULTA CON LA LÓGICA DE PROMEDIO POR ÁREA ---
+                string query = $@"
+WITH 
+-- 1. Calcular cumplimiento por área para cada Supervisor y semana
+cumplimiento_por_area AS (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") as año,
+        EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
+        u.""ID_User"",
+        u.""Usuario"" as ""Supervisor"",
+        f.""Area"",
+        -- Calcular cumplimiento según el área
+        CASE 
+            -- Para Despegue usar Kg_prod_seco
+            WHEN f.""Area"" = 'Despegue' THEN
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            ELSE
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+        END AS ""Cumplimiento_Area""
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Supervisor se une por ID_user
+    WHERE 
+        u.""Nivel"" = 'Supervisor'
+        AND u.""Activo"" = true
+        AND u.""ID_User"" IN ({idsParam})
+        AND f.""Area"" != 'Tunel/Sumergidor'  -- NUNCA se toma en cuenta Tunel/Sumergidor
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
+        AND EXTRACT(WEEK FROM f.""Fecha"") IN ({semanasParam})
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        EXTRACT(WEEK FROM f.""Fecha""),
+        u.""ID_User"",
+        u.""Usuario"",
+        f.""Area""
+),
+-- 2. Calcular el promedio por semana y Supervisor (Promedia las áreas de esa semana)
+promedio_semanal AS (
+    SELECT 
+        año,
+        No_Semana,
+        ""ID_User"",
+        ""Supervisor"",
+        ROUND(AVG(""Cumplimiento_Area""), 2) AS ""% Cumplimiento""
+    FROM cumplimiento_por_area
+    WHERE ""Cumplimiento_Area"" IS NOT NULL
+    GROUP BY 
+        año,
+        No_Semana,
+        ""ID_User"",
+        ""Supervisor""
+)
+-- 3. Seleccionar los datos finales
 SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
-    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
-    u.""Usuario"" as Supervisor,  -- Ya no usamos COALESCE
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Cambiado a INNER JOIN
-WHERE f.""Area"" = 'Despegue'
-    AND u.""Nivel"" = 'Supervisor'
-    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(WEEK FROM f.""Fecha""),
-    u.""Usuario""
+    año,
+    No_Semana,
+    ""Supervisor"",
+    ""% Cumplimiento""
+FROM promedio_semanal
 ORDER BY 
     año,
     No_Semana,
-    Supervisor;";
+    ""Supervisor"";";
 
-                // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
                 if (datos == null || datos.Rows.Count == 0)
                 {
                     MetroFramework.MetroMessageBox.Show(this,
-                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento por Supervisor.",
-                        "Precaución",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    "No se encontraron datos para las semanas seleccionadas en % Cumplimiento. Verifique que los supervisores tengan registros en esas semanas.",
+                    "Precaución",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Configurar el gráfico con LiveCharts
                 ConfigurarGraficoCumplimientoPorSupervisor(datos);
             }
             catch (Exception ex)
             {
                 MetroFramework.MetroMessageBox.Show(this,
-                    $"Error al graficar % Cumplimiento por Supervisor: {ex.Message}",
+                    $"Error al graficar % Cumplimiento: {ex.Message}",
                     "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBoxIcon.Error);
             }
         }
 
@@ -16029,79 +15632,74 @@ ORDER BY
         /// </summary>
         private void ConfigurarGraficoCumplimientoPorSupervisor(DataTable datos)
         {
-            // Limpiar el chart de LiveCharts
             cartesianChart1.Series.Clear();
             cartesianChart1.AxisX.Clear();
             cartesianChart1.AxisY.Clear();
 
-            // Obtener supervisores únicos y semanas únicas
             var supervisores = datos.AsEnumerable()
                                     .Select(row => row.Field<string>("Supervisor"))
                                     .Distinct()
                                     .OrderBy(s => s)
                                     .ToList();
 
+            // --- CAMBIO AQUÍ: Orden numérico ---
             var semanas = datos.AsEnumerable()
-                               .Select(row => $"Sem {row.Field<decimal>("No_Semana")}")
+                               .Select(row => new {
+                                   Numero = row.Field<decimal>("No_Semana"),
+                                   Etiqueta = $"Sem {row.Field<decimal>("No_Semana")}"
+                               })
                                .Distinct()
-                               .OrderBy(s => s)
+                               .OrderBy(x => x.Numero)
+                               .Select(x => x.Etiqueta)
                                .ToList();
 
-            // Crear un diccionario para acceso rápido a los valores
             var valoresPorSupervisor = new Dictionary<string, Dictionary<string, double>>();
 
             foreach (var supervisor in supervisores)
             {
                 valoresPorSupervisor[supervisor] = new Dictionary<string, double>();
-
-                // Inicializar todas las semanas con 0
                 foreach (var semana in semanas)
                 {
                     valoresPorSupervisor[supervisor][semana] = 0;
                 }
             }
 
-            // Llenar los valores reales
             foreach (DataRow row in datos.Rows)
             {
                 string supervisor = row["Supervisor"].ToString();
                 string semana = $"Sem {row["No_Semana"]}";
                 double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
 
-                if (valoresPorSupervisor.ContainsKey(supervisor))
+                if (valoresPorSupervisor.ContainsKey(supervisor) && valoresPorSupervisor[supervisor].ContainsKey(semana))
                 {
                     valoresPorSupervisor[supervisor][semana] = cumplimiento;
                 }
             }
 
-            // Array de colores para los supervisores (colores vibrantes para líneas)
             var colores = new System.Windows.Media.Color[]
             {
-        System.Windows.Media.Color.FromRgb(52, 152, 219),  // Azul
-        System.Windows.Media.Color.FromRgb(46, 204, 113),  // Verde
-        System.Windows.Media.Color.FromRgb(231, 76, 60),   // Rojo
-        System.Windows.Media.Color.FromRgb(155, 89, 182),  // Púrpura
-        System.Windows.Media.Color.FromRgb(241, 196, 15),  // Amarillo
-        System.Windows.Media.Color.FromRgb(230, 126, 34),  // Naranja
-        System.Windows.Media.Color.FromRgb(26, 188, 156),  // Turquesa
-        System.Windows.Media.Color.FromRgb(52, 73, 94),    // Azul oscuro
-        System.Windows.Media.Color.FromRgb(192, 57, 43),   // Rojo oscuro
-        System.Windows.Media.Color.FromRgb(41, 128, 185),  // Azul medio
+        System.Windows.Media.Color.FromRgb(52, 152, 219),
+        System.Windows.Media.Color.FromRgb(46, 204, 113),
+        System.Windows.Media.Color.FromRgb(231, 76, 60),
+        System.Windows.Media.Color.FromRgb(155, 89, 182),
+        System.Windows.Media.Color.FromRgb(241, 196, 15),
+        System.Windows.Media.Color.FromRgb(230, 126, 34),
+        System.Windows.Media.Color.FromRgb(26, 188, 156),
+        System.Windows.Media.Color.FromRgb(52, 73, 94),
+        System.Windows.Media.Color.FromRgb(192, 57, 43),
+        System.Windows.Media.Color.FromRgb(41, 128, 185),
             };
 
-            // Crear una serie de línea por cada supervisor
             int colorIndex = 0;
             foreach (var supervisor in supervisores)
             {
                 var valores = new LiveCharts.ChartValues<double>();
-
                 foreach (var semana in semanas)
                 {
                     valores.Add(valoresPorSupervisor[supervisor][semana]);
                 }
 
                 var color = colores[colorIndex % colores.Length];
-
                 var serie = new LiveCharts.Wpf.LineSeries
                 {
                     Title = supervisor,
@@ -16115,18 +15713,16 @@ ORDER BY
                     DataLabels = true,
                     FontSize = 9,
                     Foreground = System.Windows.Media.Brushes.Black,
-                    LabelPoint = point => point.Y.ToString("F2") + "%", // Formato con 2 decimales y %
-                    LineSmoothness = 0, // Suavizado moderado
+                    LabelPoint = point => point.Y.ToString("F2") + "%",
+                    LineSmoothness = 0,
                 };
 
                 cartesianChart1.Series.Add(serie);
                 colorIndex++;
             }
 
-            // Configurar leyenda
             cartesianChart1.LegendLocation = LegendLocation.Bottom;
 
-            // Eje X
             cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis
             {
                 Title = "SEMANAS",
@@ -16136,7 +15732,6 @@ ORDER BY
                 Separator = new LiveCharts.Wpf.Separator { IsEnabled = false }
             });
 
-            // Eje Y (para porcentajes)
             cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis
             {
                 Title = "CUMPLIMIENTO (%)",
@@ -16144,7 +15739,7 @@ ORDER BY
                 Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
                 LabelFormatter = value => value.ToString("F2") + "%",
                 MinValue = 0,
-                MaxValue = 100, // Cumplimiento limitado al 100%
+                MaxValue = 100,
                 Separator = new LiveCharts.Wpf.Separator
                 {
                     Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 220, 220)),
@@ -16153,28 +15748,21 @@ ORDER BY
                 }
             });
 
-            // Agregar una línea horizontal en el 100% (opcional - meta ideal)
-            // Nota: LiveCharts 1.x no tiene líneas de anotación fáciles, 
-            // pero podemos agregar un separador especial en el eje Y
-
-            // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
             cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
             {
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)), // Fondo oscuro
-                Foreground = System.Windows.Media.Brushes.White, // Texto blanco
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)),
+                Foreground = System.Windows.Media.Brushes.White,
                 FontSize = 12,
                 FontWeight = System.Windows.FontWeights.Bold,
                 BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 100, 100)),
                 BorderThickness = new System.Windows.Thickness(1),
-                CornerRadius = new System.Windows.CornerRadius(5), // Bordes redondeados
-                ShowSeries = true, // Mostrar el nombre de la serie
+                CornerRadius = new System.Windows.CornerRadius(5),
+                ShowSeries = true,
             };
 
-            // Configuración general
             cartesianChart1.Background = System.Windows.Media.Brushes.White;
             cartesianChart1.DisableAnimations = false;
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-            //cartesianChart1.DataTooltip = null;
         }
         /// <summary>
         /// Grafica de % Cumplimiento Mensual por Supervisor (Despegue)
@@ -16185,19 +15773,89 @@ ORDER BY
             {
                 // Configurar títulos específicos para Cumplimiento Mensual
                 ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO MENSUAL POR SUPERVISOR - DESPEGUE",
-                    "Análisis mensual de cumplimiento"
+                    "% CUMPLIMIENTO MENSUAL POR SUPERVISOR",
+                    "Análisis mensual de cumplimiento (Promedio por áreas)"
                 );
 
-                // Construir la consulta SQL
+                // Obtener supervisores seleccionados
+                List<int> idsSeleccionados = ObtenerSupervisoresSeleccionados();
+
+                if (idsSeleccionados.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                    "No hay supervisores seleccionados. Por favor, seleccione al menos un supervisor.",
+                    "Precaución",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string idsParam = string.Join(",", idsSeleccionados);
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string añoSeleccionado = CB_Anio_grafica.Text;
 
+                // --- CONSULTA CON LÓGICA DE PROMEDIO POR ÁREA A NIVEL MENSUAL (CON FILTROS DE USUARIO) ---
                 string query = $@"
+WITH 
+-- 1. Calcular cumplimiento por área para cada supervisor y mes
+cumplimiento_por_area_mensual AS (
+    SELECT 
+        EXTRACT(YEAR FROM f.""Fecha"") as año,
+        EXTRACT(MONTH FROM f.""Fecha"") as No_Mes,
+        u.""ID_User"",
+        u.""Usuario"" as ""Supervisor"",
+        f.""Area"",
+        -- Calcular cumplimiento según el área
+        CASE 
+            -- Para Despegue usar Kg_prod_seco
+            WHEN f.""Area"" = 'Despegue' THEN
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            ELSE
+                ROUND(LEAST(
+                    (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
+                    100
+                ), 2)
+        END AS ""Cumplimiento_Area""
+    FROM public.""Ficha"" f
+    INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
+    WHERE 
+        u.""Nivel"" = 'Supervisor'
+        AND u.""Activo"" = true
+        AND u.""ID_User"" IN ({idsParam})  -- <--- FILTRO DE SUPERVISORES SELECCIONADOS
+        AND f.""Area"" != 'Tunel/Sumergidor'
+        AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
+    GROUP BY 
+        EXTRACT(YEAR FROM f.""Fecha""),
+        EXTRACT(MONTH FROM f.""Fecha""),
+        u.""ID_User"",
+        u.""Usuario"",
+        f.""Area""
+),
+-- 2. Calcular el promedio por mes y supervisor (Promedia las áreas de ese mes)
+promedio_mensual AS (
+    SELECT 
+        año,
+        No_Mes,
+        ""ID_User"",
+        ""Supervisor"",
+        ROUND(AVG(""Cumplimiento_Area""), 2) AS ""% Cumplimiento""
+    FROM cumplimiento_por_area_mensual
+    WHERE ""Cumplimiento_Area"" IS NOT NULL
+    GROUP BY 
+        año,
+        No_Mes,
+        ""ID_User"",
+        ""Supervisor""
+)
+-- 3. Seleccionar los datos finales con el nombre del mes capitalizado
 SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
+    año,
     INITCAP(
-        CASE EXTRACT(MONTH FROM f.""Fecha"")
+        CASE No_Mes
             WHEN 1 THEN 'enero'
             WHEN 2 THEN 'febrero'
             WHEN 3 THEN 'marzo'
@@ -16212,26 +15870,13 @@ SELECT
             WHEN 12 THEN 'diciembre'
         END
     ) as Mes,
-    u.""Usuario"" as Supervisor,  -- Sin COALESCE, solo usuarios reales
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Cambiado a INNER JOIN
-WHERE f.""Area"" = 'Despegue'
-    AND u.""Nivel"" = 'Supervisor'  -- Filtro por nivel Supervisor
-    AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(MONTH FROM f.""Fecha""),
-    u.""Usuario""
+    ""Supervisor"",
+    ""% Cumplimiento""
+FROM promedio_mensual
 ORDER BY 
-    EXTRACT(MONTH FROM f.""Fecha""),
-    Supervisor;";
+    año,
+    No_Mes,
+    ""Supervisor"";";
 
                 // Ejecutar la consulta
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
@@ -16239,7 +15884,7 @@ ORDER BY
                 if (datos == null || datos.Rows.Count == 0)
                 {
                     MetroFramework.MetroMessageBox.Show(this,
-                        $"No se encontraron datos para el año {añoSeleccionado} en Cumplimiento Mensual por Supervisor.",
+                        $"No se encontraron datos para el año {añoSeleccionado} en Cumplimiento Mensual por Supervisor. Verifique que los supervisores tengan registros en esos meses.",
                         "Precaución",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
@@ -16396,469 +16041,6 @@ ORDER BY
                     StrokeDashArray = new System.Windows.Media.DoubleCollection { 2 }
                 }
             });
-
-            // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
-            cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
-            {
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)), // Fondo oscuro
-                Foreground = System.Windows.Media.Brushes.White, // Texto blanco
-                FontSize = 12,
-                FontWeight = System.Windows.FontWeights.Bold,
-                BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 100, 100)),
-                BorderThickness = new System.Windows.Thickness(1),
-                CornerRadius = new System.Windows.CornerRadius(5), // Bordes redondeados
-                ShowSeries = true, // Mostrar el nombre de la serie
-            };
-
-            // Configuración general
-            cartesianChart1.Background = System.Windows.Media.Brushes.White;
-            cartesianChart1.DisableAnimations = false;
-            cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-            //cartesianChart1.DataTooltip = null;
-        }
-        /// <summary>
-        /// Grafica de % Cumplimiento Mensual por Supervisor (Despegue)
-        /// </summary>
-        private void GraficarCumplimientoMensualPorSupervisorOtrasAreas()
-        {
-            try
-            {
-                // Configurar títulos específicos para Cumplimiento Mensual
-                ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO MENSUAL POR SUPERVISOR",
-                    "Análisis mensual de cumplimiento(EXCLUYENDO DESPEGUE)"
-                );
-
-                // Construir la consulta SQL
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-
-                string query = $@"
-SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
-    INITCAP(
-        CASE EXTRACT(MONTH FROM f.""Fecha"")
-            WHEN 1 THEN 'enero'
-            WHEN 2 THEN 'febrero'
-            WHEN 3 THEN 'marzo'
-            WHEN 4 THEN 'abril'
-            WHEN 5 THEN 'mayo'
-            WHEN 6 THEN 'junio'
-            WHEN 7 THEN 'julio'
-            WHEN 8 THEN 'agosto'
-            WHEN 9 THEN 'septiembre'
-            WHEN 10 THEN 'octubre'
-            WHEN 11 THEN 'noviembre'
-            WHEN 12 THEN 'diciembre'
-        END
-    ) as Mes,
-    u.""Usuario"" as Supervisor,  -- Sin COALESCE, solo usuarios reales
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Cambiado a INNER JOIN
-WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-    AND u.""Nivel"" = 'Supervisor'  -- Filtro por nivel Supervisor
-    AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(MONTH FROM f.""Fecha""),
-    u.""Usuario""
-ORDER BY 
-    EXTRACT(MONTH FROM f.""Fecha""),
-    Supervisor;";
-
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        $"No se encontraron datos para el año {añoSeleccionado} en Cumplimiento Mensual por Supervisor.",
-                        "Precaución",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Configurar el gráfico con LiveCharts
-                ConfigurarGraficoCumplimientoMensualOtrasAreas(datos);
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                    $"Error al graficar Cumplimiento Mensual: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Configura el gráfico específico para % Cumplimiento Mensual (Líneas)
-        /// </summary>
-        private void ConfigurarGraficoCumplimientoMensualOtrasAreas(DataTable datos)
-        {
-            // Limpiar el chart de LiveCharts
-            cartesianChart1.Series.Clear();
-            cartesianChart1.AxisX.Clear();
-            cartesianChart1.AxisY.Clear();
-
-            // Obtener supervisores únicos y meses únicos
-            var supervisores = datos.AsEnumerable()
-                                    .Select(row => row.Field<string>("Supervisor"))
-                                    .Distinct()
-                                    .OrderBy(s => s)
-                                    .ToList();
-
-            // Ordenar los meses correctamente (enero, febrero, marzo...)
-            var ordenMeses = new Dictionary<string, int>
-    {
-        {"enero", 1}, {"febrero", 2}, {"marzo", 3}, {"abril", 4},
-        {"mayo", 5}, {"junio", 6}, {"julio", 7}, {"agosto", 8},
-        {"septiembre", 9}, {"octubre", 10}, {"noviembre", 11}, {"diciembre", 12}
-    };
-
-            var meses = datos.AsEnumerable()
-                             .Select(row => row.Field<string>("Mes").ToLower())
-                             .Distinct()
-                             .OrderBy(m => ordenMeses[m])
-                             .Select(m => char.ToUpper(m[0]) + m.Substring(1)) // Capitalizar primera letra
-                             .ToList();
-
-            // Crear un diccionario para acceso rápido a los valores
-            var valoresPorSupervisor = new Dictionary<string, Dictionary<string, double>>();
-
-            foreach (var supervisor in supervisores)
-            {
-                valoresPorSupervisor[supervisor] = new Dictionary<string, double>();
-
-                // Inicializar todos los meses con 0
-                foreach (var mes in meses)
-                {
-                    valoresPorSupervisor[supervisor][mes] = 0;
-                }
-            }
-
-            // Llenar los valores reales
-            foreach (DataRow row in datos.Rows)
-            {
-                string supervisor = row["Supervisor"].ToString();
-                string mes = row["Mes"].ToString(); // Ya viene capitalizado por INITCAP
-                double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
-
-                if (valoresPorSupervisor.ContainsKey(supervisor))
-                {
-                    valoresPorSupervisor[supervisor][mes] = cumplimiento;
-                }
-            }
-
-            // Array de colores para los supervisores
-            var colores = new System.Windows.Media.Color[]
-            {
-        System.Windows.Media.Color.FromRgb(52, 152, 219),  // Azul
-        System.Windows.Media.Color.FromRgb(46, 204, 113),  // Verde
-        System.Windows.Media.Color.FromRgb(231, 76, 60),   // Rojo
-        System.Windows.Media.Color.FromRgb(155, 89, 182),  // Púrpura
-        System.Windows.Media.Color.FromRgb(241, 196, 15),  // Amarillo
-        System.Windows.Media.Color.FromRgb(230, 126, 34),  // Naranja
-        System.Windows.Media.Color.FromRgb(26, 188, 156),  // Turquesa
-        System.Windows.Media.Color.FromRgb(52, 73, 94),    // Azul oscuro
-        System.Windows.Media.Color.FromRgb(192, 57, 43),   // Rojo oscuro
-        System.Windows.Media.Color.FromRgb(41, 128, 185),  // Azul medio
-            };
-
-            // Crear una serie de línea por cada supervisor
-            int colorIndex = 0;
-            foreach (var supervisor in supervisores)
-            {
-                var valores = new LiveCharts.ChartValues<double>();
-
-                foreach (var mes in meses)
-                {
-                    valores.Add(valoresPorSupervisor[supervisor][mes]);
-                }
-
-                var color = colores[colorIndex % colores.Length];
-
-                var serie = new LiveCharts.Wpf.LineSeries
-                {
-                    Title = supervisor,
-                    Values = valores,
-                    Stroke = new System.Windows.Media.SolidColorBrush(color),
-                    StrokeThickness = 3,
-                    Fill = System.Windows.Media.Brushes.Transparent,
-                    PointGeometrySize = 12,
-                    PointGeometry = LiveCharts.Wpf.DefaultGeometries.Circle,
-                    PointForeground = System.Windows.Media.Brushes.White,
-                    DataLabels = true,
-                    FontSize = 9,
-                    Foreground = System.Windows.Media.Brushes.Black,
-                    LabelPoint = point => point.Y.ToString("F2") + "%",
-                    LineSmoothness = 0, // Suavizado suave
-                };
-
-                cartesianChart1.Series.Add(serie);
-                colorIndex++;
-            }
-
-            // Configurar leyenda
-            cartesianChart1.LegendLocation = LegendLocation.Bottom;
-
-            // Eje X (Meses)
-            cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "MESES",
-                Labels = meses.ToArray(),
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                Separator = new LiveCharts.Wpf.Separator { IsEnabled = false }
-            });
-
-            // Eje Y (para porcentajes)
-            cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "CUMPLIMIENTO (%)",
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                LabelFormatter = value => value.ToString("F2") + "%",
-                MinValue = 0,
-                MaxValue = 100,
-                Separator = new LiveCharts.Wpf.Separator
-                {
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 220, 220)),
-                    StrokeThickness = 1,
-                    StrokeDashArray = new System.Windows.Media.DoubleCollection { 2 }
-                }
-            });
-
-            // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
-            cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
-            {
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 50, 50)), // Fondo oscuro
-                Foreground = System.Windows.Media.Brushes.White, // Texto blanco
-                FontSize = 12,
-                FontWeight = System.Windows.FontWeights.Bold,
-                BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 100, 100)),
-                BorderThickness = new System.Windows.Thickness(1),
-                CornerRadius = new System.Windows.CornerRadius(5), // Bordes redondeados
-                ShowSeries = true, // Mostrar el nombre de la serie
-            };
-
-            // Configuración general
-            cartesianChart1.Background = System.Windows.Media.Brushes.White;
-            cartesianChart1.DisableAnimations = false;
-            cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-            //cartesianChart1.DataTooltip = null;
-        }
-        /// <summary>
-        /// Grafica de % Cumplimiento por Supervisor
-        /// </summary>
-        private void GraficarCumplimientoPorSupervisorOtrasAreas(List<string> semanasSeleccionadas)
-        {
-            try
-            {
-                // Configurar títulos específicos para Cumplimiento
-                ConfigurarTitulosGrafico(
-                    "% CUMPLIMIENTO POR SUPERVISOR",
-                    "Comparativo semanal de cumplimiento por supervisor en áreas de producción(excluyendo Deshidratado)"
-                );
-
-                // Construir la consulta SQL
-                string semanasParam = string.Join(",", semanasSeleccionadas);
-                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                string añoSeleccionado = CB_Anio_grafica.Text;
-
-                string query = @"
-SELECT 
-    EXTRACT(YEAR FROM f.""Fecha"") as año,
-    EXTRACT(WEEK FROM f.""Fecha"") as No_Semana,
-    u.""Usuario"" as Supervisor,  -- Sin COALESCE
-
-    -- Porcentaje limitado al 100%
-    ROUND(LEAST(
-        (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
-        100
-    ), 2) as ""% Cumplimiento""
-
-FROM public.""Ficha"" f
-INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""  -- Solo usuarios existentes
-WHERE f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
-    AND u.""Nivel"" = 'Supervisor'  -- Solo nivel Supervisor
-    AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
-    AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
-GROUP BY 
-    EXTRACT(YEAR FROM f.""Fecha""),
-    EXTRACT(WEEK FROM f.""Fecha""),
-    u.""Usuario""
-ORDER BY 
-    año,
-    No_Semana,
-    Supervisor;";
-
-                // Ejecutar la consulta
-                DataTable datos = dbHelper.ExecuteSelectQuery(query);
-
-                if (datos == null || datos.Rows.Count == 0)
-                {
-                    MetroFramework.MetroMessageBox.Show(this,
-                        "No se encontraron datos para las semanas seleccionadas en % Cumplimiento por Supervisor.",
-                        "Precaución",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Configurar el gráfico con LiveCharts
-                ConfigurarGraficoCumplimientoPorSupervisorOtrasAreas(datos);
-            }
-            catch (Exception ex)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                    $"Error al graficar % Cumplimiento por Supervisor: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Configura el gráfico específico para % Cumplimiento por Supervisor (Líneas)
-        /// </summary>
-        private void ConfigurarGraficoCumplimientoPorSupervisorOtrasAreas(DataTable datos)
-        {
-            // Limpiar el chart de LiveCharts
-            cartesianChart1.Series.Clear();
-            cartesianChart1.AxisX.Clear();
-            cartesianChart1.AxisY.Clear();
-
-            // Obtener supervisores únicos y semanas únicas
-            var supervisores = datos.AsEnumerable()
-                                    .Select(row => row.Field<string>("Supervisor"))
-                                    .Distinct()
-                                    .OrderBy(s => s)
-                                    .ToList();
-
-            var semanas = datos.AsEnumerable()
-                               .Select(row => $"Sem {row.Field<decimal>("No_Semana")}")
-                               .Distinct()
-                               .OrderBy(s => s)
-                               .ToList();
-
-            // Crear un diccionario para acceso rápido a los valores
-            var valoresPorSupervisor = new Dictionary<string, Dictionary<string, double>>();
-
-            foreach (var supervisor in supervisores)
-            {
-                valoresPorSupervisor[supervisor] = new Dictionary<string, double>();
-
-                // Inicializar todas las semanas con 0
-                foreach (var semana in semanas)
-                {
-                    valoresPorSupervisor[supervisor][semana] = 0;
-                }
-            }
-
-            // Llenar los valores reales
-            foreach (DataRow row in datos.Rows)
-            {
-                string supervisor = row["Supervisor"].ToString();
-                string semana = $"Sem {row["No_Semana"]}";
-                double cumplimiento = System.Convert.ToDouble(row["% Cumplimiento"]);
-
-                if (valoresPorSupervisor.ContainsKey(supervisor))
-                {
-                    valoresPorSupervisor[supervisor][semana] = cumplimiento;
-                }
-            }
-
-            // Array de colores para los supervisores (colores vibrantes para líneas)
-            var colores = new System.Windows.Media.Color[]
-            {
-        System.Windows.Media.Color.FromRgb(52, 152, 219),  // Azul
-        System.Windows.Media.Color.FromRgb(46, 204, 113),  // Verde
-        System.Windows.Media.Color.FromRgb(231, 76, 60),   // Rojo
-        System.Windows.Media.Color.FromRgb(155, 89, 182),  // Púrpura
-        System.Windows.Media.Color.FromRgb(241, 196, 15),  // Amarillo
-        System.Windows.Media.Color.FromRgb(230, 126, 34),  // Naranja
-        System.Windows.Media.Color.FromRgb(26, 188, 156),  // Turquesa
-        System.Windows.Media.Color.FromRgb(52, 73, 94),    // Azul oscuro
-        System.Windows.Media.Color.FromRgb(192, 57, 43),   // Rojo oscuro
-        System.Windows.Media.Color.FromRgb(41, 128, 185),  // Azul medio
-            };
-
-            // Crear una serie de línea por cada supervisor
-            int colorIndex = 0;
-            foreach (var supervisor in supervisores)
-            {
-                var valores = new LiveCharts.ChartValues<double>();
-
-                foreach (var semana in semanas)
-                {
-                    valores.Add(valoresPorSupervisor[supervisor][semana]);
-                }
-
-                var color = colores[colorIndex % colores.Length];
-
-                var serie = new LiveCharts.Wpf.LineSeries
-                {
-                    Title = supervisor,
-                    Values = valores,
-                    Stroke = new System.Windows.Media.SolidColorBrush(color),
-                    StrokeThickness = 3,
-                    Fill = System.Windows.Media.Brushes.Transparent,
-                    PointGeometrySize = 12,
-                    PointGeometry = LiveCharts.Wpf.DefaultGeometries.Circle,
-                    PointForeground = System.Windows.Media.Brushes.White,
-                    DataLabels = true,
-                    FontSize = 9,
-                    Foreground = System.Windows.Media.Brushes.Black,
-                    LabelPoint = point => point.Y.ToString("F2") + "%", // Formato con 2 decimales y %
-                    LineSmoothness = 0, // Suavizado moderado
-                };
-
-                cartesianChart1.Series.Add(serie);
-                colorIndex++;
-            }
-
-            // Configurar leyenda
-            cartesianChart1.LegendLocation = LegendLocation.Bottom;
-
-            // Eje X
-            cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "SEMANAS",
-                Labels = semanas.ToArray(),
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                Separator = new LiveCharts.Wpf.Separator { IsEnabled = false }
-            });
-
-            // Eje Y (para porcentajes)
-            cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis
-            {
-                Title = "CUMPLIMIENTO (%)",
-                FontSize = 11,
-                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94)),
-                LabelFormatter = value => value.ToString("F2") + "%",
-                MinValue = 0,
-                MaxValue = 100, // Cumplimiento limitado al 100%
-                Separator = new LiveCharts.Wpf.Separator
-                {
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 220, 220)),
-                    StrokeThickness = 1,
-                    StrokeDashArray = new System.Windows.Media.DoubleCollection { 2 }
-                }
-            });
-
-            // Agregar una línea horizontal en el 100% (opcional - meta ideal)
-            // Nota: LiveCharts 1.x no tiene líneas de anotación fáciles, 
-            // pero podemos agregar un separador especial en el eje Y
 
             // ✅ HABILITAR TOOLTIP (el cuadro que aparece al pasar el mouse)
             cartesianChart1.DataTooltip = new LiveCharts.Wpf.DefaultTooltip
@@ -17445,6 +16627,7 @@ ORDER BY
             txt_filtro_report_Tiempos.Enabled = true;
             tapcontrol.Enabled = true;
             btn_filtro_Tiempos.Enabled = true;
+            cb_semana_TM.Enabled = true;
         }
         public void reporte_tiempos()
         {
@@ -17565,6 +16748,105 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
                 rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
                 rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
             }
+            // DESPUÉS DE CARGAR LOS DATOS, cargar las semanas únicas del grid
+            CargarSemanasDesdeGrid();
+        }
+        private void CargarSemanasDesdeGrid()
+        {
+            try
+            {
+                // Limpiar el ComboBox de semanas
+                cb_semana_TM.Items.Clear();
+
+                // Verificar que el grid tenga datos
+                if (rgv_reporte_Tiempos == null || rgv_reporte_Tiempos.Rows.Count == 0)
+                {
+                    cb_semana_TM.Items.Add("Sin datos");
+                    cb_semana_TM.SelectedIndex = 0;
+                    cb_semana_TM.Enabled = false;
+                    return;
+                }
+
+                // Usar un HashSet para almacenar semanas únicas
+                HashSet<string> semanasUnicas = new HashSet<string>();
+
+                // Buscar la columna "No. Semana" (puede estar en diferentes índices)
+                int columnaSemana = -1;
+                for (int i = 0; i < rgv_reporte_Tiempos.Columns.Count; i++)
+                {
+                    if (rgv_reporte_Tiempos.Columns[i].HeaderText == "No. Semana")
+                    {
+                        columnaSemana = i;
+                        break;
+                    }
+                }
+
+                // Si no encuentra la columna por nombre, buscar por índice (2 en tu caso)
+                if (columnaSemana == -1 && rgv_reporte_Tiempos.Columns.Count > 2)
+                {
+                    columnaSemana = 2;
+                }
+
+                // Si no se encontró la columna, salir
+                if (columnaSemana == -1 || columnaSemana >= rgv_reporte_Tiempos.Columns.Count)
+                {
+                    cb_semana_TM.Items.Add("Sin datos");
+                    cb_semana_TM.SelectedIndex = 0;
+                    cb_semana_TM.Enabled = false;
+                    return;
+                }
+
+                // Recorrer todas las filas del grid
+                foreach (GridViewRowInfo row in rgv_reporte_Tiempos.ChildRows)
+                {
+                    if (row.IsVisible && !(row is GridViewGroupRowInfo))
+                    {
+                        if (row.Cells[columnaSemana].Value != null)
+                        {
+                            string semana = row.Cells[columnaSemana].Value.ToString();
+                            if (!string.IsNullOrEmpty(semana))
+                            {
+                                semanasUnicas.Add(semana);
+                            }
+                        }
+                    }
+                }
+
+                // Convertir a lista, ordenar de menor a mayor (numéricamente)
+                var semanasOrdenadas = semanasUnicas
+                    .Select(s => int.TryParse(s, out int num) ? num : (int?)null)
+                    .Where(n => n.HasValue)
+                    .Select(n => n.Value)
+                    .OrderBy(n => n)
+                    .ToList();
+
+                // Agregar las semanas al ComboBox
+                foreach (int semana in semanasOrdenadas)
+                {
+                    cb_semana_TM.Items.Add(semana.ToString());
+                }
+
+                if (cb_semana_TM.Items.Count > 0)
+                {
+                    cb_semana_TM.SelectedIndex = -1;
+                    cb_semana_TM.Enabled = true;
+                }
+                else
+                {
+                    cb_semana_TM.Items.Add("Sin datos");
+                    cb_semana_TM.SelectedIndex = 0;
+                    cb_semana_TM.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, mostrar mensaje
+                cb_semana_TM.Items.Clear();
+                cb_semana_TM.Items.Add("Error al cargar");
+                cb_semana_TM.SelectedIndex = 0;
+                cb_semana_TM.Enabled = false;
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar semanas del grid: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void cb_area_reporte_Tiempos_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -17628,12 +16910,15 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             rgv_reporte_Tiempos.DataSource = null;
             rgv_reporte_Tiempos.Rows.Clear();
             rgv_reporte_Tiempos.Columns.Clear();
-            // Limpiar el filtro al cargar nuevos datos
+
+            // Limpiar todos los filtros
             txt_filtro_report_Tiempos.Clear();
-            // Deshabilitar botones hasta que se seleccione un reporte y área
+            cb_semana_TM.Items.Clear();
+            cb_semana_TM.Enabled = false;
+
+            // Deshabilitar botones
             btn_export_excel_Tiempos.Enabled = false;
             btn_clean_Tiempos.Enabled = false;
-            txt_filtro_report_Tiempos.Enabled = false;
             btn_filtro_Tiempos.Enabled = false;
             btn_new_report_Tiempos.Enabled = false;
             cb_area_reporte_Tiempos.SelectedIndex = -1;
@@ -17641,7 +16926,18 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
         private void btn_filtro_Tiempos_Click(object sender, EventArgs e)
         {
+            // Limpiar el filtro de texto
             txt_filtro_report_Tiempos.Clear();
+            // Limpiar el filtro de semana (seleccionar el primer elemento o -1)
+            if (cb_semana_TM.Items.Count > 0)
+            {
+                cb_semana_TM.SelectedIndex = -1;
+            }
+            // Refrescar el grid para mostrar todos los datos
+            if (rgv_reporte_Tiempos != null)
+            {
+                rgv_reporte_Tiempos.MasterTemplate.Refresh();
+            }
         }
 
         private void txt_filtro_report_Tiempos_TextChanged(object sender, EventArgs e)
@@ -17656,53 +16952,65 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
         private void rgv_reporte_Tiempos_CustomFiltering(object sender, GridViewCustomFilteringEventArgs e)
         {
             string textoFiltro = txt_filtro_report_Tiempos.Text.Trim();
+            string semanaFiltro = cb_semana_TM.SelectedItem?.ToString();
 
-            // Si no hay texto de filtro, mostrar todas las filas
-            if (string.IsNullOrEmpty(textoFiltro))
-            {
-                e.Visible = true;
-                ResetearEstiloCeldas(e);
-                return;
-            }
+            // Por defecto mostrar la fila
+            bool mostrarFila = true;
 
             // Iniciar actualización para mejor rendimiento
             rgv_reporte_Tiempos.BeginUpdate();
 
-            // Por defecto ocultar la fila
-            e.Visible = false;
-
-            // Buscar en todas las celdas de la fila
-            for (int i = 0; i < e.Row.Cells.Count; i++)
+            // 1. FILTRO POR SEMANA (si está seleccionada)
+            if (!string.IsNullOrEmpty(semanaFiltro))
             {
-                GridViewCellInfo celda = e.Row.Cells[i];
-
-                // Verificar si la celda tiene valor
-                if (celda.Value != null)
+                bool coincideSemana = false;
+                // Buscar en la columna "No. Semana" (índice 2 en tu query)
+                if (e.Row.Cells.Count > 2 && e.Row.Cells[2].Value != null)
                 {
-                    string textoCelda = celda.Value.ToString();
-
-                    // Buscar coincidencia (case-insensitive)
-                    if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    string semanaCelda = e.Row.Cells[2].Value.ToString();
+                    if (semanaCelda.Equals(semanaFiltro, StringComparison.OrdinalIgnoreCase))
                     {
-                        e.Visible = true; // Mostrar la fila si hay coincidencia
-
-                        // Resaltar la celda que coincide
-                        celda.Style.CustomizeFill = true;
-                        celda.Style.DrawFill = true;
-                        celda.Style.BackColor = Color.FromArgb(201, 252, 254); // Color azul claro
-                    }
-                    else
-                    {
-                        // Resetear estilo si no coincide
-                        celda.Style.Reset();
+                        coincideSemana = true;
                     }
                 }
-                else
+                mostrarFila = mostrarFila && coincideSemana;
+            }
+
+            // 2. FILTRO POR TEXTO (si hay texto)
+            if (!string.IsNullOrEmpty(textoFiltro) && mostrarFila)
+            {
+                bool coincideTexto = false;
+                // Buscar en todas las celdas de la fila
+                for (int i = 0; i < e.Row.Cells.Count; i++)
                 {
-                    // Resetear estilo si la celda es nula
-                    celda.Style.Reset();
+                    GridViewCellInfo celda = e.Row.Cells[i];
+                    if (celda.Value != null)
+                    {
+                        string textoCelda = celda.Value.ToString();
+                        if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        {
+                            coincideTexto = true;
+                            // Resaltar la celda que coincide
+                            celda.Style.CustomizeFill = true;
+                            celda.Style.DrawFill = true;
+                            celda.Style.BackColor = Color.FromArgb(201, 252, 254);
+                            break;
+                        }
+                    }
+                }
+                mostrarFila = mostrarFila && coincideTexto;
+            }
+            else if (mostrarFila && string.IsNullOrEmpty(textoFiltro))
+            {
+                // Si no hay filtro de texto, resetear todos los estilos
+                for (int i = 0; i < e.Row.Cells.Count; i++)
+                {
+                    e.Row.Cells[i].Style.Reset();
                 }
             }
+
+            // Aplicar visibilidad
+            e.Visible = mostrarFila;
 
             rgv_reporte_Tiempos.EndUpdate(false);
         }
@@ -17770,18 +17078,96 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
         {
             HashSet<int> indicesConSemanas = new HashSet<int>
             {
-                0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15
+                0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12
             };
 
+            // Índices de gráficas que muestran supervisores
+            HashSet<int> indicesSupervisores = new HashSet<int>
+            {
+                4, 7, 8  // Merma, Cumplimiento por Supervisor/Jefe
+            };
+            // Índices de gráficas que muestran jefes
+            HashSet<int> indicesJefes = new HashSet<int>
+            {
+                9
+            };
             lista_semanas.Visible = indicesConSemanas.Contains(cb_tipo_grafica.SelectedIndex);
-            
-            if(lista_semanas.Visible == true)
+
+            if (lista_semanas.Visible == true)
             {
                 pnl_filtro_graph.Enabled = true;
             }
-            else 
-            {                 
-                pnl_filtro_graph.Enabled = false; 
+            else
+            {
+                pnl_filtro_graph.Enabled = false;
+            }
+            bool mostrarJefes = indicesJefes.Contains(cb_tipo_grafica.SelectedIndex);
+            // Mostrar el CheckedListBox solo para gráficas de supervisor/jefe
+            bool mostrarSupervisores = indicesSupervisores.Contains(cb_tipo_grafica.SelectedIndex);
+            //chkSupervisores.Visible = mostrarEmpleados;
+
+            // También mostrar el label
+            //lblSupervisores.Visible = mostrarEmpleados;
+
+            // Cargar supervisores activos cuando se muestre el CheckedListBox
+            if (mostrarJefes) 
+            {
+                CargarEmpleadosActivos("Jefe de Turno");
+                chkSupervisores.Visible = mostrarJefes;
+                lblSupervisores.Visible = mostrarJefes;
+            }
+            if(mostrarSupervisores)
+            {
+                CargarEmpleadosActivos("Supervisor");
+                chkSupervisores.Visible = mostrarSupervisores;
+                lblSupervisores.Visible = mostrarSupervisores;
+            }
+        }
+        private void CargarEmpleadosActivos(string Nivel_Usuario)
+        {
+            try
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                string query = @"SELECT ""ID_User"", ""Usuario"", ""Nivel"" 
+                         FROM public.""Usuarios"" 
+                         WHERE ""Nivel"" = @nivel
+                         AND ""Activo"" = true 
+                         ORDER BY ""Usuario"" ASC";
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@nivel", NpgsqlTypes.NpgsqlDbType.Varchar){Value = Nivel_Usuario}
+                };
+                DataTable dt = dbHelper.ExecuteSelectQuery(query, parameters);
+
+                chkSupervisores.Items.Clear();
+                _supervisoresIds.Clear();
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string usuario = row["Usuario"].ToString();
+                        string nivel = row["Nivel"].ToString();
+                        int id = Convert.ToInt32(row["ID_User"]);
+
+                        string displayText = $"{usuario} ({nivel})";
+
+                        int index = chkSupervisores.Items.Add(displayText);
+                        chkSupervisores.SetItemChecked(index, true);
+                        _supervisoresIds.Add(id);
+                    }
+                    chkSupervisores.Enabled = true;
+                }
+                else
+                {
+                    chkSupervisores.Items.Add("No hay supervisores activos");
+                    chkSupervisores.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error al cargar supervisores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -18831,6 +18217,15 @@ ORDER BY ""OP"" ASC;";
             if(materialTabControl1.TabPages["tabPage3"] == materialTabControl1.SelectedTab)
             {
                 dgv_users.ClearSelection();
+            }
+        }
+
+        private void cb_semana_TM_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Refrescar el grid para aplicar el filtro por semana
+            if (rgv_reporte_Tiempos != null && rgv_reporte_Tiempos.Rows.Count > 0)
+            {
+                rgv_reporte_Tiempos.MasterTemplate.Refresh();
             }
         }
     }

@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition5 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn4 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn6 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -121,6 +121,8 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.materialCard19 = new MaterialSkin.Controls.MaterialCard();
+            this.chkSupervisores = new System.Windows.Forms.CheckedListBox();
+            this.lblSupervisores = new MaterialSkin.Controls.MaterialLabel();
             this.pnl_filtro_graph = new System.Windows.Forms.Panel();
             this.lbl_separador_graph = new System.Windows.Forms.Label();
             this.txt_sem_final_graph = new Telerik.WinControls.UI.RadTextBox();
@@ -205,6 +207,7 @@
             this.btn_export_excel_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_report_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.materialCard21 = new MaterialSkin.Controls.MaterialCard();
+            this.cb_semana_TM = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_filtro_report_Tiempos = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_filtro_Tiempos = new MaterialSkin.Controls.MaterialButton();
             this.materialCard22 = new MaterialSkin.Controls.MaterialCard();
@@ -1273,20 +1276,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn1.HeaderText = "column1";
-            gridViewTextBoxColumn1.IsVisible = false;
-            gridViewTextBoxColumn1.Name = "column1";
-            gridViewTextBoxColumn2.HeaderText = "column2";
-            gridViewTextBoxColumn2.Name = "column2";
-            gridViewTextBoxColumn3.HeaderText = "column3";
-            gridViewTextBoxColumn3.Name = "column3";
+            gridViewTextBoxColumn4.HeaderText = "column1";
+            gridViewTextBoxColumn4.IsVisible = false;
+            gridViewTextBoxColumn4.Name = "column1";
+            gridViewTextBoxColumn5.HeaderText = "column2";
+            gridViewTextBoxColumn5.Name = "column2";
+            gridViewTextBoxColumn6.HeaderText = "column3";
+            gridViewTextBoxColumn6.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn1,
-            gridViewTextBoxColumn2,
-            gridViewTextBoxColumn3});
+            gridViewTextBoxColumn4,
+            gridViewTextBoxColumn5,
+            gridViewTextBoxColumn6});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition6;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -1945,6 +1948,8 @@
             // 
             this.materialCard19.AutoScroll = true;
             this.materialCard19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.materialCard19.Controls.Add(this.chkSupervisores);
+            this.materialCard19.Controls.Add(this.lblSupervisores);
             this.materialCard19.Controls.Add(this.pnl_filtro_graph);
             this.materialCard19.Controls.Add(this.cb_tipo_grafica);
             this.materialCard19.Controls.Add(this.CB_Anio_grafica);
@@ -1960,6 +1965,28 @@
             this.materialCard19.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard19.Size = new System.Drawing.Size(360, 932);
             this.materialCard19.TabIndex = 38;
+            // 
+            // chkSupervisores
+            // 
+            this.chkSupervisores.FormattingEnabled = true;
+            this.chkSupervisores.Location = new System.Drawing.Point(171, 415);
+            this.chkSupervisores.Name = "chkSupervisores";
+            this.chkSupervisores.Size = new System.Drawing.Size(156, 334);
+            this.chkSupervisores.TabIndex = 42;
+            this.chkSupervisores.Visible = false;
+            // 
+            // lblSupervisores
+            // 
+            this.lblSupervisores.AutoSize = true;
+            this.lblSupervisores.Depth = 0;
+            this.lblSupervisores.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblSupervisores.Location = new System.Drawing.Point(168, 384);
+            this.lblSupervisores.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblSupervisores.Name = "lblSupervisores";
+            this.lblSupervisores.Size = new System.Drawing.Size(159, 19);
+            this.lblSupervisores.TabIndex = 41;
+            this.lblSupervisores.Text = "Seleccione empleados";
+            this.lblSupervisores.Visible = false;
             // 
             // pnl_filtro_graph
             // 
@@ -2104,20 +2131,17 @@
             "Mermas/ Supervisor",
             "Cumpl(Despegue)",
             "Cumpl(Otras áreas)",
-            "Cumpl/Sup(Despegue)",
-            "Cumpl/Sup/Mens(Despegue)",
-            "Cumpl/Sup(Otras áreas)",
-            "Cumpl/Sup/Men(Otras áreas)",
-            "Cumpl/Jefe(Despegue)",
-            "Cumpl/Jefe(Otras áreas)",
-            "Cumpl General",
+            "Cumplimiento/Supervisor",
+            "Cumplimiento/Supervisor/Mensual",
+            "Cumplimiento/Jefe de Turno",
+            "Cumplimiento General",
             "Tiempo Efectivo(Deshidratado)",
             "Tiempo Efectivo Producción"});
             this.cb_tipo_grafica.Location = new System.Drawing.Point(14, 257);
             this.cb_tipo_grafica.MaxDropDownItems = 4;
             this.cb_tipo_grafica.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_tipo_grafica.Name = "cb_tipo_grafica";
-            this.cb_tipo_grafica.Size = new System.Drawing.Size(266, 49);
+            this.cb_tipo_grafica.Size = new System.Drawing.Size(313, 49);
             this.cb_tipo_grafica.StartIndex = -1;
             this.cb_tipo_grafica.TabIndex = 37;
             this.cb_tipo_grafica.SelectedIndexChanged += new System.EventHandler(this.cb_tipo_grafica_SelectedIndexChanged);
@@ -2201,7 +2225,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 6;
+            this.tapcontrol.SelectedIndex = 5;
             this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2500,7 +2524,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -2583,16 +2607,6 @@
             this.cb_semana_concentrado_d.Hint = "Selecione Semana";
             this.cb_semana_concentrado_d.IntegralHeight = false;
             this.cb_semana_concentrado_d.ItemHeight = 43;
-            this.cb_semana_concentrado_d.Items.AddRange(new object[] {
-            "Tunel/Sumergidor",
-            "Despegue",
-            "Evaporado",
-            "Grind",
-            "Inspeccion",
-            "Empacado",
-            "Polvos",
-            "Revolturas",
-            "Máquinas"});
             this.cb_semana_concentrado_d.Location = new System.Drawing.Point(17, 12);
             this.cb_semana_concentrado_d.MaxDropDownItems = 4;
             this.cb_semana_concentrado_d.MouseState = MaterialSkin.MouseState.OUT;
@@ -3416,7 +3430,7 @@
             this.materialCard20.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard20.Name = "materialCard20";
             this.materialCard20.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard20.Size = new System.Drawing.Size(1043, 77);
+            this.materialCard20.Size = new System.Drawing.Size(1000, 77);
             this.materialCard20.TabIndex = 5;
             // 
             // CB_Anio_Tiempos
@@ -3434,7 +3448,7 @@
             this.CB_Anio_Tiempos.Hint = "Año";
             this.CB_Anio_Tiempos.IntegralHeight = false;
             this.CB_Anio_Tiempos.ItemHeight = 43;
-            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(319, 13);
+            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(274, 13);
             this.CB_Anio_Tiempos.MaxDropDownItems = 4;
             this.CB_Anio_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.CB_Anio_Tiempos.Name = "CB_Anio_Tiempos";
@@ -3472,7 +3486,7 @@
             this.cb_area_reporte_Tiempos.MaxDropDownItems = 4;
             this.cb_area_reporte_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_area_reporte_Tiempos.Name = "cb_area_reporte_Tiempos";
-            this.cb_area_reporte_Tiempos.Size = new System.Drawing.Size(296, 49);
+            this.cb_area_reporte_Tiempos.Size = new System.Drawing.Size(251, 49);
             this.cb_area_reporte_Tiempos.StartIndex = -1;
             this.cb_area_reporte_Tiempos.TabIndex = 32;
             this.cb_area_reporte_Tiempos.SelectedIndexChanged += new System.EventHandler(this.cb_area_reporte_Tiempos_SelectedIndexChanged);
@@ -3487,14 +3501,14 @@
             this.btn_clean_Tiempos.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
             this.btn_clean_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_clean_Tiempos.ImageKey = "save_icon";
-            this.btn_clean_Tiempos.Location = new System.Drawing.Point(871, 19);
+            this.btn_clean_Tiempos.Location = new System.Drawing.Point(800, 20);
             this.btn_clean_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_clean_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_clean_Tiempos.Name = "btn_clean_Tiempos";
             this.btn_clean_Tiempos.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_clean_Tiempos.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_Tiempos.Size = new System.Drawing.Size(107, 36);
             this.btn_clean_Tiempos.TabIndex = 31;
-            this.btn_clean_Tiempos.Text = "Limpiar Tabla";
+            this.btn_clean_Tiempos.Text = "Limpiar";
             this.btn_clean_Tiempos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_clean_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_clean_Tiempos.UseAccentColor = false;
@@ -3511,14 +3525,14 @@
             this.btn_export_excel_Tiempos.Icon = global::Tablero.Properties.Resources.excel_icon;
             this.btn_export_excel_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_export_excel_Tiempos.ImageKey = "save_icon";
-            this.btn_export_excel_Tiempos.Location = new System.Drawing.Point(679, 19);
+            this.btn_export_excel_Tiempos.Location = new System.Drawing.Point(626, 19);
             this.btn_export_excel_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_export_excel_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_export_excel_Tiempos.Name = "btn_export_excel_Tiempos";
             this.btn_export_excel_Tiempos.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_export_excel_Tiempos.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_Tiempos.Size = new System.Drawing.Size(166, 36);
             this.btn_export_excel_Tiempos.TabIndex = 30;
-            this.btn_export_excel_Tiempos.Text = "Exportar a Excel";
+            this.btn_export_excel_Tiempos.Text = "Generar  Excel";
             this.btn_export_excel_Tiempos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_export_excel_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_export_excel_Tiempos.UseAccentColor = false;
@@ -3535,7 +3549,7 @@
             this.btn_new_report_Tiempos.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_Tiempos.ImageKey = "save_icon";
-            this.btn_new_report_Tiempos.Location = new System.Drawing.Point(489, 19);
+            this.btn_new_report_Tiempos.Location = new System.Drawing.Point(436, 19);
             this.btn_new_report_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_Tiempos.Name = "btn_new_report_Tiempos";
@@ -3553,17 +3567,44 @@
             // 
             this.materialCard21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard21.Controls.Add(this.cb_semana_TM);
             this.materialCard21.Controls.Add(this.txt_filtro_report_Tiempos);
             this.materialCard21.Controls.Add(this.btn_filtro_Tiempos);
             this.materialCard21.Depth = 0;
             this.materialCard21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard21.Location = new System.Drawing.Point(1085, 14);
+            this.materialCard21.Location = new System.Drawing.Point(1024, 14);
             this.materialCard21.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard21.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard21.Name = "materialCard21";
             this.materialCard21.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard21.Size = new System.Drawing.Size(526, 77);
+            this.materialCard21.Size = new System.Drawing.Size(640, 77);
             this.materialCard21.TabIndex = 6;
+            // 
+            // cb_semana_TM
+            // 
+            this.cb_semana_TM.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cb_semana_TM.AutoResize = false;
+            this.cb_semana_TM.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_semana_TM.Depth = 0;
+            this.cb_semana_TM.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_semana_TM.DropDownHeight = 174;
+            this.cb_semana_TM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_semana_TM.DropDownWidth = 121;
+            this.cb_semana_TM.Enabled = false;
+            this.cb_semana_TM.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_semana_TM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_semana_TM.FormattingEnabled = true;
+            this.cb_semana_TM.Hint = "Selecione Semana";
+            this.cb_semana_TM.IntegralHeight = false;
+            this.cb_semana_TM.ItemHeight = 43;
+            this.cb_semana_TM.Location = new System.Drawing.Point(229, 13);
+            this.cb_semana_TM.MaxDropDownItems = 4;
+            this.cb_semana_TM.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_semana_TM.Name = "cb_semana_TM";
+            this.cb_semana_TM.Size = new System.Drawing.Size(210, 49);
+            this.cb_semana_TM.StartIndex = -1;
+            this.cb_semana_TM.TabIndex = 34;
+            this.cb_semana_TM.SelectedIndexChanged += new System.EventHandler(this.cb_semana_TM_SelectedIndexChanged);
             // 
             // txt_filtro_report_Tiempos
             // 
@@ -3571,15 +3612,15 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
-            this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(81, 12);
+            this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(17, 12);
             this.txt_filtro_report_Tiempos.MaxLength = 50;
             this.txt_filtro_report_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_filtro_report_Tiempos.Multiline = false;
             this.txt_filtro_report_Tiempos.Name = "txt_filtro_report_Tiempos";
-            this.txt_filtro_report_Tiempos.Size = new System.Drawing.Size(228, 50);
+            this.txt_filtro_report_Tiempos.Size = new System.Drawing.Size(206, 50);
             this.txt_filtro_report_Tiempos.TabIndex = 32;
             this.txt_filtro_report_Tiempos.Text = "";
             this.txt_filtro_report_Tiempos.TrailingIcon = null;
@@ -3595,14 +3636,14 @@
             this.btn_filtro_Tiempos.Icon = global::Tablero.Properties.Resources.filter_remove;
             this.btn_filtro_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_filtro_Tiempos.ImageKey = "save_icon";
-            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(316, 19);
+            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(475, 19);
             this.btn_filtro_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_filtro_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_filtro_Tiempos.Name = "btn_filtro_Tiempos";
             this.btn_filtro_Tiempos.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_filtro_Tiempos.Size = new System.Drawing.Size(159, 36);
+            this.btn_filtro_Tiempos.Size = new System.Drawing.Size(107, 36);
             this.btn_filtro_Tiempos.TabIndex = 31;
-            this.btn_filtro_Tiempos.Text = "Limpiar Filtro";
+            this.btn_filtro_Tiempos.Text = "Limpiar";
             this.btn_filtro_Tiempos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_filtro_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_filtro_Tiempos.UseAccentColor = false;
@@ -3636,7 +3677,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -4255,7 +4296,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition4;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition9;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -7479,7 +7520,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition5;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition10;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
@@ -8121,6 +8162,9 @@
         private MaterialSkin.Controls.MaterialButton btn_select_all_graph;
         private MaterialSkin.Controls.MaterialButton btn_reactivate_user;
         private MaterialSkin.Controls.MaterialButton btn_Desactivar;
+        private MaterialSkin.Controls.MaterialComboBox cb_semana_TM;
+        private MaterialSkin.Controls.MaterialLabel lblSupervisores;
+        private System.Windows.Forms.CheckedListBox chkSupervisores;
     }
 }
 
