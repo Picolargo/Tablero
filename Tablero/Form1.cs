@@ -2374,10 +2374,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             
             btn_cancel.Enabled = true;
             
-            //txt_usuario.Enabled = true;
-            //txt_contra.Enabled = true;
-            //cmb_nivel_user.Enabled = true;
-            //cmb_nivel_user.Focus();
             if (activo) 
             {
                 // El usuario está activo, permitir la edición
@@ -2413,7 +2409,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 e.Handled = true;
             }
         }
-
         private void btn_search_user_Click(object sender, EventArgs e)
         {
             // Si el filtro está activo, limpiar filtro y campos de búsqueda
@@ -4948,7 +4943,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             limpiar_filtros_OP();
         }
-
         private void calcular_meta_programada()
         {
             double hr_programada, meta_programada, meta_x_hr, kg_pz_double;
@@ -7547,7 +7541,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             NpgsqlParameter[] deleteParams = new NpgsqlParameter[]
             {
-        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int }
+                new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = id_ficha_int }
             };
 
             dbHelper.ExecuteNonQuery(deleteQuery, deleteParams);
@@ -8393,11 +8387,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 errorProvider2.SetError(Mask_txt_hr2, ""); // Borra el error si es válido
                 btn_save_ficha.Enabled = true;
                 calcular_turno();
-                //if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
-                //{
-                //    calcular_meta_programada();
-                //    porcentaje_logrado_planeacion();
-                //}
 
                 if (cb_Area.SelectedIndex == 1 && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_Read_2.Text))
                 {
@@ -16524,13 +16513,6 @@ ORDER BY
 
         private void btn_prueba_Click(object sender, EventArgs e)
         {
-            //servidor_smtp
-            //RemitenteEMail
-            //PasswordEmail
-            //PuertoSMTP
-            //SSLCheck
-            //DestinatariosEmail
-
             // Validar que la configuración esté completa
             if (string.IsNullOrWhiteSpace(servidor_smtp) ||
                 string.IsNullOrWhiteSpace(RemitenteEMail) ||
@@ -17104,10 +17086,6 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
             bool mostrarJefes = indicesJefes.Contains(cb_tipo_grafica.SelectedIndex);
             // Mostrar el CheckedListBox solo para gráficas de supervisor/jefe
             bool mostrarSupervisores = indicesSupervisores.Contains(cb_tipo_grafica.SelectedIndex);
-            //chkSupervisores.Visible = mostrarEmpleados;
-
-            // También mostrar el label
-            //lblSupervisores.Visible = mostrarEmpleados;
 
             // Cargar supervisores activos cuando se muestre el CheckedListBox
             if (mostrarJefes) 
@@ -17180,9 +17158,6 @@ ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
                 if (selectedValue != null)
                 {
-                    // También puedes obtener el texto mostrado
-                    //string textoMostrado = radMultiColumnComboBox1.Text;
-                    //MessageBox.Show($"Texto mostrado: {textoMostrado}", "Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     int valorBuscado = System.Convert.ToInt32(selectedValue);
 
