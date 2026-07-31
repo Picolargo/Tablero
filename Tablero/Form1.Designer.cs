@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn4 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn6 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition5 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -139,6 +139,7 @@
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            this.btn_validar_seleccionados = new MaterialSkin.Controls.MaterialButton();
             this.DTP_Consolidado_2 = new MetroFramework.Controls.MetroDateTime();
             this.DTP_Consolidado_1 = new MetroFramework.Controls.MetroDateTime();
             this.materialLabel14 = new MaterialSkin.Controls.MaterialLabel();
@@ -148,6 +149,7 @@
             this.btn_export_excel_consolidado = new MaterialSkin.Controls.MaterialButton();
             this.btn_new_report_consolidado = new MaterialSkin.Controls.MaterialButton();
             this.materialCard9 = new MaterialSkin.Controls.MaterialCard();
+            this.cmb_estado_validacion = new MaterialSkin.Controls.MaterialComboBox();
             this.txt_filtro_report_consolidado = new MaterialSkin.Controls.MaterialTextBox();
             this.btn_filtro_consolidado = new MaterialSkin.Controls.MaterialButton();
             this.materialCard4 = new MaterialSkin.Controls.MaterialCard();
@@ -1276,20 +1278,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn4.HeaderText = "column1";
-            gridViewTextBoxColumn4.IsVisible = false;
-            gridViewTextBoxColumn4.Name = "column1";
-            gridViewTextBoxColumn5.HeaderText = "column2";
-            gridViewTextBoxColumn5.Name = "column2";
-            gridViewTextBoxColumn6.HeaderText = "column3";
-            gridViewTextBoxColumn6.Name = "column3";
+            gridViewTextBoxColumn1.HeaderText = "column1";
+            gridViewTextBoxColumn1.IsVisible = false;
+            gridViewTextBoxColumn1.Name = "column1";
+            gridViewTextBoxColumn2.HeaderText = "column2";
+            gridViewTextBoxColumn2.Name = "column2";
+            gridViewTextBoxColumn3.HeaderText = "column3";
+            gridViewTextBoxColumn3.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn4,
-            gridViewTextBoxColumn5,
-            gridViewTextBoxColumn6});
+            gridViewTextBoxColumn1,
+            gridViewTextBoxColumn2,
+            gridViewTextBoxColumn3});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition6;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2225,7 +2227,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 5;
+            this.tapcontrol.SelectedIndex = 0;
             this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2264,6 +2266,7 @@
             // 
             this.materialCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard3.Controls.Add(this.btn_validar_seleccionados);
             this.materialCard3.Controls.Add(this.DTP_Consolidado_2);
             this.materialCard3.Controls.Add(this.DTP_Consolidado_1);
             this.materialCard3.Controls.Add(this.materialLabel14);
@@ -2279,8 +2282,33 @@
             this.materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard3.Name = "materialCard3";
             this.materialCard3.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard3.Size = new System.Drawing.Size(1077, 99);
+            this.materialCard3.Size = new System.Drawing.Size(1005, 99);
             this.materialCard3.TabIndex = 5;
+            // 
+            // btn_validar_seleccionados
+            // 
+            this.btn_validar_seleccionados.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_validar_seleccionados.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btn_validar_seleccionados.Depth = 0;
+            this.btn_validar_seleccionados.Enabled = false;
+            this.btn_validar_seleccionados.HighEmphasis = true;
+            this.btn_validar_seleccionados.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
+            this.btn_validar_seleccionados.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_validar_seleccionados.ImageKey = "save_icon";
+            this.btn_validar_seleccionados.Location = new System.Drawing.Point(874, 26);
+            this.btn_validar_seleccionados.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btn_validar_seleccionados.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btn_validar_seleccionados.Name = "btn_validar_seleccionados";
+            this.btn_validar_seleccionados.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btn_validar_seleccionados.Size = new System.Drawing.Size(109, 36);
+            this.btn_validar_seleccionados.TabIndex = 39;
+            this.btn_validar_seleccionados.Text = "Validar";
+            this.btn_validar_seleccionados.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_validar_seleccionados.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btn_validar_seleccionados.UseAccentColor = false;
+            this.btn_validar_seleccionados.UseVisualStyleBackColor = true;
+            this.btn_validar_seleccionados.Visible = false;
+            this.btn_validar_seleccionados.Click += new System.EventHandler(this.btn_validar_seleccionados_Click);
             // 
             // DTP_Consolidado_2
             // 
@@ -2290,7 +2318,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2303,7 +2331,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -2357,7 +2385,7 @@
             "Polvos",
             "Revolturas",
             "Máquinas"});
-            this.cb_area_reporte.Location = new System.Drawing.Point(17, 12);
+            this.cb_area_reporte.Location = new System.Drawing.Point(15, 25);
             this.cb_area_reporte.MaxDropDownItems = 4;
             this.cb_area_reporte.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_area_reporte.Name = "cb_area_reporte";
@@ -2376,14 +2404,14 @@
             this.btn_clean_consolidado.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
             this.btn_clean_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_clean_consolidado.ImageKey = "save_icon";
-            this.btn_clean_consolidado.Location = new System.Drawing.Point(905, 19);
+            this.btn_clean_consolidado.Location = new System.Drawing.Point(759, 26);
             this.btn_clean_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_clean_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_clean_consolidado.Name = "btn_clean_consolidado";
             this.btn_clean_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_clean_consolidado.Size = new System.Drawing.Size(156, 36);
+            this.btn_clean_consolidado.Size = new System.Drawing.Size(107, 36);
             this.btn_clean_consolidado.TabIndex = 31;
-            this.btn_clean_consolidado.Text = "Limpiar Tabla";
+            this.btn_clean_consolidado.Text = "Limpiar";
             this.btn_clean_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_clean_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_clean_consolidado.UseAccentColor = false;
@@ -2400,14 +2428,14 @@
             this.btn_export_excel_consolidado.Icon = global::Tablero.Properties.Resources.excel_icon;
             this.btn_export_excel_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_export_excel_consolidado.ImageKey = "save_icon";
-            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(713, 19);
+            this.btn_export_excel_consolidado.Location = new System.Drawing.Point(628, 26);
             this.btn_export_excel_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_export_excel_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_export_excel_consolidado.Name = "btn_export_excel_consolidado";
             this.btn_export_excel_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_export_excel_consolidado.Size = new System.Drawing.Size(184, 36);
+            this.btn_export_excel_consolidado.Size = new System.Drawing.Size(123, 36);
             this.btn_export_excel_consolidado.TabIndex = 30;
-            this.btn_export_excel_consolidado.Text = "Exportar a Excel";
+            this.btn_export_excel_consolidado.Text = "Exportar";
             this.btn_export_excel_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_export_excel_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_export_excel_consolidado.UseAccentColor = false;
@@ -2424,14 +2452,14 @@
             this.btn_new_report_consolidado.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_consolidado.ImageKey = "save_icon";
-            this.btn_new_report_consolidado.Location = new System.Drawing.Point(523, 19);
+            this.btn_new_report_consolidado.Location = new System.Drawing.Point(505, 25);
             this.btn_new_report_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_consolidado.Name = "btn_new_report_consolidado";
             this.btn_new_report_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_new_report_consolidado.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_report_consolidado.Size = new System.Drawing.Size(115, 36);
             this.btn_new_report_consolidado.TabIndex = 29;
-            this.btn_new_report_consolidado.Text = "Generar Reporte";
+            this.btn_new_report_consolidado.Text = "Generar";
             this.btn_new_report_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_new_report_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_new_report_consolidado.UseAccentColor = false;
@@ -2442,17 +2470,46 @@
             // 
             this.materialCard9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard9.Controls.Add(this.cmb_estado_validacion);
             this.materialCard9.Controls.Add(this.txt_filtro_report_consolidado);
             this.materialCard9.Controls.Add(this.btn_filtro_consolidado);
             this.materialCard9.Depth = 0;
             this.materialCard9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard9.Location = new System.Drawing.Point(1119, 14);
+            this.materialCard9.Location = new System.Drawing.Point(1028, 14);
             this.materialCard9.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard9.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard9.Name = "materialCard9";
             this.materialCard9.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard9.Size = new System.Drawing.Size(527, 77);
+            this.materialCard9.Size = new System.Drawing.Size(644, 99);
             this.materialCard9.TabIndex = 6;
+            // 
+            // cmb_estado_validacion
+            // 
+            this.cmb_estado_validacion.AutoResize = false;
+            this.cmb_estado_validacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmb_estado_validacion.Depth = 0;
+            this.cmb_estado_validacion.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmb_estado_validacion.DropDownHeight = 174;
+            this.cmb_estado_validacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_estado_validacion.DropDownWidth = 121;
+            this.cmb_estado_validacion.Enabled = false;
+            this.cmb_estado_validacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmb_estado_validacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmb_estado_validacion.FormattingEnabled = true;
+            this.cmb_estado_validacion.IntegralHeight = false;
+            this.cmb_estado_validacion.ItemHeight = 43;
+            this.cmb_estado_validacion.Items.AddRange(new object[] {
+            "Todos",
+            "Validados",
+            "No Validados"});
+            this.cmb_estado_validacion.Location = new System.Drawing.Point(251, 20);
+            this.cmb_estado_validacion.MaxDropDownItems = 4;
+            this.cmb_estado_validacion.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmb_estado_validacion.Name = "cmb_estado_validacion";
+            this.cmb_estado_validacion.Size = new System.Drawing.Size(259, 49);
+            this.cmb_estado_validacion.StartIndex = 0;
+            this.cmb_estado_validacion.TabIndex = 33;
+            this.cmb_estado_validacion.SelectedIndexChanged += new System.EventHandler(this.cmb_estado_validacion_SelectedIndexChanged);
             // 
             // txt_filtro_report_consolidado
             // 
@@ -2460,10 +2517,10 @@
             this.txt_filtro_report_consolidado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consolidado.Depth = 0;
             this.txt_filtro_report_consolidado.Enabled = false;
-            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consolidado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consolidado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consolidado.LeadingIcon = null;
-            this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(17, 12);
+            this.txt_filtro_report_consolidado.Location = new System.Drawing.Point(17, 21);
             this.txt_filtro_report_consolidado.MaxLength = 50;
             this.txt_filtro_report_consolidado.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_filtro_report_consolidado.Multiline = false;
@@ -2484,14 +2541,14 @@
             this.btn_filtro_consolidado.Icon = global::Tablero.Properties.Resources.filter_remove;
             this.btn_filtro_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_filtro_consolidado.ImageKey = "save_icon";
-            this.btn_filtro_consolidado.Location = new System.Drawing.Point(252, 19);
+            this.btn_filtro_consolidado.Location = new System.Drawing.Point(517, 33);
             this.btn_filtro_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_filtro_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_filtro_consolidado.Name = "btn_filtro_consolidado";
             this.btn_filtro_consolidado.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_filtro_consolidado.Size = new System.Drawing.Size(159, 36);
+            this.btn_filtro_consolidado.Size = new System.Drawing.Size(107, 36);
             this.btn_filtro_consolidado.TabIndex = 31;
-            this.btn_filtro_consolidado.Text = "Limpiar Filtro";
+            this.btn_filtro_consolidado.Text = "Limpiar";
             this.btn_filtro_consolidado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_filtro_consolidado.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_filtro_consolidado.UseAccentColor = false;
@@ -2524,11 +2581,13 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
+            this.rgv_reporte_consolidado.CellBeginEdit += new Telerik.WinControls.UI.GridViewCellCancelEventHandler(this.rgv_reporte_consolidado_CellBeginEdit);
             this.rgv_reporte_consolidado.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.rgv_reporte_consolidado_CellDoubleClick);
+            this.rgv_reporte_consolidado.CellValueChanged += new Telerik.WinControls.UI.GridViewCellEventHandler(this.rgv_reporte_consolidado_CellValueChanged);
             this.rgv_reporte_consolidado.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_consolidado_CustomFiltering);
             // 
             // tabPage16
@@ -3612,7 +3671,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(17, 12);
@@ -3677,7 +3736,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1650, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -4296,7 +4355,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition9;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -7520,7 +7579,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition10;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition5;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
@@ -8165,6 +8224,8 @@
         private MaterialSkin.Controls.MaterialComboBox cb_semana_TM;
         private MaterialSkin.Controls.MaterialLabel lblSupervisores;
         private System.Windows.Forms.CheckedListBox chkSupervisores;
+        private MaterialSkin.Controls.MaterialButton btn_validar_seleccionados;
+        private MaterialSkin.Controls.MaterialComboBox cmb_estado_validacion;
     }
 }
 

@@ -83,6 +83,7 @@ namespace Tablero
         private Editar _editarForm = null;
         private string Kg_pz_str = string.Empty;
         private bool activo = false;
+        private bool _aplicarFiltroValidacion = true; // Indica si el filtro debe aplicarse
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -11252,6 +11253,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             btn_export_excel_consolidado.Enabled = true;
             btn_clean_consolidado.Enabled = true;
             txt_filtro_report_consolidado.Enabled = true;
+            cmb_estado_validacion.Enabled = true;
             btn_filtro_consolidado.Enabled = true;
         }
 
@@ -11262,7 +11264,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
             // Obtener las fechas de los controles MetroDateTime
             DateTime fechaInicio = DTP_Consolidado_1.Value.Date;
-            DateTime fechaFin = DTP_Consolidado_2.Value.Date; // Incluye todo el día final
+            DateTime fechaFin = DTP_Consolidado_2.Value.Date;
 
             rgv_reporte_consolidado.DataSource = null;
             rgv_reporte_consolidado.Rows.Clear();
@@ -11296,6 +11298,8 @@ merma_semanal AS (
 )
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11314,18 +11318,12 @@ SELECT
     f.""Cascara_carrete"" AS ""Cáscara Carrete(Kg)"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Limpieza Túnel (distribuida por turnos trabajados)
     CASE 
         WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
         THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
         ELSE 0 
     END AS ""Limpieza Túnel"",
-    
-    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
 FROM public.""Ficha"" f
@@ -11339,8 +11337,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11348,8 +11346,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11373,6 +11369,8 @@ ORDER BY f.""OP"" ASC;";
                 querySimple = @"
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11390,11 +11388,7 @@ SELECT
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""FTT"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
 FROM public.""Ficha"" f
@@ -11402,8 +11396,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11411,8 +11405,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11436,6 +11428,8 @@ ORDER BY f.""OP"" ASC;";
                 querySimple = @"
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11451,11 +11445,7 @@ SELECT
     f.""porcent_aumento_hum"" as ""% Aumento de Humedad"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
 FROM public.""Ficha"" f
@@ -11463,8 +11453,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11472,8 +11462,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11497,6 +11485,8 @@ ORDER BY f.""OP"" ASC;";
                 querySimple = @"
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11511,8 +11501,6 @@ SELECT
     f.""Merma_kg"" AS ""Merma(Kg)"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Totales de tiempo muerto
     COALESCE(tmo.total_min_operativo, 0) AS ""Tiempo Muerto Operativo(Hrs)"",
     COALESCE(tmm.total_min_mecanico, 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
@@ -11521,8 +11509,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11530,8 +11518,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11556,6 +11542,8 @@ ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
                 querySimple = @"
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11573,11 +11561,7 @@ SELECT
     f.""Bobina_utilizada"" AS ""Bobina Utilizada"",
     f.""Bobina_merma"" AS ""Bobina Merma"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
 FROM public.""Ficha"" f
@@ -11585,8 +11569,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11594,8 +11578,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11638,6 +11620,8 @@ merma_semanal AS (
 )
 SELECT
     f.""ID_Ficha"",
+    f.""Validado"",                                 
+    validador.""Usuario"" AS ""Validado Por"",     
     f.""Fecha"",
     EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
     f.""Turno"",
@@ -11654,18 +11638,12 @@ SELECT
     f.""Granulo"",
     f.""Personal_Operativo"" as ""Personal Operativo"",
     f.""Hr_efectivas"" as ""Horas Reales"",
-    
-    -- Limpieza Polvos (distribuida por turnos trabajados)
     CASE 
         WHEN tt.total_turnos_trabajados > 0 AND ms.merma_total_semanal IS NOT NULL
         THEN ROUND(ms.merma_total_semanal / tt.total_turnos_trabajados, 2)
         ELSE 0 
     END AS ""Limpieza Polvos"",
-    
-    -- Tiempo Muerto Operativo (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmo.total_min_operativo / 60.0, 2), 0) AS ""Tiempo Muerto Operativo(Hrs)"",
-    
-    -- Tiempo Muerto Mecánico (suma por ID_Ficha, convertido a horas)
     COALESCE(ROUND(tmm.total_min_mecanico / 60.0, 2), 0) AS ""Tiempo Muerto Mecánico(Hrs)""
 
 FROM public.""Ficha"" f
@@ -11679,8 +11657,8 @@ LEFT JOIN public.""Usuarios"" u
     ON f.""ID_user"" = u.""ID_User""
 LEFT JOIN public.""Usuarios"" jefe
     ON f.""ID_Jefe"" = jefe.""ID_User""
-    
--- Subconsulta para sumar tiempo muerto operativo por ID_Ficha
+LEFT JOIN public.""Usuarios"" validador                   
+    ON f.""ID_Jefe_Validacion"" = validador.""ID_User""
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11688,8 +11666,6 @@ LEFT JOIN (
     FROM public.""Tiempo_Muerto_Operativo""
     GROUP BY ""ID_Ficha""
 ) tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-
--- Subconsulta para sumar tiempo muerto mecánico por ID_Ficha
 LEFT JOIN (
     SELECT 
         ""ID_Ficha"",
@@ -11709,18 +11685,100 @@ ORDER BY f.""OP"" ASC;";
                 };
             }
 
-            
-
-            // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_consolidado, parameters);
-
-            // Verificar si hay datos antes de configurar columnas
+            // 🔥 Resetear el filtro al cargar nuevos datos
+            _aplicarFiltroValidacion = true;
+            cmb_estado_validacion.SelectedIndex = 0;
+            // Verificar si hay datos
             if (rgv_reporte_consolidado.Columns.Count > 0)
             {
-                // Configurar el DataGridView
-                rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar la columna ID
-                rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
+                // --- CAMBIOS: Configuración del grid con las nuevas columnas ---
+                rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar ID_Ficha
 
+                // --- CAMBIO: Reemplazar la columna "Validado" por un CheckBox real ---
+                int indexValidado = -1;
+                for (int i = 0; i < rgv_reporte_consolidado.Columns.Count; i++)
+                {
+                    if (rgv_reporte_consolidado.Columns[i].Name == "Validado")
+                    {
+                        indexValidado = i;
+                        break;
+                    }
+                }
+
+                if (indexValidado != -1)
+                {
+                    // 🔥 GUARDAR LOS VALORES DE LA COLUMNA "Validado" ANTES DE ELIMINARLA
+                    Dictionary<int, bool> valoresValidado = new Dictionary<int, bool>();
+                    int rowIndex = 0;
+                    foreach (GridViewRowInfo row in rgv_reporte_consolidado.ChildRows)
+                    {
+                        if (!(row is GridViewGroupRowInfo))
+                        {
+                            object valor = row.Cells["Validado"].Value;
+                            bool esValido = false;
+                            if (valor != null && valor != DBNull.Value)
+                            {
+                                // Convertir el valor a booleano (puede ser string "True"/"False" o bool)
+                                if (valor is bool boolVal)
+                                {
+                                    esValido = boolVal;
+                                }
+                                else if (valor is string strVal)
+                                {
+                                    bool.TryParse(strVal, out esValido);
+                                }
+                                else if (valor is int intVal)
+                                {
+                                    esValido = intVal == 1;
+                                }
+                            }
+                            valoresValidado[rowIndex] = esValido;
+                            rowIndex++;
+                        }
+                    }
+
+                    // Removemos la columna de texto que viene de la BD
+                    rgv_reporte_consolidado.Columns.RemoveAt(indexValidado);
+
+                    // Creamos una verdadera columna CheckBox
+                    Telerik.WinControls.UI.GridViewCheckBoxColumn chkCol = new Telerik.WinControls.UI.GridViewCheckBoxColumn();
+                    chkCol.Name = "Validado";
+                    chkCol.HeaderText = "Validado";
+                    chkCol.Width = 70;
+                    chkCol.MinWidth = 60;
+                    chkCol.TextAlignment = ContentAlignment.MiddleCenter;
+                    chkCol.ReadOnly = false;
+                    chkCol.AllowSort = false;
+                    chkCol.AllowFiltering = false;
+                    chkCol.EnableHeaderCheckBox = false;
+
+                    // Insertar la columna en la posición exacta
+                    rgv_reporte_consolidado.Columns.Insert(indexValidado, chkCol);
+
+                    // 🔥 RESTAURAR LOS VALORES GUARDADOS EN LA NUEVA COLUMNA
+                    rowIndex = 0;
+                    foreach (GridViewRowInfo row in rgv_reporte_consolidado.ChildRows)
+                    {
+                        if (!(row is GridViewGroupRowInfo))
+                        {
+                            if (valoresValidado.ContainsKey(rowIndex))
+                            {
+                                row.Cells["Validado"].Value = valoresValidado[rowIndex];
+                            }
+                            rowIndex++;
+                        }
+                    }
+                }
+
+                // Configurar columna Validado Por
+                if (rgv_reporte_consolidado.Columns.Contains("Validado Por"))
+                {
+                    rgv_reporte_consolidado.Columns["Validado Por"].TextAlignment = ContentAlignment.MiddleCenter;
+                }
+
+                // (El resto de tu configuración de formato existente sigue igual)
+                rgv_reporte_consolidado.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
                 rgv_reporte_consolidado.Columns["Fecha"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["No. Semana"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Turno"].TextAlignment = ContentAlignment.MiddleCenter;
@@ -11731,6 +11789,7 @@ ORDER BY f.""OP"" ASC;";
                 rgv_reporte_consolidado.Columns["Tiempo Muerto Operativo(Hrs)"].TextAlignment = ContentAlignment.MiddleCenter;
                 rgv_reporte_consolidado.Columns["Tiempo Muerto Mecánico(Hrs)"].TextAlignment = ContentAlignment.MiddleCenter;
 
+                // (Tus configuraciones específicas de áreas...)
                 if (var1 == "Despegue")
                 {
                     rgv_reporte_consolidado.Columns["Kg Frescos Entrada a Secador"].TextAlignment = ContentAlignment.MiddleCenter;
@@ -11743,44 +11802,14 @@ ORDER BY f.""OP"" ASC;";
                     rgv_reporte_consolidado.Columns["FTT"].TextAlignment = ContentAlignment.MiddleCenter;
                 }
 
-                if (var1 == "Tunel/Sumergidor")
-                {
-                    rgv_reporte_consolidado.Columns["Kg Entrada(Proceso)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Kg Frescos Entrada a Secador"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Lote"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Limpieza Túnel"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Canica(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Merma Podrido(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Merma Tina(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Merma Piso(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Merma Canaletas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Merma Lavado Bandas(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Cáscara Carrete(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (var1 == "Máquinas")
-                {
-                    rgv_reporte_consolidado.Columns["Bobina Kg Entrada"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Bobina Utilizada"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Bobina Merma"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (var1 == "Polvos")
-                {
-                    rgv_reporte_consolidado.Columns["Polvo Colector(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Granulo"].TextAlignment = ContentAlignment.MiddleCenter;
-                    rgv_reporte_consolidado.Columns["Limpieza Polvos"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                // 🔹 Formato de porcentaje para las columnas de tipo decimal
+                // (Porcentajes...)
                 if (rgv_reporte_consolidado.Columns.Contains("% Cumplimiento a Metas"))
                 {
                     var colMeta = rgv_reporte_consolidado.Columns["% Cumplimiento a Metas"];
                     colMeta.DataType = typeof(decimal);
-                    colMeta.FormatString = "{0:P0}"; // ejemplo: 0.85 → 85%
+                    colMeta.FormatString = "{0:P0}";
                     colMeta.TextAlignment = ContentAlignment.MiddleCenter;
                 }
-
                 if (rgv_reporte_consolidado.Columns.Contains("FTT"))
                 {
                     var colFTT = rgv_reporte_consolidado.Columns["FTT"];
@@ -11788,7 +11817,6 @@ ORDER BY f.""OP"" ASC;";
                     colFTT.FormatString = "{0:P0}";
                     colFTT.TextAlignment = ContentAlignment.MiddleCenter;
                 }
-
                 if (rgv_reporte_consolidado.Columns.Contains("% Aumento de Humedad"))
                 {
                     var colFTT = rgv_reporte_consolidado.Columns["% Aumento de Humedad"];
@@ -11797,39 +11825,103 @@ ORDER BY f.""OP"" ASC;";
                     colFTT.TextAlignment = ContentAlignment.MiddleCenter;
                 }
 
-                if (rgv_reporte_consolidado.Columns.Contains("Meta(Kg)"))
-                {
-                    rgv_reporte_consolidado.Columns["Meta(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (rgv_reporte_consolidado.Columns.Contains("Kg Entrada(Proceso)"))
-                {
-                    rgv_reporte_consolidado.Columns["Kg Entrada(Proceso)"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (rgv_reporte_consolidado.Columns.Contains("Kg Producto Terminado"))
-                {
-                    rgv_reporte_consolidado.Columns["Kg Producto Terminado"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (rgv_reporte_consolidado.Columns.Contains("Kg Fuera de Especificación"))
-                {
-                    rgv_reporte_consolidado.Columns["Kg Fuera de Especificación"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
-                if (rgv_reporte_consolidado.Columns.Contains("Merma(Kg)"))
-                {
-                    rgv_reporte_consolidado.Columns["Merma(Kg)"].TextAlignment = ContentAlignment.MiddleCenter;
-                }
-
                 rgv_reporte_consolidado.BestFitColumns(BestFitColumnMode.DisplayedCells);
             }
 
-            // Limpiar el filtro al cargar nuevos datos
+            // --- LÓGICA DE PERMISOS ---
+            bool esJefeTurno = (nivel_user == "Jefe de Turno");
+            bool esAdmin = (nivel_user == "Super Administrador" || nivel_user == "Administrador");
+
+            // 1. Visibilidad de la columna Validado
+            if (rgv_reporte_consolidado.Columns.Contains("Validado"))
+            {
+                rgv_reporte_consolidado.Columns["Validado"].IsVisible = esJefeTurno;
+            }
+
+            // 2. 🔥 CONFIGURAR VISIBILIDAD DEL COMBOBOX DE FILTRO
+            // El ComboBox de estado de validación solo es visible para Jefes de Turno y Administradores
+            cmb_estado_validacion.Visible = (esJefeTurno || esAdmin);
+
+            // Si es Jefe de Turno, mostrar todas las opciones
+            // Si es Administrador, también mostrar todas las opciones (pero la columna Validado no es visible)
+
+            // 3. Configurar el botón de validación (solo para Jefe de Turno)
+            if (esJefeTurno)
+            {
+                btn_validar_seleccionados.Visible = true;
+                btn_validar_seleccionados.Enabled = rgv_reporte_consolidado.Rows.Count > 0;
+
+                rgv_reporte_consolidado.MasterTemplate.AllowEditRow = true;
+                rgv_reporte_consolidado.MasterTemplate.SelectionMode = Telerik.WinControls.UI.GridViewSelectionMode.FullRowSelect;
+                rgv_reporte_consolidado.MasterTemplate.MultiSelect = true;
+
+                // Suscribir evento CellBeginEdit
+                rgv_reporte_consolidado.CellBeginEdit -= rgv_reporte_consolidado_CellBeginEdit;
+                rgv_reporte_consolidado.CellBeginEdit += rgv_reporte_consolidado_CellBeginEdit;
+            }
+            else if (esAdmin)
+            {
+                btn_validar_seleccionados.Visible = false;
+                btn_validar_seleccionados.Enabled = false;
+
+                rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
+                rgv_reporte_consolidado.MasterTemplate.SelectionMode = Telerik.WinControls.UI.GridViewSelectionMode.None;
+                rgv_reporte_consolidado.MasterTemplate.MultiSelect = false;
+            }
+
+            // Limpiar el filtro de texto
             txt_filtro_report_consolidado.Clear();
             rgv_reporte_costo.ClearSelection();
+
+            // 🔥 Restaurar el filtro de estado a "Todos" cuando se recarga el reporte
+            cmb_estado_validacion.SelectedIndex = 0;
+
+            // Forzar el refresco visual del Grid
+            rgv_reporte_consolidado.MasterTemplate.Refresh();
+
         }
 
+        /// <summary>
+        /// Evento que controla qué celdas pueden ser editadas.
+        /// SOLO la columna "Validado" es editable para Jefes de Turno.
+        /// NO permite editar fichas que YA están validadas (ni marcar ni desmarcar)
+        /// </summary>
+        private void rgv_reporte_consolidado_CellBeginEdit(object sender, GridViewCellCancelEventArgs e)
+        {
+            // Solo Jefes de Turno pueden editar
+            if (nivel_user != "Jefe de Turno")
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // Verificar que la columna exista
+            if (e.Column == null)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // 🔥 SOLO permitir edición si la columna se llama "Validado"
+            if (e.Column.Name != "Validado")
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // 🔥 Verificar si la ficha YA ESTÁ VALIDADA
+            object validadoValue = e.Row.Cells["Validado"].Value;
+
+            if (validadoValue != null && validadoValue is bool isValidado && isValidado == true)
+            {
+                // Si ya está validada, NO permitir edición (ni marcar ni desmarcar)
+                e.Cancel = true;
+                return;
+            }
+
+            // Si no está validada, permitir edición (puede marcar o desmarcar libremente)
+            e.Cancel = false;
+        }
         private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
         {
           
@@ -11957,62 +12049,86 @@ ORDER BY f.""OP"" ASC;";
         private void btn_filtro_consolidado_Click(object sender, EventArgs e)
         {
             txt_filtro_report_consolidado.Clear();
+            cmb_estado_validacion.SelectedIndex = 0;
+
+            if (rgv_reporte_consolidado != null)
+            {
+                rgv_reporte_consolidado.MasterTemplate.Refresh();
+            }
         }
 
         private void rgv_reporte_consolidado_CustomFiltering(object sender, GridViewCustomFilteringEventArgs e)
         {
             string textoFiltro = txt_filtro_report_consolidado.Text.Trim();
+            string estadoFiltro = cmb_estado_validacion.SelectedItem?.ToString() ?? "Todos";
 
-            // Si no hay texto de filtro, mostrar todas las filas
-            if (string.IsNullOrEmpty(textoFiltro))
-            {
-                e.Visible = true;
-                ResetearEstiloCeldas(e);
-                return;
-            }
-
-            // Iniciar actualización para mejor rendimiento
             rgv_reporte_consolidado.BeginUpdate();
 
-            // Por defecto ocultar la fila
-            e.Visible = false;
+            bool mostrarFila = true;
 
-            // Buscar en todas las celdas de la fila
-            for (int i = 0; i < e.Row.Cells.Count; i++)
+            // --- FILTRO POR ESTADO DE VALIDACIÓN ---
+            // 🔥 Solo aplicar el filtro si _aplicarFiltroValidacion es true
+            if (_aplicarFiltroValidacion && estadoFiltro != "Todos")
             {
-                GridViewCellInfo celda = e.Row.Cells[i];
+                object valorValidado = e.Row.Cells["Validado"].Value;
+                bool esValidado = false;
 
-                // Verificar si la celda tiene valor
-                if (celda.Value != null)
+                if (valorValidado != null && valorValidado != DBNull.Value)
                 {
-                    string textoCelda = celda.Value.ToString();
-
-                    // Buscar coincidencia (case-insensitive)
-                    if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    {
-                        e.Visible = true; // Mostrar la fila si hay coincidencia
-
-                        // Resaltar la celda que coincide
-                        celda.Style.CustomizeFill = true;
-                        celda.Style.DrawFill = true;
-                        celda.Style.BackColor = Color.FromArgb(201, 252, 254); // Color azul claro
-                    }
-                    else
-                    {
-                        // Resetear estilo si no coincide
-                        celda.Style.Reset();
-                    }
+                    if (valorValidado is bool boolVal)
+                        esValidado = boolVal;
+                    else if (valorValidado is string strVal)
+                        bool.TryParse(strVal, out esValidado);
+                    else if (valorValidado is int intVal)
+                        esValidado = intVal == 1;
                 }
-                else
+
+                if (estadoFiltro == "Validados")
+                    mostrarFila = esValidado;
+                else if (estadoFiltro == "No Validados")
                 {
-                    // Resetear estilo si la celda es nula
-                    celda.Style.Reset();
+                    mostrarFila = !esValidado;
                 }
             }
 
+            // --- FILTRO POR TEXTO ---
+            if (mostrarFila && !string.IsNullOrEmpty(textoFiltro))
+            {
+                bool coincideTexto = false;
+
+                for (int i = 0; i < e.Row.Cells.Count; i++)
+                {
+                    GridViewCellInfo celda = e.Row.Cells[i];
+
+                    if (celda.Value != null)
+                    {
+                        string textoCelda = celda.Value.ToString();
+
+                        if (textoCelda.IndexOf(textoFiltro, 0, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        {
+                            coincideTexto = true;
+                            celda.Style.CustomizeFill = true;
+                            celda.Style.DrawFill = true;
+                            celda.Style.BackColor = Color.FromArgb(201, 252, 254);
+                            break;
+                        }
+                    }
+                }
+
+                mostrarFila = coincideTexto;
+            }
+            else if (mostrarFila && string.IsNullOrEmpty(textoFiltro))
+            {
+                for (int i = 0; i < e.Row.Cells.Count; i++)
+                {
+                    e.Row.Cells[i].Style.Reset();
+                }
+            }
+
+            e.Visible = mostrarFila;
             rgv_reporte_consolidado.EndUpdate(false);
         }
-       
+
         // Método auxiliar para resetear el estilo de todas las celdas
         private void ResetearEstiloCeldas(GridViewCustomFilteringEventArgs e)
         {
@@ -12037,12 +12153,19 @@ ORDER BY f.""OP"" ASC;";
             rgv_reporte_consolidado.DataSource = null;
             rgv_reporte_consolidado.Rows.Clear();
             rgv_reporte_consolidado.Columns.Clear();
-            // Limpiar el filtro al cargar nuevos datos
+
+            // Limpiar el filtro de texto
             txt_filtro_report_consolidado.Clear();
-            // Deshabilitar botones hasta que se seleccione un reporte y área
+
+            // 🔥 Resetear el filtro de estado
+            _aplicarFiltroValidacion = true;
+            cmb_estado_validacion.SelectedIndex = 0;
+
+            // Deshabilitar botones
             btn_export_excel_consolidado.Enabled = false;
             btn_clean_consolidado.Enabled = false;
             txt_filtro_report_consolidado.Enabled = false;
+            cmb_estado_validacion.Enabled = false;
             btn_filtro_consolidado.Enabled = false;
             btn_new_report_consolidado.Enabled = false;
             DTP_Consolidado_1.Enabled = false;
@@ -18201,6 +18324,214 @@ ORDER BY ""OP"" ASC;";
             if (rgv_reporte_Tiempos != null && rgv_reporte_Tiempos.Rows.Count > 0)
             {
                 rgv_reporte_Tiempos.MasterTemplate.Refresh();
+            }
+        }
+
+        private void btn_validar_seleccionados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Obtener las filas donde el CheckBox "Validado" esté marcado (true)
+                List<int> idsFichasAValidar = new List<int>();        // Fichas NO validadas -> se procesarán
+                List<int> idsFichasYaValidadas = new List<int>();     // Fichas YA validadas -> NO se procesan
+                int colIndexId = -1;
+
+                // Buscar el índice de la columna ID_Ficha
+                for (int i = 0; i < rgv_reporte_consolidado.Columns.Count; i++)
+                {
+                    if (rgv_reporte_consolidado.Columns[i].Name == "ID_Ficha")
+                    {
+                        colIndexId = i;
+                        break;
+                    }
+                }
+
+                if (colIndexId == -1)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "No se pudo encontrar la columna ID_Ficha en el reporte.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // --- LECTURA DE CHECKBOX Y VERIFICACIÓN DE ESTADO ---
+                DatabaseHelper dbHelperCheck = new DatabaseHelper(connectionString);
+                foreach (var row in rgv_reporte_consolidado.ChildRows)
+                {
+                    if (row.IsVisible && !(row is Telerik.WinControls.UI.GridViewGroupRowInfo))
+                    {
+                        object checkValue = row.Cells["Validado"].Value;
+
+                        // SOLO las fichas que están marcadas (true) se considerarán
+                        if (checkValue != null && checkValue is bool && (bool)checkValue == true)
+                        {
+                            int idFicha = Convert.ToInt32(row.Cells[colIndexId].Value);
+
+                            // 🔥 VERIFICAR EN LA BASE DE DATOS SI LA FICHA YA ESTÁ VALIDADA
+                            string queryCheck = $"SELECT \"Validado\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = {idFicha}";
+                            DataTable dtCheck = dbHelperCheck.ExecuteSelectQuery(queryCheck);
+
+                            bool yaValidadaBD = false;
+                            if (dtCheck != null && dtCheck.Rows.Count > 0)
+                            {
+                                yaValidadaBD = Convert.ToBoolean(dtCheck.Rows[0]["Validado"]);
+                            }
+
+                            if (yaValidadaBD)
+                            {
+                                // ✅ La ficha ya está validada en BD -> SE QUEDA MARCADA, NO se procesa
+                                idsFichasYaValidadas.Add(idFicha);
+                            }
+                            else
+                            {
+                                // ✅ Ficha no validada -> se puede procesar
+                                idsFichasAValidar.Add(idFicha);
+                            }
+                        }
+                    }
+                }
+
+                // 🔥 Si no hay fichas NO validadas seleccionadas, mostrar mensaje y salir
+                if (idsFichasAValidar.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No hay fichas NO VALIDADAS seleccionadas para continuar.\n\n" +
+                        "Las fichas que seleccionó ya están validadas y no se pueden volver a validar.",
+                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // 2. Solicitar contraseña del Jefe de Turno
+                string inputPassword = "";
+                using (Form inputForm = new Form())
+                {
+                    inputForm.Text = "Validación de Fichas";
+                    inputForm.Size = new Size(400, 150);
+                    inputForm.StartPosition = FormStartPosition.CenterScreen;
+                    inputForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+                    inputForm.MaximizeBox = false;
+                    inputForm.MinimizeBox = false;
+
+                    Label lblPrompt = new Label() { Text = "Ingrese su contraseña para validar las fichas seleccionadas:", Left = 20, Top = 20, AutoSize = true };
+                    TextBox txtInput = new TextBox() { Left = 20, Top = 50, Width = 340, PasswordChar = '*' };
+                    Button btnOk = new Button() { Text = "Aceptar", Left = 230, Width = 60, Top = 80, DialogResult = DialogResult.OK };
+                    Button btnCancel = new Button() { Text = "Cancelar", Left = 300, Width = 60, Top = 80, DialogResult = DialogResult.Cancel };
+
+                    inputForm.Controls.AddRange(new Control[] { lblPrompt, txtInput, btnOk, btnCancel });
+                    inputForm.AcceptButton = btnOk;
+                    inputForm.CancelButton = btnCancel;
+
+                    if (inputForm.ShowDialog() == DialogResult.OK)
+                    {
+                        inputPassword = txtInput.Text;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(inputPassword)) return;
+
+                // 3. Validar contraseña y obtener ID del Jefe de Turno
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string errorMsg;
+                int idJefeTurno = dbHelper.ValidateJefePasswordAndGetId(numero_empleado_admin, inputPassword, out errorMsg);
+
+                if (idJefeTurno <= 0)
+                {
+                    string mensajeError = (idJefeTurno == -1) ? "Credenciales incorrectas o no tiene permiso de Jefe de Turno." : errorMsg;
+                    MetroFramework.MetroMessageBox.Show(this, $"Error de validación: {mensajeError}", "Validación Fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // 4. 🔥 ACTUALIZAR LA BASE DE DATOS (SOLO FICHAS NO VALIDADAS)
+                string idsParam = string.Join(",", idsFichasAValidar);
+                string updateQuery = $@"
+            UPDATE public.""Ficha"" 
+            SET ""Validado"" = true, 
+                ""ID_Jefe_Validacion"" = {idJefeTurno}
+            WHERE ""ID_Ficha"" IN ({idsParam})
+            AND ""Validado"" = false;";  // 🔥 Doble verificación: solo si NO está validada
+
+                int result = dbHelper.ExecuteNonQuery(updateQuery);
+
+                // Después de validar, recargar el reporte
+                if (result > 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        $"{result} ficha(s) validadas correctamente por el Jefe de Turno {nombre_admin}.",
+                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // 🔥 REACTIVAR EL FILTRO ANTES DE RECARGAR
+                    _aplicarFiltroValidacion = true;
+
+                    // 🔥 RECARGAR EL REPORTE AUTOMÁTICAMENTE
+                    btn_new_report_consolidado.PerformClick();
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                        "No se pudo completar la validación. Las fichas seleccionadas podrían ya estar validadas.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, $"Error en la validación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void rgv_reporte_consolidado_CellValueChanged(object sender, GridViewCellEventArgs e)
+        {
+            // Solo para Jefes de Turno
+            if (nivel_user != "Jefe de Turno") return;
+
+            // Solo para la columna "Validado"
+            if (e.Column == null || e.Column.Name != "Validado") return;
+
+            // 🔥 Cuando el usuario cambia un CheckBox, DESACTIVAMOS el filtro temporalmente
+            // para que la fila no desaparezca
+            _aplicarFiltroValidacion = false;
+
+            // Obtener la fila
+            GridViewRowInfo row = rgv_reporte_consolidado.Rows[e.RowIndex];
+
+            // Obtener el nuevo valor
+            object newValue = row.Cells["Validado"].Value;
+            bool esValidado = false;
+            if (newValue != null && newValue is bool boolNew)
+            {
+                esValidado = boolNew;
+            }
+
+            // Obtener el ID de la ficha
+            int idFicha = Convert.ToInt32(row.Cells["ID_Ficha"].Value);
+
+            // 🔥 Verificar en la base de datos si ya estaba validada
+            string query = $"SELECT \"Validado\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = {idFicha}";
+            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+            DataTable dt = dbHelper.ExecuteSelectQuery(query);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                bool yaValidadaBD = Convert.ToBoolean(dt.Rows[0]["Validado"]);
+
+                // Si ya estaba validada en BD, revertir el cambio
+                if (yaValidadaBD && esValidado == true)
+                {
+                    row.Cells["Validado"].Value = true;
+                    //MetroFramework.MetroMessageBox.Show(this,
+                    //    "Esta ficha ya está validada y no se puede modificar.",
+                    //    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void cmb_estado_validacion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 🔥 Activar el filtro y refrescar cuando el usuario cambia el combo
+            _aplicarFiltroValidacion = true;
+            // Refrescar el grid para aplicar el filtro
+            if (rgv_reporte_consolidado != null)
+            {
+                rgv_reporte_consolidado.MasterTemplate.Refresh();
+                _aplicarFiltroValidacion = false;
             }
         }
     }

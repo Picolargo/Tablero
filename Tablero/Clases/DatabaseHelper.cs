@@ -73,6 +73,50 @@ namespace Tablero
                 }
             }
         }
+        // Método para validar la contraseña de un Jefe de Turno y obtener su ID
+        public int ValidateJefePasswordAndGetId(string identificador, string password, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            string query = @"SELECT ""ID_User"" FROM public.""Usuarios"" 
+                     WHERE (""Usuario"" ILIKE @identificador OR ""No_Empleado"" = @identificador) 
+                     AND ""Password"" = @password 
+                     AND ""Nivel"" = 'Jefe de Turno'
+                     AND ""Activo"" = true";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@identificador", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = identificador },
+        new NpgsqlParameter("@password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = password }
+            };
+
+            try
+            {
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddRange(parameters);
+                        object result = command.ExecuteScalar();
+
+                        if (result != null)
+                        {
+                            return Convert.ToInt32(result); // Retorna el ID del Jefe de Turno
+                        }
+                        else
+                        {
+                            return -1; // Credenciales incorrectas o no es Jefe de Turno
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return -2; // Error de conexión o BD
+            }
+        }
 
         // Agrega estos métodos a tu clase DatabaseHelper
         public int ExecuteScalarInt(string query, NpgsqlParameter[] parameters = null)
