@@ -5202,9 +5202,42 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 return true;
             }
         }
+        // ============================================================
+        // 🔍 FUNCIÓN AUXILIAR PARA VALIDAR TIEMPOS MUERTOS
+        // ============================================================
+        private bool ValidarTiemposMuertos()
+        {
+            // Verificar si ambos DataGridView están vacíos
+            bool dgvMecanicoVacio = (dgv_mecanico.Rows.Count == 0 ||
+                                      (dgv_mecanico.Rows.Count == 1 && dgv_mecanico.Rows[0].IsNewRow));
 
+            bool dgvOperativoVacio = (dgv_operativo.Rows.Count == 0 ||
+                                       (dgv_operativo.Rows.Count == 1 && dgv_operativo.Rows[0].IsNewRow));
+
+            // Si AMBOS están vacíos, preguntar al usuario
+            if (dgvMecanicoVacio && dgvOperativoVacio)
+            {
+                DialogResult resultado = MetroFramework.MetroMessageBox.Show(this,
+                    "⚠️ No se han registrado tiempos muertos en esta ficha.\n\n" +
+                    "Si continúa, los tiempos muertos quedarán en cero.\n" +
+                    "¿Está seguro que desea guardar la ficha sin tiempos muertos?",
+                    "Confirmar guardado sin tiempos muertos",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                return resultado == DialogResult.Yes;
+            }
+
+            return true; // Si hay tiempos muertos, continuar sin preguntar
+        }
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
+            // 🔍 Validar tiempos muertos ANTES de cualquier otra operación
+            if (!ValidarTiemposMuertos())
+            {
+                return; // El usuario canceló
+            }
+
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             string Variable_nombre = lbl_nom2.Text;
             string variable_num = lbl_no_emp2.Text;
@@ -5322,6 +5355,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                             string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
                             string resultado = GenerarTablaDetallesOP();
+                            
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
