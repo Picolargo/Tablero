@@ -82,6 +82,7 @@
             this.Txt_Read_2 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_Read_1 = new Telerik.WinControls.UI.RadTextBox();
             this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
+            this.mlTxt_observaciones = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             this.radMultiColumnComboBox1 = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.cb_proceso = new MaterialSkin.Controls.MaterialComboBox();
             this.Txt_11 = new Telerik.WinControls.UI.RadTextBox();
@@ -1238,6 +1239,7 @@
             // Card_only_read
             // 
             this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.mlTxt_observaciones);
             this.Card_only_read.Controls.Add(this.radMultiColumnComboBox1);
             this.Card_only_read.Controls.Add(this.cb_proceso);
             this.Card_only_read.Controls.Add(this.Txt_11);
@@ -1262,6 +1264,33 @@
             this.Card_only_read.Padding = new System.Windows.Forms.Padding(14);
             this.Card_only_read.Size = new System.Drawing.Size(718, 377);
             this.Card_only_read.TabIndex = 4;
+            // 
+            // mlTxt_observaciones
+            // 
+            this.mlTxt_observaciones.AnimateReadOnly = false;
+            this.mlTxt_observaciones.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.mlTxt_observaciones.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.mlTxt_observaciones.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.mlTxt_observaciones.Depth = 0;
+            this.mlTxt_observaciones.Enabled = false;
+            this.mlTxt_observaciones.HideSelection = true;
+            this.mlTxt_observaciones.Hint = "Observaciones(Opcional)";
+            this.mlTxt_observaciones.Location = new System.Drawing.Point(460, 138);
+            this.mlTxt_observaciones.MaxLength = 32767;
+            this.mlTxt_observaciones.MouseState = MaterialSkin.MouseState.OUT;
+            this.mlTxt_observaciones.Name = "mlTxt_observaciones";
+            this.mlTxt_observaciones.PasswordChar = '\0';
+            this.mlTxt_observaciones.ReadOnly = false;
+            this.mlTxt_observaciones.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.mlTxt_observaciones.SelectedText = "";
+            this.mlTxt_observaciones.SelectionLength = 0;
+            this.mlTxt_observaciones.SelectionStart = 0;
+            this.mlTxt_observaciones.ShortcutsEnabled = true;
+            this.mlTxt_observaciones.Size = new System.Drawing.Size(241, 217);
+            this.mlTxt_observaciones.TabIndex = 29;
+            this.mlTxt_observaciones.TabStop = false;
+            this.mlTxt_observaciones.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.mlTxt_observaciones.UseSystemPasswordChar = false;
             // 
             // radMultiColumnComboBox1
             // 
@@ -2318,7 +2347,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2331,7 +2360,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -8226,6 +8255,7 @@
         private System.Windows.Forms.CheckedListBox chkSupervisores;
         private MaterialSkin.Controls.MaterialButton btn_validar_seleccionados;
         private MaterialSkin.Controls.MaterialComboBox cmb_estado_validacion;
+        private MaterialSkin.Controls.MaterialMultiLineTextBox2 mlTxt_observaciones;
     }
 }
 
