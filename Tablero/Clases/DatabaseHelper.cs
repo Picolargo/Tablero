@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,6 +15,95 @@ namespace Tablero
         public DatabaseHelper(string connectionString)
         {
             this.connectionString = connectionString;
+        }
+        /// <summary>
+        /// Registra la trazabilidad de una edición de ficha (versión simplificada)
+        /// </summary>
+        public int RegistrarTrazabilidadEdicion(int idFicha, int idUsuario, string usuario, string nivel)
+        {
+            string query = @"INSERT INTO public.""Trazabilidad_Ediciones_Ficha"" 
+        (""ID_Ficha"", ""ID_Usuario"", ""Usuario_Edito"", ""Nivel_Usuario"", ""Fecha_Edicion"")
+        VALUES (@id_ficha, @id_usuario, @usuario, @nivel, @fecha)
+        RETURNING ""ID_Trazabilidad"";";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+        new NpgsqlParameter("@id_usuario", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+        new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario ?? (object)DBNull.Value },
+        new NpgsqlParameter("@nivel", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = nivel ?? (object)DBNull.Value },
+        new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = DateTime.Now }
+            };
+
+            try
+            {
+                return ExecuteScalarInt(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al registrar trazabilidad: {ex.Message}");
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la trazabilidad de ediciones de una ficha específica
+        /// </summary>
+        public DataTable ObtenerTrazabilidadPorFicha(int idFicha)
+        {
+            string query = @"SELECT 
+        t.""ID_Trazabilidad"",
+        t.""Fecha_Edicion"",
+        t.""Usuario_Edito"",
+        t.""Nivel_Usuario"",
+        u.""No_Empleado""
+    FROM public.""Trazabilidad_Ediciones_Ficha"" t
+    INNER JOIN public.""Usuarios"" u ON t.""ID_Usuario"" = u.""ID_User""
+    WHERE t.""ID_Ficha"" = @id_ficha
+    ORDER BY t.""Fecha_Edicion"" DESC";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha }
+            };
+
+            return ExecuteSelectQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Obtiene toda la trazabilidad con filtros (versión simplificada)
+        /// </summary>
+        public DataTable ObtenerTrazabilidadConFiltros(string fechaInicio, string fechaFin, string usuario)
+        {
+            string query = @"SELECT 
+        t.""ID_Trazabilidad"",
+        t.""ID_Ficha"",
+        t.""Fecha_Edicion"",
+        t.""Usuario_Edito"",
+        t.""Nivel_Usuario"",
+        u.""No_Empleado""
+    FROM public.""Trazabilidad_Ediciones_Ficha"" t
+    INNER JOIN public.""Usuarios"" u ON t.""ID_Usuario"" = u.""ID_User""
+    WHERE 1=1";
+
+            List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+
+            if (!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
+            {
+                query += " AND t.\"Fecha_Edicion\" BETWEEN @fecha_inicio AND @fecha_fin";
+                parameters.Add(new NpgsqlParameter("@fecha_inicio", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = Convert.ToDateTime(fechaInicio) });
+                parameters.Add(new NpgsqlParameter("@fecha_fin", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = Convert.ToDateTime(fechaFin) });
+            }
+
+            if (!string.IsNullOrEmpty(usuario))
+            {
+                query += " AND t.\"Usuario_Edito\" ILIKE @usuario";
+                parameters.Add(new NpgsqlParameter("@usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = $"%{usuario}%" });
+            }
+
+            query += " ORDER BY t.\"Fecha_Edicion\" DESC";
+
+            return ExecuteSelectQuery(query, parameters.ToArray());
         }
 
         // Método para probar la conexión

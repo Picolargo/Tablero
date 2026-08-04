@@ -84,6 +84,7 @@ namespace Tablero
         private string Kg_pz_str = string.Empty;
         private bool activo = false;
         private bool _aplicarFiltroValidacion = true; // Indica si el filtro debe aplicarse
+        private FormTrazabilidad formTrazabilidadInstance = null;
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -508,6 +509,7 @@ namespace Tablero
                     llenado_anios_cumplimientos();
 
                     menuStrip1.Visible = true; // Mostrar el menú para el administrador
+                   
                 }
                 dgv_users.ClearSelection();
             }
@@ -555,7 +557,8 @@ namespace Tablero
 
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
-                menuStrip1.Visible = false; // Mostrar el menú para el administrador
+                menuStrip1.Visible = true; // Mostrar el menú para el administrador
+                editarToolStripMenuItem.Visible = false;
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
             {
@@ -576,6 +579,11 @@ namespace Tablero
                 if(nivel_user == "Supervisor") 
                 {
                     materialTabControl1.TabPages.Remove(tabPage10);
+                }
+                if (nivel_user == "Jefe de Turno")
+                {
+                    menuStrip1.Visible = true;
+                    borrarToolStripMenuItem.Visible = false;
                 }
 
                 ActualizarAnioReportes();
@@ -5402,6 +5410,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             cuerpoHtml1 += cuerpoHtml2;
                             conf_email(cuerpoHtml1);
                             //fin correo
+                            // Registrar trazabilidad (versión simplificada)
+                            dbHelper = new DatabaseHelper(connectionString);
+
+                            // Necesitas tener el ID de la ficha como entero
+                            int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                            dbHelper.RegistrarTrazabilidadEdicion(
+                                idFichaInt,      // ID de la ficha
+                                id_user,         // ID del usuario actual
+                                nombre_admin,    // Nombre del usuario
+                                nivel_user       // Nivel del usuario
+                            );
+                            id_global_ficha = string.Empty; // Limpiar el ID global
                         }
                         else
                         {
@@ -5673,6 +5694,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -5928,6 +5962,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -6164,6 +6211,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -6398,6 +6458,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -6633,6 +6706,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -6880,6 +6966,19 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         cuerpoHtml1 += cuerpoHtml2;
                         conf_email(cuerpoHtml1);
                         //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
                     }
                     else
                     {
@@ -6989,6 +7088,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                                                 "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
+
                 }
                 else
                 {
@@ -7273,7 +7373,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Opcional: También puedes enfocarlo
                     _editarForm.Focus();
                 }
-                id_global_ficha = string.Empty; // Limpiar el ID global
+                
                 if (nivel_user == "Super Administrador")
                 {
                     lbl_no_emp2.Text = numero_empleado_admin;
@@ -9139,7 +9239,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (_editarForm == null || _editarForm.IsDisposed) 
             {
                 // Crear nueva instancia
-                _editarForm = new Editar(connectionString, editar, borrar);
+                _editarForm = new Editar(connectionString, editar, borrar, nivel_user);
 
                 // Manejar el evento FormClosed para limpiar la referencia
                 _editarForm.FormClosed += (s, args) => _editarForm = null;
@@ -16792,7 +16892,7 @@ ORDER BY
         {
             editar = false;
             borrar = true;
-            Editar Editar_ficha = new Editar(connectionString, editar, borrar);
+            Editar Editar_ficha = new Editar(connectionString, editar, borrar, nivel_user);
             // Suscripción al evento con los dos parámetros
             Editar_ficha.FichaSeleccionada += (id_global, area) =>
             {
@@ -18609,6 +18709,23 @@ ORDER BY ""OP"" ASC;";
             {
                 rgv_reporte_consolidado.MasterTemplate.Refresh();
                 _aplicarFiltroValidacion = false;
+            }
+        }
+
+        private void trazabilidadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Verificar si el formulario ya está abierto
+            if (formTrazabilidadInstance == null || formTrazabilidadInstance.IsDisposed)
+            {
+                formTrazabilidadInstance = new FormTrazabilidad(connectionString);
+                formTrazabilidadInstance.FormClosed += (s, args) => formTrazabilidadInstance = null;
+                formTrazabilidadInstance.Show();
+            }
+            else
+            {
+                // Si ya está abierto, traerlo al frente
+                formTrazabilidadInstance.BringToFront();
+                formTrazabilidadInstance.Focus();
             }
         }
     }
