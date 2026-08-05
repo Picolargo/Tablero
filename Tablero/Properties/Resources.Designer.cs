@@ -273,6 +273,16 @@ namespace Tablero.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap find_11405066 {
+            get {
+                object obj = ResourceManager.GetObject("find_11405066", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ic_fluent_table_dismiss_filled {
             get {
                 object obj = ResourceManager.GetObject("ic_fluent_table_dismiss_filled", resourceCulture);

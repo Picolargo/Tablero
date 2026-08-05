@@ -609,5 +609,152 @@ namespace Tablero
 
             LoadDataIntoComboBox(query, comboBox, displayMember, valueMember, parameters);
         }
+
+        /// <summary>
+        /// Registra una imagen de evidencia en la base de datos
+        /// </summary>
+        public int RegistrarImagenEvidencia(int idFicha, string nombreArchivo, string rutaCompleta,
+            int numeroImagen, int idUsuario, long tamaño)
+        {
+            string query = @"INSERT INTO public.""Imagenes_Evidencia"" 
+        (""ID_Ficha"", ""Nombre_Archivo"", ""Ruta_Completa"", ""Numero_Imagen"", 
+         ""Fecha_Subida"", ""ID_Usuario"", ""Tamaño"")
+        VALUES (@id_ficha, @nombre_archivo, @ruta_completa, @numero_imagen, 
+                @fecha_subida, @id_usuario, @tamaño)
+        RETURNING ""ID_Imagen"";";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha },
+        new NpgsqlParameter("@nombre_archivo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = nombreArchivo },
+        new NpgsqlParameter("@ruta_completa", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = rutaCompleta },
+        new NpgsqlParameter("@numero_imagen", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numeroImagen },
+        new NpgsqlParameter("@fecha_subida", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = DateTime.Now },
+        new NpgsqlParameter("@id_usuario", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
+        new NpgsqlParameter("@tamaño", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = tamaño }
+            };
+
+            try
+            {
+                return ExecuteScalarInt(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al registrar imagen: {ex.Message}");
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las imágenes de evidencia de una ficha
+        /// </summary>
+        public DataTable ObtenerImagenesPorFicha(int idFicha)
+        {
+            string query = @"SELECT 
+        ""ID_Imagen"",
+        ""Nombre_Archivo"",
+        ""Ruta_Completa"",
+        ""Numero_Imagen"",
+        ""Fecha_Subida"",
+        ""Tamaño""
+    FROM public.""Imagenes_Evidencia""
+    WHERE ""ID_Ficha"" = @id_ficha
+    ORDER BY ""Numero_Imagen"" ASC";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha }
+            };
+
+            return ExecuteSelectQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Elimina imágenes de evidencia de una ficha
+        /// </summary>
+        public bool EliminarImagenesPorFicha(int idFicha)
+        {
+            string query = @"DELETE FROM public.""Imagenes_Evidencia"" 
+        WHERE ""ID_Ficha"" = @id_ficha";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_ficha", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idFicha }
+            };
+
+            try
+            {
+                int result = ExecuteNonQuery(query, parameters);
+                return result >= 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar imágenes: {ex.Message}");
+                return false;
+            }
+        }
+        /// <summary>
+        /// Elimina una imagen específica por su ID
+        /// </summary>
+        public bool EliminarImagenPorId(int idImagen, out string rutaArchivo)
+        {
+            rutaArchivo = string.Empty;
+
+            // Primero obtener la ruta del archivo
+            string queryGet = @"SELECT ""Ruta_Completa"" FROM public.""Imagenes_Evidencia"" 
+                        WHERE ""ID_Imagen"" = @id_imagen";
+
+            NpgsqlParameter[] paramGet = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_imagen", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idImagen }
+            };
+
+            DataTable dt = ExecuteSelectQuery(queryGet, paramGet);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                rutaArchivo = dt.Rows[0]["Ruta_Completa"].ToString();
+            }
+
+            // Eliminar el registro de la BD
+            string queryDelete = @"DELETE FROM public.""Imagenes_Evidencia"" 
+                           WHERE ""ID_Imagen"" = @id_imagen";
+
+            NpgsqlParameter[] paramDelete = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_imagen", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idImagen }
+            };
+
+            try
+            {
+                int result = ExecuteNonQuery(queryDelete, paramDelete);
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar imagen: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la ruta de una imagen por su ID
+        /// </summary>
+        public string ObtenerRutaImagenPorId(int idImagen)
+        {
+            string query = @"SELECT ""Ruta_Completa"" FROM public.""Imagenes_Evidencia"" 
+                     WHERE ""ID_Imagen"" = @id_imagen";
+
+            NpgsqlParameter[] parameters = new NpgsqlParameter[]
+            {
+        new NpgsqlParameter("@id_imagen", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idImagen }
+            };
+
+            DataTable dt = ExecuteSelectQuery(query, parameters);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                return dt.Rows[0]["Ruta_Completa"].ToString();
+            }
+            return string.Empty;
+        }
     }
 }

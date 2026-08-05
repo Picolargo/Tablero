@@ -26,7 +26,7 @@
     <UpdateUrl>\\sv-picolargo-01\Archivos-Generales\Publica\1.Sistemas\1. Instalador Tablero\</UpdateUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>24</ApplicationRevision>
+    <ApplicationRevision>25</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -250,6 +250,12 @@
     <Compile Include="FormTrazabilidad.Designer.cs">
       <DependentUpon>FormTrazabilidad.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormVerImagenes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormVerImagenes.Designer.cs">
+      <DependentUpon>FormVerImagenes.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -328,6 +334,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="formulario_icono.ico" />
+    <None Include="Resources\find_11405066.png" />
     <None Include="Resources\mark_13914388.png" />
     <None Include="Resources\Icon1.ico" />
     <None Include="Resources\icono_principal.bmp" />

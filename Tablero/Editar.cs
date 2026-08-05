@@ -294,17 +294,6 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
             }
         }
 
-        //private void txt_password_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        e.SuppressKeyPress = true; // evita beep
-        //        MaterialExpansionPanel1_OnActionButtonClick(
-        //            materialExpansionPanel1, EventArgs.Empty
-        //        );
-        //    }
-        //}
-
         private void Editar_Load(object sender, EventArgs e)
         {
             actualiza_fichas();

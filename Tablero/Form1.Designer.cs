@@ -52,6 +52,15 @@
             this.txt_Tiempo_energia = new MaterialSkin.Controls.MaterialTextBox();
             this.lbl_min_comida = new MaterialSkin.Controls.MaterialLabel();
             this.card_botones = new MaterialSkin.Controls.MaterialCard();
+            this.lblTamañoImagen = new MaterialSkin.Controls.MaterialLabel();
+            this.lblNombreImagen = new MaterialSkin.Controls.MaterialLabel();
+            this.btnEliminarImagen = new MaterialSkin.Controls.MaterialButton();
+            this.lblCantidadImagenes = new MaterialSkin.Controls.MaterialLabel();
+            this.listBoxImagenes = new System.Windows.Forms.ListBox();
+            this.btnLimpiarImagenes = new MaterialSkin.Controls.MaterialButton();
+            this.btnSeleccionarImagenes = new MaterialSkin.Controls.MaterialButton();
+            this.car_img_preview = new MaterialSkin.Controls.MaterialCard();
+            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.btn_cancelar_ficha = new MaterialSkin.Controls.MaterialButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_save_ficha = new MaterialSkin.Controls.MaterialButton();
@@ -436,6 +445,8 @@
             this.menuStrip1.SuspendLayout();
             this.card_meal_energy.SuspendLayout();
             this.card_botones.SuspendLayout();
+            this.car_img_preview.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.card_TM.SuspendLayout();
             this.card_dgv_operativo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_operativo)).BeginInit();
@@ -675,7 +686,7 @@
             this.editarToolStripMenuItem1,
             this.borrarToolStripMenuItem});
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.editarToolStripMenuItem.Text = "Ficha";
             // 
             // editarToolStripMenuItem1
@@ -695,7 +706,7 @@
             // trazabilidadToolStripMenuItem
             // 
             this.trazabilidadToolStripMenuItem.Name = "trazabilidadToolStripMenuItem";
-            this.trazabilidadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trazabilidadToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.trazabilidadToolStripMenuItem.Text = "Trazabilidad";
             this.trazabilidadToolStripMenuItem.Click += new System.EventHandler(this.trazabilidadToolStripMenuItem_Click);
             // 
@@ -784,6 +795,14 @@
             // card_botones
             // 
             this.card_botones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_botones.Controls.Add(this.lblTamañoImagen);
+            this.card_botones.Controls.Add(this.lblNombreImagen);
+            this.card_botones.Controls.Add(this.btnEliminarImagen);
+            this.card_botones.Controls.Add(this.lblCantidadImagenes);
+            this.card_botones.Controls.Add(this.listBoxImagenes);
+            this.card_botones.Controls.Add(this.btnLimpiarImagenes);
+            this.card_botones.Controls.Add(this.btnSeleccionarImagenes);
+            this.card_botones.Controls.Add(this.car_img_preview);
             this.card_botones.Controls.Add(this.btn_cancelar_ficha);
             this.card_botones.Controls.Add(this.btn_save_ficha);
             this.card_botones.Depth = 0;
@@ -793,9 +812,144 @@
             this.card_botones.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_botones.Name = "card_botones";
             this.card_botones.Padding = new System.Windows.Forms.Padding(14);
-            this.card_botones.Size = new System.Drawing.Size(874, 78);
+            this.card_botones.Size = new System.Drawing.Size(874, 252);
             this.card_botones.TabIndex = 7;
             this.card_botones.Visible = false;
+            // 
+            // lblTamañoImagen
+            // 
+            this.lblTamañoImagen.AutoSize = true;
+            this.lblTamañoImagen.Depth = 0;
+            this.lblTamañoImagen.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblTamañoImagen.Location = new System.Drawing.Point(441, 219);
+            this.lblTamañoImagen.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblTamañoImagen.Name = "lblTamañoImagen";
+            this.lblTamañoImagen.Size = new System.Drawing.Size(90, 19);
+            this.lblTamañoImagen.TabIndex = 12;
+            this.lblTamañoImagen.Text = "TamañoIMG";
+            // 
+            // lblNombreImagen
+            // 
+            this.lblNombreImagen.AutoSize = true;
+            this.lblNombreImagen.Depth = 0;
+            this.lblNombreImagen.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblNombreImagen.Location = new System.Drawing.Point(443, 164);
+            this.lblNombreImagen.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblNombreImagen.Name = "lblNombreImagen";
+            this.lblNombreImagen.Size = new System.Drawing.Size(86, 19);
+            this.lblNombreImagen.TabIndex = 11;
+            this.lblNombreImagen.Text = "NombreIMG";
+            // 
+            // btnEliminarImagen
+            // 
+            this.btnEliminarImagen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnEliminarImagen.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnEliminarImagen.Depth = 0;
+            this.btnEliminarImagen.HighEmphasis = true;
+            this.btnEliminarImagen.Icon = global::Tablero.Properties.Resources._8666597_trash_2_icon;
+            this.btnEliminarImagen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEliminarImagen.Location = new System.Drawing.Point(444, 69);
+            this.btnEliminarImagen.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnEliminarImagen.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnEliminarImagen.Name = "btnEliminarImagen";
+            this.btnEliminarImagen.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnEliminarImagen.Size = new System.Drawing.Size(116, 36);
+            this.btnEliminarImagen.TabIndex = 10;
+            this.btnEliminarImagen.Text = "Eliminar";
+            this.btnEliminarImagen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEliminarImagen.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnEliminarImagen.UseAccentColor = false;
+            this.btnEliminarImagen.UseVisualStyleBackColor = true;
+            this.btnEliminarImagen.Click += new System.EventHandler(this.btnEliminarImagen_Click);
+            // 
+            // lblCantidadImagenes
+            // 
+            this.lblCantidadImagenes.AutoSize = true;
+            this.lblCantidadImagenes.Depth = 0;
+            this.lblCantidadImagenes.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblCantidadImagenes.Location = new System.Drawing.Point(441, 192);
+            this.lblCantidadImagenes.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblCantidadImagenes.Name = "lblCantidadImagenes";
+            this.lblCantidadImagenes.Size = new System.Drawing.Size(94, 19);
+            this.lblCantidadImagenes.TabIndex = 9;
+            this.lblCantidadImagenes.Text = "CantidadIMG";
+            // 
+            // listBoxImagenes
+            // 
+            this.listBoxImagenes.FormattingEnabled = true;
+            this.listBoxImagenes.Location = new System.Drawing.Point(248, 20);
+            this.listBoxImagenes.Name = "listBoxImagenes";
+            this.listBoxImagenes.Size = new System.Drawing.Size(189, 212);
+            this.listBoxImagenes.TabIndex = 8;
+            this.listBoxImagenes.SelectedIndexChanged += new System.EventHandler(this.listBoxImagenes_SelectedIndexChanged);
+            // 
+            // btnLimpiarImagenes
+            // 
+            this.btnLimpiarImagenes.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnLimpiarImagenes.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnLimpiarImagenes.Depth = 0;
+            this.btnLimpiarImagenes.HighEmphasis = true;
+            this.btnLimpiarImagenes.Icon = global::Tablero.Properties.Resources.short_broom;
+            this.btnLimpiarImagenes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLimpiarImagenes.Location = new System.Drawing.Point(444, 117);
+            this.btnLimpiarImagenes.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnLimpiarImagenes.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnLimpiarImagenes.Name = "btnLimpiarImagenes";
+            this.btnLimpiarImagenes.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnLimpiarImagenes.Size = new System.Drawing.Size(189, 36);
+            this.btnLimpiarImagenes.TabIndex = 7;
+            this.btnLimpiarImagenes.Text = "Limpiar Selección";
+            this.btnLimpiarImagenes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnLimpiarImagenes.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnLimpiarImagenes.UseAccentColor = false;
+            this.btnLimpiarImagenes.UseVisualStyleBackColor = true;
+            this.btnLimpiarImagenes.Click += new System.EventHandler(this.btnLimpiarImagenes_Click);
+            // 
+            // btnSeleccionarImagenes
+            // 
+            this.btnSeleccionarImagenes.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSeleccionarImagenes.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnSeleccionarImagenes.Depth = 0;
+            this.btnSeleccionarImagenes.HighEmphasis = true;
+            this.btnSeleccionarImagenes.Icon = global::Tablero.Properties.Resources._1564491_add_create_new_plus_icon;
+            this.btnSeleccionarImagenes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSeleccionarImagenes.Location = new System.Drawing.Point(444, 21);
+            this.btnSeleccionarImagenes.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnSeleccionarImagenes.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSeleccionarImagenes.Name = "btnSeleccionarImagenes";
+            this.btnSeleccionarImagenes.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnSeleccionarImagenes.Size = new System.Drawing.Size(137, 36);
+            this.btnSeleccionarImagenes.TabIndex = 6;
+            this.btnSeleccionarImagenes.Text = "Selecionar";
+            this.btnSeleccionarImagenes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSeleccionarImagenes.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnSeleccionarImagenes.UseAccentColor = false;
+            this.btnSeleccionarImagenes.UseVisualStyleBackColor = true;
+            this.btnSeleccionarImagenes.Click += new System.EventHandler(this.btnSeleccionarImagenes_Click);
+            // 
+            // car_img_preview
+            // 
+            this.car_img_preview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.car_img_preview.Controls.Add(this.pictureBoxPreview);
+            this.car_img_preview.Depth = 0;
+            this.car_img_preview.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.car_img_preview.Location = new System.Drawing.Point(17, 20);
+            this.car_img_preview.Margin = new System.Windows.Forms.Padding(14);
+            this.car_img_preview.MouseState = MaterialSkin.MouseState.HOVER;
+            this.car_img_preview.Name = "car_img_preview";
+            this.car_img_preview.Padding = new System.Windows.Forms.Padding(1);
+            this.car_img_preview.Size = new System.Drawing.Size(226, 221);
+            this.car_img_preview.TabIndex = 5;
+            // 
+            // pictureBoxPreview
+            // 
+            this.pictureBoxPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxPreview.Location = new System.Drawing.Point(1, 1);
+            this.pictureBoxPreview.Name = "pictureBoxPreview";
+            this.pictureBoxPreview.Size = new System.Drawing.Size(224, 219);
+            this.pictureBoxPreview.TabIndex = 4;
+            this.pictureBoxPreview.TabStop = false;
+            this.pictureBoxPreview.Click += new System.EventHandler(this.pictureBoxPreview_Click);
             // 
             // btn_cancelar_ficha
             // 
@@ -806,7 +960,7 @@
             this.btn_cancelar_ficha.Icon = global::Tablero.Properties.Resources._8666740_slash_icon;
             this.btn_cancelar_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_cancelar_ficha.ImageList = this.imageList1;
-            this.btn_cancelar_ficha.Location = new System.Drawing.Point(445, 22);
+            this.btn_cancelar_ficha.Location = new System.Drawing.Point(729, 68);
             this.btn_cancelar_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_cancelar_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_cancelar_ficha.Name = "btn_cancelar_ficha";
@@ -846,7 +1000,7 @@
             this.btn_save_ficha.HighEmphasis = true;
             this.btn_save_ficha.Icon = global::Tablero.Properties.Resources._8666542_save_icon;
             this.btn_save_ficha.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_ficha.Location = new System.Drawing.Point(301, 22);
+            this.btn_save_ficha.Location = new System.Drawing.Point(729, 20);
             this.btn_save_ficha.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_save_ficha.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_save_ficha.Name = "btn_save_ficha";
@@ -871,12 +1025,12 @@
             this.card_TM.Controls.Add(this.card_dgv_mecanico);
             this.card_TM.Depth = 0;
             this.card_TM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_TM.Location = new System.Drawing.Point(797, 140);
+            this.card_TM.Location = new System.Drawing.Point(797, 315);
             this.card_TM.Margin = new System.Windows.Forms.Padding(14);
             this.card_TM.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_TM.Name = "card_TM";
             this.card_TM.Padding = new System.Windows.Forms.Padding(14);
-            this.card_TM.Size = new System.Drawing.Size(874, 696);
+            this.card_TM.Size = new System.Drawing.Size(874, 521);
             this.card_TM.TabIndex = 4;
             this.card_TM.Visible = false;
             // 
@@ -885,7 +1039,7 @@
             this.materialLabel3.AutoSize = true;
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel3.Location = new System.Drawing.Point(59, 384);
+            this.materialLabel3.Location = new System.Drawing.Point(59, 269);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
             this.materialLabel3.Size = new System.Drawing.Size(139, 19);
@@ -897,7 +1051,7 @@
             this.materialLabel2.AutoSize = true;
             this.materialLabel2.Depth = 0;
             this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel2.Location = new System.Drawing.Point(59, 47);
+            this.materialLabel2.Location = new System.Drawing.Point(59, 15);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
             this.materialLabel2.Size = new System.Drawing.Size(138, 19);
@@ -913,7 +1067,7 @@
             this.txt_TM_operativo.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_operativo.Hint = "Minutos Totales";
             this.txt_TM_operativo.LeadingIcon = null;
-            this.txt_TM_operativo.Location = new System.Drawing.Point(62, 275);
+            this.txt_TM_operativo.Location = new System.Drawing.Point(682, 13);
             this.txt_TM_operativo.MaxLength = 50;
             this.txt_TM_operativo.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_operativo.Multiline = false;
@@ -930,7 +1084,7 @@
             this.card_dgv_operativo.Controls.Add(this.dgv_operativo);
             this.card_dgv_operativo.Depth = 0;
             this.card_dgv_operativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_operativo.Location = new System.Drawing.Point(62, 80);
+            this.card_dgv_operativo.Location = new System.Drawing.Point(61, 66);
             this.card_dgv_operativo.Margin = new System.Windows.Forms.Padding(14);
             this.card_dgv_operativo.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_operativo.Name = "card_dgv_operativo";
@@ -992,7 +1146,7 @@
             this.txt_TM_mecanico.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_TM_mecanico.Hint = "Minutos Totales";
             this.txt_TM_mecanico.LeadingIcon = null;
-            this.txt_TM_mecanico.Location = new System.Drawing.Point(62, 612);
+            this.txt_TM_mecanico.Location = new System.Drawing.Point(683, 267);
             this.txt_TM_mecanico.MaxLength = 50;
             this.txt_TM_mecanico.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_TM_mecanico.Multiline = false;
@@ -1010,7 +1164,7 @@
             this.card_dgv_mecanico.Controls.Add(this.dgv_mecanico);
             this.card_dgv_mecanico.Depth = 0;
             this.card_dgv_mecanico.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.card_dgv_mecanico.Location = new System.Drawing.Point(62, 417);
+            this.card_dgv_mecanico.Location = new System.Drawing.Point(62, 321);
             this.card_dgv_mecanico.Margin = new System.Windows.Forms.Padding(14);
             this.card_dgv_mecanico.MouseState = MaterialSkin.MouseState.HOVER;
             this.card_dgv_mecanico.Name = "card_dgv_mecanico";
@@ -2356,7 +2510,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2369,7 +2523,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -7655,6 +7809,7 @@
             this.Name = "Form_principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_principal_FormClosing);
             this.Load += new System.EventHandler(this.Form_principal_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -7665,6 +7820,8 @@
             this.card_meal_energy.PerformLayout();
             this.card_botones.ResumeLayout(false);
             this.card_botones.PerformLayout();
+            this.car_img_preview.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.card_TM.ResumeLayout(false);
             this.card_TM.PerformLayout();
             this.card_dgv_operativo.ResumeLayout(false);
@@ -8266,6 +8423,15 @@
         private MaterialSkin.Controls.MaterialComboBox cmb_estado_validacion;
         private MaterialSkin.Controls.MaterialMultiLineTextBox2 mlTxt_observaciones;
         private System.Windows.Forms.ToolStripMenuItem trazabilidadToolStripMenuItem;
+        private MaterialSkin.Controls.MaterialButton btnSeleccionarImagenes;
+        private MaterialSkin.Controls.MaterialCard car_img_preview;
+        private System.Windows.Forms.PictureBox pictureBoxPreview;
+        private MaterialSkin.Controls.MaterialLabel lblCantidadImagenes;
+        private System.Windows.Forms.ListBox listBoxImagenes;
+        private MaterialSkin.Controls.MaterialButton btnLimpiarImagenes;
+        private MaterialSkin.Controls.MaterialButton btnEliminarImagen;
+        private MaterialSkin.Controls.MaterialLabel lblNombreImagen;
+        private MaterialSkin.Controls.MaterialLabel lblTamañoImagen;
     }
 }
 

@@ -385,7 +385,6 @@ namespace Tablero
 
         private void login_Shown(object sender, EventArgs e)
         {
-
             //cambiar_servidor();
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;

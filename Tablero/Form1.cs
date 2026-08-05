@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -85,6 +86,17 @@ namespace Tablero
         private bool activo = false;
         private bool _aplicarFiltroValidacion = true; // Indica si el filtro debe aplicarse
         private FormTrazabilidad formTrazabilidadInstance = null;
+        // Variables para manejo de imágenes
+        private List<string> _imagenesSeleccionadas = new List<string>();     // Imágenes nuevas a subir
+        private DataTable _imagenesCargadas = null;                          // Imágenes existentes en BD
+        private List<int> _imagenesCargadasIds = new List<int>();            // IDs de imágenes existentes
+        private List<int> _imagenesAEliminar = new List<int>();              // 🔥 IDs de imágenes a eliminar (marcadas para borrar)     
+        private const int MAX_IMAGENES = 10;
+        private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
+        //private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
+        // Variables para ampliación de imagen
+        private Form _formImagenAmpliada = null;
+        private bool _imagenAmpliadaVisible = false;
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -446,7 +458,9 @@ namespace Tablero
         private void Form_principal_Load(object sender, EventArgs e)
         {
             materialTabControl1.TabPages.Remove(tabPage36);// eliminar la pestaña de productos hasta programar ese modulo es el modulo de productos o fichas de producción
-            
+            lblNombreImagen.Text = string.Empty;
+            lblCantidadImagenes.Text = string.Empty;
+            lblTamañoImagen.Text = string.Empty;
             if (nivel_user == "Super Administrador")
             {
                 lbl_user_no_emp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -2052,7 +2066,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             Txt_Read_8.Text = string.Empty;
             Txt_Read_9.Text = string.Empty;
             txt_Tiempo_comida.Text = "30";
+            lblNombreImagen.Text = string.Empty;
+            lblCantidadImagenes.Text = string.Empty;
+            lblTamañoImagen.Text = string.Empty;
             mlTxt_observaciones.Text = string.Empty;
+            
             //hacer invisibles controles
             card_datos.Visible = false;
             card_TM.Visible = false;
@@ -5450,6 +5468,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                                 // Insertar en tablas relacionadas
                                 InsertarTiemposMuertos(dbHelper, idFicha);
+                                int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                                GuardarImagenesEvidencia(idFichaActual, id_user);
 
                                 //enviar correo
                                 //Crear lista de valores
@@ -5714,6 +5734,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, lote,
                             KgFueraSpec, KgResecar, PorcentCumplimiento, 0, Relacion_Fresco_seco, FTT,
                             KgProdSeco, MermaKgSeco, kgFrescosEnterSe, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones);
+                        int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                        GuardarImagenesEvidencia(idFichaActual, id_user);
                         //enviar correo
                         //Crear lista de valores
                         List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -5987,6 +6009,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
 
                             //enviar correo
                             //Crear lista de valores
@@ -6235,7 +6259,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
-
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -6482,7 +6507,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
-
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -6731,7 +6757,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
-
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -6990,6 +7017,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             // Insertar en tablas relacionadas
                             InsertarTiemposMuertos(dbHelper, idFicha);
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -7357,6 +7386,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
                                                             "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                int idFicha_int = Convert.ToInt32(id_global_ficha);
+                GuardarImagenesEvidencia(idFicha_int, id_user);
                 cb_Area.SelectedIndex = -1;
                 reiniciarCampos();
                 cb_Area.Focus();
@@ -9216,17 +9247,28 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_Area.Focus();
             editar = false;
             cb_jefe_turno.Enabled = false;
+
+            // 🔥 Limpiar TODAS las listas de imágenes
+            _imagenesSeleccionadas.Clear();
+            _imagenesCargadasIds.Clear();
+            _imagenesAEliminar.Clear();
+            _imagenesCargadas = null;
+            listBoxImagenes.Items.Clear();
+            pictureBoxPreview.Image = null;
+            lblCantidadImagenes.Text = "Imágenes: 0/10";
+            lblNombreImagen.Text = "Ninguna imagen seleccionada";
+            lblTamañoImagen.Text = "";
+
             if (nivel_user == "Super Administrador")
             {
                 lbl_no_emp2.Text = numero_empleado_admin;
                 lbl_nom2.Text = nombre_admin;
                 cb_supervisor_turno.Visible = false;
 
-                // Cerrar el formulario Editar si está abierto
                 if (_editarForm != null && !_editarForm.IsDisposed)
                 {
                     _editarForm.Close();
-                    _editarForm = null; // Opcional, pero recomendado para liberar la referencia
+                    _editarForm = null;
                 }
             }
         }
@@ -9247,9 +9289,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 // Suscripción al evento con los dos parámetros
                 _editarForm.FichaSeleccionada += (id_global, area) =>
                 {
-
-                    
-
                     cb_Area.SelectedIndex = -1;
                     reiniciarCampos();
                     cb_Area.Focus();
@@ -9257,6 +9296,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     if (id_global == null || area == null)
                     {
                         editar = false;
+                        // Limpiar imágenes al cancelar
+                        _imagenesSeleccionadas.Clear();
+                        _imagenesCargadasIds.Clear();
+                        listBoxImagenes.Items.Clear();
+                        pictureBoxPreview.Image = null;
+                        lblCantidadImagenes.Text = "Imágenes: 0/10";
+                        lblNombreImagen.Text = "Ninguna imagen cargada";
+                        lblTamañoImagen.Text = "";
                         return;
                     }
                     var materialSkinManager = MaterialSkinManager.Instance;
@@ -9388,6 +9435,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         }
 
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
                     if (area == "Despegue")
                     {
@@ -9501,6 +9566,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         radMultiColumnComboBox1.Enabled = false;
 
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
                     if (area == "Evaporado" || area == "Grind" || area == "Empacado" || area == "Revolturas")
                     {
@@ -9606,6 +9689,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         }
 
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
                     if (area == "Inspeccion")
                     {
@@ -9710,6 +9811,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             cb_jefe_turno.Focus();
                         }
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
                     if (area == "Polvos")
                     {
@@ -9817,6 +9936,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             cb_jefe_turno.Focus();
                         }
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
                     if (area == "Máquinas")
                     {
@@ -9931,6 +10068,24 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         }
 
                         actualiza_tiempos(id_global);
+                        // 🔥 Cargar imágenes de evidencia de la ficha
+                        CargarImagenesDeFicha(Convert.ToInt32(id_global));
+                        // También cuando se cancela (id_global == null)
+                        if (id_global == null || area == null)
+                        {
+                            editar = false;
+                            // Limpiar imágenes al cancelar
+                            _imagenesSeleccionadas.Clear();
+                            _imagenesCargadasIds.Clear();
+                            _imagenesAEliminar.Clear();
+                            _imagenesCargadas = null;
+                            listBoxImagenes.Items.Clear();
+                            pictureBoxPreview.Image = null;
+                            lblCantidadImagenes.Text = "Imágenes: 0/10";
+                            lblNombreImagen.Text = "Ninguna imagen cargada";
+                            lblTamañoImagen.Text = "";
+                            return;
+                        }
                     }
 
                 };
@@ -11871,6 +12026,33 @@ ORDER BY f.""OP"" ASC;";
                 // --- CAMBIOS: Configuración del grid con las nuevas columnas ---
                 rgv_reporte_consolidado.Columns[0].IsVisible = false; // Ocultar ID_Ficha
 
+                // 🔥 NUEVO: AGREGAR COLUMNA DE BOTÓN "VER IMÁGENES" CON ICONO
+                GridViewCommandColumn btnCol = new GridViewCommandColumn();
+                btnCol.Name = "btnVerImagenes";
+                btnCol.HeaderText = "Ver\nImágenes";
+                btnCol.TextAlignment = ContentAlignment.MiddleCenter;
+                btnCol.Width = 80;
+                btnCol.MinWidth = 70;
+                btnCol.MaxWidth = 100;
+                btnCol.DefaultText = "Ver";
+                btnCol.UseDefaultText = true;
+
+                // 🔥 ASIGNAR EL ICONO AL BOTÓN
+                btnCol.Image = global::Tablero.Properties.Resources.find_11405066;
+                btnCol.ImageAlignment = ContentAlignment.MiddleLeft;
+                btnCol.TextImageRelation = TextImageRelation.TextBeforeImage;
+                btnCol.TextAlignment = ContentAlignment.MiddleRight;
+
+                // Insertar en la posición 0 (primera columna)
+                rgv_reporte_consolidado.Columns.Insert(0, btnCol);
+
+                // 🔥 IMPORTANTE: Eliminar la suscripción previa para evitar duplicados
+                rgv_reporte_consolidado.CommandCellClick -= rgv_reporte_consolidado_CommandCellClick;
+
+                // Suscribir evento de clic para el botón
+                rgv_reporte_consolidado.CommandCellClick += rgv_reporte_consolidado_CommandCellClick;
+                // 🔥 FIN AGREGAR COLUMNA DE BOTÓN
+
                 // --- CAMBIO: Reemplazar la columna "Validado" por un CheckBox real ---
                 int indexValidado = -1;
                 for (int i = 0; i < rgv_reporte_consolidado.Columns.Count; i++)
@@ -12057,6 +12239,43 @@ ORDER BY f.""OP"" ASC;";
             rgv_reporte_consolidado.MasterTemplate.Refresh();
 
         }
+        /// <summary>
+        /// Evento que se dispara cuando se hace clic en el botón "Ver Imágenes"
+        /// </summary>
+        private void rgv_reporte_consolidado_CommandCellClick(object sender, Telerik.WinControls.UI.GridViewCellEventArgs e)
+        {
+            try
+            {
+                // Verificar que sea la columna del botón
+                if (e.Column == null || e.Column.Name != "btnVerImagenes")
+                    return;
+
+                // Obtener la fila actual
+                GridViewRowInfo row = e.Row;
+                if (row == null) return;
+
+                // Obtener el ID_Ficha de la fila (está en la columna 1 porque insertamos el botón en la posición 0)
+                object idFichaObj = row.Cells["ID_Ficha"].Value;
+                if (idFichaObj == null || idFichaObj == DBNull.Value)
+                    return;
+
+                int idFicha = Convert.ToInt32(idFichaObj);
+
+                // Abrir el formulario con las imágenes
+                using (FormVerImagenes form = new FormVerImagenes(idFicha, connectionString))
+                {
+                    form.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al abrir imágenes: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
         /// <summary>
         /// Evento que controla qué celdas pueden ser editadas.
@@ -12157,10 +12376,11 @@ ORDER BY f.""OP"" ASC;";
 
                 int colIndex = 1;
 
-                // Encabezados
+                // 🔥 ENCABEZADOS: Solo exportar columnas de datos (excluir columnas de botón)
                 foreach (GridViewDataColumn column in radGridView.Columns)
                 {
-                    if (column.IsVisible)
+                    // 🔥 Excluir columnas que no deben exportarse
+                    if (column.IsVisible && column.Name != "btnVerImagenes")
                     {
                         var cell = worksheet.Cell(1, colIndex);
                         cell.Value = column.HeaderText;
@@ -12178,6 +12398,7 @@ ORDER BY f.""OP"" ASC;";
                 int rowIndex = 2;
                 bool hayDatos = false;
 
+                // 🔥 DATOS: Solo exportar columnas de datos (excluir columnas de botón)
                 foreach (GridViewRowInfo row in radGridView.ChildRows)
                 {
                     if (row.IsVisible && !(row is GridViewGroupRowInfo))
@@ -12186,7 +12407,8 @@ ORDER BY f.""OP"" ASC;";
 
                         foreach (GridViewDataColumn column in radGridView.Columns)
                         {
-                            if (column.IsVisible)
+                            // 🔥 Excluir columnas que no deben exportarse
+                            if (column.IsVisible && column.Name != "btnVerImagenes")
                             {
                                 worksheet.Cell(rowIndex, colIndex).Value =
                                     row.Cells[column.Name].Value?.ToString();
@@ -18727,6 +18949,577 @@ ORDER BY ""OP"" ASC;";
                 formTrazabilidadInstance.BringToFront();
                 formTrazabilidadInstance.Focus();
             }
+        }
+
+        private void btnSeleccionarImagenes_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(RUTA_SERVIDOR))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                "La carpeta 'Img_Tablero' no existe o no está disponible.\n\nPor favor, cree la carpeta, compártala en la red y vuelva a intentarlo.",
+                "Carpeta de imágenes no encontrada",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Multiselect = true;
+                openFileDialog.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+                openFileDialog.Title = "Seleccione imágenes de evidencia (máx 10)";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Verificar límite
+                    int disponibles = MAX_IMAGENES - _imagenesSeleccionadas.Count;
+                    if (openFileDialog.FileNames.Length > disponibles)
+                    {
+                        MetroFramework.MetroMessageBox.Show(this,
+                            $"Solo puede seleccionar {disponibles} imágenes más. Máximo {MAX_IMAGENES}.",
+                            "Límite de imágenes",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    foreach (string archivo in openFileDialog.FileNames)
+                    {
+                        // Verificar que no esté duplicada
+                        if (!_imagenesSeleccionadas.Contains(archivo))
+                        {
+                            _imagenesSeleccionadas.Add(archivo);
+                        }
+                    }
+
+                    ActualizarListaImagenes();
+                }
+            }
+        }
+
+        private void btnLimpiarImagenes_Click(object sender, EventArgs e)
+        {
+            if (MetroFramework.MetroMessageBox.Show(this,
+                "¿Está seguro que desea eliminar todas las imágenes seleccionadas?",
+                "Confirmar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                _imagenesSeleccionadas.Clear();
+                ActualizarListaImagenes();
+            }
+        }
+
+        private void btnEliminarImagen_Click(object sender, EventArgs e)
+        {
+            if (listBoxImagenes.SelectedIndex < 0) return;
+
+            string itemSeleccionado = listBoxImagenes.SelectedItem.ToString();
+            bool esNueva = itemSeleccionado.StartsWith("🆕 ");
+
+            if (esNueva)
+            {
+                // Eliminar de la lista de nuevas imágenes
+                string nombreLimpio = itemSeleccionado.Substring(2);
+                string rutaAEliminar = string.Empty;
+                foreach (string archivo in _imagenesSeleccionadas)
+                {
+                    if (Path.GetFileName(archivo) == nombreLimpio)
+                    {
+                        rutaAEliminar = archivo;
+                        break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(rutaAEliminar))
+                {
+                    _imagenesSeleccionadas.Remove(rutaAEliminar);
+                }
+                ActualizarListaImagenes();
+                return;
+            }
+
+            // Marcar imagen existente para eliminar
+            if (_imagenesCargadas != null)
+            {
+                foreach (DataRow row in _imagenesCargadas.Rows)
+                {
+                    string nombreArchivo = row["Nombre_Archivo"].ToString();
+                    if (nombreArchivo == itemSeleccionado)
+                    {
+                        int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+
+                        if (MetroFramework.MetroMessageBox.Show(this,
+                            $"¿Desea marcar la imagen '{nombreArchivo}' para eliminar?\n(Se eliminará al guardar la ficha)",
+                            "Confirmar eliminación",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            // Marcar para eliminar
+                            if (!_imagenesAEliminar.Contains(idImagen))
+                            {
+                                _imagenesAEliminar.Add(idImagen);
+                            }
+
+                            ActualizarListaImagenes();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void listBoxImagenes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxImagenes.SelectedIndex < 0) return;
+
+            string itemSeleccionado = listBoxImagenes.SelectedItem.ToString();
+            string rutaImagen = string.Empty;
+            bool esNueva = itemSeleccionado.StartsWith("🆕 ");
+
+            if (esNueva)
+            {
+                // Es una imagen nueva seleccionada desde el equipo
+                string nombreLimpio = itemSeleccionado.Substring(2);
+                foreach (string archivo in _imagenesSeleccionadas)
+                {
+                    if (Path.GetFileName(archivo) == nombreLimpio)
+                    {
+                        rutaImagen = archivo;
+                        break;
+                    }
+                }
+                lblNombreImagen.Text = nombreLimpio + " (nueva)";
+                lblTamañoImagen.Text = "Archivo local - se subirá al guardar";
+            }
+            else
+            {
+                // Es una imagen existente en el servidor
+                if (_imagenesCargadas != null)
+                {
+                    foreach (DataRow row in _imagenesCargadas.Rows)
+                    {
+                        string nombreArchivo = row["Nombre_Archivo"].ToString();
+                        if (nombreArchivo == itemSeleccionado)
+                        {
+                            int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+                            rutaImagen = row["Ruta_Completa"].ToString();
+                            lblNombreImagen.Text = nombreArchivo;
+
+                            // Verificar si está marcada para eliminar
+                            if (_imagenesAEliminar.Contains(idImagen))
+                            {
+                                lblNombreImagen.Text += " 🔴 (marcada para eliminar)";
+                            }
+
+                            long tamaño = Convert.ToInt64(row["Tamaño"]);
+                            lblTamañoImagen.Text = $"Tamaño: {tamaño / 1024} KB";
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Cargar la imagen en el PictureBox
+            if (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen))
+            {
+                try
+                {
+                    using (var stream = new FileStream(rutaImagen, FileMode.Open, FileAccess.Read))
+                    {
+                        pictureBoxPreview.Image = Image.FromStream(stream);
+                        pictureBoxPreview.SizeMode = PictureBoxSizeMode.Zoom;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    pictureBoxPreview.Image = null;
+                    lblNombreImagen.Text = "Error al cargar imagen";
+                }
+            }
+            else
+            {
+                pictureBoxPreview.Image = null;
+                if (!esNueva)
+                {
+                    lblNombreImagen.Text = "Imagen no encontrada en el servidor";
+                }
+            }
+        }
+        private void ActualizarListaImagenes()
+        {
+            listBoxImagenes.Items.Clear();
+
+            // Mostrar imágenes existentes (las que NO están marcadas para eliminar)
+            if (_imagenesCargadas != null)
+            {
+                foreach (DataRow row in _imagenesCargadas.Rows)
+                {
+                    int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+                    string nombreArchivo = row["Nombre_Archivo"].ToString();
+
+                    // Verificar si esta imagen está marcada para eliminar
+                    bool marcadaEliminar = _imagenesAEliminar.Contains(idImagen);
+
+                    // Verificar si esta imagen ya fue reemplazada por una nueva (mismo número)
+                    string numeroImagen = ObtenerNumeroDeImagen(nombreArchivo);
+                    bool tieneReemplazo = _imagenesSeleccionadas.Any(f =>
+                        Path.GetFileName(f).Contains($"_{numeroImagen}."));
+
+                    if (!marcadaEliminar && !tieneReemplazo)
+                    {
+                        listBoxImagenes.Items.Add(nombreArchivo);
+                    }
+                }
+            }
+
+            // Mostrar imágenes nuevas (las que están en _imagenesSeleccionadas)
+            foreach (string archivo in _imagenesSeleccionadas)
+            {
+                listBoxImagenes.Items.Add("🆕 " + Path.GetFileName(archivo));
+            }
+
+            // Calcular total de imágenes (existentes no eliminadas + nuevas)
+            int totalExistentes = 0;
+            if (_imagenesCargadas != null)
+            {
+                foreach (DataRow row in _imagenesCargadas.Rows)
+                {
+                    int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+                    if (!_imagenesAEliminar.Contains(idImagen))
+                    {
+                        totalExistentes++;
+                    }
+                }
+            }
+            int total = totalExistentes + _imagenesSeleccionadas.Count;
+            lblCantidadImagenes.Text = $"Imágenes: {total}/{MAX_IMAGENES}";
+
+            // Limpiar preview si no hay selección
+            if (listBoxImagenes.SelectedIndex == -1)
+            {
+                pictureBoxPreview.Image = null;
+                lblNombreImagen.Text = "Ninguna imagen seleccionada";
+                lblTamañoImagen.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Extrae el número de la imagen del nombre del archivo (ej: "1284_IMG_3.jpg" → "3")
+        /// </summary>
+        private string ObtenerNumeroDeImagen(string nombreArchivo)
+        {
+            // Busca el patrón "_IMG_N." donde N es un número
+            var match = System.Text.RegularExpressions.Regex.Match(nombreArchivo, @"_IMG_(\d+)\.");
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+            return string.Empty;
+        }
+        private void GuardarImagenesEvidencia(int idFicha, int idUsuario)
+        {
+            try
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // 🔥 PASO 1: Eliminar imágenes marcadas y reordenar
+                if (_imagenesAEliminar.Count > 0)
+                {
+                    foreach (int idImagen in _imagenesAEliminar)
+                    {
+                        // Obtener la ruta del archivo
+                        string rutaArchivo = dbHelper.ObtenerRutaImagenPorId(idImagen);
+
+                        // Eliminar de la BD
+                        dbHelper.EliminarImagenPorId(idImagen, out _);
+
+                        // Eliminar archivo físico
+                        if (!string.IsNullOrEmpty(rutaArchivo) && File.Exists(rutaArchivo))
+                        {
+                            try
+                            {
+                                File.Delete(rutaArchivo);
+                            }
+                            catch { /* Ignorar errores de archivo */ }
+                        }
+                    }
+
+                    // 🔥 PASO 2: Reordenar las imágenes restantes (renombrar para que sean consecutivas)
+                    ReordenarImagenes(idFicha);
+                    _imagenesAEliminar.Clear();
+                }
+
+                // 🔥 PASO 3: Agregar imágenes nuevas (si hay)
+                if (_imagenesSeleccionadas.Count > 0)
+                {
+                    // Obtener el número de imágenes existentes después de la reordenación
+                    DataTable dtActual = dbHelper.ObtenerImagenesPorFicha(idFicha);
+                    int numeroImagen = (dtActual != null) ? dtActual.Rows.Count + 1 : 1;
+
+                    foreach (string rutaOrigen in _imagenesSeleccionadas)
+                    {
+                        string extension = Path.GetExtension(rutaOrigen);
+                        string nombreArchivo = $"{idFicha}_IMG_{numeroImagen}{extension}";
+                        string rutaDestino = Path.Combine(RUTA_SERVIDOR, nombreArchivo);
+
+                        // Copiar archivo al servidor
+                        File.Copy(rutaOrigen, rutaDestino, true);
+
+                        // Registrar en la base de datos
+                        FileInfo fileInfo = new FileInfo(rutaDestino);
+                        dbHelper.RegistrarImagenEvidencia(
+                            idFicha,
+                            nombreArchivo,
+                            rutaDestino,
+                            numeroImagen,
+                            idUsuario,
+                            fileInfo.Length
+                        );
+
+                        numeroImagen++;
+                    }
+
+                    _imagenesSeleccionadas.Clear();
+                }
+
+                // Recargar las imágenes para mostrar el estado final
+                CargarImagenesDeFicha(idFicha);
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al guardar imágenes: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+        /// <summary>
+        /// Reordena las imágenes de una ficha para que sean consecutivas (1, 2, 3...)
+        /// </summary>
+        private void ReordenarImagenes(int idFicha)
+        {
+            try
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // Obtener las imágenes actuales (ordenadas por Numero_Imagen)
+                DataTable dt = dbHelper.ObtenerImagenesPorFicha(idFicha);
+
+                if (dt == null || dt.Rows.Count == 0) return;
+
+                int nuevoNumero = 1;
+                foreach (DataRow row in dt.Rows)
+                {
+                    int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+                    string nombreActual = row["Nombre_Archivo"].ToString();
+                    string rutaActual = row["Ruta_Completa"].ToString();
+                    int numeroActual = Convert.ToInt32(row["Numero_Imagen"]);
+
+                    // Si el número actual no coincide con el nuevo número, renombrar
+                    if (numeroActual != nuevoNumero)
+                    {
+                        string extension = Path.GetExtension(nombreActual);
+                        string nuevoNombre = $"{idFicha}_IMG_{nuevoNumero}{extension}";
+                        string nuevaRuta = Path.Combine(RUTA_SERVIDOR, nuevoNombre);
+
+                        // Renombrar archivo físico
+                        if (File.Exists(rutaActual))
+                        {
+                            File.Move(rutaActual, nuevaRuta);
+                        }
+
+                        // Actualizar en la base de datos
+                        string updateQuery = @"
+                    UPDATE public.""Imagenes_Evidencia"" 
+                    SET ""Nombre_Archivo"" = @nombre, 
+                        ""Ruta_Completa"" = @ruta,
+                        ""Numero_Imagen"" = @numero
+                    WHERE ""ID_Imagen"" = @id";
+
+                        NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                        {
+                    new NpgsqlParameter("@nombre", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = nuevoNombre },
+                    new NpgsqlParameter("@ruta", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = nuevaRuta },
+                    new NpgsqlParameter("@numero", NpgsqlTypes.NpgsqlDbType.Integer) { Value = nuevoNumero },
+                    new NpgsqlParameter("@id", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idImagen }
+                        };
+
+                        dbHelper.ExecuteNonQuery(updateQuery, parameters);
+                    }
+
+                    nuevoNumero++;
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al reordenar imágenes: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+        /// <summary>
+        /// Carga las imágenes de evidencia de una ficha desde el servidor
+        /// </summary>
+        private void CargarImagenesDeFicha(int idFicha)
+        {
+            try
+            {
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+
+                // Obtener imágenes de la BD
+                DataTable dt = dbHelper.ObtenerImagenesPorFicha(idFicha);
+
+                // Limpiar las listas actuales
+                _imagenesSeleccionadas.Clear();
+                _imagenesCargadasIds.Clear();
+                _imagenesAEliminar.Clear();
+                _imagenesCargadas = dt;
+
+                // Actualizar la lista de imágenes en el ListBox
+                listBoxImagenes.Items.Clear();
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string nombreArchivo = row["Nombre_Archivo"].ToString();
+                        int idImagen = Convert.ToInt32(row["ID_Imagen"]);
+
+                        _imagenesCargadasIds.Add(idImagen);
+                        listBoxImagenes.Items.Add(nombreArchivo);
+                    }
+
+                    lblCantidadImagenes.Text = $"Imágenes: {dt.Rows.Count}/{MAX_IMAGENES}";
+
+                    // Seleccionar la primera imagen para previsualizar
+                    if (dt.Rows.Count > 0)
+                    {
+                        listBoxImagenes.SelectedIndex = 0;
+                    }
+                }
+                else
+                {
+                    lblCantidadImagenes.Text = $"Imágenes: 0/{MAX_IMAGENES}";
+                    pictureBoxPreview.Image = null;
+                    lblNombreImagen.Text = "Ninguna imagen cargada";
+                    lblTamañoImagen.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    $"Error al cargar imágenes de la ficha: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void pictureBoxPreview_Click(object sender, EventArgs e)
+        {
+            if (pictureBoxPreview.Image == null) return;
+
+            // Si ya hay una imagen ampliada visible, cerrarla
+            if (_imagenAmpliadaVisible)
+            {
+                CerrarImagenAmpliada();
+                return;
+            }
+
+            // Mostrar imagen ampliada
+            MostrarImagenAmpliada();
+        }
+        /// <summary>
+        /// Muestra la imagen ampliada en el centro de la pantalla
+        /// </summary>
+        private void MostrarImagenAmpliada()
+        {
+            if (pictureBoxPreview.Image == null) return;
+
+            // Crear un formulario flotante para mostrar la imagen
+            _formImagenAmpliada = new Form();
+            _formImagenAmpliada.FormBorderStyle = FormBorderStyle.None;
+            _formImagenAmpliada.BackColor = Color.Black;
+            _formImagenAmpliada.StartPosition = FormStartPosition.CenterScreen;
+            _formImagenAmpliada.WindowState = FormWindowState.Normal;
+            _formImagenAmpliada.TopMost = true;
+            _formImagenAmpliada.ShowInTaskbar = false;
+            _formImagenAmpliada.KeyPreview = true;
+
+            // Crear PictureBox para la imagen ampliada
+            PictureBox pbAmpliada = new PictureBox();
+            pbAmpliada.Dock = DockStyle.Fill;
+            pbAmpliada.Image = (Image)pictureBoxPreview.Image.Clone();
+            pbAmpliada.SizeMode = PictureBoxSizeMode.Zoom;
+            pbAmpliada.BackColor = Color.Black;
+
+            // Agregar al formulario
+            _formImagenAmpliada.Controls.Add(pbAmpliada);
+
+            // Calcular tamaño de la pantalla (90% de la pantalla)
+            Rectangle screenBounds = Screen.PrimaryScreen.WorkingArea;
+            int width = (int)(screenBounds.Width * 0.9);
+            int height = (int)(screenBounds.Height * 0.9);
+            _formImagenAmpliada.Size = new Size(width, height);
+
+            // Centrar en pantalla
+            _formImagenAmpliada.Location = new Point(
+                (screenBounds.Width - width) / 2,
+                (screenBounds.Height - height) / 2
+            );
+
+            // Eventos para cerrar la imagen ampliada
+            _formImagenAmpliada.Click += (s, ev) => CerrarImagenAmpliada();
+            _formImagenAmpliada.KeyDown += (s, ev) =>
+            {
+                if (ev.KeyCode == Keys.Escape)
+                    CerrarImagenAmpliada();
+            };
+            _formImagenAmpliada.LostFocus += (s, ev) => CerrarImagenAmpliada();
+            _formImagenAmpliada.FormClosed += (s, ev) =>
+            {
+                _imagenAmpliadaVisible = false;
+                _formImagenAmpliada = null;
+            };
+
+            // También cerrar al hacer clic en el PictureBox dentro del formulario
+            pbAmpliada.Click += (s, ev) => CerrarImagenAmpliada();
+
+            // Mostrar el formulario
+            _imagenAmpliadaVisible = true;
+            _formImagenAmpliada.Show();
+
+            // Enfocar para que el evento LostFocus funcione
+            _formImagenAmpliada.Focus();
+        }
+        /// <summary>
+        /// Cierra la ventana de imagen ampliada
+        /// </summary>
+        private void CerrarImagenAmpliada()
+        {
+            if (_formImagenAmpliada != null && !_formImagenAmpliada.IsDisposed)
+            {
+                _formImagenAmpliada.Close();
+                //_formImagenAmpliada.Dispose();
+                _formImagenAmpliada = null;
+            }
+            _imagenAmpliadaVisible = false;
+        }
+        /// <summary>
+        /// Verifica si la imagen ampliada está visible
+        /// </summary>
+        //private bool IsImagenAmpliadaVisible()
+        //{
+        //    return _formImagenAmpliada != null && !_formImagenAmpliada.IsDisposed && _formImagenAmpliada.Visible;
+        //}
+
+        private void Form_principal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Cerrar la imagen ampliada si está abierta
+            CerrarImagenAmpliada();
         }
     }
 }
