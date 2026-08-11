@@ -2510,7 +2510,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2523,7 +2523,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;

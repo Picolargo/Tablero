@@ -92,8 +92,8 @@ namespace Tablero
         private List<int> _imagenesCargadasIds = new List<int>();            // IDs de imágenes existentes
         private List<int> _imagenesAEliminar = new List<int>();              // 🔥 IDs de imágenes a eliminar (marcadas para borrar)     
         private const int MAX_IMAGENES = 10;
-        private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
-        //private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
+        //private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
+        private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
         // Variables para ampliación de imagen
         private Form _formImagenAmpliada = null;
         private bool _imagenAmpliadaVisible = false;
@@ -8055,6 +8055,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Ftt_metodo();
                 Relacion_Fresco_seco();
             }
+            if(cb_Area.SelectedIndex == 8) 
+            {
+                calcular_kg_entrada_proceso();
+            }
         }
 
         private void Txt_5_TextChanged(object sender, EventArgs e)
@@ -8850,7 +8854,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             string query = "SELECT \"Kg_pz\" FROM public.\"Maquinas\" WHERE \"OP\" = @valorBuscado;";
             string valorBuscado = cb_OP.Text;
             string kg_pz_string;
-            decimal kg_pz, pz_producidas, resultado;
+            decimal kg_pz, pz_producidas, resultado, merma;
             kg_pz = 0;
 
             // Crear parámetro
@@ -8869,7 +8873,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 kg_pz = System.Convert.ToDecimal(kg_pz_string);
             }
             pz_producidas = System.Convert.ToDecimal(Txt_1.Text);
-            resultado = pz_producidas * kg_pz;
+            merma = string.IsNullOrWhiteSpace(Txt_4.Text) ? 0 : Convert.ToDecimal(Txt_4.Text);
+            resultado = (pz_producidas * kg_pz)+merma;
 
             Txt_Read_5.Text = resultado.ToString();
         }
@@ -19074,12 +19079,12 @@ ORDER BY ""OP"" ASC;";
 
             string itemSeleccionado = listBoxImagenes.SelectedItem.ToString();
             string rutaImagen = string.Empty;
-            bool esNueva = itemSeleccionado.StartsWith("🆕 ");
+            bool esNueva = itemSeleccionado.StartsWith("🆕");
 
             if (esNueva)
             {
                 // Es una imagen nueva seleccionada desde el equipo
-                string nombreLimpio = itemSeleccionado.Substring(2);
+                string nombreLimpio = itemSeleccionado.Substring(2).Trim();
                 foreach (string archivo in _imagenesSeleccionadas)
                 {
                     if (Path.GetFileName(archivo) == nombreLimpio)
