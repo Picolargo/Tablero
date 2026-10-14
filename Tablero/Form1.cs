@@ -97,6 +97,17 @@ namespace Tablero
         // Variables para ampliación de imagen
         private Form _formImagenAmpliada = null;
         private bool _imagenAmpliadaVisible = false;
+
+        // ═══════════════════════════════════════════════════════════
+        // VARIABLES PARA ZOOM Y ROTACIÓN EN FORM1
+        // ═══════════════════════════════════════════════════════════
+        private float _zoomAmpliadoForm1 = 1.0f;
+        private float _rotacionAmpliadoForm1 = 0f;
+        private Image _imagenOriginalAmpliadaForm1 = null;
+        private PictureBox _pbAmpliadaForm1 = null;
+        private Panel _panelScrollAmpliadaForm1 = null;
+        private Label _lblZoomInfoForm1 = null;
+        // ═══════════════════════════════════════════════════════════
         public Form_principal(string var_no_empledo, string var_nom_empledo, int ID_usuario, string nivel, string conexionstring)
         {
             InitializeComponent();
@@ -1365,7 +1376,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_9.Visible = false;
                 Txt_11.Visible = false;
                 radMultiColumnComboBox1.Visible = false;
-                cb_proceso.Visible = false;
 
                 //Inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1453,7 +1463,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
-                cb_proceso.Visible = false;
                 Txt_Read_6.Visible = false;
 
                 Txt_2.Enabled = false;
@@ -1546,7 +1555,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-                cb_proceso.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1630,7 +1638,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-                cb_proceso.Visible = false;
 
                 //nombrar controles
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
@@ -1645,7 +1652,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 dbHelper.LoadDataIntoComboBox(query, cb_OP, "OP", "ID_OP");
             }
-            if (cb_Area.SelectedIndex == 4)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 9)
             {
                 //Inspeccion
                 reiniciarCampos();
@@ -1656,8 +1663,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
-                cb_proceso.Visible = true;
-
+                    
                 Txt_1.Text = string.Empty;
 
                 //habilitar controles
@@ -1694,7 +1700,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 txt_Tiempo_energia.Enabled = false;
                 dgv_mecanico.Enabled = false;
                 dgv_operativo.Enabled = false;
-                cb_proceso.Enabled = false;
 
                 Txt_Read_5.Visible = false;
                 Txt_Read_6.Visible = false;
@@ -1748,7 +1753,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
-                cb_proceso.Visible = false;
                 radMultiColumnComboBox1.Visible = false;
 
                 //inabilitar controles
@@ -1842,7 +1846,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-                cb_proceso.Visible = false;
 
                 //nombrar controles
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
@@ -1911,7 +1914,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-                cb_proceso.Visible = false;
 
                 //nombrar controles
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
@@ -1990,10 +1992,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 txt_Tiempo_energia.Enabled = false;
                 dgv_mecanico.Enabled = false;
                 dgv_operativo.Enabled = false;
-                cb_proceso.Enabled = false;
 
                 Txt_Read_9.Visible = false;
-                cb_proceso.Visible = false;
 
                 // Cargar combobox OP
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
@@ -2038,8 +2038,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cb_OP.Enabled = true;
             cb_OP.SelectedIndex = -1;
             cb_OP.Focus();
-            cb_proceso.SelectedIndex = -1;
-            cb_proceso.Focus();
             cb_jefe_turno.SelectedIndex = -1;
             cb_jefe_turno.Focus();
             cb_jefe_turno.Enabled = false;
@@ -5147,17 +5145,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_5.Enabled = true;
                     Txt_6.Enabled = true;
                 }
-                if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7)
+                if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 9)
                 {
                     Txt_1.Enabled = true;
                     Txt_2.Enabled = true;
                     Txt_3.Enabled = true;
                     Txt_4.Enabled = true;
                     Txt_5.Enabled = true;
-                    if (cb_Area.SelectedIndex == 4)
-                    {
-                        cb_proceso.Enabled = true;
-                    }
                     if (cb_Area.SelectedIndex == 6)
                     {
                         Txt_6.Enabled = true;
@@ -6365,7 +6359,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4)
             {
-                if (cb_proceso.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
                     && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
                     && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
                     && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
@@ -6386,7 +6380,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
                     decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
                     decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
-                    string proceso = cb_proceso.Text;
                     // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                     TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                     TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
@@ -6397,7 +6390,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     if (editar)
                     {
                         idUsuarioActual = id_supervisor_global;
-                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones);
 
@@ -6500,7 +6493,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     else
                     {
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, proceso,
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
                         0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones);
                         if (idFicha > 0)
@@ -7126,6 +7119,252 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     return;
                 }
             }
+            if (cb_Area.SelectedIndex == 9)
+            {
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text)
+                    && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text)
+                    && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text)
+                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
+                {
+                    //Inspeccion
+                    int idUsuarioActual = id_user;
+                    // Obtener datos de los TextBox
+                    DateTime fecha = dtp1.Value; // Tu MetroDateTime
+                    int turno = System.Convert.ToInt32(cb_Turno.Text);
+                    string op = cb_OP.Text;
+                    decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
+                    string textoPorcent_Logrado = Txt_Read_4.Text.Replace("%", "").Trim();
+                    decimal Porcent_Logrado = System.Convert.ToDecimal(textoPorcent_Logrado) / 100m;
+                    decimal KgEntrada = System.Convert.ToDecimal(Txt_1.Text);
+                    decimal KgProductoTerminado = System.Convert.ToDecimal(Txt_2.Text);
+                    decimal KgFueraEspec = System.Convert.ToDecimal(Txt_3.Text);
+                    decimal Merma = System.Convert.ToDecimal(Txt_4.Text);
+                    int PersonalOpe = System.Convert.ToInt32(Txt_5.Text);
+                    decimal hr_programadas = System.Convert.ToDecimal(Txt_Read_1.Text);
+                    decimal hr_efec = System.Convert.ToDecimal(Txt_Read_3.Text);
+                    // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
+                    TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
+                    TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
+                    string area = cb_Area.Text;
+                    decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
+                    string fecha_formateada = fecha.ToString("dd/MM/yyyy");
+
+                    if (editar)
+                    {
+                        idUsuarioActual = id_supervisor_global;
+                        updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones);
+
+                        //enviar correo
+                        //Crear lista de valores
+                        List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
+                            };
+                        string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
+                        //lista de valores para resumen
+                        List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
+
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
+                        string tablaGenerada = GenerarTablaValores(valores);
+                        // Generar tabla de tiempos muertos mecánicos
+                        string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                        string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                        string resultado = GenerarTablaDetallesOP();
+                        string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
+
+                                    {tablaGenerada}
+                                    <br>
+                                    <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                        cuerpoHtml1 += cuerpoHtml2;
+                        conf_email(cuerpoHtml1);
+                        //fin correo
+                        // Registrar trazabilidad (versión simplificada)
+                        dbHelper = new DatabaseHelper(connectionString);
+
+                        // Necesitas tener el ID de la ficha como entero
+                        int idFichaInt = Convert.ToInt32(id_global_ficha);
+
+                        dbHelper.RegistrarTrazabilidadEdicion(
+                            idFichaInt,      // ID de la ficha
+                            id_user,         // ID del usuario actual
+                            nombre_admin,    // Nombre del usuario
+                            nivel_user       // Nivel del usuario
+                        );
+                        id_global_ficha = string.Empty; // Limpiar el ID global
+                    }
+                    else
+                    {
+                        // Insertar en tabla Ficha y obtener el ID_Ficha generado
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null,
+                        KgEntrada, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
+                        0, 0, 0, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones);
+                        if (idFicha > 0)
+                        {
+                            // Insertar en tablas relacionadas
+                            InsertarTiemposMuertos(dbHelper, idFicha);
+                            int idFichaActual = editar ? Convert.ToInt32(id_global_ficha) : idFicha;
+                            GuardarImagenesEvidencia(idFichaActual, id_user);
+                            //enviar correo
+                            //Crear lista de valores
+                            List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Kg entrada (proceso)", KgEntrada.ToString()),
+                                new KeyValuePair<string, string>("Kg Producto Terminado", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg Secos Fuera de Espec.", KgFueraEspec.ToString()),
+                                new KeyValuePair<string, string>("Merma en Kg", Merma.ToString()),
+                                new KeyValuePair<string, string>("Personal Operativo", PersonalOpe.ToString()),
+                                new KeyValuePair<string, string>("Horas Progamadas", hr_programadas.ToString()),
+                                new KeyValuePair<string, string>("Kg Meta Programada", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Horas Efectivas", hr_efec.ToString()),
+                                new KeyValuePair<string, string>("Logro de Planeación (%)", textoPorcent_Logrado)
+                            };
+                            string Kgproducidosxhr = (KgProductoTerminado / hr_programadas).ToString("0.##");
+                            //lista de valores para resumen
+                            List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
+                            {
+                                new KeyValuePair<string, string>("Meta por Hora", meta.ToString()),
+                                new KeyValuePair<string, string>("Meta programada en turno", meta_kg.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos en turno", KgProductoTerminado.ToString()),
+                                new KeyValuePair<string, string>("Kg producidos por hora", Kgproducidosxhr)
+                            };
+
+                            string tablaResumen = GenerarTablaResumen(valoresResumen);
+                            string tablaGenerada = GenerarTablaValores(valores);
+                            // Generar tabla de tiempos muertos mecánicos
+                            string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
+                            string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
+                            string resultado = GenerarTablaDetallesOP();
+                            string cuerpoHtml2 = $@"
+                                        <strong>{turno.ToString()}</strong>, inició su turno a las 
+                                        <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
+                                        <strong>{hrFin.ToString()}</strong>, el día 
+                                        <strong>{fecha_formateada}</strong>.
+                                    </p>
+
+                                    <p>
+                                        Durante el turno, se registró información en el área 
+                                        <strong>{cb_Area.Text}</strong>, correspondiente al 
+                                        <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
+                                    {tablaGenerada}
+                                    <br>
+                                    <p>
+                                        Además, se registraron los siguientes tiempos muertos mecánicos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos}
+                                    <p>
+                                        Y se registraron los siguientes tiempos muertos operativos durante el turno:
+                                    </p>
+                                    {tablaTiemposMuertos_Operativo}
+                                    <p>
+                                    Del cual los detalles del OP son los siguientes:
+                                    </p>
+                                        {resultado}     
+                                    </br>  
+                                    <p>        
+                                        Agradecemos su atención. Este mensaje ha sido generado automáticamente por el Sistema Tablero.
+                                    </p>
+
+                                    <p style='margin-top: 20px;'>
+                                        Atentamente,<br>
+                                        <strong>Sistema Tablero</strong><br>
+                                        Departamento de Sistemas
+                                    </p>
+
+                                </div>
+
+                            </body>
+                            </html>";
+
+                            cuerpoHtml1 += cuerpoHtml2;
+                            conf_email(cuerpoHtml1);
+                            //fin correo
+                            MetroFramework.MetroMessageBox.Show(this, "Datos guardados correctamente",
+                                                                "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cb_Area.SelectedIndex = -1;
+                            reiniciarCampos();
+                            cb_Area.Focus();
+                        }
+                        else
+                        {
+                            MetroFramework.MetroMessageBox.Show(this, "Error al guardar datos",
+                                                                "Operación fallida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos requeridos.",
+                                                        "Error de llenado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
             if (string.IsNullOrEmpty(Tablero.Properties.Settings.Default.ServerSMTP))
             {
                 MetroFramework.MetroMessageBox.Show(this, "Complete la configuración SMTP antes de enviar el correo electronico. Solo el Administrador puede realizar esta configuración.", "SMTP pendiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -7282,14 +7521,44 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (cb_Area.SelectedIndex == 4)
             {
 
-                queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Proceso"" = @Proceso, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_meta"" = @Kg_meta, 
+                queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_meta"" = @Kg_meta, 
                                     ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, 
                                     ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg,""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, 
                                     ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe, ""Observaciones"" = @Observaciones WHERE ""ID_Ficha"" = @ID_Ficha;";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
-                    new NpgsqlParameter("@Proceso", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var2 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
+                    new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Kg_fuera_espec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe },
+                    new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
+                };
+                result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
+            }
+            if (cb_Area.SelectedIndex == 9)
+            {
+
+                queryInsertUpdate = @"UPDATE public.""Ficha"" SET ""ID_user"" = @id_user, ""Fecha"" = @fecha, ""Turno"" = @turno, ""OP"" = @op, ""Kg_meta"" = @Kg_meta, 
+                                    ""porcent_cump_meta"" = @porcent_cump_meta, ""Kg_enter_proceso"" = @Kg_enter_proceso, ""Kg_prod_term"" = @Kg_prod_term, 
+                                    ""Kg_fuera_espec"" = @Kg_fuera_espec, ""Merma_kg"" = @Merma_kg,""Hr_programadas"" = @Hr_programadas, ""Hr_efectivas"" = @Hr_efectivas, 
+                                    ""Personal_Operativo"" = @Personal_Operativo, ""Hr_inicio"" = @Hr_inicio, ""Hr_fin"" = @Hr_fin, ""MetaHr"" = @MetaHr, ""ID_Jefe"" = @Jefe, ""Observaciones"" = @Observaciones WHERE ""ID_Ficha"" = @ID_Ficha;";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
@@ -7577,17 +7846,49 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (cb_Area.SelectedIndex == 4)
             {
                 query = @"INSERT INTO public.""Ficha"" (
-                    ""ID_user"", ""Proceso"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
+                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
                     ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", 
                     ""MetaHr"", ""ID_Jefe"", ""Observaciones""
                 ) VALUES (
-                    @id_user, @Proceso, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
+                    @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
                     @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr, @Jefe, @Observaciones
                 ) RETURNING ""ID_Ficha"";";
                 parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
-                    new NpgsqlParameter("@Proceso", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var2 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
+                    new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
+                    new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Kg_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = meta_kg },
+                    new NpgsqlParameter("@porcent_cump_meta", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var8 },
+                    new NpgsqlParameter("@Kg_enter_proceso", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var3 },
+                    new NpgsqlParameter("@Kg_prod_term", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var4 },
+                    new NpgsqlParameter("@Kg_fuera_espec", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var5 },
+                    new NpgsqlParameter("@Merma_kg", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = var6 },
+                    new NpgsqlParameter("@Hr_programadas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_programadas },
+                    new NpgsqlParameter("@Hr_efectivas", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = hr_efectivas },
+                    new NpgsqlParameter("@Personal_Operativo", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = personal_O },
+                    new NpgsqlParameter("@hr_inicio", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrInicio },
+                    new NpgsqlParameter("@hr_fin", NpgsqlTypes.NpgsqlDbType.Time) { Value = hrFin },
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f },
+                    new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
+                    new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe },
+                    new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
+                };
+            }
+            if (cb_Area.SelectedIndex == 9)
+            {
+                query = @"INSERT INTO public.""Ficha"" (
+                    ""ID_user"", ""Fecha"", ""Turno"", ""OP"", ""Kg_meta"", ""porcent_cump_meta"", ""Kg_enter_proceso"", ""Kg_prod_term"", 
+                    ""Kg_fuera_espec"", ""Merma_kg"",""Hr_programadas"", ""Hr_efectivas"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", ""Area"", 
+                    ""MetaHr"", ""ID_Jefe"", ""Observaciones""
+                ) VALUES (
+                    @id_user, @fecha, @turno, @OP, @Kg_meta, @porcent_cump_meta, @Kg_enter_proceso, @Kg_prod_term, 
+                    @Kg_fuera_espec,@Merma_kg, @Hr_programadas, @Hr_efectivas, @Personal_Operativo, @Hr_inicio, @Hr_fin, @Area, @MetaHr, @Jefe, @Observaciones
+                ) RETURNING ""ID_Ficha"";";
+                parameters = new NpgsqlParameter[]
+                {
+                    new NpgsqlParameter("@id_user", NpgsqlTypes.NpgsqlDbType.Integer) { Value = idUsuario },
                     new NpgsqlParameter("@fecha", NpgsqlTypes.NpgsqlDbType.Date) { Value = fecha },
                     new NpgsqlParameter("@turno", NpgsqlTypes.NpgsqlDbType.Integer) { Value = turno },
                     new NpgsqlParameter("@OP", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
@@ -8024,7 +8325,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
                 porcentaje_logrado_planeacion();
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
             {
                 calcular_meta_programada();
                 porcentaje_logrado_planeacion();
@@ -8078,7 +8379,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 }
                 CalcularSuma();
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
             {
                 calcular_meta_programada();
                 porcentaje_logrado_planeacion();
@@ -8189,7 +8490,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 porcentaje_logrado_planeacion_platinum();
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
             {
                 calcular_meta_programada();
                 porcentaje_logrado_planeacion();
@@ -8227,7 +8528,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 cb_Turno.Enabled = true;
             }
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8)
+            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 9)
             {
                 cb_Turno.Enabled = true;
             }
@@ -8347,7 +8648,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_meta.Text = resultado;
                 }
             }
-            if (cb_Area.SelectedIndex == 4)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 9)
             {
                 // Consulta para buscar donde OP = valor_buscado
                 string query = "SELECT \"Meta_kg_hr_line\" FROM public.\"Inspeccion\" WHERE \"OP\" = @valorBuscado;";
@@ -8516,7 +8817,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 porcentaje_logrado_planeacion_platinum();
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
             {
                 calcular_meta_programada();
                 porcentaje_logrado_planeacion();
@@ -8552,7 +8853,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     porcentaje_logrado_planeacion_platinum();
                 }
-                if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+                if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
                 {
                     calcular_meta_programada();
                     porcentaje_logrado_planeacion();
@@ -8594,7 +8895,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 {
                     porcentaje_logrado_planeacion_platinum();
                 }
-                if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+                if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
                 {
                     calcular_meta_programada();
                     porcentaje_logrado_planeacion();
@@ -8628,7 +8929,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 porcentaje_logrado_planeacion_platinum();
             }
-            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5)
+            if (cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 9)
             {
                 calcular_meta_programada();
                 porcentaje_logrado_planeacion();
@@ -9004,7 +9305,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void Txt_1_TextChanged(object sender, EventArgs e)
         {
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8)
+            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 8 || cb_Area.SelectedIndex == 9)
             {
                 var tb = (RadTextBox)sender;
                 string original = tb.Text;
@@ -9098,7 +9399,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void Txt_1_Validating(object sender, CancelEventArgs e)
         {
-            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7)
+            if (cb_Area.SelectedIndex == 2 || cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 4 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 6 || cb_Area.SelectedIndex == 7 || cb_Area.SelectedIndex == 9)
             {
                 RadTextBox textBox = (RadTextBox)sender;
                 string text = textBox.Text;
@@ -9716,7 +10017,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     if (area == "Inspeccion")
                     {
                         DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-                        string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Proceso"", ""Kg_prod_term"", ""Kg_enter_proceso"", 
+                        string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_prod_term"", ""Kg_enter_proceso"", 
                     ""Kg_fuera_espec"", ""Merma_kg"", ""Personal_Operativo"", ""Hr_inicio"", ""Hr_fin"", 
                     ""MetaHr"", ""ID_Jefe"", ""ID_user"", ""Observaciones"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @valorBuscado;";
                         // Crear parámetro
@@ -9733,7 +10034,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         string Hr_inicio = string.Empty;
                         string Hr_fin = string.Empty;
                         string MetaHr = string.Empty;
-                        string Proceso = string.Empty;
                         string Kg_prod_term = string.Empty;
                         string Kg_enter_proceso = string.Empty;
                         string Kg_fuera_espec = string.Empty;
@@ -9751,7 +10051,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             Hr_inicio = dt2.Rows[0]["Hr_inicio"].ToString();
                             Hr_fin = dt2.Rows[0]["Hr_fin"].ToString();
                             MetaHr = dt2.Rows[0]["MetaHr"].ToString();
-                            Proceso = dt2.Rows[0]["Proceso"].ToString();
                             Kg_prod_term = dt2.Rows[0]["Kg_prod_term"].ToString();
                             Kg_enter_proceso = dt2.Rows[0]["Kg_enter_proceso"].ToString();
                             Kg_fuera_espec = dt2.Rows[0]["Kg_fuera_espec"].ToString();
@@ -9806,8 +10105,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Txt_4.Text = Merma_kg;
                         Txt_5.Text = Personal_Operativo;
                         mlTxt_observaciones.Text = Observaciones;
-                        cb_proceso.Text = Proceso;
-                        cb_proceso.Focus();
                         // Deshabilitar controles no editables
                         cb_Area.Enabled = false;
                         if (!string.IsNullOrWhiteSpace(ID_Jefe))
@@ -9929,7 +10226,6 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Txt_3.Text = Kg_fuera_espec;
                         Txt_4.Text = Merma_kg;
                         Txt_5.Text = Personal_Operativo;
-                        cb_proceso.Focus();
                         Txt_6.Text = Polvo_colector;
                         Txt_7.Text = Granulo;
                         mlTxt_observaciones.Text = Observaciones;
@@ -11813,7 +12109,7 @@ ORDER BY f.""OP"" ASC;";
             new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
                 };
             }
-            else if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas")
+            else if (var1 == "Grind" || var1 == "Inspeccion" || var1 == "Empacado" || var1 == "Revolturas" || var1 == "Reproceso")
             {
                 querySimple = @"
 SELECT
@@ -11866,9 +12162,9 @@ ORDER BY f.""ID_Ficha"", f.""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+                    new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
                 };
             }
             else if (var1 == "Máquinas")
@@ -12016,8 +12312,8 @@ ORDER BY f.""OP"" ASC;";
 
                 parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
-            new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
+                    new NpgsqlParameter("@FechaInicio", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaInicio },
+                    new NpgsqlParameter("@FechaFin", NpgsqlTypes.NpgsqlDbType.Date) { Value = fechaFin }
                 };
             }
 
@@ -14058,7 +14354,7 @@ ORDER BY
                 ""ID_Ficha""
         ) tmm_daily ON f.""ID_Ficha"" = tmm_daily.""ID_Ficha""
         WHERE 
-            f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+            f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue', 'Reproceso')
             AND f.""Hr_programadas"" > 0
             AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
             AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
@@ -14543,7 +14839,7 @@ ORDER BY
             DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
             string añoSeleccionado = CB_Anio_grafica.Text;
 
-            string query = $@"
+                string query = $@"
 WITH 
 -- 1. Calcular cumplimiento por área para cada jefe y semana
 cumplimiento_por_area AS (
@@ -14561,7 +14857,7 @@ cumplimiento_por_area AS (
                     (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
                     100
                 ), 2)
-            -- Para otras áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            -- Para otras áreas (excluyendo Tunel/Sumergidor y Reproceso) usar Kg_prod_term
             ELSE
                 ROUND(LEAST(
                     (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
@@ -14574,7 +14870,7 @@ cumplimiento_por_area AS (
         u.""Nivel"" = 'Jefe de Turno'
         AND u.""Activo"" = true
         AND u.""ID_User"" IN ({idsParam})
-        AND f.""Area"" != 'Tunel/Sumergidor'  -- Excluir siempre Tunel/Sumergidor
+        AND f.""Area"" NOT IN ('Tunel/Sumergidor', 'Reproceso')  -- 🔥 Excluir siempre Tunel/Sumergidor y Reproceso
         AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
         AND EXTRACT(WEEK FROM f.""Fecha"") IN ({semanasParam})
     GROUP BY 
@@ -14612,7 +14908,7 @@ ORDER BY
     No_Semana,
     ""Jefe de Turno"";";
 
-            DataTable datos = dbHelper.ExecuteSelectQuery(query);
+                DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
             if (datos == null || datos.Rows.Count == 0)
             {
@@ -15282,7 +15578,7 @@ ORDER BY
 FROM 
     public.""Ficha"" f
 WHERE 
-    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+    f.""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue', 'Reproceso')
     AND EXTRACT(WEEK FROM f.""Fecha"") IN (" + semanasParam + @")
     AND EXTRACT(YEAR FROM f.""Fecha"") = " + añoSeleccionado + @"
 GROUP BY 
@@ -15511,6 +15807,7 @@ WITH merma_usuario AS (
     FROM public.""Ficha"" f
     INNER JOIN public.""Usuarios"" u ON f.""ID_user"" = u.""ID_User""
     WHERE f.""Area"" IS NOT NULL
+        AND f.""Area"" != 'Reproceso'  -- 🔥 EXCLUIR SOLO 'Reproceso'
         AND u.""Nivel"" = 'Supervisor'
         AND u.""Activo"" = true
         AND u.""ID_User"" IN ({idsParam})
@@ -15889,7 +16186,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 100
             ),2) as ""% Cumplimiento""
         FROM public.""Ficha""
-        WHERE ""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue')
+        WHERE ""Area"" NOT IN ('Tunel/Sumergidor', 'Despegue', 'Reproceso')
             AND EXTRACT(YEAR FROM ""Fecha"") = {añoSeleccionado}
             AND EXTRACT(WEEK FROM ""Fecha"") IN ({semanasParam})
         GROUP BY 
@@ -16068,7 +16365,7 @@ cumplimiento_por_area AS (
                     (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
                     100
                 ), 2)
-            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor y Reproceso) usar Kg_prod_term
             ELSE
                 ROUND(LEAST(
                     (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
@@ -16081,7 +16378,7 @@ cumplimiento_por_area AS (
         u.""Nivel"" = 'Supervisor'
         AND u.""Activo"" = true
         AND u.""ID_User"" IN ({idsParam})
-        AND f.""Area"" != 'Tunel/Sumergidor'  -- NUNCA se toma en cuenta Tunel/Sumergidor
+        AND f.""Area"" NOT IN ('Tunel/Sumergidor', 'Reproceso')  -- 🔥 NUNCA se toma en cuenta Tunel/Sumergidor ni Reproceso
         AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
         AND EXTRACT(WEEK FROM f.""Fecha"") IN ({semanasParam})
     GROUP BY 
@@ -16329,7 +16626,7 @@ cumplimiento_por_area_mensual AS (
                     (SUM(f.""Kg_prod_seco"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
                     100
                 ), 2)
-            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor) usar Kg_prod_term
+            -- Para todas las demás áreas (excluyendo Tunel/Sumergidor y Reproceso) usar Kg_prod_term
             ELSE
                 ROUND(LEAST(
                     (SUM(f.""Kg_prod_term"") - SUM(f.""Kg_fuera_espec"")) / NULLIF(SUM(f.""Kg_meta""), 0) * 100,
@@ -16341,8 +16638,8 @@ cumplimiento_por_area_mensual AS (
     WHERE 
         u.""Nivel"" = 'Supervisor'
         AND u.""Activo"" = true
-        AND u.""ID_User"" IN ({idsParam})  -- <--- FILTRO DE SUPERVISORES SELECCIONADOS
-        AND f.""Area"" != 'Tunel/Sumergidor'
+        AND u.""ID_User"" IN ({idsParam})  -- Filtro de supervisores seleccionados
+        AND f.""Area"" NOT IN ('Tunel/Sumergidor', 'Reproceso')  -- 🔥 EXCLUIR AMBAS ÁREAS
         AND EXTRACT(YEAR FROM f.""Fecha"") = {añoSeleccionado}
     GROUP BY 
         EXTRACT(YEAR FROM f.""Fecha""),
@@ -19437,78 +19734,301 @@ ORDER BY ""OP"" ASC;";
             // Mostrar imagen ampliada
             MostrarImagenAmpliada();
         }
-        /// <summary>
-        /// Muestra la imagen ampliada en el centro de la pantalla
-        /// </summary>
         private void MostrarImagenAmpliada()
         {
             if (pictureBoxPreview.Image == null) return;
+            if (_imagenAmpliadaVisible) { CerrarImagenAmpliada(); return; }
 
-            // Crear un formulario flotante para mostrar la imagen
+            // Resetear
+            _zoomAmpliadoForm1 = 1.0f;
+            _rotacionAmpliadoForm1 = 0f;
+
+            // COPIA INDEPENDIENTE de la imagen
+            _imagenOriginalAmpliadaForm1 = new Bitmap(pictureBoxPreview.Image);
+
             _formImagenAmpliada = new Form();
             _formImagenAmpliada.FormBorderStyle = FormBorderStyle.None;
             _formImagenAmpliada.BackColor = Color.Black;
             _formImagenAmpliada.StartPosition = FormStartPosition.CenterScreen;
-            _formImagenAmpliada.WindowState = FormWindowState.Normal;
             _formImagenAmpliada.TopMost = true;
             _formImagenAmpliada.ShowInTaskbar = false;
             _formImagenAmpliada.KeyPreview = true;
 
-            // Crear PictureBox para la imagen ampliada
-            PictureBox pbAmpliada = new PictureBox();
-            pbAmpliada.Dock = DockStyle.Fill;
-            pbAmpliada.Image = (Image)pictureBoxPreview.Image.Clone();
-            pbAmpliada.SizeMode = PictureBoxSizeMode.Zoom;
-            pbAmpliada.BackColor = Color.Black;
+            // Panel con scroll
+            _panelScrollAmpliadaForm1 = new Panel();
+            _panelScrollAmpliadaForm1.Dock = DockStyle.Fill;
+            _panelScrollAmpliadaForm1.AutoScroll = true;
+            _panelScrollAmpliadaForm1.BackColor = Color.Black;
 
-            // Agregar al formulario
-            _formImagenAmpliada.Controls.Add(pbAmpliada);
+            // PictureBox AutoSize
+            _pbAmpliadaForm1 = new PictureBox();
+            _pbAmpliadaForm1.SizeMode = PictureBoxSizeMode.AutoSize;
+            _pbAmpliadaForm1.BackColor = Color.Black;
+            _pbAmpliadaForm1.Location = new Point(0, 0);
 
-            // Calcular tamaño de la pantalla (90% de la pantalla)
+            _panelScrollAmpliadaForm1.Controls.Add(_pbAmpliadaForm1);
+
+            // Panel controles
+            Panel panelControles = new Panel();
+            panelControles.Dock = DockStyle.Top;
+            panelControles.Height = 50;
+            panelControles.BackColor = Color.FromArgb(40, 40, 40);
+
+            Button btnRotarIzq = CrearBotonControlForm1("↺  Rotar -90°", 20, 8);
+            btnRotarIzq.Click += (s, ev) => { _rotacionAmpliadoForm1 -= 90f; AplicarTransformacionAmpliadaForm1(); };
+
+            Button btnRotarDer = CrearBotonControlForm1("↻  Rotar +90°", 220, 8);
+            btnRotarDer.Click += (s, ev) => { _rotacionAmpliadoForm1 += 90f; AplicarTransformacionAmpliadaForm1(); };
+
+            Button btnZoomIn = CrearBotonControlForm1("＋  Zoom +", 420, 8);
+            btnZoomIn.Click += (s, ev) => { _zoomAmpliadoForm1 = Math.Min(_zoomAmpliadoForm1 + 0.25f, 5.0f); AplicarTransformacionAmpliadaForm1(); };
+
+            Button btnZoomOut = CrearBotonControlForm1("－  Zoom -", 620, 8);
+            btnZoomOut.Click += (s, ev) => { _zoomAmpliadoForm1 = Math.Max(_zoomAmpliadoForm1 - 0.25f, 0.25f); AplicarTransformacionAmpliadaForm1(); };
+
+            Button btnReset = CrearBotonControlForm1("⟲  Reset", 820, 8);
+            btnReset.Click += (s, ev) =>
+            {
+                _zoomAmpliadoForm1 = 1.0f;
+                _rotacionAmpliadoForm1 = 0f;
+                AplicarTransformacionAmpliadaForm1();
+            };
+
+            // ═══════════════════════════════════════════════════════════
+            // 🔥 NUEVO BOTÓN CERRAR
+            // ═══════════════════════════════════════════════════════════
+            Button btnCerrar = CrearBotonControlForm1("✖  Cerrar", 1020, 8);
+            btnCerrar.BackColor = Color.FromArgb(200, 50, 50);      // Rojo
+            btnCerrar.FlatAppearance.BorderColor = Color.FromArgb(255, 80, 80);
+            btnCerrar.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 70, 70);
+            btnCerrar.Click += (s, ev) => CerrarImagenAmpliada();
+            // ═══════════════════════════════════════════════════════════
+
+            _lblZoomInfoForm1 = new Label();
+            _lblZoomInfoForm1.Text = "Zoom: 100%  |  Rotación: 0°";
+            _lblZoomInfoForm1.ForeColor = Color.White;
+            _lblZoomInfoForm1.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            _lblZoomInfoForm1.AutoSize = true;
+            _lblZoomInfoForm1.Location = new Point(1250, 17);   // ← Movido a la derecha
+
+            panelControles.Controls.Add(btnRotarIzq);
+            panelControles.Controls.Add(btnRotarDer);
+            panelControles.Controls.Add(btnZoomIn);
+            panelControles.Controls.Add(btnZoomOut);
+            panelControles.Controls.Add(btnReset);
+            panelControles.Controls.Add(btnCerrar);       // ← Agregar botón cerrar
+            panelControles.Controls.Add(_lblZoomInfoForm1);
+
+            // Panel inferior
+            Label lblInstrucciones = new Label();
+            lblInstrucciones.Text = "🖱️ Rueda del mouse: Zoom  |  ⌨️ Flechas ← →: Rotar  |  ESC: Cerrar";
+            lblInstrucciones.Dock = DockStyle.Bottom;
+            lblInstrucciones.Height = 30;
+            lblInstrucciones.BackColor = Color.FromArgb(40, 40, 40);
+            lblInstrucciones.ForeColor = Color.LightGray;
+            lblInstrucciones.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            lblInstrucciones.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Teclado
+            _formImagenAmpliada.KeyDown += (s, ev) =>
+            {
+                switch (ev.KeyCode)
+                {
+                    case Keys.Escape:
+                    case Keys.Space:
+                        CerrarImagenAmpliada();
+                        break;
+                    case Keys.Left:
+                        _rotacionAmpliadoForm1 -= 90f;
+                        AplicarTransformacionAmpliadaForm1();
+                        break;
+                    case Keys.Right:
+                        _rotacionAmpliadoForm1 += 90f;
+                        AplicarTransformacionAmpliadaForm1();
+                        break;
+                    case Keys.Up:
+                    case Keys.Add:
+                    case Keys.Oemplus:
+                        _zoomAmpliadoForm1 = Math.Min(_zoomAmpliadoForm1 + 0.25f, 5.0f);
+                        AplicarTransformacionAmpliadaForm1();
+                        break;
+                    case Keys.Down:
+                    case Keys.Subtract:
+                    case Keys.OemMinus:
+                        _zoomAmpliadoForm1 = Math.Max(_zoomAmpliadoForm1 - 0.25f, 0.25f);
+                        AplicarTransformacionAmpliadaForm1();
+                        break;
+                }
+            };
+
+            // Rueda del mouse
+            MouseEventHandler zoomHandler = (s, ev) =>
+            {
+                if (ev.Delta > 0)
+                    _zoomAmpliadoForm1 = Math.Min(_zoomAmpliadoForm1 + 0.15f, 5.0f);
+                else
+                    _zoomAmpliadoForm1 = Math.Max(_zoomAmpliadoForm1 - 0.15f, 0.25f);
+
+                AplicarTransformacionAmpliadaForm1();
+            };
+
+            _pbAmpliadaForm1.MouseWheel += (s, ev) => zoomHandler(s, ev);
+            _panelScrollAmpliadaForm1.MouseWheel += (s, ev) => zoomHandler(s, ev);
+
+            // Agregar al form
+            _formImagenAmpliada.Controls.Add(_panelScrollAmpliadaForm1);
+            _formImagenAmpliada.Controls.Add(panelControles);
+            _formImagenAmpliada.Controls.Add(lblInstrucciones);
+
+            // Tamaño y posición
             Rectangle screenBounds = Screen.PrimaryScreen.WorkingArea;
-            int width = (int)(screenBounds.Width * 0.9);
-            int height = (int)(screenBounds.Height * 0.9);
+            int width = (int)(screenBounds.Width * 0.95);
+            int height = (int)(screenBounds.Height * 0.95);
             _formImagenAmpliada.Size = new Size(width, height);
-
-            // Centrar en pantalla
             _formImagenAmpliada.Location = new Point(
                 (screenBounds.Width - width) / 2,
                 (screenBounds.Height - height) / 2
             );
 
-            // Eventos para cerrar la imagen ampliada
-            _formImagenAmpliada.Click += (s, ev) => CerrarImagenAmpliada();
-            _formImagenAmpliada.KeyDown += (s, ev) =>
-            {
-                if (ev.KeyCode == Keys.Escape)
-                    CerrarImagenAmpliada();
-            };
-            _formImagenAmpliada.LostFocus += (s, ev) => CerrarImagenAmpliada();
-            _formImagenAmpliada.FormClosed += (s, ev) =>
-            {
-                _imagenAmpliadaVisible = false;
-                _formImagenAmpliada = null;
-            };
+            _formImagenAmpliada.FormClosing += (s, ev) => LimpiarRecursosAmpliadaForm1();
 
-            // También cerrar al hacer clic en el PictureBox dentro del formulario
-            pbAmpliada.Click += (s, ev) => CerrarImagenAmpliada();
-
-            // Mostrar el formulario
             _imagenAmpliadaVisible = true;
             _formImagenAmpliada.Show();
 
-            // Enfocar para que el evento LostFocus funcione
+            AplicarTransformacionAmpliadaForm1();
             _formImagenAmpliada.Focus();
         }
-        /// <summary>
-        /// Cierra la ventana de imagen ampliada
-        /// </summary>
+
+        private Button CrearBotonControlForm1(string texto, int x, int y)
+        {
+            Button btn = new Button();
+            btn.Text = texto;
+            btn.Location = new Point(x, y);
+            btn.Size = new Size(180, 34);
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderColor = Color.FromArgb(80, 80, 80);
+            btn.BackColor = Color.FromArgb(60, 60, 60);
+            btn.ForeColor = Color.White;
+            btn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btn.Cursor = Cursors.Hand;
+            return btn;
+        }
+
+        private void AplicarTransformacionAmpliadaForm1()
+        {
+            if (_imagenOriginalAmpliadaForm1 == null || _pbAmpliadaForm1 == null) return;
+
+            try
+            {
+                int anchoBase = _imagenOriginalAmpliadaForm1.Width;
+                int altoBase = _imagenOriginalAmpliadaForm1.Height;
+
+                // Normalizar rotación a [0, 360)
+                float rot = _rotacionAmpliadoForm1 % 360f;
+                if (rot < 0) rot += 360f;
+
+                double rad = rot * Math.PI / 180.0;
+                double cos = Math.Abs(Math.Cos(rad));
+                double sin = Math.Abs(Math.Sin(rad));
+
+                int anchoRotado = (int)Math.Round(anchoBase * cos + altoBase * sin);
+                int altoRotado = (int)Math.Round(anchoBase * sin + altoBase * cos);
+
+                int anchoFinal = (int)Math.Round(anchoRotado * _zoomAmpliadoForm1);
+                int altoFinal = (int)Math.Round(altoRotado * _zoomAmpliadoForm1);
+
+                const int MAX_DIM = 10000;
+                if (anchoFinal > MAX_DIM || altoFinal > MAX_DIM)
+                {
+                    float factor = Math.Min((float)MAX_DIM / anchoFinal, (float)MAX_DIM / altoFinal);
+                    anchoFinal = (int)(anchoFinal * factor);
+                    altoFinal = (int)(altoFinal * factor);
+                }
+
+                if (anchoFinal <= 0 || altoFinal <= 0) return;
+
+                Bitmap bmpNuevo = new Bitmap(anchoFinal, altoFinal,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                using (Graphics g = Graphics.FromImage(bmpNuevo))
+                {
+                    g.Clear(Color.Black);
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                    float centroDestinoX = anchoFinal / 2f;
+                    float centroDestinoY = altoFinal / 2f;
+                    float centroOrigenX = anchoBase / 2f;
+                    float centroOrigenY = altoBase / 2f;
+
+                    g.TranslateTransform(centroDestinoX, centroDestinoY);
+                    g.RotateTransform(rot);
+                    g.ScaleTransform(_zoomAmpliadoForm1, _zoomAmpliadoForm1);
+                    g.TranslateTransform(-centroOrigenX, -centroOrigenY);
+
+                    g.DrawImage(_imagenOriginalAmpliadaForm1, 0, 0, anchoBase, altoBase);
+                }
+
+                Image imagenAnterior = _pbAmpliadaForm1.Image;
+                _pbAmpliadaForm1.Image = bmpNuevo;
+                _pbAmpliadaForm1.Size = new Size(anchoFinal, altoFinal);
+
+                // Liberar bitmap anterior (NO la original)
+                if (imagenAnterior != null && imagenAnterior != _imagenOriginalAmpliadaForm1)
+                {
+                    try { imagenAnterior.Dispose(); } catch { }
+                }
+
+                if (_lblZoomInfoForm1 != null)
+                {
+                    _lblZoomInfoForm1.Text = $"Zoom: {(_zoomAmpliadoForm1 * 100):F0}%  |  Rotación: {rot:F0}°";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en transformación: {ex.Message}");
+                MessageBox.Show($"Error al transformar imagen: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LimpiarRecursosAmpliadaForm1()
+        {
+            try
+            {
+                if (_pbAmpliadaForm1 != null)
+                {
+                    Image img = _pbAmpliadaForm1.Image;
+                    _pbAmpliadaForm1.Image = null;
+
+                    if (img != null && img != _imagenOriginalAmpliadaForm1)
+                    {
+                        try { img.Dispose(); } catch { }
+                    }
+                }
+
+                if (_imagenOriginalAmpliadaForm1 != null)
+                {
+                    try { _imagenOriginalAmpliadaForm1.Dispose(); } catch { }
+                    _imagenOriginalAmpliadaForm1 = null;
+                }
+
+                _pbAmpliadaForm1 = null;
+                _panelScrollAmpliadaForm1 = null;
+                _lblZoomInfoForm1 = null;
+
+                _zoomAmpliadoForm1 = 1.0f;
+                _rotacionAmpliadoForm1 = 0f;
+            }
+            catch { }
+        }
+
         private void CerrarImagenAmpliada()
         {
             if (_formImagenAmpliada != null && !_formImagenAmpliada.IsDisposed)
             {
                 _formImagenAmpliada.Close();
-                //_formImagenAmpliada.Dispose();
                 _formImagenAmpliada = null;
             }
             _imagenAmpliadaVisible = false;

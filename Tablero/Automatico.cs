@@ -52,37 +52,6 @@ namespace Tablero
                 "Monitoreo de tarea semanal iniciado (Lunes 10 AM)",
                 ToolTipIcon.Info);
         }
-
-        //private void CrearTrayIcon()
-        //{
-        //    trayIcon = new NotifyIcon
-        //    {
-        //        Icon = SystemIcons.Application,
-        //        Text = "Tablero - Tarea Semanal (Lunes 10 AM)",
-        //        Visible = true
-        //    };
-
-        //    trayMenu = new ContextMenuStrip();
-
-        //    // Opciones del menú
-        //    trayMenu.Items.Add("Ejecutar tarea ahora", null, (s, ev) => Automatico_Email("manual"));
-        //    trayMenu.Items.Add("Ver log de ejecuciones", null, (s, ev) => VerLog());
-        //    trayMenu.Items.Add("Reiniciar estado semanal", null, (s, ev) => ReiniciarEstado());
-        //    trayMenu.Items.Add("Configurar Email", null, (s, ev) => AbrirConfiguracionEmail());
-        //    trayMenu.Items.Add("-"); // Separador
-
-        //    // Opción para habilitar/deshabilitar inicio automático
-        //    inicioAutomaticoMenuItem = new ToolStripMenuItem();
-        //    ActualizarTextoInicioAutomatico();
-        //    inicioAutomaticoMenuItem.Click += (s, ev) => ToggleInicioAutomatico();
-        //    trayMenu.Items.Add(inicioAutomaticoMenuItem);
-
-        //    trayMenu.Items.Add("-"); // Separador
-        //    trayMenu.Items.Add("Salir", null, (s, ev) => Salir());
-
-        //    trayIcon.ContextMenuStrip = trayMenu;
-        //    trayIcon.DoubleClick += (s, ev) => VerLog();
-        //}
         private void CrearTrayIcon()
         {
             try

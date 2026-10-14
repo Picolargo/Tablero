@@ -26,7 +26,7 @@
     <UpdateUrl>\\sv-picolargo-01\Archivos-Generales\Publica\1.Sistemas\1. Instalador Tablero\</UpdateUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>28</ApplicationRevision>
+    <ApplicationRevision>30</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -294,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTrazabilidad.resx">
       <DependentUpon>FormTrazabilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormVerImagenes.resx">
+      <DependentUpon>FormVerImagenes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadingForm.resx">
       <DependentUpon>LoadingForm.cs</DependentUpon>

@@ -73,6 +73,32 @@ namespace Tablero
                 }
             };
         }
+        private void MigrarConfiguracion()
+        {
+            if (!Properties.Settings.Default.ConfiguracionMigrada)
+            {
+                try
+                {
+                    // Recuperar la configuración de la versión anterior
+                    Properties.Settings.Default.Upgrade();
+
+                    // Marcar que ya se realizó la migración
+                    Properties.Settings.Default.ConfiguracionMigrada = true;
+
+                    // Guardar la configuración migrada
+                    Properties.Settings.Default.Save();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo recuperar la configuración anterior.\n\n" +
+                        ex.Message,
+                        "Error de configuración",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+            }
+        }
 
         private void InitializeAnimation()
         {
@@ -386,6 +412,7 @@ namespace Tablero
         private void login_Shown(object sender, EventArgs e)
         {
             //cambiar_servidor();
+            MigrarConfiguracion();
             string var_servidor = Tablero.Properties.Settings.Default.Servidor;
             string var_password = Tablero.Properties.Settings.Default.Contrasena;
             string var_usuario = Tablero.Properties.Settings.Default.Usuario;

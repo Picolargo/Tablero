@@ -42,19 +42,21 @@
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
-
+            // 
             // pictureBoxImagen
-            this.pictureBoxImagen.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+            // 
+            this.pictureBoxImagen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.pictureBoxImagen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxImagen.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxImagen.Name = "pictureBoxImagen";
-            this.pictureBoxImagen.Size = new System.Drawing.Size(800, 500);
+            this.pictureBoxImagen.Size = new System.Drawing.Size(950, 500);
             this.pictureBoxImagen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxImagen.TabIndex = 0;
             this.pictureBoxImagen.TabStop = false;
             this.pictureBoxImagen.Click += new System.EventHandler(this.pictureBoxImagen_Click);
-
+            // 
             // btnAnterior
+            // 
             this.btnAnterior.Enabled = false;
             this.btnAnterior.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.btnAnterior.Location = new System.Drawing.Point(10, 210);
@@ -64,8 +66,9 @@
             this.btnAnterior.Text = "◄";
             this.btnAnterior.UseVisualStyleBackColor = true;
             this.btnAnterior.Click += new System.EventHandler(this.btnAnterior_Click);
-
+            // 
             // btnSiguiente
+            // 
             this.btnSiguiente.Enabled = false;
             this.btnSiguiente.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.btnSiguiente.Location = new System.Drawing.Point(730, 210);
@@ -75,73 +78,80 @@
             this.btnSiguiente.Text = "►";
             this.btnSiguiente.UseVisualStyleBackColor = true;
             this.btnSiguiente.Click += new System.EventHandler(this.btnSiguiente_Click);
-
+            // 
             // lblInfo
-            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            // 
+            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.lblInfo.ForeColor = System.Drawing.Color.White;
-            this.lblInfo.Location = new System.Drawing.Point(0, 500);
+            this.lblInfo.Location = new System.Drawing.Point(0, 0);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(10, 5, 0, 5);
-            this.lblInfo.Size = new System.Drawing.Size(800, 30);
+            this.lblInfo.Size = new System.Drawing.Size(1060, 30);
             this.lblInfo.TabIndex = 3;
             this.lblInfo.Text = "0/0";
             this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
+            // 
             // lblNoImagenes
-            this.lblNoImagenes.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+            // 
+            this.lblNoImagenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblNoImagenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblNoImagenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
-            this.lblNoImagenes.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
+            this.lblNoImagenes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.lblNoImagenes.Location = new System.Drawing.Point(0, 0);
             this.lblNoImagenes.Name = "lblNoImagenes";
-            this.lblNoImagenes.Size = new System.Drawing.Size(800, 500);
+            this.lblNoImagenes.Size = new System.Drawing.Size(950, 500);
             this.lblNoImagenes.TabIndex = 4;
             this.lblNoImagenes.Text = "No hay imágenes para esta ficha";
             this.lblNoImagenes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblNoImagenes.Visible = false;
-
+            // 
             // listBoxMiniaturas
+            // 
             this.listBoxMiniaturas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxMiniaturas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.listBoxMiniaturas.FormattingEnabled = true;
-            this.listBoxMiniaturas.ItemHeight = 20;
+            this.listBoxMiniaturas.ItemHeight = 15;
             this.listBoxMiniaturas.Location = new System.Drawing.Point(0, 0);
             this.listBoxMiniaturas.Name = "listBoxMiniaturas";
-            this.listBoxMiniaturas.Size = new System.Drawing.Size(250, 530);
+            this.listBoxMiniaturas.Size = new System.Drawing.Size(110, 530);
             this.listBoxMiniaturas.TabIndex = 5;
             this.listBoxMiniaturas.SelectedIndexChanged += new System.EventHandler(this.listBoxMiniaturas_SelectedIndexChanged);
-
+            // 
             // panel1
+            // 
             this.panel1.Controls.Add(this.lblNoImagenes);
             this.panel1.Controls.Add(this.pictureBoxImagen);
             this.panel1.Controls.Add(this.btnAnterior);
             this.panel1.Controls.Add(this.btnSiguiente);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(260, 0);
+            this.panel1.Location = new System.Drawing.Point(110, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 30);
-            this.panel1.Size = new System.Drawing.Size(800, 530);
+            this.panel1.Size = new System.Drawing.Size(950, 530);
             this.panel1.TabIndex = 6;
-
+            // 
             // panel2
+            // 
             this.panel2.Controls.Add(this.lblInfo);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(260, 530);
+            this.panel2.Location = new System.Drawing.Point(0, 530);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 30);
+            this.panel2.Size = new System.Drawing.Size(1060, 30);
             this.panel2.TabIndex = 7;
-
+            // 
             // panel3
+            // 
             this.panel3.Controls.Add(this.listBoxMiniaturas);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(260, 560);
+            this.panel3.Size = new System.Drawing.Size(110, 530);
             this.panel3.TabIndex = 8;
-
+            // 
             // FormVerImagenes
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1060, 560);
@@ -160,6 +170,7 @@
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
