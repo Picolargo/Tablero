@@ -92,8 +92,8 @@ namespace Tablero
         private List<int> _imagenesCargadasIds = new List<int>();            // IDs de imágenes existentes
         private List<int> _imagenesAEliminar = new List<int>();              // 🔥 IDs de imágenes a eliminar (marcadas para borrar)     
         private const int MAX_IMAGENES = 10;
-        //private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
-        private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
+        private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
+        //private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
         // Variables para ampliación de imagen
         private Form _formImagenAmpliada = null;
         private bool _imagenAmpliadaVisible = false;
@@ -10014,7 +10014,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             return;
                         }
                     }
-                    if (area == "Inspeccion")
+                    if (area == "Inspeccion" || area == "Reproceso")
                     {
                         DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                         string query2 = @"SELECT ""Fecha"", ""Turno"", ""OP"", ""Kg_prod_term"", ""Kg_enter_proceso"", 
@@ -17462,34 +17462,34 @@ ORDER BY
             {
                 // Consulta para TODAS las áreas - ACTUALIZADA con filtro de año
                 querySimple = @"SELECT 
-    f.""OP"" AS ""OP"",
-    f.""Fecha"" AS ""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
-    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
-    tmo.""Motivos"" AS ""Motivos"",
-    f.""Area"" AS ""Area""
-FROM ""Ficha"" f
-LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-WHERE tmo.""Min_Detenidos"" IS NOT NULL
-    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+                    f.""OP"" AS ""OP"",
+                    f.""Fecha"" AS ""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
+                    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
+                    tmo.""Motivos"" AS ""Motivos"",
+                    f.""Area"" AS ""Area""
+                FROM ""Ficha"" f
+                LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                WHERE tmo.""Min_Detenidos"" IS NOT NULL
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
-UNION ALL
+                UNION ALL
 
-SELECT 
-    f.""OP"" AS ""OP"",
-    f.""Fecha"" AS ""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
-    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
-    tmm.""Motivos"" AS ""Motivos"",
-    f.""Area"" AS ""Area""
-FROM ""Ficha"" f
-LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-WHERE tmm.""Min_Detenidos"" IS NOT NULL
-    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+                SELECT 
+                    f.""OP"" AS ""OP"",
+                    f.""Fecha"" AS ""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
+                    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
+                    tmm.""Motivos"" AS ""Motivos"",
+                    f.""Area"" AS ""Area""
+                FROM ""Ficha"" f
+                LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                WHERE tmm.""Min_Detenidos"" IS NOT NULL
+                    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
-ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
+                ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
 
                 // Crear parámetro para el año
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -17505,45 +17505,42 @@ ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
             {
                 // Consulta para un área específica - ACTUALIZADA con filtro de año
                 querySimple = @"SELECT 
-    f.""OP"" AS ""OP"",
-    f.""Fecha"" AS ""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
-    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
-    tmo.""Motivos"" AS ""Motivos"",
-    f.""Area"" AS ""Area""
-FROM ""Ficha"" f
-LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-WHERE (f.""Area"" = @Area)
-   AND tmo.""Min_Detenidos"" IS NOT NULL
-   AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+                    f.""OP"" AS ""OP"",
+                    f.""Fecha"" AS ""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
+                    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
+                    tmo.""Motivos"" AS ""Motivos"",
+                    f.""Area"" AS ""Area""
+                FROM ""Ficha"" f
+                LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+                WHERE (f.""Area"" = @Area)
+                AND tmo.""Min_Detenidos"" IS NOT NULL
+                AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
-UNION ALL
+                UNION ALL
 
-SELECT 
-    f.""OP"" AS ""OP"",
-    f.""Fecha"" AS ""Fecha"",
-    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
-    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
-    tmm.""Motivos"" AS ""Motivos"",
-    f.""Area"" AS ""Area""
-FROM ""Ficha"" f
-LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-WHERE (f.""Area"" = @Area)
-   AND tmm.""Min_Detenidos"" IS NOT NULL
-   AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+                SELECT 
+                    f.""OP"" AS ""OP"",
+                    f.""Fecha"" AS ""Fecha"",
+                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+                    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
+                    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
+                    tmm.""Motivos"" AS ""Motivos"",
+                    f.""Area"" AS ""Area""
+                FROM ""Ficha"" f
+                LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+                WHERE (f.""Area"" = @Area)
+                AND tmm.""Min_Detenidos"" IS NOT NULL
+                AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
 
-ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
+                ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
 
                 // Crear parámetros para área y año
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-            new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
-            {
-                Value = Convert.ToInt32(añoSeleccionado)
-            }
+                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
+                    new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer){Value = Convert.ToInt32(añoSeleccionado)}
                 };
                 dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
             }
