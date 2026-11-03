@@ -119,7 +119,7 @@ namespace Tablero
             rgv_reporte_consolidado.EnableCustomFiltering = true;
 
             // Configurar propiedades similares al ejemplo
-           // rgv_reporte_costo.EnableGrouping = false;
+            // rgv_reporte_costo.EnableGrouping = false;
             rgv_reporte_costo.EnableHotTracking = true;
             rgv_reporte_costo.ShowFilteringRow = false;
             rgv_reporte_costo.EnableFiltering = true;
@@ -144,11 +144,23 @@ namespace Tablero
             nombre_admin = var_nom_empledo.ToUpper(); // Almacenar el nombre del usuario para uso futuro
             numero_empleado_admin = var_no_empledo; // Almacenar el número de empleado para uso futuro
 
-            // Initialize MaterialSkinManager and set the theme and color scheme  
+
             var materialSkinManager = MaterialSkinManager.Instance;
+
+            // IMPORTANTE:
+            // Evita que MaterialSkin sobrescriba los colores y
+            // estilos personalizados de los controles WinForms.
+            materialSkinManager.EnforceBackcolorOnAllComponents = false;
+
+            // Mantener el tema MaterialSkin existente.
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Orange600, Primary.Orange600, Primary.BlueGrey800, Accent.Blue700, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Orange600,
+                Primary.Orange600,
+                Primary.BlueGrey800,
+                Accent.Blue700,
+                TextShade.WHITE);
 
 
             // Personaliza todos los DataGridView de una sola línea cada uno
@@ -496,7 +508,7 @@ namespace Tablero
                     emaildatos();
                     email_varibles();
                 }
-                else 
+                else
                 {
                     actualiza_grid_users(); // Llamar al método para actualizar el DataGridView de usuarios
                     emaildatos();
@@ -535,7 +547,7 @@ namespace Tablero
                     llenado_anios_cumplimientos();
 
                     menuStrip1.Visible = true; // Mostrar el menú para el administrador
-                   
+
                 }
                 dgv_users.ClearSelection();
             }
@@ -569,10 +581,10 @@ namespace Tablero
                 carga_Jefes();
                 ConfigurarTooltipParaComboBox();
                 // Configurar el ListView
-                    ConfigurarListViewSimple();
+                ConfigurarListViewSimple();
 
-                    // Cargar las semanas
-                    CargarSemanasSimple();
+                // Cargar las semanas
+                CargarSemanasSimple();
                 //cargar años en los combos de los reportes
                 llenado_anios_concentrado_Des();
                 llenado_anios_concentrado_otras_areas();
@@ -592,8 +604,9 @@ namespace Tablero
                 // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
-                if(nivel_user == "Supervisor") { materialTabControl1.TabPages.Remove(tabPage11); }
-                if(nivel_user == "Jefe de Turno") {
+                if (nivel_user == "Supervisor") { materialTabControl1.TabPages.Remove(tabPage11); }
+                if (nivel_user == "Jefe de Turno")
+                {
                     ActualizarNumeroSemana();
                     actualiza_polvos_calidad();
                     actualiza_tunel_calidad();
@@ -609,7 +622,7 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage22);
                 tapcontrol.TabPages.Remove(tabPage33);
 
-                if(nivel_user == "Supervisor") 
+                if (nivel_user == "Supervisor")
                 {
                     materialTabControl1.TabPages.Remove(tabPage10);
                 }
@@ -677,11 +690,13 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage17);
                 tapcontrol.TabPages.Remove(metroTabPage10);
                 tapcontrol.TabPages.Remove(tabPage22);
-                tapcontrol.TabPages.Remove(tabPage18);
                 cb_Tipo_Tiempos.SelectedIndex = 0; // "Todos"
                 llenado_anios_tiempos();
             }
 
+            // Nuevos reportes, después de aplicar TODOS los permisos existentes.
+            InicializarCumplimientoPersonal();
+            // El selector debe cargarse al final para incluir solo las pestañas permitidas.
             InicializarSelectorDeReportes();
         }
         private void ConfigurarTooltipParaComboBox()
@@ -789,9 +804,9 @@ namespace Tablero
             CB_Anio_Cumplimiento.Focus();
             CB_Anio_Cumplimiento.Focus();
         }
-        private void emaildatos() 
+        private void emaildatos()
         {
-            if (!string.IsNullOrEmpty(Tablero.Properties.Settings.Default.ServerSMTP)) 
+            if (!string.IsNullOrEmpty(Tablero.Properties.Settings.Default.ServerSMTP))
             {
                 Txt_server_Smtp.Text = Tablero.Properties.Settings.Default.ServerSMTP;
                 Txt_Remitente.Text = Tablero.Properties.Settings.Default.RemitenteEMail;
@@ -1678,7 +1693,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 card_botones.Visible = true;
                 card_meal_energy.Visible = true;
                 Txt_1.Visible = true;
-                    
+
                 Txt_1.Text = string.Empty;
 
                 //habilitar controles
@@ -2083,7 +2098,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             lblCantidadImagenes.Text = string.Empty;
             lblTamañoImagen.Text = string.Empty;
             mlTxt_observaciones.Text = string.Empty;
-            
+
             //hacer invisibles controles
             card_datos.Visible = false;
             card_TM.Visible = false;
@@ -2098,7 +2113,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (dgv_mecanico.DataSource is DataTable dt1)
             {
                 dt1.Rows.Clear();
-            }else
+            }
+            else
             {
                 dgv_mecanico.Rows.Clear();
             }
@@ -2107,11 +2123,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 dt2.Rows.Clear();
             }
-            else 
-            {                 
-                dgv_operativo.Rows.Clear(); 
+            else
+            {
+                dgv_operativo.Rows.Clear();
             }
-                
+
         }
         private void reiniciarCampos_comboturno()
         {
@@ -2164,11 +2180,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cmb_nivel_user.SelectedItem = dgv_users.Rows[e.RowIndex].Cells[4].Value.ToString(); // Nivel
 
                 // Obtener el estado Activo del checkbox
-                
+
                 if (dgv_users.Rows[e.RowIndex].Cells["Activo"].Value != null)
                 {
                     activo = Convert.ToBoolean(dgv_users.Rows[e.RowIndex].Cells["Activo"].Value);
-                    if(activo)
+                    if (activo)
                     {
                         btn_Desactivar.Enabled = true;
                         btn_reactivate_user.Enabled = false;
@@ -2189,7 +2205,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
                 cmb_nivel_user.Enabled = false;
                 btn_save.Enabled = false;
-                
+
             }
         }
         private void LimpiarComboBox(MaterialComboBox comboBox)
@@ -2407,16 +2423,16 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cmb_nivel_user.Enabled = true;
             cmb_nivel_user.Focus(); // Enfocar el ComboBox de nivel de usuario
             cmb_nivel_user.Enabled = false;
-            
+
         }
 
         private void btn_edit_Click(object sender, EventArgs e)
         {
             btn_edit.Enabled = false;
-            
+
             btn_cancel.Enabled = true;
-            
-            if (activo) 
+
+            if (activo)
             {
                 // El usuario está activo, permitir la edición
                 btn_delete_user.Enabled = false;
@@ -2441,7 +2457,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 btn_reactivate_user.Enabled = true;
                 btn_Desactivar.Enabled = false;
             }
-            
+
         }
 
         private void txt_no_emp_KeyPress(object sender, KeyPressEventArgs e)
@@ -3609,7 +3625,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -4342,7 +4358,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         {
             if (cmb_area.SelectedIndex == 0)
             {
-                
+
                 if (decimal.TryParse(txt_Meta_1.Text, out decimal valor))
                 {
                     // Fórmula: (valor * 380) - (valor * 380 * 10%)
@@ -4478,7 +4494,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -4508,7 +4524,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -4538,7 +4554,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
                 txt_Meta_2.Enabled = false;
@@ -4994,13 +5010,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             if (cb_Area.SelectedIndex == 8)
             {
                 kg_pz_double = double.TryParse(Kg_pz_str, out kg_pz_double) ? kg_pz_double : 0;
-                meta_programada = (meta_x_hr* kg_pz_double) *hr_programada;
+                meta_programada = (meta_x_hr * kg_pz_double) * hr_programada;
             }
             else
             {
                 meta_programada = hr_programada * meta_x_hr;
             }
-            
+
             Txt_Read_2.Text = meta_programada.ToString("0.##");
         }
         private void calcular_turno()
@@ -5054,12 +5070,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 diferencia = TimeSpan.Zero;
                             }
                         }
-                        if(cb_Area.SelectedIndex != 1) 
+                        if (cb_Area.SelectedIndex != 1)
                         {
                             // Mostrar horas totales (con decimales si hay minutos)
                             Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
                         }
-                        
+
 
                         // Calcular la nueva diferencia restando los minutos
                         TimeSpan diferenciaConDescuento = diferencia;
@@ -5086,12 +5102,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             calcular_meta_programada();
                         }
-                        if (cb_Area.SelectedIndex != 1) 
+                        if (cb_Area.SelectedIndex != 1)
                         {
                             // Mostrar el resultado con descuento en Txt_Read_3
                             Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
                         }
-                            
+
                     }
                     btn_save_ficha.Enabled = true;
                 }
@@ -5139,13 +5155,13 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 mlTxt_observaciones.Enabled = true;
                 if (cb_Area.SelectedIndex == 0)
                 {
-                    if (!editar) 
-                    { 
-                        Txt_1.Enabled = true; 
-                    } 
-                    else 
-                    { 
-                        Txt_1.Enabled = false; 
+                    if (!editar)
+                    {
+                        Txt_1.Enabled = true;
+                    }
+                    else
+                    {
+                        Txt_1.Enabled = false;
                     }
                     Txt_2.Enabled = true;
                     Txt_3.Enabled = true;
@@ -5189,7 +5205,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_6.Enabled = true;
                     Txt_7.Enabled = true;
                     Txt_8.Enabled = true;
-                    
+
                 }
             }
         }
@@ -5213,7 +5229,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             {
                 return false;
             }
-            else 
+            else
             {
                 return true;
             }
@@ -5284,7 +5300,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             string variable_num = lbl_no_emp2.Text;
             string jefe = cb_jefe_turno.Text;
             string observaciones = mlTxt_observaciones.Text;
-            if (editar) 
+            if (editar)
             {
                 // Consulta para buscar donde OP = valor_buscado
                 string query2 = "SELECT \"ID_User\" FROM public.\"Usuarios\" where \"No_Empleado\" = @valorBuscado";
@@ -5330,14 +5346,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 try
                 {
                     int idUsuarioActual = id_user;
-                   
 
-                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
-                        && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
-                        && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
-                        && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) 
+
+                    if (cb_OP.SelectedIndex != -1 && !string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text)
+                        && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text)
+                        && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text)
+                        && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text)
                         && !string.IsNullOrEmpty(Txt_8.Text) && !string.IsNullOrEmpty(Txt_9.Text) && !string.IsNullOrEmpty(Txt_10.Text)
-                        && !string.IsNullOrEmpty(cb_jefe_turno.Text)&& ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                        && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                     {
                         // Obtener datos de los TextBox
                         DateTime fecha = dtp1.Value; // Tu MetroDateTime
@@ -5359,7 +5375,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         decimal meta_kg = System.Convert.ToDecimal(Txt_Read_2.Text);
                         string area = cb_Area.Text;
                         decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
-                        
+
 
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
@@ -5396,7 +5412,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             string tablaTiemposMuertos = GenerarTablaTiemposMuertosMecanicos();
                             string tablaTiemposMuertos_Operativo = GenerarTablaTiemposOperativos();
                             string resultado = GenerarTablaDetallesOP();
-                            
+
                             string cuerpoHtml2 = $@"
                                         <strong>{turno.ToString()}</strong>, inició su turno a las 
                                         <strong>{hrInicio.ToString()}</strong> y lo concluyó a las 
@@ -5600,10 +5616,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 1)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
-                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) 
-                    && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text)
+                    && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(Txt_6.Text)
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Despegue
                     int idUsuarioActual = id_user;
@@ -5660,7 +5676,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 new KeyValuePair<string, string>("Relación Fresco-Seco", Relacion_Fresco_seco.ToString()),
                                 new KeyValuePair<string, string>("FTT", textoFTT)
                             };
-                        string Kgproducidosxhr = (KgProdSeco/ hr_programadas).ToString("0.##");
+                        string Kgproducidosxhr = (KgProdSeco / hr_programadas).ToString("0.##");
                         //lista de valores para resumen
                         List<KeyValuePair<string, string>> valoresResumen = new List<KeyValuePair<string, string>>()
                             {
@@ -5879,10 +5895,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 2)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
-                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
-                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text)
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text)
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Evaporado
                     int idUsuarioActual = id_user;
@@ -6133,10 +6149,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 3 || cb_Area.SelectedIndex == 5 || cb_Area.SelectedIndex == 7)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
-                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
-                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text)
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text)
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Grind
                     int idUsuarioActual = id_user;
@@ -6380,10 +6396,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 4)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) 
-                    && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) 
-                    && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) 
-                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text)
+                    && cb_Turno.SelectedIndex != -1 && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text)
+                    && !string.IsNullOrEmpty(Txt_2.Text) && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text)
+                    && !string.IsNullOrEmpty(Txt_5.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Inspeccion
                     int idUsuarioActual = id_user;
@@ -6626,10 +6642,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 6)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
-                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
-                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text)
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text)
+                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Polvos
                     int idUsuarioActual = id_user;
@@ -6881,11 +6897,11 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             if (cb_Area.SelectedIndex == 8)
             {
-                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1 
-                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text) 
-                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text) 
-                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text) 
-                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo()&& ValidarTodasLasFilas_mecanico())
+                if (!string.IsNullOrEmpty(txt_Tiempo_comida.Text) && !string.IsNullOrEmpty(txt_Tiempo_energia.Text) && cb_Turno.SelectedIndex != -1
+                    && Mask_txt_hr1.Text != "  :" && Mask_txt_hr2.Text != "  :" && !string.IsNullOrEmpty(Txt_1.Text) && !string.IsNullOrEmpty(Txt_2.Text)
+                    && !string.IsNullOrEmpty(Txt_3.Text) && !string.IsNullOrEmpty(Txt_4.Text) && !string.IsNullOrEmpty(Txt_5.Text)
+                    && !string.IsNullOrEmpty(Txt_6.Text) && !string.IsNullOrEmpty(Txt_7.Text) && !string.IsNullOrEmpty(Txt_8.Text)
+                    && !string.IsNullOrEmpty(cb_jefe_turno.Text) && ValidarTodasLasFilas_operativo() && ValidarTodasLasFilas_mecanico())
                 {
                     //Revolturas
                     int idUsuarioActual = id_user;
@@ -6919,7 +6935,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         idUsuarioActual = id_supervisor_global;
                         updateFicha(dbHelper, idUsuarioActual, fecha, turno, op, null,
                         Pz_producidas, KgProductoTerminado, KgFueraEspec, Merma, 0, Porcent_Logrado,
-                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg, 
+                        kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, hr_programadas, hr_efec, meta_kg,
                         null, meta, bobina_merma, idUserSeleccionado, observaciones);
 
                         //enviar correo
@@ -7024,8 +7040,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     else
                     {
                         // Insertar en tabla Ficha y obtener el ID_Ficha generado
-                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null, Pz_producidas, KgProductoTerminado, 
-                            KgFueraEspec, Merma, 0, Porcent_Logrado,kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe, 
+                        int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, op, null, Pz_producidas, KgProductoTerminado,
+                            KgFueraEspec, Merma, 0, Porcent_Logrado, kg_entrada, bobina_entrada, bobina_utilizada, hrInicio, hrFin, PersonalOpe,
                             hr_programadas, hr_efec, meta_kg, area, meta, bobina_merma, idUserSeleccionado, observaciones);
                         if (idFicha > 0)
                         {
@@ -7694,7 +7710,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Opcional: También puedes enfocarlo
                     _editarForm.Focus();
                 }
-                
+
                 if (nivel_user == "Super Administrador")
                 {
                     lbl_no_emp2.Text = numero_empleado_admin;
@@ -8300,7 +8316,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 cmbMotivo.Value = null;
             }
 
-           
+
             CalcularTotaloperativo();
         }
 
@@ -8377,7 +8393,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Ftt_metodo();
                 Relacion_Fresco_seco();
             }
-            if(cb_Area.SelectedIndex == 8) 
+            if (cb_Area.SelectedIndex == 8)
             {
                 calcular_kg_entrada_proceso();
             }
@@ -8811,7 +8827,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     resultado = dt.Rows[0]["Meta_Kg_Hr"].ToString();
-                    Kg_pz_str  = dt.Rows[0]["Kg_pz"].ToString();
+                    Kg_pz_str = dt.Rows[0]["Kg_pz"].ToString();
                     Txt_meta.Text = resultado;
                 }
             }
@@ -9196,7 +9212,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             pz_producidas = System.Convert.ToDecimal(Txt_1.Text);
             merma = string.IsNullOrWhiteSpace(Txt_4.Text) ? 0 : Convert.ToDecimal(Txt_4.Text);
-            resultado = (pz_producidas * kg_pz)+merma;
+            resultado = (pz_producidas * kg_pz) + merma;
 
             Txt_Read_5.Text = resultado.ToString();
         }
@@ -9348,7 +9364,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     calcular_kg_entrada_proceso();
                 }
             }
-            if(cb_Area.SelectedIndex == 1 && editar == true)
+            if (cb_Area.SelectedIndex == 1 && editar == true)
             {
                 string valorBuscado = Txt_1.Text;
 
@@ -9501,7 +9517,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -9532,7 +9548,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -9562,7 +9578,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
                 btn_meta_edit.Enabled = true;
                 btn_meta_delete.Enabled = true;
-                
+
 
                 txt_op.Enabled = false;
                 txt_Meta_1.Enabled = false;
@@ -9612,7 +9628,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             editar = true;
             borrar = false;
             // Verificar si el formulario ya existe y no está cerrado
-            if (_editarForm == null || _editarForm.IsDisposed) 
+            if (_editarForm == null || _editarForm.IsDisposed)
             {
                 // Crear nueva instancia
                 _editarForm = new Editar(connectionString, editar, borrar, nivel_user);
@@ -11045,7 +11061,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void btn_save_dt_op_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txt_orden_produc.Text) || string.IsNullOrEmpty(txt_producto.Text) || string.IsNullOrEmpty(txt_medida.Text) ||
-                string.IsNullOrEmpty(txt_descripcion.Text) || cb_Comercio.SelectedIndex == -1 || string.IsNullOrEmpty(txt_clacificacion.Text) || 
+                string.IsNullOrEmpty(txt_descripcion.Text) || cb_Comercio.SelectedIndex == -1 || string.IsNullOrEmpty(txt_clacificacion.Text) ||
                 string.IsNullOrEmpty(txt_destino.Text))
             {
                 MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -11053,7 +11069,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             }
             else
             {
-                
+
 
                 DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
                 string queryInsertUpdate = string.Empty;
@@ -11205,7 +11221,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void dgv_detalles_op_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (nivel_user == "Administrador" || nivel_user == "Super Administrador") 
+            if (nivel_user == "Administrador" || nivel_user == "Super Administrador")
             {
                 if (e.RowIndex >= 0)
                 {
@@ -11250,7 +11266,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     btn_save_dt_op.Enabled = false;
                     btn_cancel_dt_op.Enabled = false;
                 }
-            } 
+            }
         }
 
         private void btn_cancel_dt_op_Click(object sender, EventArgs e)
@@ -11721,7 +11737,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControl1.SelectedIndex == 0) 
+            if (tabControl1.SelectedIndex == 0)
             {
                 tab_limpiezas.SelectedIndex = 0;
             }
@@ -11896,7 +11912,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             // Validar que la fecha inicial no sea mayor que la final
             if (DTP_Consolidado_1.Value.Date > DTP_Consolidado_2.Value.Date)
             {
-                MetroFramework.MetroMessageBox.Show(this,"La fecha inicial no puede ser mayor que la fecha final.",
+                MetroFramework.MetroMessageBox.Show(this, "La fecha inicial no puede ser mayor que la fecha final.",
                                 "Validación de Fechas",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -12649,7 +12665,7 @@ ORDER BY f.""OP"" ASC;";
         }
         private async void btn_export_excel_consolidado_Click(object sender, EventArgs e)
         {
-          
+
             LoadingScreen.ShowLoading();
             try
             {
@@ -12903,7 +12919,7 @@ ORDER BY f.""OP"" ASC;";
 
         private void cb_area_reporte_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cb_area_reporte.SelectedIndex != -1)
+            if (cb_area_reporte.SelectedIndex != -1)
             {
                 btn_new_report_consolidado.Enabled = true;
                 DTP_Consolidado_1.Enabled = true;
@@ -14844,28 +14860,28 @@ ORDER BY
         {
             try
             {
-            ConfigurarTitulosGrafico(
-            "% CUMPLIMIENTO POR JEFE DE TURNO - ANÁLISIS SEMANAL",
-            "Porcentaje de cumplimiento"
-            );
+                ConfigurarTitulosGrafico(
+                "% CUMPLIMIENTO POR JEFE DE TURNO - ANÁLISIS SEMANAL",
+                "Porcentaje de cumplimiento"
+                );
 
-            // Obtener jefes seleccionados
-            List<int> idsSeleccionados = ObtenerJefesSeleccionados();
+                // Obtener jefes seleccionados
+                List<int> idsSeleccionados = ObtenerJefesSeleccionados();
 
-            if (idsSeleccionados.Count == 0)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                "No hay jefes de turno seleccionados. Por favor, seleccione al menos un jefe.",
-                "Precaución",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-                return;
-            }
+                if (idsSeleccionados.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                    "No hay jefes de turno seleccionados. Por favor, seleccione al menos un jefe.",
+                    "Precaución",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                    return;
+                }
 
-            string idsParam = string.Join(",", idsSeleccionados);
-            string semanasParam = string.Join(",", semanasSeleccionadas);
-            DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
-            string añoSeleccionado = CB_Anio_grafica.Text;
+                string idsParam = string.Join(",", idsSeleccionados);
+                string semanasParam = string.Join(",", semanasSeleccionadas);
+                DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
+                string añoSeleccionado = CB_Anio_grafica.Text;
 
                 string query = $@"
 WITH 
@@ -14938,17 +14954,17 @@ ORDER BY
 
                 DataTable datos = dbHelper.ExecuteSelectQuery(query);
 
-            if (datos == null || datos.Rows.Count == 0)
-            {
-                MetroFramework.MetroMessageBox.Show(this,
-                "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
-                "Precaución",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-                return;
-            }
+                if (datos == null || datos.Rows.Count == 0)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,
+                    "No se encontraron datos para las semanas seleccionadas en % Cumplimiento.",
+                    "Precaución",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                    return;
+                }
 
-            ConfigurarGraficoCumplimientoPorJefe(datos);
+                ConfigurarGraficoCumplimientoPorJefe(datos);
             }
             catch (Exception ex)
             {
@@ -15733,7 +15749,7 @@ ORDER BY
             cartesianChart1.Background = System.Windows.Media.Brushes.White;
             cartesianChart1.DisableAnimations = false;
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-           // cartesianChart1.DataTooltip = null;
+            // cartesianChart1.DataTooltip = null;
         }
         private List<int> ObtenerSupervisoresSeleccionados()
         {
@@ -16023,7 +16039,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cartesianChart1.Background = System.Windows.Media.Brushes.White;
             cartesianChart1.DisableAnimations = false;
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
-           // cartesianChart1.DataTooltip = null;
+            // cartesianChart1.DataTooltip = null;
         }
         /// <summary>
         /// Grafica de FTT Deshidratado - Análisis Semanal
@@ -16981,7 +16997,7 @@ ORDER BY
             btn_export_excel_merma_S.Enabled = false;
             btn_clean_merma_S.Enabled = false;
         }
-        private void conf_email(string cuerpoHtml) 
+        private void conf_email(string cuerpoHtml)
         {
             try
             {
@@ -17302,7 +17318,7 @@ ORDER BY
             {
                 return;
             }
-            if(string.IsNullOrEmpty(Txt_server_Smtp.Text)||string.IsNullOrEmpty(Txt_Password_SMTP.Text)||string.IsNullOrEmpty(TxtPuerto.Text))
+            if (string.IsNullOrEmpty(Txt_server_Smtp.Text) || string.IsNullOrEmpty(Txt_Password_SMTP.Text) || string.IsNullOrEmpty(TxtPuerto.Text))
             {
                 MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -17950,13 +17966,13 @@ ORDER BY
             bool mostrarSupervisores = indicesSupervisores.Contains(cb_tipo_grafica.SelectedIndex);
 
             // Cargar supervisores activos cuando se muestre el CheckedListBox
-            if (mostrarJefes) 
+            if (mostrarJefes)
             {
                 CargarEmpleadosActivos("Jefe de Turno");
                 chkSupervisores.Visible = mostrarJefes;
                 lblSupervisores.Visible = mostrarJefes;
             }
-            if(mostrarSupervisores)
+            if (mostrarSupervisores)
             {
                 CargarEmpleadosActivos("Supervisor");
                 chkSupervisores.Visible = mostrarSupervisores;
@@ -18051,7 +18067,7 @@ ORDER BY
                         kgFrescoEnterSecador = dt.Rows[0]["kg_frescos_enter_se"].ToString();
                         HrProgramadas = dt.Rows[0]["Hr_programadas"].ToString();
                         HrEfectivas = dt.Rows[0]["Hr_efectivas"].ToString();
-                    
+
                         cb_OP.Enabled = true;
                         cb_OP.Text = OP;
                         cb_OP.Enabled = false;
@@ -18522,10 +18538,11 @@ ORDER BY ""OP"" ASC;";
                 txt_costo.Enabled = true;
 
                 id_global_costo = rgv_reporte_costo.Rows[e.RowIndex].Cells[0].Value.ToString();
-                if (var1 == "Despegue") 
+                if (var1 == "Despegue")
                 {
                     txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[6].Value.ToString();
-                }else
+                }
+                else
                 {
                     txt_costo.Text = rgv_reporte_costo.Rows[e.RowIndex].Cells[5].Value.ToString();
                 }
@@ -18564,7 +18581,7 @@ ORDER BY ""OP"" ASC;";
                 reporte_costo();
                 cancel_costo();
             }
-            else 
+            else
             {
                 MetroFramework.MetroMessageBox.Show(this, "Por favor, complete todos los campos antes de guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -18592,7 +18609,7 @@ ORDER BY ""OP"" ASC;";
             cancel_costo();
         }
 
-        private void cancel_costo() 
+        private void cancel_costo()
         {
             // deshabilitar controles
             txt_costo.Enabled = false;
@@ -18612,9 +18629,9 @@ ORDER BY ""OP"" ASC;";
             {
                 CargarSemanasSimple();
             }
-            else 
+            else
             {
-                CargartodasSemanas(); 
+                CargartodasSemanas();
             }
         }
 
@@ -19058,7 +19075,7 @@ ORDER BY ""OP"" ASC;";
 
         private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(materialTabControl1.TabPages["tabPage3"] == materialTabControl1.SelectedTab)
+            if (materialTabControl1.TabPages["tabPage3"] == materialTabControl1.SelectedTab)
             {
                 dgv_users.ClearSelection();
             }

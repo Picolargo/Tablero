@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn4 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn6 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn7 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn8 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn9 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition11 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition12 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition13 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition14 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition15 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -242,6 +242,38 @@
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.tabPageCumplSup = new MetroFramework.Controls.MetroTabPage();
+            this.panelCumplSupBody = new System.Windows.Forms.Panel();
+            this.dgvCumplSupervisor = new System.Windows.Forms.DataGridView();
+            this.panelCumplSupTop = new System.Windows.Forms.Panel();
+            this.panelCumplSupCabecera = new System.Windows.Forms.Panel();
+            this.lblCumplSupTitulo = new System.Windows.Forms.Label();
+            this.lblCumplSupAyuda = new System.Windows.Forms.Label();
+            this.lblCumplSupAnio = new System.Windows.Forms.Label();
+            this.lblCumplSupSemanas = new System.Windows.Forms.Label();
+            this.lblCumplSupEstado = new System.Windows.Forms.Label();
+            this.cbCumplSupAnio = new System.Windows.Forms.ComboBox();
+            this.clbCumplSupSemanas = new System.Windows.Forms.CheckedListBox();
+            this.btnCumplSupConsultar = new System.Windows.Forms.Button();
+            this.btnCumplSupExcel = new System.Windows.Forms.Button();
+            this.btnCumplSupTodas = new System.Windows.Forms.Button();
+            this.btnCumplSupLimpiar = new System.Windows.Forms.Button();
+            this.tabPageCumplJefe = new MetroFramework.Controls.MetroTabPage();
+            this.panelCumplJefeBody = new System.Windows.Forms.Panel();
+            this.dgvCumplJefe = new System.Windows.Forms.DataGridView();
+            this.panelCumplJefeTop = new System.Windows.Forms.Panel();
+            this.panelCumplJefeCabecera = new System.Windows.Forms.Panel();
+            this.lblCumplJefeTitulo = new System.Windows.Forms.Label();
+            this.lblCumplJefeAyuda = new System.Windows.Forms.Label();
+            this.lblCumplJefeAnio = new System.Windows.Forms.Label();
+            this.lblCumplJefeSemanas = new System.Windows.Forms.Label();
+            this.lblCumplJefeEstado = new System.Windows.Forms.Label();
+            this.cbCumplJefeAnio = new System.Windows.Forms.ComboBox();
+            this.clbCumplJefeSemanas = new System.Windows.Forms.CheckedListBox();
+            this.btnCumplJefeConsultar = new System.Windows.Forms.Button();
+            this.btnCumplJefeExcel = new System.Windows.Forms.Button();
+            this.btnCumplJefeTodas = new System.Windows.Forms.Button();
+            this.btnCumplJefeLimpiar = new System.Windows.Forms.Button();
             this.pnl_reportes_cabecera = new System.Windows.Forms.Panel();
             this.card_selector_reportes = new MaterialSkin.Controls.MaterialCard();
             this.lbl_ayuda_reportes = new System.Windows.Forms.Label();
@@ -546,6 +578,16 @@
             this.materialCard28.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_final)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).BeginInit();
+            this.tabPageCumplSup.SuspendLayout();
+            this.panelCumplSupBody.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupervisor)).BeginInit();
+            this.panelCumplSupTop.SuspendLayout();
+            this.panelCumplSupCabecera.SuspendLayout();
+            this.tabPageCumplJefe.SuspendLayout();
+            this.panelCumplJefeBody.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefe)).BeginInit();
+            this.panelCumplJefeTop.SuspendLayout();
+            this.panelCumplJefeCabecera.SuspendLayout();
             this.pnl_reportes_cabecera.SuspendLayout();
             this.card_selector_reportes.SuspendLayout();
             this.tabPage19.SuspendLayout();
@@ -646,7 +688,7 @@
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1694, 928);
+            this.materialTabControl1.Size = new System.Drawing.Size(1694, 983);
             this.materialTabControl1.TabIndex = 0;
             this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChanged);
             // 
@@ -1478,20 +1520,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn4.HeaderText = "column1";
-            gridViewTextBoxColumn4.IsVisible = false;
-            gridViewTextBoxColumn4.Name = "column1";
-            gridViewTextBoxColumn5.HeaderText = "column2";
-            gridViewTextBoxColumn5.Name = "column2";
-            gridViewTextBoxColumn6.HeaderText = "column3";
-            gridViewTextBoxColumn6.Name = "column3";
+            gridViewTextBoxColumn7.HeaderText = "column1";
+            gridViewTextBoxColumn7.IsVisible = false;
+            gridViewTextBoxColumn7.Name = "column1";
+            gridViewTextBoxColumn8.HeaderText = "column2";
+            gridViewTextBoxColumn8.Name = "column2";
+            gridViewTextBoxColumn9.HeaderText = "column3";
+            gridViewTextBoxColumn9.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn4,
-            gridViewTextBoxColumn5,
-            gridViewTextBoxColumn6});
+            gridViewTextBoxColumn7,
+            gridViewTextBoxColumn8,
+            gridViewTextBoxColumn9});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition6;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition11;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2384,7 +2426,7 @@
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1686, 885);
+            this.tabPage10.Size = new System.Drawing.Size(1686, 940);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2396,7 +2438,7 @@
             this.pnl_contenido_reportes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_contenido_reportes.Location = new System.Drawing.Point(0, 112);
             this.pnl_contenido_reportes.Name = "pnl_contenido_reportes";
-            this.pnl_contenido_reportes.Size = new System.Drawing.Size(1686, 773);
+            this.pnl_contenido_reportes.Size = new System.Drawing.Size(1686, 828);
             this.pnl_contenido_reportes.TabIndex = 0;
             // 
             // tapcontrol
@@ -2411,10 +2453,12 @@
             this.tapcontrol.Controls.Add(this.tabPage22);
             this.tapcontrol.Controls.Add(this.tabPage33);
             this.tapcontrol.Controls.Add(this.tabPage18);
+            this.tapcontrol.Controls.Add(this.tabPageCumplSup);
+            this.tapcontrol.Controls.Add(this.tabPageCumplJefe);
             this.tapcontrol.Location = new System.Drawing.Point(0, -38);
             this.tapcontrol.Name = "tapcontrol";
             this.tapcontrol.SelectedIndex = 0;
-            this.tapcontrol.Size = new System.Drawing.Size(1686, 845);
+            this.tapcontrol.Size = new System.Drawing.Size(1686, 870);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
             this.tapcontrol.UseCustomForeColor = true;
@@ -2429,7 +2473,7 @@
             this.metroTabPage9.HorizontalScrollbarSize = 0;
             this.metroTabPage9.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage9.Name = "metroTabPage9";
-            this.metroTabPage9.Size = new System.Drawing.Size(1678, 803);
+            this.metroTabPage9.Size = new System.Drawing.Size(1678, 828);
             this.metroTabPage9.TabIndex = 0;
             this.metroTabPage9.Text = "Reportes Consolidados";
             this.metroTabPage9.VerticalScrollbarBarColor = false;
@@ -2445,7 +2489,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1678, 803);
+            this.panel2.Size = new System.Drawing.Size(1678, 828);
             this.panel2.TabIndex = 7;
             // 
             // materialCard3
@@ -2504,7 +2548,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2517,7 +2561,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -2639,7 +2683,7 @@
             this.btn_new_report_consolidado.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_consolidado.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_consolidado.ImageKey = "save_icon";
-            this.btn_new_report_consolidado.Location = new System.Drawing.Point(505, 26);
+            this.btn_new_report_consolidado.Location = new System.Drawing.Point(505, 25);
             this.btn_new_report_consolidado.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_consolidado.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_consolidado.Name = "btn_new_report_consolidado";
@@ -2754,7 +2798,7 @@
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(1672, 727);
+            this.materialCard4.Size = new System.Drawing.Size(1672, 779);
             this.materialCard4.TabIndex = 4;
             // 
             // rgv_reporte_consolidado
@@ -2768,9 +2812,9 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition12;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
-            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1644, 699);
+            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1644, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
             this.rgv_reporte_consolidado.CellBeginEdit += new Telerik.WinControls.UI.GridViewCellCancelEventHandler(this.rgv_reporte_consolidado_CellBeginEdit);
             this.rgv_reporte_consolidado.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.rgv_reporte_consolidado_CellDoubleClick);
@@ -2782,7 +2826,7 @@
             this.tabPage16.Controls.Add(this.panel4);
             this.tabPage16.Location = new System.Drawing.Point(4, 38);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1678, 828);
+            this.tabPage16.Size = new System.Drawing.Size(1678, 825);
             this.tabPage16.TabIndex = 2;
             this.tabPage16.Text = "Reporte Concentrado en Deshidratado";
             // 
@@ -2795,7 +2839,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1678, 828);
+            this.panel4.Size = new System.Drawing.Size(1678, 825);
             this.panel4.TabIndex = 5;
             // 
             // materialCard12
@@ -3049,7 +3093,7 @@
             this.tabPage17.Controls.Add(this.panel5);
             this.tabPage17.Location = new System.Drawing.Point(4, 38);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1678, 828);
+            this.tabPage17.Size = new System.Drawing.Size(1678, 825);
             this.tabPage17.TabIndex = 3;
             this.tabPage17.Text = "Reporte Concentrado en Otras Áreas";
             // 
@@ -3062,7 +3106,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1678, 828);
+            this.panel5.Size = new System.Drawing.Size(1678, 825);
             this.panel5.TabIndex = 6;
             // 
             // materialCard13
@@ -3319,7 +3363,7 @@
             this.metroTabPage10.HorizontalScrollbarSize = 0;
             this.metroTabPage10.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage10.Name = "metroTabPage10";
-            this.metroTabPage10.Size = new System.Drawing.Size(1678, 828);
+            this.metroTabPage10.Size = new System.Drawing.Size(1678, 825);
             this.metroTabPage10.TabIndex = 1;
             this.metroTabPage10.Text = "%Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
@@ -3334,7 +3378,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1678, 828);
+            this.panel1.Size = new System.Drawing.Size(1678, 825);
             this.panel1.TabIndex = 4;
             // 
             // materialCard8
@@ -3483,7 +3527,7 @@
             this.tabPage22.Controls.Add(this.panel6);
             this.tabPage22.Location = new System.Drawing.Point(4, 38);
             this.tabPage22.Name = "tabPage22";
-            this.tabPage22.Size = new System.Drawing.Size(1678, 828);
+            this.tabPage22.Size = new System.Drawing.Size(1678, 825);
             this.tabPage22.TabIndex = 4;
             this.tabPage22.Text = "Kg Mermas por Supervisor";
             // 
@@ -3495,7 +3539,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1678, 828);
+            this.panel6.Size = new System.Drawing.Size(1678, 825);
             this.panel6.TabIndex = 5;
             // 
             // materialCard16
@@ -3644,7 +3688,7 @@
             this.tabPage33.Controls.Add(this.panel8);
             this.tabPage33.Location = new System.Drawing.Point(4, 38);
             this.tabPage33.Name = "tabPage33";
-            this.tabPage33.Size = new System.Drawing.Size(1678, 828);
+            this.tabPage33.Size = new System.Drawing.Size(1678, 825);
             this.tabPage33.TabIndex = 5;
             this.tabPage33.Text = "Tiempos Muertos";
             // 
@@ -3657,7 +3701,7 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1678, 828);
+            this.panel8.Size = new System.Drawing.Size(1678, 825);
             this.panel8.TabIndex = 8;
             // 
             // materialCard20
@@ -3952,7 +3996,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition13;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1636, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -3963,7 +4007,7 @@
             this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(1678, 828);
+            this.tabPage18.Size = new System.Drawing.Size(1678, 825);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
             // 
@@ -3982,7 +4026,7 @@
             this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard29.Name = "materialCard29";
             this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1678, 828);
+            this.materialCard29.Size = new System.Drawing.Size(1678, 825);
             this.materialCard29.TabIndex = 40;
             // 
             // panel13
@@ -3991,7 +4035,7 @@
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel13.Location = new System.Drawing.Point(1028, 14);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(636, 800);
+            this.panel13.Size = new System.Drawing.Size(636, 797);
             this.panel13.TabIndex = 41;
             // 
             // panel14
@@ -4020,7 +4064,7 @@
             this.panel12.Location = new System.Drawing.Point(14, 14);
             this.panel12.Name = "panel12";
             this.panel12.Padding = new System.Windows.Forms.Padding(5);
-            this.panel12.Size = new System.Drawing.Size(478, 800);
+            this.panel12.Size = new System.Drawing.Size(478, 797);
             this.panel12.TabIndex = 40;
             // 
             // materialCard28
@@ -4205,6 +4249,432 @@
             this.listView1.Size = new System.Drawing.Size(202, 380);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // tabPageCumplSup
+            // 
+            this.tabPageCumplSup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.tabPageCumplSup.Controls.Add(this.panelCumplSupBody);
+            this.tabPageCumplSup.Controls.Add(this.panelCumplSupTop);
+            this.tabPageCumplSup.HorizontalScrollbarBarColor = false;
+            this.tabPageCumplSup.HorizontalScrollbarHighlightOnWheel = false;
+            this.tabPageCumplSup.HorizontalScrollbarSize = 10;
+            this.tabPageCumplSup.Location = new System.Drawing.Point(4, 38);
+            this.tabPageCumplSup.Name = "tabPageCumplSup";
+            this.tabPageCumplSup.Size = new System.Drawing.Size(1678, 825);
+            this.tabPageCumplSup.TabIndex = 7;
+            this.tabPageCumplSup.Text = "Cumplimiento por Supervisor";
+            this.tabPageCumplSup.UseCustomBackColor = true;
+            this.tabPageCumplSup.VerticalScrollbarBarColor = false;
+            this.tabPageCumplSup.VerticalScrollbarHighlightOnWheel = false;
+            this.tabPageCumplSup.VerticalScrollbarSize = 10;
+            // 
+            // panelCumplSupBody
+            // 
+            this.panelCumplSupBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.panelCumplSupBody.Controls.Add(this.dgvCumplSupervisor);
+            this.panelCumplSupBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCumplSupBody.Location = new System.Drawing.Point(0, 207);
+            this.panelCumplSupBody.Name = "panelCumplSupBody";
+            this.panelCumplSupBody.Padding = new System.Windows.Forms.Padding(14, 6, 14, 14);
+            this.panelCumplSupBody.Size = new System.Drawing.Size(1678, 618);
+            this.panelCumplSupBody.TabIndex = 1;
+            // 
+            // dgvCumplSupervisor
+            // 
+            this.dgvCumplSupervisor.BackgroundColor = System.Drawing.Color.White;
+            this.dgvCumplSupervisor.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCumplSupervisor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCumplSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCumplSupervisor.Location = new System.Drawing.Point(14, 6);
+            this.dgvCumplSupervisor.Name = "dgvCumplSupervisor";
+            this.dgvCumplSupervisor.ReadOnly = true;
+            this.dgvCumplSupervisor.Size = new System.Drawing.Size(1650, 598);
+            this.dgvCumplSupervisor.TabIndex = 0;
+            // 
+            // panelCumplSupTop
+            // 
+            this.panelCumplSupTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.panelCumplSupTop.Controls.Add(this.panelCumplSupCabecera);
+            this.panelCumplSupTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCumplSupTop.Location = new System.Drawing.Point(0, 0);
+            this.panelCumplSupTop.Name = "panelCumplSupTop";
+            this.panelCumplSupTop.Size = new System.Drawing.Size(1678, 207);
+            this.panelCumplSupTop.TabIndex = 0;
+            // 
+            // panelCumplSupCabecera
+            // 
+            this.panelCumplSupCabecera.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelCumplSupCabecera.BackColor = System.Drawing.Color.White;
+            this.panelCumplSupCabecera.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCumplSupCabecera.Controls.Add(this.lblCumplSupTitulo);
+            this.panelCumplSupCabecera.Controls.Add(this.lblCumplSupAyuda);
+            this.panelCumplSupCabecera.Controls.Add(this.lblCumplSupAnio);
+            this.panelCumplSupCabecera.Controls.Add(this.lblCumplSupSemanas);
+            this.panelCumplSupCabecera.Controls.Add(this.lblCumplSupEstado);
+            this.panelCumplSupCabecera.Controls.Add(this.cbCumplSupAnio);
+            this.panelCumplSupCabecera.Controls.Add(this.clbCumplSupSemanas);
+            this.panelCumplSupCabecera.Controls.Add(this.btnCumplSupConsultar);
+            this.panelCumplSupCabecera.Controls.Add(this.btnCumplSupExcel);
+            this.panelCumplSupCabecera.Controls.Add(this.btnCumplSupTodas);
+            this.panelCumplSupCabecera.Controls.Add(this.btnCumplSupLimpiar);
+            this.panelCumplSupCabecera.Location = new System.Drawing.Point(14, 10);
+            this.panelCumplSupCabecera.Name = "panelCumplSupCabecera";
+            this.panelCumplSupCabecera.Size = new System.Drawing.Size(1649, 187);
+            this.panelCumplSupCabecera.TabIndex = 0;
+            // 
+            // lblCumplSupTitulo
+            // 
+            this.lblCumplSupTitulo.AutoSize = true;
+            this.lblCumplSupTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.lblCumplSupTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(59)))), ((int)(((byte)(77)))));
+            this.lblCumplSupTitulo.Location = new System.Drawing.Point(22, 10);
+            this.lblCumplSupTitulo.Name = "lblCumplSupTitulo";
+            this.lblCumplSupTitulo.Size = new System.Drawing.Size(320, 25);
+            this.lblCumplSupTitulo.TabIndex = 0;
+            this.lblCumplSupTitulo.Text = "CUMPLIMIENTO POR SUPERVISOR";
+            // 
+            // lblCumplSupAyuda
+            // 
+            this.lblCumplSupAyuda.AutoSize = true;
+            this.lblCumplSupAyuda.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCumplSupAyuda.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.lblCumplSupAyuda.Location = new System.Drawing.Point(24, 43);
+            this.lblCumplSupAyuda.Name = "lblCumplSupAyuda";
+            this.lblCumplSupAyuda.Size = new System.Drawing.Size(545, 15);
+            this.lblCumplSupAyuda.TabIndex = 1;
+            this.lblCumplSupAyuda.Text = "Despegue 50 % + promedio de demás áreas 50 % (si hay Despegue); sin Despegue: dem" +
+    "ás áreas 100 %.";
+            // 
+            // lblCumplSupAnio
+            // 
+            this.lblCumplSupAnio.AutoSize = true;
+            this.lblCumplSupAnio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCumplSupAnio.Location = new System.Drawing.Point(24, 76);
+            this.lblCumplSupAnio.Name = "lblCumplSupAnio";
+            this.lblCumplSupAnio.Size = new System.Drawing.Size(33, 15);
+            this.lblCumplSupAnio.TabIndex = 2;
+            this.lblCumplSupAnio.Text = "AÑO";
+            // 
+            // lblCumplSupSemanas
+            // 
+            this.lblCumplSupSemanas.AutoSize = true;
+            this.lblCumplSupSemanas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCumplSupSemanas.Location = new System.Drawing.Point(209, 76);
+            this.lblCumplSupSemanas.Name = "lblCumplSupSemanas";
+            this.lblCumplSupSemanas.Size = new System.Drawing.Size(191, 15);
+            this.lblCumplSupSemanas.TabIndex = 3;
+            this.lblCumplSupSemanas.Text = "SEMANAS (puedes marcar varias)";
+            // 
+            // lblCumplSupEstado
+            // 
+            this.lblCumplSupEstado.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCumplSupEstado.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCumplSupEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.lblCumplSupEstado.Location = new System.Drawing.Point(24, 160);
+            this.lblCumplSupEstado.Name = "lblCumplSupEstado";
+            this.lblCumplSupEstado.Size = new System.Drawing.Size(1599, 20);
+            this.lblCumplSupEstado.TabIndex = 4;
+            this.lblCumplSupEstado.Text = "Selecciona las semanas y pulsa Consultar.";
+            // 
+            // cbCumplSupAnio
+            // 
+            this.cbCumplSupAnio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCumplSupAnio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbCumplSupAnio.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.cbCumplSupAnio.FormattingEnabled = true;
+            this.cbCumplSupAnio.Location = new System.Drawing.Point(24, 99);
+            this.cbCumplSupAnio.Name = "cbCumplSupAnio";
+            this.cbCumplSupAnio.Size = new System.Drawing.Size(157, 28);
+            this.cbCumplSupAnio.TabIndex = 0;
+            // 
+            // clbCumplSupSemanas
+            // 
+            this.clbCumplSupSemanas.BackColor = System.Drawing.Color.White;
+            this.clbCumplSupSemanas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.clbCumplSupSemanas.CheckOnClick = true;
+            this.clbCumplSupSemanas.ColumnWidth = 55;
+            this.clbCumplSupSemanas.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.clbCumplSupSemanas.FormattingEnabled = true;
+            this.clbCumplSupSemanas.Location = new System.Drawing.Point(209, 99);
+            this.clbCumplSupSemanas.MultiColumn = true;
+            this.clbCumplSupSemanas.Name = "clbCumplSupSemanas";
+            this.clbCumplSupSemanas.Size = new System.Drawing.Size(481, 56);
+            this.clbCumplSupSemanas.TabIndex = 1;
+            // 
+            // btnCumplSupConsultar
+            // 
+            this.btnCumplSupConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(120)))), ((int)(((byte)(35)))));
+            this.btnCumplSupConsultar.FlatAppearance.BorderSize = 0;
+            this.btnCumplSupConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplSupConsultar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplSupConsultar.ForeColor = System.Drawing.Color.White;
+            this.btnCumplSupConsultar.Location = new System.Drawing.Point(714, 100);
+            this.btnCumplSupConsultar.Name = "btnCumplSupConsultar";
+            this.btnCumplSupConsultar.Size = new System.Drawing.Size(150, 37);
+            this.btnCumplSupConsultar.TabIndex = 2;
+            this.btnCumplSupConsultar.Text = "CONSULTAR";
+            this.btnCumplSupConsultar.UseVisualStyleBackColor = false;
+            this.btnCumplSupConsultar.Click += new System.EventHandler(this.btnCumplSupConsultar_Click);
+            // 
+            // btnCumplSupExcel
+            // 
+            this.btnCumplSupExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(99)))), ((int)(((byte)(166)))));
+            this.btnCumplSupExcel.FlatAppearance.BorderSize = 0;
+            this.btnCumplSupExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplSupExcel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplSupExcel.ForeColor = System.Drawing.Color.White;
+            this.btnCumplSupExcel.Location = new System.Drawing.Point(876, 100);
+            this.btnCumplSupExcel.Name = "btnCumplSupExcel";
+            this.btnCumplSupExcel.Size = new System.Drawing.Size(172, 37);
+            this.btnCumplSupExcel.TabIndex = 3;
+            this.btnCumplSupExcel.Text = "EXPORTAR EXCEL";
+            this.btnCumplSupExcel.UseVisualStyleBackColor = false;
+            this.btnCumplSupExcel.Click += new System.EventHandler(this.btnCumplSupExcel_Click);
+            // 
+            // btnCumplSupTodas
+            // 
+            this.btnCumplSupTodas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(119)))));
+            this.btnCumplSupTodas.FlatAppearance.BorderSize = 0;
+            this.btnCumplSupTodas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplSupTodas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplSupTodas.ForeColor = System.Drawing.Color.White;
+            this.btnCumplSupTodas.Location = new System.Drawing.Point(1060, 100);
+            this.btnCumplSupTodas.Name = "btnCumplSupTodas";
+            this.btnCumplSupTodas.Size = new System.Drawing.Size(145, 37);
+            this.btnCumplSupTodas.TabIndex = 4;
+            this.btnCumplSupTodas.Text = "MARCAR TODAS";
+            this.btnCumplSupTodas.UseVisualStyleBackColor = false;
+            this.btnCumplSupTodas.Click += new System.EventHandler(this.btnCumplSupTodas_Click);
+            // 
+            // btnCumplSupLimpiar
+            // 
+            this.btnCumplSupLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(119)))));
+            this.btnCumplSupLimpiar.FlatAppearance.BorderSize = 0;
+            this.btnCumplSupLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplSupLimpiar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplSupLimpiar.ForeColor = System.Drawing.Color.White;
+            this.btnCumplSupLimpiar.Location = new System.Drawing.Point(1217, 100);
+            this.btnCumplSupLimpiar.Name = "btnCumplSupLimpiar";
+            this.btnCumplSupLimpiar.Size = new System.Drawing.Size(123, 37);
+            this.btnCumplSupLimpiar.TabIndex = 5;
+            this.btnCumplSupLimpiar.Text = "LIMPIAR";
+            this.btnCumplSupLimpiar.UseVisualStyleBackColor = false;
+            this.btnCumplSupLimpiar.Click += new System.EventHandler(this.btnCumplSupLimpiar_Click);
+            // 
+            // tabPageCumplJefe
+            // 
+            this.tabPageCumplJefe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.tabPageCumplJefe.Controls.Add(this.panelCumplJefeBody);
+            this.tabPageCumplJefe.Controls.Add(this.panelCumplJefeTop);
+            this.tabPageCumplJefe.HorizontalScrollbarBarColor = false;
+            this.tabPageCumplJefe.HorizontalScrollbarHighlightOnWheel = false;
+            this.tabPageCumplJefe.HorizontalScrollbarSize = 10;
+            this.tabPageCumplJefe.Location = new System.Drawing.Point(4, 38);
+            this.tabPageCumplJefe.Name = "tabPageCumplJefe";
+            this.tabPageCumplJefe.Size = new System.Drawing.Size(1678, 825);
+            this.tabPageCumplJefe.TabIndex = 8;
+            this.tabPageCumplJefe.Text = "Cumplimiento por Jefe de Turno";
+            this.tabPageCumplJefe.UseCustomBackColor = true;
+            this.tabPageCumplJefe.VerticalScrollbarBarColor = false;
+            this.tabPageCumplJefe.VerticalScrollbarHighlightOnWheel = false;
+            this.tabPageCumplJefe.VerticalScrollbarSize = 10;
+            // 
+            // panelCumplJefeBody
+            // 
+            this.panelCumplJefeBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.panelCumplJefeBody.Controls.Add(this.dgvCumplJefe);
+            this.panelCumplJefeBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCumplJefeBody.Location = new System.Drawing.Point(0, 207);
+            this.panelCumplJefeBody.Name = "panelCumplJefeBody";
+            this.panelCumplJefeBody.Padding = new System.Windows.Forms.Padding(14, 6, 14, 14);
+            this.panelCumplJefeBody.Size = new System.Drawing.Size(1678, 618);
+            this.panelCumplJefeBody.TabIndex = 1;
+            // 
+            // dgvCumplJefe
+            // 
+            this.dgvCumplJefe.BackgroundColor = System.Drawing.Color.White;
+            this.dgvCumplJefe.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCumplJefe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCumplJefe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCumplJefe.Location = new System.Drawing.Point(14, 6);
+            this.dgvCumplJefe.Name = "dgvCumplJefe";
+            this.dgvCumplJefe.ReadOnly = true;
+            this.dgvCumplJefe.Size = new System.Drawing.Size(1650, 598);
+            this.dgvCumplJefe.TabIndex = 0;
+            // 
+            // panelCumplJefeTop
+            // 
+            this.panelCumplJefeTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.panelCumplJefeTop.Controls.Add(this.panelCumplJefeCabecera);
+            this.panelCumplJefeTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCumplJefeTop.Location = new System.Drawing.Point(0, 0);
+            this.panelCumplJefeTop.Name = "panelCumplJefeTop";
+            this.panelCumplJefeTop.Size = new System.Drawing.Size(1678, 207);
+            this.panelCumplJefeTop.TabIndex = 0;
+            // 
+            // panelCumplJefeCabecera
+            // 
+            this.panelCumplJefeCabecera.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelCumplJefeCabecera.BackColor = System.Drawing.Color.White;
+            this.panelCumplJefeCabecera.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCumplJefeCabecera.Controls.Add(this.lblCumplJefeTitulo);
+            this.panelCumplJefeCabecera.Controls.Add(this.lblCumplJefeAyuda);
+            this.panelCumplJefeCabecera.Controls.Add(this.lblCumplJefeAnio);
+            this.panelCumplJefeCabecera.Controls.Add(this.lblCumplJefeSemanas);
+            this.panelCumplJefeCabecera.Controls.Add(this.lblCumplJefeEstado);
+            this.panelCumplJefeCabecera.Controls.Add(this.cbCumplJefeAnio);
+            this.panelCumplJefeCabecera.Controls.Add(this.clbCumplJefeSemanas);
+            this.panelCumplJefeCabecera.Controls.Add(this.btnCumplJefeConsultar);
+            this.panelCumplJefeCabecera.Controls.Add(this.btnCumplJefeExcel);
+            this.panelCumplJefeCabecera.Controls.Add(this.btnCumplJefeTodas);
+            this.panelCumplJefeCabecera.Controls.Add(this.btnCumplJefeLimpiar);
+            this.panelCumplJefeCabecera.Location = new System.Drawing.Point(14, 10);
+            this.panelCumplJefeCabecera.Name = "panelCumplJefeCabecera";
+            this.panelCumplJefeCabecera.Size = new System.Drawing.Size(1649, 187);
+            this.panelCumplJefeCabecera.TabIndex = 0;
+            // 
+            // lblCumplJefeTitulo
+            // 
+            this.lblCumplJefeTitulo.AutoSize = true;
+            this.lblCumplJefeTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.lblCumplJefeTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(59)))), ((int)(((byte)(77)))));
+            this.lblCumplJefeTitulo.Location = new System.Drawing.Point(22, 10);
+            this.lblCumplJefeTitulo.Name = "lblCumplJefeTitulo";
+            this.lblCumplJefeTitulo.Size = new System.Drawing.Size(343, 25);
+            this.lblCumplJefeTitulo.TabIndex = 0;
+            this.lblCumplJefeTitulo.Text = "CUMPLIMIENTO POR JEFE DE TURNO";
+            // 
+            // lblCumplJefeAyuda
+            // 
+            this.lblCumplJefeAyuda.AutoSize = true;
+            this.lblCumplJefeAyuda.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCumplJefeAyuda.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.lblCumplJefeAyuda.Location = new System.Drawing.Point(24, 43);
+            this.lblCumplJefeAyuda.Name = "lblCumplJefeAyuda";
+            this.lblCumplJefeAyuda.Size = new System.Drawing.Size(545, 15);
+            this.lblCumplJefeAyuda.TabIndex = 1;
+            this.lblCumplJefeAyuda.Text = "Despegue 50 % + promedio de demás áreas 50 % (si hay Despegue); sin Despegue: dem" +
+    "ás áreas 100 %.";
+            // 
+            // lblCumplJefeAnio
+            // 
+            this.lblCumplJefeAnio.AutoSize = true;
+            this.lblCumplJefeAnio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCumplJefeAnio.Location = new System.Drawing.Point(24, 76);
+            this.lblCumplJefeAnio.Name = "lblCumplJefeAnio";
+            this.lblCumplJefeAnio.Size = new System.Drawing.Size(33, 15);
+            this.lblCumplJefeAnio.TabIndex = 2;
+            this.lblCumplJefeAnio.Text = "AÑO";
+            // 
+            // lblCumplJefeSemanas
+            // 
+            this.lblCumplJefeSemanas.AutoSize = true;
+            this.lblCumplJefeSemanas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCumplJefeSemanas.Location = new System.Drawing.Point(209, 76);
+            this.lblCumplJefeSemanas.Name = "lblCumplJefeSemanas";
+            this.lblCumplJefeSemanas.Size = new System.Drawing.Size(191, 15);
+            this.lblCumplJefeSemanas.TabIndex = 3;
+            this.lblCumplJefeSemanas.Text = "SEMANAS (puedes marcar varias)";
+            // 
+            // lblCumplJefeEstado
+            // 
+            this.lblCumplJefeEstado.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCumplJefeEstado.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCumplJefeEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.lblCumplJefeEstado.Location = new System.Drawing.Point(24, 160);
+            this.lblCumplJefeEstado.Name = "lblCumplJefeEstado";
+            this.lblCumplJefeEstado.Size = new System.Drawing.Size(1599, 20);
+            this.lblCumplJefeEstado.TabIndex = 4;
+            this.lblCumplJefeEstado.Text = "Selecciona las semanas y pulsa Consultar.";
+            // 
+            // cbCumplJefeAnio
+            // 
+            this.cbCumplJefeAnio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCumplJefeAnio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbCumplJefeAnio.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.cbCumplJefeAnio.FormattingEnabled = true;
+            this.cbCumplJefeAnio.Location = new System.Drawing.Point(24, 99);
+            this.cbCumplJefeAnio.Name = "cbCumplJefeAnio";
+            this.cbCumplJefeAnio.Size = new System.Drawing.Size(157, 28);
+            this.cbCumplJefeAnio.TabIndex = 0;
+            // 
+            // clbCumplJefeSemanas
+            // 
+            this.clbCumplJefeSemanas.BackColor = System.Drawing.Color.White;
+            this.clbCumplJefeSemanas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.clbCumplJefeSemanas.CheckOnClick = true;
+            this.clbCumplJefeSemanas.ColumnWidth = 55;
+            this.clbCumplJefeSemanas.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.clbCumplJefeSemanas.FormattingEnabled = true;
+            this.clbCumplJefeSemanas.Location = new System.Drawing.Point(209, 99);
+            this.clbCumplJefeSemanas.MultiColumn = true;
+            this.clbCumplJefeSemanas.Name = "clbCumplJefeSemanas";
+            this.clbCumplJefeSemanas.Size = new System.Drawing.Size(481, 56);
+            this.clbCumplJefeSemanas.TabIndex = 1;
+            // 
+            // btnCumplJefeConsultar
+            // 
+            this.btnCumplJefeConsultar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(120)))), ((int)(((byte)(35)))));
+            this.btnCumplJefeConsultar.FlatAppearance.BorderSize = 0;
+            this.btnCumplJefeConsultar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplJefeConsultar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplJefeConsultar.ForeColor = System.Drawing.Color.White;
+            this.btnCumplJefeConsultar.Location = new System.Drawing.Point(714, 100);
+            this.btnCumplJefeConsultar.Name = "btnCumplJefeConsultar";
+            this.btnCumplJefeConsultar.Size = new System.Drawing.Size(150, 37);
+            this.btnCumplJefeConsultar.TabIndex = 2;
+            this.btnCumplJefeConsultar.Text = "CONSULTAR";
+            this.btnCumplJefeConsultar.UseVisualStyleBackColor = false;
+            this.btnCumplJefeConsultar.Click += new System.EventHandler(this.btnCumplJefeConsultar_Click);
+            // 
+            // btnCumplJefeExcel
+            // 
+            this.btnCumplJefeExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(99)))), ((int)(((byte)(166)))));
+            this.btnCumplJefeExcel.FlatAppearance.BorderSize = 0;
+            this.btnCumplJefeExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplJefeExcel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplJefeExcel.ForeColor = System.Drawing.Color.White;
+            this.btnCumplJefeExcel.Location = new System.Drawing.Point(876, 100);
+            this.btnCumplJefeExcel.Name = "btnCumplJefeExcel";
+            this.btnCumplJefeExcel.Size = new System.Drawing.Size(172, 37);
+            this.btnCumplJefeExcel.TabIndex = 3;
+            this.btnCumplJefeExcel.Text = "EXPORTAR EXCEL";
+            this.btnCumplJefeExcel.UseVisualStyleBackColor = false;
+            this.btnCumplJefeExcel.Click += new System.EventHandler(this.btnCumplJefeExcel_Click);
+            // 
+            // btnCumplJefeTodas
+            // 
+            this.btnCumplJefeTodas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(119)))));
+            this.btnCumplJefeTodas.FlatAppearance.BorderSize = 0;
+            this.btnCumplJefeTodas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplJefeTodas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplJefeTodas.ForeColor = System.Drawing.Color.White;
+            this.btnCumplJefeTodas.Location = new System.Drawing.Point(1060, 100);
+            this.btnCumplJefeTodas.Name = "btnCumplJefeTodas";
+            this.btnCumplJefeTodas.Size = new System.Drawing.Size(145, 37);
+            this.btnCumplJefeTodas.TabIndex = 4;
+            this.btnCumplJefeTodas.Text = "MARCAR TODAS";
+            this.btnCumplJefeTodas.UseVisualStyleBackColor = false;
+            this.btnCumplJefeTodas.Click += new System.EventHandler(this.btnCumplJefeTodas_Click);
+            // 
+            // btnCumplJefeLimpiar
+            // 
+            this.btnCumplJefeLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(119)))));
+            this.btnCumplJefeLimpiar.FlatAppearance.BorderSize = 0;
+            this.btnCumplJefeLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCumplJefeLimpiar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCumplJefeLimpiar.ForeColor = System.Drawing.Color.White;
+            this.btnCumplJefeLimpiar.Location = new System.Drawing.Point(1217, 100);
+            this.btnCumplJefeLimpiar.Name = "btnCumplJefeLimpiar";
+            this.btnCumplJefeLimpiar.Size = new System.Drawing.Size(123, 37);
+            this.btnCumplJefeLimpiar.TabIndex = 5;
+            this.btnCumplJefeLimpiar.Text = "LIMPIAR";
+            this.btnCumplJefeLimpiar.UseVisualStyleBackColor = false;
+            this.btnCumplJefeLimpiar.Click += new System.EventHandler(this.btnCumplJefeLimpiar_Click);
             // 
             // pnl_reportes_cabecera
             // 
@@ -4647,7 +5117,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition9;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition14;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -6140,7 +6610,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -7871,7 +8341,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition10;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition15;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
@@ -7900,7 +8370,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1700, 995);
+            this.ClientSize = new System.Drawing.Size(1700, 1050);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
@@ -8034,6 +8504,18 @@
             this.materialCard28.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_final)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).EndInit();
+            this.tabPageCumplSup.ResumeLayout(false);
+            this.panelCumplSupBody.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupervisor)).EndInit();
+            this.panelCumplSupTop.ResumeLayout(false);
+            this.panelCumplSupCabecera.ResumeLayout(false);
+            this.panelCumplSupCabecera.PerformLayout();
+            this.tabPageCumplJefe.ResumeLayout(false);
+            this.panelCumplJefeBody.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefe)).EndInit();
+            this.panelCumplJefeTop.ResumeLayout(false);
+            this.panelCumplJefeCabecera.ResumeLayout(false);
+            this.panelCumplJefeCabecera.PerformLayout();
             this.pnl_reportes_cabecera.ResumeLayout(false);
             this.card_selector_reportes.ResumeLayout(false);
             this.card_selector_reportes.PerformLayout();
@@ -8305,6 +8787,38 @@
         private MaterialSkin.Controls.MaterialComboBox cb_seleccionar_reporte;
         private System.Windows.Forms.Label lbl_ayuda_reportes;
         private System.Windows.Forms.Panel pnl_contenido_reportes;
+        private MetroFramework.Controls.MetroTabPage tabPageCumplSup;
+        private System.Windows.Forms.Panel panelCumplSupTop;
+        private System.Windows.Forms.Panel panelCumplSupCabecera;
+        private System.Windows.Forms.Panel panelCumplSupBody;
+        private System.Windows.Forms.Label lblCumplSupTitulo;
+        private System.Windows.Forms.Label lblCumplSupAyuda;
+        private System.Windows.Forms.Label lblCumplSupAnio;
+        private System.Windows.Forms.Label lblCumplSupSemanas;
+        private System.Windows.Forms.Label lblCumplSupEstado;
+        private System.Windows.Forms.ComboBox cbCumplSupAnio;
+        private System.Windows.Forms.CheckedListBox clbCumplSupSemanas;
+        private System.Windows.Forms.Button btnCumplSupConsultar;
+        private System.Windows.Forms.Button btnCumplSupExcel;
+        private System.Windows.Forms.Button btnCumplSupTodas;
+        private System.Windows.Forms.Button btnCumplSupLimpiar;
+        private System.Windows.Forms.DataGridView dgvCumplSupervisor;
+        private MetroFramework.Controls.MetroTabPage tabPageCumplJefe;
+        private System.Windows.Forms.Panel panelCumplJefeTop;
+        private System.Windows.Forms.Panel panelCumplJefeCabecera;
+        private System.Windows.Forms.Panel panelCumplJefeBody;
+        private System.Windows.Forms.Label lblCumplJefeTitulo;
+        private System.Windows.Forms.Label lblCumplJefeAyuda;
+        private System.Windows.Forms.Label lblCumplJefeAnio;
+        private System.Windows.Forms.Label lblCumplJefeSemanas;
+        private System.Windows.Forms.Label lblCumplJefeEstado;
+        private System.Windows.Forms.ComboBox cbCumplJefeAnio;
+        private System.Windows.Forms.CheckedListBox clbCumplJefeSemanas;
+        private System.Windows.Forms.Button btnCumplJefeConsultar;
+        private System.Windows.Forms.Button btnCumplJefeExcel;
+        private System.Windows.Forms.Button btnCumplJefeTodas;
+        private System.Windows.Forms.Button btnCumplJefeLimpiar;
+        private System.Windows.Forms.DataGridView dgvCumplJefe;
         private MetroFramework.Controls.MetroTabControl tapcontrol;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;

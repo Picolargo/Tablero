@@ -246,6 +246,9 @@
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form1.CumplimientoPersonal.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
@@ -286,6 +289,7 @@
     <Compile Include="Editar.Designer.cs">
       <DependentUpon>Editar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte_Cumplimiento_Personal.cs" />
     <Compile Include="Tiempo_Muerto.cs">
       <SubType>Form</SubType>
     </Compile>
