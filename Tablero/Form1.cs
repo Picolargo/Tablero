@@ -489,6 +489,7 @@ namespace Tablero
                     materialTabControl1.TabPages.Remove(tabPage9);
                     materialTabControl1.TabPages.Remove(tabPage11);
                     materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
+                    cb_Tipo_Tiempos.SelectedIndex = 0; // "Todos"
                     materialCardtab_users.Visible = false;
                     materialCard_users.Visible = false;
                     materialCard18.Location = new Point(14, 14);
@@ -583,6 +584,7 @@ namespace Tablero
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
                 menuStrip1.Visible = true; // Mostrar el menú para el administrador
+                cb_Tipo_Tiempos.SelectedIndex = 0; // "Todos"
                 editarToolStripMenuItem.Visible = false;
             }
             if (nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
@@ -590,7 +592,13 @@ namespace Tablero
                 // Ocultar las pestañas no necesarias para el usuario supervisor
                 materialTabControl1.TabPages.Remove(tabPage3);
                 materialTabControl1.TabPages.Remove(tabPage4);
-                materialTabControl1.TabPages.Remove(tabPage11);
+                if(nivel_user == "Supervisor") { materialTabControl1.TabPages.Remove(tabPage11); }
+                if(nivel_user == "Jefe de Turno") {
+                    ActualizarNumeroSemana();
+                    actualiza_polvos_calidad();
+                    actualiza_tunel_calidad();
+                    configurar_limpieza();
+                }
                 materialTabControl1.TabPages.Remove(tabPage19);///eliminar pestaña de costos
 
                 tabControl_detallesOP.TabPages.Remove(tabPage12);
@@ -669,6 +677,7 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage17);
                 tapcontrol.TabPages.Remove(metroTabPage10);
                 tapcontrol.TabPages.Remove(tabPage22);
+                cb_Tipo_Tiempos.SelectedIndex = 0; // "Todos"
                 llenado_anios_tiempos();
             }
         }
@@ -850,6 +859,8 @@ namespace Tablero
             txt_no_semana_tunel.BackColor = Color.White;
             tabControl1.SelectedIndex = 0;
             tab_limpiezas.SelectedIndex = 0;
+            dgv_polvos_calidad.ClearSelection();
+            dgv_Tunel_calidad.ClearSelection();
         }
         private void actualiza_grid_users()
         {
@@ -1112,6 +1123,7 @@ namespace Tablero
             {
                 dgv_polvos_calidad.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
+            dgv_polvos_calidad.ClearSelection();
         }
         private void actualiza_tunel_calidad()
         {
@@ -5039,9 +5051,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                 diferencia = TimeSpan.Zero;
                             }
                         }
-
-                        // Mostrar horas totales (con decimales si hay minutos)
-                        Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+                        if(cb_Area.SelectedIndex != 1) 
+                        {
+                            // Mostrar horas totales (con decimales si hay minutos)
+                            Txt_Read_1.Text = diferencia.TotalHours.ToString("0.##");
+                        }
+                        
 
                         // Calcular la nueva diferencia restando los minutos
                         TimeSpan diferenciaConDescuento = diferencia;
@@ -5068,9 +5083,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         {
                             calcular_meta_programada();
                         }
-
-                        // Mostrar el resultado con descuento en Txt_Read_3
-                        Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
+                        if (cb_Area.SelectedIndex != 1) 
+                        {
+                            // Mostrar el resultado con descuento en Txt_Read_3
+                            Txt_Read_3.Text = diferenciaConDescuento.TotalHours.ToString("0.##");
+                        }
+                            
                     }
                     btn_save_ficha.Enabled = true;
                 }
@@ -9336,7 +9354,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (!string.IsNullOrWhiteSpace(Txt_1.Text))
                 {
                     // Consulta para buscar donde OP = valor_buscado
-                    string query = "SELECT \"OP\", \"kg_frescos_enter_se\" FROM public.\"Ficha\" WHERE \"Lote\" = @valorBuscado and \"Area\" = 'Tunel/Sumergidor';";
+                    string query = "SELECT \"OP\", \"kg_frescos_enter_se\", \"Hr_programadas\", \"Hr_efectivas\" FROM public.\"Ficha\" WHERE \"Lote\" = @valorBuscado and \"Area\" = 'Tunel/Sumergidor';";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -9350,12 +9368,17 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     // Variable string donde guardar el resultado
                     string OP = string.Empty;
                     string kgFrescoEnterSecador = string.Empty;
+                    string HrProgramadas = string.Empty;
+                    string HrEfectivas = string.Empty;
 
                     // Verificar si se encontraron resultados
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         OP = dt.Rows[0]["OP"].ToString();
                         kgFrescoEnterSecador = dt.Rows[0]["kg_frescos_enter_se"].ToString();
+                        HrProgramadas = dt.Rows[0]["Hr_programadas"].ToString();
+                        HrEfectivas = dt.Rows[0]["Hr_efectivas"].ToString();
+
                         cb_OP.Enabled = true;
                         cb_OP.Text = OP;
                         cb_OP.Enabled = false;
@@ -9365,6 +9388,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Txt_Read_4.Text = kgFrescoEnterSecador;
                         buscar_Meta_hr();
                     }
+                    Txt_Read_1.Text = HrProgramadas;
+                    Txt_Read_3.Text = HrEfectivas;
                 }
                 else
                 {
@@ -17438,7 +17463,9 @@ ORDER BY
         public void reporte_tiempos()
         {
             string var1 = cb_area_reporte_Tiempos.Text;
+            string tipoTiempoSeleccionado = cb_Tipo_Tiempos.Text; // "Todos", "Mecánicos", "Operativo"
             string querySimple = string.Empty;
+
             rgv_reporte_Tiempos.DataSource = null;
             rgv_reporte_Tiempos.Rows.Clear();
             rgv_reporte_Tiempos.Columns.Clear();
@@ -17458,92 +17485,101 @@ ORDER BY
                 return;
             }
 
-            if (var1 == "Todos")
+            // Validar que se haya seleccionado un tipo de tiempo
+            if (string.IsNullOrEmpty(tipoTiempoSeleccionado))
             {
-                // Consulta para TODAS las áreas - ACTUALIZADA con filtro de año
-                querySimple = @"SELECT 
-                    f.""OP"" AS ""OP"",
-                    f.""Fecha"" AS ""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
-                    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
-                    tmo.""Motivos"" AS ""Motivos"",
-                    f.""Area"" AS ""Area""
-                FROM ""Ficha"" f
-                LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                WHERE tmo.""Min_Detenidos"" IS NOT NULL
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Por favor, seleccione un tipo de tiempo muerto antes de generar el reporte.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
-                UNION ALL
+            // ═══════════════════════════════════════════════════════════════════════
+            // CONSTRUCCIÓN DINÁMICA DE LA CONSULTA SEGÚN EL TIPO Y ÁREA SELECCIONADOS
+            // ═══════════════════════════════════════════════════════════════════════
 
-                SELECT 
-                    f.""OP"" AS ""OP"",
-                    f.""Fecha"" AS ""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
-                    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
-                    tmm.""Motivos"" AS ""Motivos"",
-                    f.""Area"" AS ""Area""
-                FROM ""Ficha"" f
-                LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                WHERE tmm.""Min_Detenidos"" IS NOT NULL
-                    AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+            // Bloque para Tiempo Muerto OPERATIVO (solo se incluye si aplica)
+            string bloqueOperativo = @"
+        SELECT 
+            f.""OP"" AS ""OP"",
+            f.""Fecha"" AS ""Fecha"",
+            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+            COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
+            (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
+            tmo.""Motivos"" AS ""Motivos"",
+            f.""Area"" AS ""Area""
+        FROM ""Ficha"" f
+        LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
+        WHERE tmo.""Min_Detenidos"" IS NOT NULL
+            AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+            {0}";  // {0} se reemplaza con el filtro de área (opcional)
 
-                ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
+            // Bloque para Tiempo Muerto MECÁNICO (solo se incluye si aplica)
+            string bloqueMecanico = @"
+        SELECT 
+            f.""OP"" AS ""OP"",
+            f.""Fecha"" AS ""Fecha"",
+            EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
+            COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
+            (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
+            tmm.""Motivos"" AS ""Motivos"",
+            f.""Area"" AS ""Area""
+        FROM ""Ficha"" f
+        LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
+        WHERE tmm.""Min_Detenidos"" IS NOT NULL
+            AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
+            {0}";  // {0} se reemplaza con el filtro de área (opcional)
 
-                // Crear parámetro para el año
-                NpgsqlParameter[] parameters = new NpgsqlParameter[]
-                {
-            new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
+            // Filtro de área opcional
+            string filtroArea = string.Empty;
+            if (var1 != "Todos")
+            {
+                filtroArea = " AND f.\"Area\" = @Area ";
+            }
+
+            // Determinar qué bloques incluir según el tipo seleccionado
+            bool incluirOperativo = (tipoTiempoSeleccionado == "Todos" || tipoTiempoSeleccionado == "Operativo");
+            bool incluirMecanico = (tipoTiempoSeleccionado == "Todos" || tipoTiempoSeleccionado == "Mecánicos");
+
+            List<string> bloques = new List<string>();
+
+            if (incluirOperativo)
+            {
+                bloques.Add(string.Format(bloqueOperativo, filtroArea));
+            }
+
+            if (incluirMecanico)
+            {
+                bloques.Add(string.Format(bloqueMecanico, filtroArea));
+            }
+
+            // Unir los bloques con UNION ALL
+            querySimple = string.Join(" UNION ALL ", bloques);
+
+            // Añadir el ORDER BY al final
+            querySimple += @" ORDER BY ""Fecha"" DESC, ""Area"", ""OP"", ""Tipo de Tiempo Muerto"";";
+
+            // ═══════════════════════════════════════════════════════════════════════
+            // CONSTRUCCIÓN DE PARÁMETROS
+            // ═══════════════════════════════════════════════════════════════════════
+            List<NpgsqlParameter> parametros = new List<NpgsqlParameter>();
+            parametros.Add(new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer)
             {
                 Value = Convert.ToInt32(añoSeleccionado)
-            }
-                };
-                dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
-            }
-            else
+            });
+
+            if (var1 != "Todos")
             {
-                // Consulta para un área específica - ACTUALIZADA con filtro de año
-                querySimple = @"SELECT 
-                    f.""OP"" AS ""OP"",
-                    f.""Fecha"" AS ""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    COALESCE(tmo.""Tipo"", 'Operativo') AS ""Tipo de Tiempo Muerto"",
-                    (tmo.""Min_Detenidos"") AS ""Minutos Detenidos"",
-                    tmo.""Motivos"" AS ""Motivos"",
-                    f.""Area"" AS ""Area""
-                FROM ""Ficha"" f
-                LEFT JOIN ""Tiempo_Muerto_Operativo"" tmo ON f.""ID_Ficha"" = tmo.""ID_Ficha""
-                WHERE (f.""Area"" = @Area)
-                AND tmo.""Min_Detenidos"" IS NOT NULL
-                AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
-
-                UNION ALL
-
-                SELECT 
-                    f.""OP"" AS ""OP"",
-                    f.""Fecha"" AS ""Fecha"",
-                    EXTRACT(WEEK FROM f.""Fecha"") AS ""No. Semana"",
-                    COALESCE(tmm.""Tipo"", 'Mecánico') AS ""Tipo de Tiempo Muerto"",
-                    (tmm.""Min_Detenidos"") AS ""Minutos Detenidos"",
-                    tmm.""Motivos"" AS ""Motivos"",
-                    f.""Area"" AS ""Area""
-                FROM ""Ficha"" f
-                LEFT JOIN ""Tiempo_muerto_Mecanico"" tmm ON f.""ID_Ficha"" = tmm.""ID_Ficha""
-                WHERE (f.""Area"" = @Area)
-                AND tmm.""Min_Detenidos"" IS NOT NULL
-                AND EXTRACT(YEAR FROM f.""Fecha"") = @Anio
-
-                ORDER BY ""Fecha"" DESC, ""OP"", ""Tipo de Tiempo Muerto"";";
-
-                // Crear parámetros para área y año
-                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                parametros.Add(new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar)
                 {
-                    new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = var1 ?? (object)DBNull.Value },
-                    new NpgsqlParameter("@Anio", NpgsqlTypes.NpgsqlDbType.Integer){Value = Convert.ToInt32(añoSeleccionado)}
-                };
-                dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parameters);
+                    Value = var1
+                });
             }
+
+            // Ejecutar la consulta
+            dbHelper.LoadDataIntoDataGridViewTelerik(querySimple, rgv_reporte_Tiempos, parametros.ToArray());
 
             // Formato solo fecha (verificar que la columna existe)
             if (rgv_reporte_Tiempos.Columns.Contains("Fecha"))
@@ -17551,6 +17587,7 @@ ORDER BY
                 rgv_reporte_Tiempos.Columns["Fecha"].FormatString = "{0:dd/MM/yyyy}";
                 rgv_reporte_Tiempos.Columns["Fecha"].FormatInfo = new System.Globalization.CultureInfo("es-MX");
             }
+
             // DESPUÉS DE CARGAR LOS DATOS, cargar las semanas únicas del grid
             CargarSemanasDesdeGrid();
         }
@@ -17718,13 +17755,14 @@ ORDER BY
             txt_filtro_report_Tiempos.Clear();
             cb_semana_TM.Items.Clear();
             cb_semana_TM.Enabled = false;
+            cb_area_reporte_Tiempos.SelectedIndex = -1;
+            cb_Tipo_Tiempos.SelectedIndex = 0; // ← Resetear a "Todos"
 
             // Deshabilitar botones
             btn_export_excel_Tiempos.Enabled = false;
             btn_clean_Tiempos.Enabled = false;
             btn_filtro_Tiempos.Enabled = false;
             btn_new_report_Tiempos.Enabled = false;
-            cb_area_reporte_Tiempos.SelectedIndex = -1;
         }
 
         private void btn_filtro_Tiempos_Click(object sender, EventArgs e)
@@ -17986,7 +18024,7 @@ ORDER BY
                     DatabaseHelper dbHelper = new DatabaseHelper(connectionString);
 
                     // Consulta para buscar donde OP = valor_buscado
-                    string query = "SELECT \"OP\", \"kg_frescos_enter_se\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado and \"Area\" = 'Tunel/Sumergidor';";
+                    string query = "SELECT \"OP\", \"kg_frescos_enter_se\", \"Hr_programadas\", \"Hr_efectivas\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado and \"Area\" = 'Tunel/Sumergidor';";
 
                     // Crear parámetro
                     NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -18000,12 +18038,17 @@ ORDER BY
                     // Variable string donde guardar el resultado
                     string OP = string.Empty;
                     string kgFrescoEnterSecador = string.Empty;
+                    string HrProgramadas = string.Empty;
+                    string HrEfectivas = string.Empty;
 
                     // Verificar si se encontraron resultados
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         OP = dt.Rows[0]["OP"].ToString();
                         kgFrescoEnterSecador = dt.Rows[0]["kg_frescos_enter_se"].ToString();
+                        HrProgramadas = dt.Rows[0]["Hr_programadas"].ToString();
+                        HrEfectivas = dt.Rows[0]["Hr_efectivas"].ToString();
+                    
                         cb_OP.Enabled = true;
                         cb_OP.Text = OP;
                         cb_OP.Enabled = false;
@@ -18015,6 +18058,8 @@ ORDER BY
                         Txt_Read_4.Text = kgFrescoEnterSecador;
                         buscar_Meta_hr();
                     }
+                    Txt_Read_1.Text = HrProgramadas;
+                    Txt_Read_3.Text = HrEfectivas;
                 }
             }
         }

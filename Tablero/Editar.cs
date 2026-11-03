@@ -58,7 +58,7 @@ WHERE
     AND EXTRACT(WEEK FROM f.""Fecha"") = EXTRACT(WEEK FROM CURRENT_DATE)
 ORDER BY f.""OP"" ASC;";
             }
-            else 
+            else
             {
                 querySimple = @"SELECT 
     f.""ID_Ficha"", 
@@ -109,19 +109,16 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                         string id_global = radGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                         string area_actual = radGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
 
-                        
-
                         // Construir la consulta base de eliminación
                         string queryChecklote;
                         if (area_actual == "Despegue")
                         {
-
                             // Primero obtener el Lote y OP del registro a eliminar
                             string queryObtenerLoteOP = @"SELECT ""Lote"", ""OP"" FROM public.""Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;";
 
                             NpgsqlParameter[] parametersObtener = new NpgsqlParameter[]
                             {
-                    new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
                             };
 
                             DataTable dtRegistro = dbHelper.ExecuteSelectQuery(queryObtenerLoteOP, parametersObtener);
@@ -135,9 +132,13 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                                 op = dtRegistro.Rows[0]["OP"].ToString();
                             }
 
-                            // Para área Despegue: borrar y luego actualizar el registro correspondiente en Tunel/Sumergidor
+                            // 🔥 Para área Despegue: borrar dependencias + ficha + actualizar Tunel/Sumergidor
                             queryChecklote = @"
                         BEGIN;
+                        -- 🔥 Eliminar trazabilidad e imágenes para evitar violación de llave foránea
+                        DELETE FROM ""Trazabilidad_Ediciones_Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                        DELETE FROM ""Imagenes_Evidencia"" WHERE ""ID_Ficha"" = @ID_Valor;
+
                         -- Eliminar los registros de tiempos muertos
                         DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
@@ -156,9 +157,9 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
                             NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
                             {
-                            new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
-                            new NpgsqlParameter("@Lote", lote),
-                            new NpgsqlParameter("@OP", op)
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@Lote", lote),
+                                new NpgsqlParameter("@OP", op)
                             };
 
                             dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
@@ -170,7 +171,7 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
                             NpgsqlParameter[] parametersObtener = new NpgsqlParameter[]
                             {
-                    new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
                             };
 
                             DataTable dtRegistro = dbHelper.ExecuteSelectQuery(queryObtenerLoteOP, parametersObtener);
@@ -185,8 +186,8 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                             }
 
 
-                            // Primero obtener el Lote y OP del registro a eliminar
-                           queryObtenerLoteOP = @"SELECT ""ID_Ficha"" FROM public.""Ficha"" WHERE ""Lote"" = @Lote and ""OP"" = @OP and ""Area"" = 'Despegue';";
+                            // Buscar si existe la ficha de Despegue relacionada
+                            queryObtenerLoteOP = @"SELECT ""ID_Ficha"" FROM public.""Ficha"" WHERE ""Lote"" = @Lote and ""OP"" = @OP and ""Area"" = 'Despegue';";
 
                             NpgsqlParameter[] parametersObtener2 = new NpgsqlParameter[]
                             {
@@ -204,9 +205,13 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                             }
 
 
-                            // Para área Tunel/Sumergidor: solo borrar (comportamiento actual)
+                            // 🔥 Para área Tunel/Sumergidor: borrar dependencias + ficha
                             queryChecklote = @"
                         BEGIN;
+                        -- 🔥 Eliminar trazabilidad e imágenes para evitar violación de llave foránea
+                        DELETE FROM ""Trazabilidad_Ediciones_Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                        DELETE FROM ""Imagenes_Evidencia"" WHERE ""ID_Ficha"" = @ID_Valor;
+
                         DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
@@ -216,15 +221,20 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
                             NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
                             {
-                            new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
                             };
 
                             dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
+
                             if (!string.IsNullOrEmpty(idficha_tunel))
                             {
-                                // Para área Tunel/Sumergidor: solo borrar (comportamiento actual)
+                                // 🔥 Borrar también la ficha de Despegue relacionada (con sus dependencias)
                                 queryChecklote = @"
                         BEGIN;
+                        -- 🔥 Eliminar trazabilidad e imágenes para evitar violación de llave foránea
+                        DELETE FROM ""Trazabilidad_Ediciones_Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                        DELETE FROM ""Imagenes_Evidencia"" WHERE ""ID_Ficha"" = @ID_Valor;
+
                         DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
@@ -234,19 +244,21 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
                                 NpgsqlParameter[] parametersLotetunel = new NpgsqlParameter[]
                                 {
-                            new NpgsqlParameter("@ID_Valor", int.Parse(idficha_tunel)),
+                                    new NpgsqlParameter("@ID_Valor", int.Parse(idficha_tunel)),
                                 };
 
                                 dbHelper.ExecuteSelectQuery(queryChecklote, parametersLotetunel);
                             }
-
-                            
                         }
                         else
                         {
-                            // Para otras áreas: solo borrar (comportamiento actual)
+                            // 🔥 Para otras áreas: borrar dependencias + ficha
                             queryChecklote = @"
                         BEGIN;
+                        -- 🔥 Eliminar trazabilidad e imágenes para evitar violación de llave foránea
+                        DELETE FROM ""Trazabilidad_Ediciones_Ficha"" WHERE ""ID_Ficha"" = @ID_Valor;
+                        DELETE FROM ""Imagenes_Evidencia"" WHERE ""ID_Ficha"" = @ID_Valor;
+
                         DELETE FROM ""Tiempo_Muerto_Comida"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Energia"" WHERE ""ID_Ficha"" = @ID_Valor;
                         DELETE FROM ""Tiempo_Muerto_Operativo"" WHERE ""ID_Ficha"" = @ID_Valor;
@@ -256,13 +268,19 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
 
                             NpgsqlParameter[] parametersLote = new NpgsqlParameter[]
                             {
-                            new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
+                                new NpgsqlParameter("@ID_Valor", int.Parse(id_global)),
                             };
 
                             dbHelper.ExecuteSelectQuery(queryChecklote, parametersLote);
                         }
 
+                        // 🔥 Marcar la bandera ANTES de invocar el evento
+                        // para que Editar_FormClosed NO lo dispare otra vez
+                        fichaSeleccionada = true;
+
+                        // 🔹 Notificar a Form1 (el handler allá está vacío, pero no rompe nada)
                         FichaSeleccionada?.Invoke(null, null);
+
                         // 🔹 Cierra el formulario
                         this.Close();
                     }
@@ -287,7 +305,7 @@ ORDER BY f.""OP"" ASC;";  // ← orden ascendente
                 formPrincipal.Text = string.Empty;
             }
 
-            // 🔹 Si no se seleccionó nada, dispara un evento con valores nulos opcionalmente
+            // 🔹 Si no se seleccionó/borró nada (el usuario cerró con la X), dispara el evento con nulos
             if (!fichaSeleccionada)
             {
                 FichaSeleccionada?.Invoke(null, null);

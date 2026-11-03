@@ -213,6 +213,7 @@
             this.tabPage33 = new System.Windows.Forms.TabPage();
             this.panel8 = new System.Windows.Forms.Panel();
             this.materialCard20 = new MaterialSkin.Controls.MaterialCard();
+            this.cb_Tipo_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
             this.CB_Anio_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
             this.cb_area_reporte_Tiempos = new MaterialSkin.Controls.MaterialComboBox();
             this.btn_clean_Tiempos = new MaterialSkin.Controls.MaterialButton();
@@ -1488,7 +1489,7 @@
             this.radMultiColumnComboBox1.EditorControl.Size = new System.Drawing.Size(240, 150);
             this.radMultiColumnComboBox1.EditorControl.TabIndex = 0;
             this.radMultiColumnComboBox1.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radMultiColumnComboBox1.Location = new System.Drawing.Point(-8, 34);
+            this.radMultiColumnComboBox1.Location = new System.Drawing.Point(17, 82);
             this.radMultiColumnComboBox1.Name = "radMultiColumnComboBox1";
             this.radMultiColumnComboBox1.Size = new System.Drawing.Size(170, 40);
             this.radMultiColumnComboBox1.TabIndex = 28;
@@ -2391,7 +2392,7 @@
             this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tapcontrol.Location = new System.Drawing.Point(0, 0);
             this.tapcontrol.Name = "tapcontrol";
-            this.tapcontrol.SelectedIndex = 5;
+            this.tapcontrol.SelectedIndex = 0;
             this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
@@ -2760,7 +2761,7 @@
             this.tabPage16.Controls.Add(this.panel4);
             this.tabPage16.Location = new System.Drawing.Point(4, 38);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1678, 898);
+            this.tabPage16.Size = new System.Drawing.Size(1679, 898);
             this.tabPage16.TabIndex = 2;
             this.tabPage16.Text = "Reporte Concentrado en Deshidratado";
             // 
@@ -2773,7 +2774,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1678, 898);
+            this.panel4.Size = new System.Drawing.Size(1679, 898);
             this.panel4.TabIndex = 5;
             // 
             // materialCard12
@@ -2844,7 +2845,7 @@
             this.txt_filtro_report_consentrado.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado.Depth = 0;
-            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado.LeadingIcon = null;
             this.txt_filtro_report_consentrado.Location = new System.Drawing.Point(268, 11);
@@ -3004,7 +3005,7 @@
             this.materialCard11.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard11.Name = "materialCard11";
             this.materialCard11.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard11.Size = new System.Drawing.Size(1678, 792);
+            this.materialCard11.Size = new System.Drawing.Size(1679, 792);
             this.materialCard11.TabIndex = 2;
             // 
             // dgv_reporte_concentrado
@@ -3018,7 +3019,7 @@
             this.dgv_reporte_concentrado.Name = "dgv_reporte_concentrado";
             this.dgv_reporte_concentrado.ReadOnly = true;
             this.dgv_reporte_concentrado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_concentrado.Size = new System.Drawing.Size(1650, 764);
+            this.dgv_reporte_concentrado.Size = new System.Drawing.Size(1651, 764);
             this.dgv_reporte_concentrado.TabIndex = 7;
             this.dgv_reporte_concentrado.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_reporte_concentrado_CellFormatting);
             // 
@@ -3027,7 +3028,7 @@
             this.tabPage17.Controls.Add(this.panel5);
             this.tabPage17.Location = new System.Drawing.Point(4, 38);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1678, 898);
+            this.tabPage17.Size = new System.Drawing.Size(1679, 898);
             this.tabPage17.TabIndex = 3;
             this.tabPage17.Text = "Reporte Concentrado en Otras Áreas";
             // 
@@ -3040,7 +3041,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1678, 898);
+            this.panel5.Size = new System.Drawing.Size(1679, 898);
             this.panel5.TabIndex = 6;
             // 
             // materialCard13
@@ -3111,7 +3112,7 @@
             this.txt_filtro_report_consentrado_otras.AnimateReadOnly = false;
             this.txt_filtro_report_consentrado_otras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_consentrado_otras.Depth = 0;
-            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_consentrado_otras.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_consentrado_otras.Hint = "Ingresa texto...";
             this.txt_filtro_report_consentrado_otras.LeadingIcon = null;
             this.txt_filtro_report_consentrado_otras.Location = new System.Drawing.Point(268, 11);
@@ -3271,7 +3272,7 @@
             this.materialCard15.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard15.Name = "materialCard15";
             this.materialCard15.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard15.Size = new System.Drawing.Size(1678, 792);
+            this.materialCard15.Size = new System.Drawing.Size(1679, 792);
             this.materialCard15.TabIndex = 2;
             // 
             // dgv_reporte_concentrado_otras
@@ -3285,7 +3286,7 @@
             this.dgv_reporte_concentrado_otras.Name = "dgv_reporte_concentrado_otras";
             this.dgv_reporte_concentrado_otras.ReadOnly = true;
             this.dgv_reporte_concentrado_otras.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_concentrado_otras.Size = new System.Drawing.Size(1650, 764);
+            this.dgv_reporte_concentrado_otras.Size = new System.Drawing.Size(1651, 764);
             this.dgv_reporte_concentrado_otras.TabIndex = 7;
             this.dgv_reporte_concentrado_otras.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_reporte_concentrado_otras_CellFormatting);
             // 
@@ -3297,7 +3298,7 @@
             this.metroTabPage10.HorizontalScrollbarSize = 0;
             this.metroTabPage10.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage10.Name = "metroTabPage10";
-            this.metroTabPage10.Size = new System.Drawing.Size(1678, 898);
+            this.metroTabPage10.Size = new System.Drawing.Size(1679, 898);
             this.metroTabPage10.TabIndex = 1;
             this.metroTabPage10.Text = "%Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
@@ -3312,7 +3313,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1678, 898);
+            this.panel1.Size = new System.Drawing.Size(1679, 898);
             this.panel1.TabIndex = 4;
             // 
             // materialCard8
@@ -3439,7 +3440,7 @@
             this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard7.Name = "materialCard7";
             this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(1678, 792);
+            this.materialCard7.Size = new System.Drawing.Size(1679, 792);
             this.materialCard7.TabIndex = 2;
             // 
             // dgv_reporte_merma
@@ -3453,7 +3454,7 @@
             this.dgv_reporte_merma.Name = "dgv_reporte_merma";
             this.dgv_reporte_merma.ReadOnly = true;
             this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma.Size = new System.Drawing.Size(1650, 764);
+            this.dgv_reporte_merma.Size = new System.Drawing.Size(1651, 764);
             this.dgv_reporte_merma.TabIndex = 7;
             // 
             // tabPage22
@@ -3461,7 +3462,7 @@
             this.tabPage22.Controls.Add(this.panel6);
             this.tabPage22.Location = new System.Drawing.Point(4, 38);
             this.tabPage22.Name = "tabPage22";
-            this.tabPage22.Size = new System.Drawing.Size(1678, 898);
+            this.tabPage22.Size = new System.Drawing.Size(1679, 898);
             this.tabPage22.TabIndex = 4;
             this.tabPage22.Text = "Kg Mermas por Supervisor";
             // 
@@ -3473,7 +3474,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1678, 898);
+            this.panel6.Size = new System.Drawing.Size(1679, 898);
             this.panel6.TabIndex = 5;
             // 
             // materialCard16
@@ -3600,7 +3601,7 @@
             this.materialCard17.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard17.Name = "materialCard17";
             this.materialCard17.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard17.Size = new System.Drawing.Size(1678, 792);
+            this.materialCard17.Size = new System.Drawing.Size(1679, 792);
             this.materialCard17.TabIndex = 2;
             // 
             // dgv_reporte_merma_S
@@ -3614,7 +3615,7 @@
             this.dgv_reporte_merma_S.Name = "dgv_reporte_merma_S";
             this.dgv_reporte_merma_S.ReadOnly = true;
             this.dgv_reporte_merma_S.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma_S.Size = new System.Drawing.Size(1650, 764);
+            this.dgv_reporte_merma_S.Size = new System.Drawing.Size(1651, 764);
             this.dgv_reporte_merma_S.TabIndex = 7;
             // 
             // tabPage33
@@ -3622,7 +3623,7 @@
             this.tabPage33.Controls.Add(this.panel8);
             this.tabPage33.Location = new System.Drawing.Point(4, 38);
             this.tabPage33.Name = "tabPage33";
-            this.tabPage33.Size = new System.Drawing.Size(1678, 898);
+            this.tabPage33.Size = new System.Drawing.Size(1679, 898);
             this.tabPage33.TabIndex = 5;
             this.tabPage33.Text = "Tiempos Muertos";
             // 
@@ -3635,13 +3636,14 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1678, 898);
+            this.panel8.Size = new System.Drawing.Size(1679, 898);
             this.panel8.TabIndex = 8;
             // 
             // materialCard20
             // 
             this.materialCard20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.materialCard20.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.materialCard20.Controls.Add(this.cb_Tipo_Tiempos);
             this.materialCard20.Controls.Add(this.CB_Anio_Tiempos);
             this.materialCard20.Controls.Add(this.cb_area_reporte_Tiempos);
             this.materialCard20.Controls.Add(this.btn_clean_Tiempos);
@@ -3654,8 +3656,35 @@
             this.materialCard20.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard20.Name = "materialCard20";
             this.materialCard20.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard20.Size = new System.Drawing.Size(1000, 77);
+            this.materialCard20.Size = new System.Drawing.Size(1072, 77);
             this.materialCard20.TabIndex = 5;
+            // 
+            // cb_Tipo_Tiempos
+            // 
+            this.cb_Tipo_Tiempos.AutoResize = false;
+            this.cb_Tipo_Tiempos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cb_Tipo_Tiempos.Depth = 0;
+            this.cb_Tipo_Tiempos.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_Tipo_Tiempos.DropDownHeight = 174;
+            this.cb_Tipo_Tiempos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_Tipo_Tiempos.DropDownWidth = 121;
+            this.cb_Tipo_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_Tipo_Tiempos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_Tipo_Tiempos.FormattingEnabled = true;
+            this.cb_Tipo_Tiempos.Hint = "Selecione Tipo";
+            this.cb_Tipo_Tiempos.IntegralHeight = false;
+            this.cb_Tipo_Tiempos.ItemHeight = 43;
+            this.cb_Tipo_Tiempos.Items.AddRange(new object[] {
+            "Todos",
+            "Mecánicos",
+            "Operativo"});
+            this.cb_Tipo_Tiempos.Location = new System.Drawing.Point(17, 14);
+            this.cb_Tipo_Tiempos.MaxDropDownItems = 4;
+            this.cb_Tipo_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_Tipo_Tiempos.Name = "cb_Tipo_Tiempos";
+            this.cb_Tipo_Tiempos.Size = new System.Drawing.Size(241, 49);
+            this.cb_Tipo_Tiempos.StartIndex = -1;
+            this.cb_Tipo_Tiempos.TabIndex = 42;
             // 
             // CB_Anio_Tiempos
             // 
@@ -3672,11 +3701,11 @@
             this.CB_Anio_Tiempos.Hint = "Año";
             this.CB_Anio_Tiempos.IntegralHeight = false;
             this.CB_Anio_Tiempos.ItemHeight = 43;
-            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(274, 13);
+            this.CB_Anio_Tiempos.Location = new System.Drawing.Point(530, 13);
             this.CB_Anio_Tiempos.MaxDropDownItems = 4;
             this.CB_Anio_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.CB_Anio_Tiempos.Name = "CB_Anio_Tiempos";
-            this.CB_Anio_Tiempos.Size = new System.Drawing.Size(155, 49);
+            this.CB_Anio_Tiempos.Size = new System.Drawing.Size(126, 49);
             this.CB_Anio_Tiempos.StartIndex = -1;
             this.CB_Anio_Tiempos.TabIndex = 41;
             // 
@@ -3707,7 +3736,7 @@
             "Máquinas",
             "Reproceso",
             "Todos"});
-            this.cb_area_reporte_Tiempos.Location = new System.Drawing.Point(17, 13);
+            this.cb_area_reporte_Tiempos.Location = new System.Drawing.Point(264, 14);
             this.cb_area_reporte_Tiempos.MaxDropDownItems = 4;
             this.cb_area_reporte_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_area_reporte_Tiempos.Name = "cb_area_reporte_Tiempos";
@@ -3726,7 +3755,7 @@
             this.btn_clean_Tiempos.Icon = global::Tablero.Properties.Resources.ic_fluent_table_dismiss_filled;
             this.btn_clean_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_clean_Tiempos.ImageKey = "save_icon";
-            this.btn_clean_Tiempos.Location = new System.Drawing.Point(800, 20);
+            this.btn_clean_Tiempos.Location = new System.Drawing.Point(958, 21);
             this.btn_clean_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_clean_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_clean_Tiempos.Name = "btn_clean_Tiempos";
@@ -3750,7 +3779,7 @@
             this.btn_export_excel_Tiempos.Icon = global::Tablero.Properties.Resources.excel_icon;
             this.btn_export_excel_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_export_excel_Tiempos.ImageKey = "save_icon";
-            this.btn_export_excel_Tiempos.Location = new System.Drawing.Point(626, 19);
+            this.btn_export_excel_Tiempos.Location = new System.Drawing.Point(784, 20);
             this.btn_export_excel_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_export_excel_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_export_excel_Tiempos.Name = "btn_export_excel_Tiempos";
@@ -3774,14 +3803,14 @@
             this.btn_new_report_Tiempos.Icon = global::Tablero.Properties.Resources.file_document_paper_page;
             this.btn_new_report_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_new_report_Tiempos.ImageKey = "save_icon";
-            this.btn_new_report_Tiempos.Location = new System.Drawing.Point(436, 19);
+            this.btn_new_report_Tiempos.Location = new System.Drawing.Point(663, 21);
             this.btn_new_report_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_new_report_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_new_report_Tiempos.Name = "btn_new_report_Tiempos";
             this.btn_new_report_Tiempos.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btn_new_report_Tiempos.Size = new System.Drawing.Size(182, 36);
+            this.btn_new_report_Tiempos.Size = new System.Drawing.Size(113, 36);
             this.btn_new_report_Tiempos.TabIndex = 29;
-            this.btn_new_report_Tiempos.Text = "Generar Reporte";
+            this.btn_new_report_Tiempos.Text = "Reporte";
             this.btn_new_report_Tiempos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_new_report_Tiempos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btn_new_report_Tiempos.UseAccentColor = false;
@@ -3797,12 +3826,12 @@
             this.materialCard21.Controls.Add(this.btn_filtro_Tiempos);
             this.materialCard21.Depth = 0;
             this.materialCard21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard21.Location = new System.Drawing.Point(1024, 14);
+            this.materialCard21.Location = new System.Drawing.Point(1096, 14);
             this.materialCard21.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard21.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard21.Name = "materialCard21";
             this.materialCard21.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard21.Size = new System.Drawing.Size(640, 77);
+            this.materialCard21.Size = new System.Drawing.Size(568, 77);
             this.materialCard21.TabIndex = 6;
             // 
             // cb_semana_TM
@@ -3822,7 +3851,7 @@
             this.cb_semana_TM.Hint = "Selecione Semana";
             this.cb_semana_TM.IntegralHeight = false;
             this.cb_semana_TM.ItemHeight = 43;
-            this.cb_semana_TM.Location = new System.Drawing.Point(229, 13);
+            this.cb_semana_TM.Location = new System.Drawing.Point(229, 11);
             this.cb_semana_TM.MaxDropDownItems = 4;
             this.cb_semana_TM.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_semana_TM.Name = "cb_semana_TM";
@@ -3840,7 +3869,7 @@
             this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
-            this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(17, 12);
+            this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(17, 13);
             this.txt_filtro_report_Tiempos.MaxLength = 50;
             this.txt_filtro_report_Tiempos.MouseState = MaterialSkin.MouseState.OUT;
             this.txt_filtro_report_Tiempos.Multiline = false;
@@ -3861,7 +3890,7 @@
             this.btn_filtro_Tiempos.Icon = global::Tablero.Properties.Resources.filter_remove;
             this.btn_filtro_Tiempos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_filtro_Tiempos.ImageKey = "save_icon";
-            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(475, 19);
+            this.btn_filtro_Tiempos.Location = new System.Drawing.Point(446, 20);
             this.btn_filtro_Tiempos.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btn_filtro_Tiempos.MouseState = MaterialSkin.MouseState.HOVER;
             this.btn_filtro_Tiempos.Name = "btn_filtro_Tiempos";
@@ -3887,7 +3916,7 @@
             this.materialCard22.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard22.Name = "materialCard22";
             this.materialCard22.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard22.Size = new System.Drawing.Size(1678, 779);
+            this.materialCard22.Size = new System.Drawing.Size(1679, 779);
             this.materialCard22.TabIndex = 4;
             // 
             // rgv_reporte_Tiempos
@@ -3904,7 +3933,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
             this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
-            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1650, 751);
+            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1651, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
             this.rgv_reporte_Tiempos.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_Tiempos_CustomFiltering);
             // 
@@ -3913,7 +3942,7 @@
             this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(1678, 898);
+            this.tabPage18.Size = new System.Drawing.Size(1679, 898);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
             // 
@@ -3932,14 +3961,14 @@
             this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard29.Name = "materialCard29";
             this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1678, 898);
+            this.materialCard29.Size = new System.Drawing.Size(1679, 898);
             this.materialCard29.TabIndex = 40;
             // 
             // panel13
             // 
             this.panel13.Controls.Add(this.panel14);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(1028, 14);
+            this.panel13.Location = new System.Drawing.Point(1029, 14);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(636, 870);
             this.panel13.TabIndex = 41;
@@ -8405,6 +8434,7 @@
         private MaterialSkin.Controls.MaterialButton btnEliminarImagen;
         private MaterialSkin.Controls.MaterialLabel lblNombreImagen;
         private MaterialSkin.Controls.MaterialLabel lblTamañoImagen;
+        private MaterialSkin.Controls.MaterialComboBox cb_Tipo_Tiempos;
     }
 }
 
