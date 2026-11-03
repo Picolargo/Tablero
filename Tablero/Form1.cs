@@ -677,9 +677,12 @@ namespace Tablero
                 tapcontrol.TabPages.Remove(tabPage17);
                 tapcontrol.TabPages.Remove(metroTabPage10);
                 tapcontrol.TabPages.Remove(tabPage22);
+                tapcontrol.TabPages.Remove(tabPage18);
                 cb_Tipo_Tiempos.SelectedIndex = 0; // "Todos"
                 llenado_anios_tiempos();
             }
+
+            InicializarSelectorDeReportes();
         }
         private void ConfigurarTooltipParaComboBox()
         {

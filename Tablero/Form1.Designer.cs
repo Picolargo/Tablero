@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn4 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn6 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn1 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn2 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn3 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition5 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -145,6 +145,7 @@
             this.bnt_graficar = new MaterialSkin.Controls.MaterialButton();
             this.lista_semanas = new Telerik.WinControls.UI.RadListView();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.pnl_contenido_reportes = new System.Windows.Forms.Panel();
             this.tapcontrol = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage9 = new MetroFramework.Controls.MetroTabPage();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -241,6 +242,11 @@
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.bnt_limpiar_check = new MaterialSkin.Controls.MaterialButton();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.pnl_reportes_cabecera = new System.Windows.Forms.Panel();
+            this.card_selector_reportes = new MaterialSkin.Controls.MaterialCard();
+            this.lbl_ayuda_reportes = new System.Windows.Forms.Label();
+            this.cb_seleccionar_reporte = new MaterialSkin.Controls.MaterialComboBox();
+            this.lbl_selector_reportes = new System.Windows.Forms.Label();
             this.tabPage19 = new System.Windows.Forms.TabPage();
             this.panel15 = new System.Windows.Forms.Panel();
             this.materialCard33 = new MaterialSkin.Controls.MaterialCard();
@@ -493,6 +499,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial_graph)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).BeginInit();
             this.tabPage10.SuspendLayout();
+            this.pnl_contenido_reportes.SuspendLayout();
             this.tapcontrol.SuspendLayout();
             this.metroTabPage9.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -539,6 +546,8 @@
             this.materialCard28.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_final)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).BeginInit();
+            this.pnl_reportes_cabecera.SuspendLayout();
+            this.card_selector_reportes.SuspendLayout();
             this.tabPage19.SuspendLayout();
             this.panel15.SuspendLayout();
             this.materialCard33.SuspendLayout();
@@ -637,7 +646,7 @@
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1694, 983);
+            this.materialTabControl1.Size = new System.Drawing.Size(1694, 928);
             this.materialTabControl1.TabIndex = 0;
             this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChanged);
             // 
@@ -1469,20 +1478,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn4.HeaderText = "column1";
-            gridViewTextBoxColumn4.IsVisible = false;
-            gridViewTextBoxColumn4.Name = "column1";
-            gridViewTextBoxColumn5.HeaderText = "column2";
-            gridViewTextBoxColumn5.Name = "column2";
-            gridViewTextBoxColumn6.HeaderText = "column3";
-            gridViewTextBoxColumn6.Name = "column3";
+            gridViewTextBoxColumn1.HeaderText = "column1";
+            gridViewTextBoxColumn1.IsVisible = false;
+            gridViewTextBoxColumn1.Name = "column1";
+            gridViewTextBoxColumn2.HeaderText = "column2";
+            gridViewTextBoxColumn2.Name = "column2";
+            gridViewTextBoxColumn3.HeaderText = "column3";
+            gridViewTextBoxColumn3.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn4,
-            gridViewTextBoxColumn5,
-            gridViewTextBoxColumn6});
+            gridViewTextBoxColumn1,
+            gridViewTextBoxColumn2,
+            gridViewTextBoxColumn3});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition6;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2370,18 +2379,31 @@
             // 
             // tabPage10
             // 
-            this.tabPage10.AutoScroll = true;
-            this.tabPage10.Controls.Add(this.tapcontrol);
+            this.tabPage10.Controls.Add(this.pnl_contenido_reportes);
+            this.tabPage10.Controls.Add(this.pnl_reportes_cabecera);
             this.tabPage10.ImageKey = "file_document_paper_page.png";
             this.tabPage10.Location = new System.Drawing.Point(4, 39);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1686, 940);
+            this.tabPage10.Size = new System.Drawing.Size(1686, 885);
             this.tabPage10.TabIndex = 5;
             this.tabPage10.Text = "Reportes";
             this.tabPage10.UseVisualStyleBackColor = true;
             // 
+            // pnl_contenido_reportes
+            // 
+            this.pnl_contenido_reportes.BackColor = System.Drawing.Color.White;
+            this.pnl_contenido_reportes.Controls.Add(this.tapcontrol);
+            this.pnl_contenido_reportes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl_contenido_reportes.Location = new System.Drawing.Point(0, 112);
+            this.pnl_contenido_reportes.Name = "pnl_contenido_reportes";
+            this.pnl_contenido_reportes.Size = new System.Drawing.Size(1686, 773);
+            this.pnl_contenido_reportes.TabIndex = 0;
+            // 
             // tapcontrol
             // 
+            this.tapcontrol.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tapcontrol.Controls.Add(this.metroTabPage9);
             this.tapcontrol.Controls.Add(this.tabPage16);
             this.tapcontrol.Controls.Add(this.tabPage17);
@@ -2389,11 +2411,10 @@
             this.tapcontrol.Controls.Add(this.tabPage22);
             this.tapcontrol.Controls.Add(this.tabPage33);
             this.tapcontrol.Controls.Add(this.tabPage18);
-            this.tapcontrol.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tapcontrol.Location = new System.Drawing.Point(0, 0);
+            this.tapcontrol.Location = new System.Drawing.Point(0, -38);
             this.tapcontrol.Name = "tapcontrol";
             this.tapcontrol.SelectedIndex = 0;
-            this.tapcontrol.Size = new System.Drawing.Size(1686, 940);
+            this.tapcontrol.Size = new System.Drawing.Size(1686, 845);
             this.tapcontrol.Style = MetroFramework.MetroColorStyle.Black;
             this.tapcontrol.TabIndex = 0;
             this.tapcontrol.UseCustomForeColor = true;
@@ -2408,7 +2429,7 @@
             this.metroTabPage9.HorizontalScrollbarSize = 0;
             this.metroTabPage9.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage9.Name = "metroTabPage9";
-            this.metroTabPage9.Size = new System.Drawing.Size(1678, 898);
+            this.metroTabPage9.Size = new System.Drawing.Size(1678, 803);
             this.metroTabPage9.TabIndex = 0;
             this.metroTabPage9.Text = "Reportes Consolidados";
             this.metroTabPage9.VerticalScrollbarBarColor = false;
@@ -2424,7 +2445,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1678, 898);
+            this.panel2.Size = new System.Drawing.Size(1678, 803);
             this.panel2.TabIndex = 7;
             // 
             // materialCard3
@@ -2728,12 +2749,12 @@
             this.materialCard4.Depth = 0;
             this.materialCard4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard4.Location = new System.Drawing.Point(0, 119);
+            this.materialCard4.Location = new System.Drawing.Point(0, 113);
             this.materialCard4.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard4.Name = "materialCard4";
             this.materialCard4.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard4.Size = new System.Drawing.Size(1678, 779);
+            this.materialCard4.Size = new System.Drawing.Size(1672, 727);
             this.materialCard4.TabIndex = 4;
             // 
             // rgv_reporte_consolidado
@@ -2747,9 +2768,9 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
-            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1650, 751);
+            this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1644, 699);
             this.rgv_reporte_consolidado.TabIndex = 0;
             this.rgv_reporte_consolidado.CellBeginEdit += new Telerik.WinControls.UI.GridViewCellCancelEventHandler(this.rgv_reporte_consolidado_CellBeginEdit);
             this.rgv_reporte_consolidado.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.rgv_reporte_consolidado_CellDoubleClick);
@@ -2761,7 +2782,7 @@
             this.tabPage16.Controls.Add(this.panel4);
             this.tabPage16.Location = new System.Drawing.Point(4, 38);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1679, 898);
+            this.tabPage16.Size = new System.Drawing.Size(1678, 828);
             this.tabPage16.TabIndex = 2;
             this.tabPage16.Text = "Reporte Concentrado en Deshidratado";
             // 
@@ -2774,7 +2795,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1679, 898);
+            this.panel4.Size = new System.Drawing.Size(1678, 828);
             this.panel4.TabIndex = 5;
             // 
             // materialCard12
@@ -3000,12 +3021,12 @@
             this.materialCard11.Depth = 0;
             this.materialCard11.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard11.Location = new System.Drawing.Point(0, 106);
+            this.materialCard11.Location = new System.Drawing.Point(0, 91);
             this.materialCard11.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard11.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard11.Name = "materialCard11";
             this.materialCard11.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard11.Size = new System.Drawing.Size(1679, 792);
+            this.materialCard11.Size = new System.Drawing.Size(1661, 792);
             this.materialCard11.TabIndex = 2;
             // 
             // dgv_reporte_concentrado
@@ -3019,7 +3040,7 @@
             this.dgv_reporte_concentrado.Name = "dgv_reporte_concentrado";
             this.dgv_reporte_concentrado.ReadOnly = true;
             this.dgv_reporte_concentrado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_concentrado.Size = new System.Drawing.Size(1651, 764);
+            this.dgv_reporte_concentrado.Size = new System.Drawing.Size(1633, 764);
             this.dgv_reporte_concentrado.TabIndex = 7;
             this.dgv_reporte_concentrado.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_reporte_concentrado_CellFormatting);
             // 
@@ -3028,7 +3049,7 @@
             this.tabPage17.Controls.Add(this.panel5);
             this.tabPage17.Location = new System.Drawing.Point(4, 38);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1679, 898);
+            this.tabPage17.Size = new System.Drawing.Size(1678, 828);
             this.tabPage17.TabIndex = 3;
             this.tabPage17.Text = "Reporte Concentrado en Otras Áreas";
             // 
@@ -3041,7 +3062,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1679, 898);
+            this.panel5.Size = new System.Drawing.Size(1678, 828);
             this.panel5.TabIndex = 6;
             // 
             // materialCard13
@@ -3267,12 +3288,12 @@
             this.materialCard15.Depth = 0;
             this.materialCard15.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard15.Location = new System.Drawing.Point(0, 106);
+            this.materialCard15.Location = new System.Drawing.Point(0, 91);
             this.materialCard15.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard15.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard15.Name = "materialCard15";
             this.materialCard15.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard15.Size = new System.Drawing.Size(1679, 792);
+            this.materialCard15.Size = new System.Drawing.Size(1661, 792);
             this.materialCard15.TabIndex = 2;
             // 
             // dgv_reporte_concentrado_otras
@@ -3286,7 +3307,7 @@
             this.dgv_reporte_concentrado_otras.Name = "dgv_reporte_concentrado_otras";
             this.dgv_reporte_concentrado_otras.ReadOnly = true;
             this.dgv_reporte_concentrado_otras.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_concentrado_otras.Size = new System.Drawing.Size(1651, 764);
+            this.dgv_reporte_concentrado_otras.Size = new System.Drawing.Size(1633, 764);
             this.dgv_reporte_concentrado_otras.TabIndex = 7;
             this.dgv_reporte_concentrado_otras.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_reporte_concentrado_otras_CellFormatting);
             // 
@@ -3298,7 +3319,7 @@
             this.metroTabPage10.HorizontalScrollbarSize = 0;
             this.metroTabPage10.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage10.Name = "metroTabPage10";
-            this.metroTabPage10.Size = new System.Drawing.Size(1679, 898);
+            this.metroTabPage10.Size = new System.Drawing.Size(1678, 828);
             this.metroTabPage10.TabIndex = 1;
             this.metroTabPage10.Text = "%Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
@@ -3313,7 +3334,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1679, 898);
+            this.panel1.Size = new System.Drawing.Size(1678, 828);
             this.panel1.TabIndex = 4;
             // 
             // materialCard8
@@ -3435,12 +3456,12 @@
             this.materialCard7.Depth = 0;
             this.materialCard7.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard7.Location = new System.Drawing.Point(0, 106);
+            this.materialCard7.Location = new System.Drawing.Point(0, 91);
             this.materialCard7.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard7.Name = "materialCard7";
             this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(1679, 792);
+            this.materialCard7.Size = new System.Drawing.Size(1661, 792);
             this.materialCard7.TabIndex = 2;
             // 
             // dgv_reporte_merma
@@ -3454,7 +3475,7 @@
             this.dgv_reporte_merma.Name = "dgv_reporte_merma";
             this.dgv_reporte_merma.ReadOnly = true;
             this.dgv_reporte_merma.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma.Size = new System.Drawing.Size(1651, 764);
+            this.dgv_reporte_merma.Size = new System.Drawing.Size(1633, 764);
             this.dgv_reporte_merma.TabIndex = 7;
             // 
             // tabPage22
@@ -3462,7 +3483,7 @@
             this.tabPage22.Controls.Add(this.panel6);
             this.tabPage22.Location = new System.Drawing.Point(4, 38);
             this.tabPage22.Name = "tabPage22";
-            this.tabPage22.Size = new System.Drawing.Size(1679, 898);
+            this.tabPage22.Size = new System.Drawing.Size(1678, 828);
             this.tabPage22.TabIndex = 4;
             this.tabPage22.Text = "Kg Mermas por Supervisor";
             // 
@@ -3474,7 +3495,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1679, 898);
+            this.panel6.Size = new System.Drawing.Size(1678, 828);
             this.panel6.TabIndex = 5;
             // 
             // materialCard16
@@ -3596,12 +3617,12 @@
             this.materialCard17.Depth = 0;
             this.materialCard17.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard17.Location = new System.Drawing.Point(0, 106);
+            this.materialCard17.Location = new System.Drawing.Point(0, 91);
             this.materialCard17.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard17.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard17.Name = "materialCard17";
             this.materialCard17.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard17.Size = new System.Drawing.Size(1679, 792);
+            this.materialCard17.Size = new System.Drawing.Size(1661, 792);
             this.materialCard17.TabIndex = 2;
             // 
             // dgv_reporte_merma_S
@@ -3615,7 +3636,7 @@
             this.dgv_reporte_merma_S.Name = "dgv_reporte_merma_S";
             this.dgv_reporte_merma_S.ReadOnly = true;
             this.dgv_reporte_merma_S.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_reporte_merma_S.Size = new System.Drawing.Size(1651, 764);
+            this.dgv_reporte_merma_S.Size = new System.Drawing.Size(1633, 764);
             this.dgv_reporte_merma_S.TabIndex = 7;
             // 
             // tabPage33
@@ -3623,7 +3644,7 @@
             this.tabPage33.Controls.Add(this.panel8);
             this.tabPage33.Location = new System.Drawing.Point(4, 38);
             this.tabPage33.Name = "tabPage33";
-            this.tabPage33.Size = new System.Drawing.Size(1679, 898);
+            this.tabPage33.Size = new System.Drawing.Size(1678, 828);
             this.tabPage33.TabIndex = 5;
             this.tabPage33.Text = "Tiempos Muertos";
             // 
@@ -3636,7 +3657,7 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1679, 898);
+            this.panel8.Size = new System.Drawing.Size(1678, 828);
             this.panel8.TabIndex = 8;
             // 
             // materialCard20
@@ -3866,7 +3887,7 @@
             this.txt_filtro_report_Tiempos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_filtro_report_Tiempos.Depth = 0;
             this.txt_filtro_report_Tiempos.Enabled = false;
-            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txt_filtro_report_Tiempos.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txt_filtro_report_Tiempos.Hint = "Ingresa texto...";
             this.txt_filtro_report_Tiempos.LeadingIcon = null;
             this.txt_filtro_report_Tiempos.Location = new System.Drawing.Point(17, 13);
@@ -3911,12 +3932,12 @@
             this.materialCard22.Depth = 0;
             this.materialCard22.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialCard22.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard22.Location = new System.Drawing.Point(0, 119);
+            this.materialCard22.Location = new System.Drawing.Point(0, 91);
             this.materialCard22.Margin = new System.Windows.Forms.Padding(14);
             this.materialCard22.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard22.Name = "materialCard22";
             this.materialCard22.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard22.Size = new System.Drawing.Size(1679, 779);
+            this.materialCard22.Size = new System.Drawing.Size(1664, 779);
             this.materialCard22.TabIndex = 4;
             // 
             // rgv_reporte_Tiempos
@@ -3931,9 +3952,9 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
-            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1651, 751);
+            this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1636, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
             this.rgv_reporte_Tiempos.CustomFiltering += new Telerik.WinControls.UI.GridViewCustomFilteringEventHandler(this.rgv_reporte_Tiempos_CustomFiltering);
             // 
@@ -3942,7 +3963,7 @@
             this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(1679, 898);
+            this.tabPage18.Size = new System.Drawing.Size(1678, 828);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
             // 
@@ -3961,16 +3982,16 @@
             this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard29.Name = "materialCard29";
             this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1679, 898);
+            this.materialCard29.Size = new System.Drawing.Size(1678, 828);
             this.materialCard29.TabIndex = 40;
             // 
             // panel13
             // 
             this.panel13.Controls.Add(this.panel14);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(1029, 14);
+            this.panel13.Location = new System.Drawing.Point(1028, 14);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(636, 870);
+            this.panel13.Size = new System.Drawing.Size(636, 800);
             this.panel13.TabIndex = 41;
             // 
             // panel14
@@ -3999,7 +4020,7 @@
             this.panel12.Location = new System.Drawing.Point(14, 14);
             this.panel12.Name = "panel12";
             this.panel12.Padding = new System.Windows.Forms.Padding(5);
-            this.panel12.Size = new System.Drawing.Size(478, 870);
+            this.panel12.Size = new System.Drawing.Size(478, 800);
             this.panel12.TabIndex = 40;
             // 
             // materialCard28
@@ -4184,6 +4205,82 @@
             this.listView1.Size = new System.Drawing.Size(202, 380);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // pnl_reportes_cabecera
+            // 
+            this.pnl_reportes_cabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
+            this.pnl_reportes_cabecera.Controls.Add(this.card_selector_reportes);
+            this.pnl_reportes_cabecera.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnl_reportes_cabecera.Location = new System.Drawing.Point(0, 0);
+            this.pnl_reportes_cabecera.Name = "pnl_reportes_cabecera";
+            this.pnl_reportes_cabecera.Size = new System.Drawing.Size(1686, 112);
+            this.pnl_reportes_cabecera.TabIndex = 1;
+            // 
+            // card_selector_reportes
+            // 
+            this.card_selector_reportes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.card_selector_reportes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.card_selector_reportes.Controls.Add(this.lbl_ayuda_reportes);
+            this.card_selector_reportes.Controls.Add(this.cb_seleccionar_reporte);
+            this.card_selector_reportes.Controls.Add(this.lbl_selector_reportes);
+            this.card_selector_reportes.Depth = 0;
+            this.card_selector_reportes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.card_selector_reportes.Location = new System.Drawing.Point(14, 11);
+            this.card_selector_reportes.Margin = new System.Windows.Forms.Padding(14);
+            this.card_selector_reportes.MouseState = MaterialSkin.MouseState.HOVER;
+            this.card_selector_reportes.Name = "card_selector_reportes";
+            this.card_selector_reportes.Padding = new System.Windows.Forms.Padding(14);
+            this.card_selector_reportes.Size = new System.Drawing.Size(1658, 92);
+            this.card_selector_reportes.TabIndex = 0;
+            // 
+            // lbl_ayuda_reportes
+            // 
+            this.lbl_ayuda_reportes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_ayuda_reportes.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_ayuda_reportes.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lbl_ayuda_reportes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.lbl_ayuda_reportes.Location = new System.Drawing.Point(635, 41);
+            this.lbl_ayuda_reportes.Name = "lbl_ayuda_reportes";
+            this.lbl_ayuda_reportes.Size = new System.Drawing.Size(998, 34);
+            this.lbl_ayuda_reportes.TabIndex = 2;
+            this.lbl_ayuda_reportes.Text = "Selecciona el reporte que deseas consultar. Solo se muestran los autorizados para" +
+    " tu usuario.";
+            // 
+            // cb_seleccionar_reporte
+            // 
+            this.cb_seleccionar_reporte.AutoResize = false;
+            this.cb_seleccionar_reporte.BackColor = System.Drawing.Color.White;
+            this.cb_seleccionar_reporte.Depth = 0;
+            this.cb_seleccionar_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cb_seleccionar_reporte.DropDownHeight = 346;
+            this.cb_seleccionar_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_seleccionar_reporte.DropDownWidth = 585;
+            this.cb_seleccionar_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cb_seleccionar_reporte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cb_seleccionar_reporte.FormattingEnabled = true;
+            this.cb_seleccionar_reporte.Hint = "Reporte a consultar";
+            this.cb_seleccionar_reporte.IntegralHeight = false;
+            this.cb_seleccionar_reporte.ItemHeight = 43;
+            this.cb_seleccionar_reporte.Location = new System.Drawing.Point(24, 32);
+            this.cb_seleccionar_reporte.MouseState = MaterialSkin.MouseState.OUT;
+            this.cb_seleccionar_reporte.Name = "cb_seleccionar_reporte";
+            this.cb_seleccionar_reporte.Size = new System.Drawing.Size(585, 49);
+            this.cb_seleccionar_reporte.StartIndex = -1;
+            this.cb_seleccionar_reporte.TabIndex = 1;
+            // 
+            // lbl_selector_reportes
+            // 
+            this.lbl_selector_reportes.AutoSize = true;
+            this.lbl_selector_reportes.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_selector_reportes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lbl_selector_reportes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.lbl_selector_reportes.Location = new System.Drawing.Point(24, 11);
+            this.lbl_selector_reportes.Name = "lbl_selector_reportes";
+            this.lbl_selector_reportes.Size = new System.Drawing.Size(181, 19);
+            this.lbl_selector_reportes.TabIndex = 0;
+            this.lbl_selector_reportes.Text = "SELECCIONA UN REPORTE";
             // 
             // tabPage19
             // 
@@ -4550,7 +4647,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition9;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition4;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -6043,7 +6140,7 @@
             this.dtp_polvos.FontSize = MetroFramework.MetroDateTimeSize.Tall;
             this.dtp_polvos.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.dtp_polvos.Location = new System.Drawing.Point(6, 77);
-            this.dtp_polvos.MinimumSize = new System.Drawing.Size(4, 35);
+            this.dtp_polvos.MinimumSize = new System.Drawing.Size(0, 35);
             this.dtp_polvos.Name = "dtp_polvos";
             this.dtp_polvos.Size = new System.Drawing.Size(289, 35);
             this.dtp_polvos.TabIndex = 8;
@@ -7774,7 +7871,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition10;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition5;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
@@ -7803,7 +7900,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1700, 1050);
+            this.ClientSize = new System.Drawing.Size(1700, 995);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
@@ -7879,6 +7976,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial_graph)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lista_semanas)).EndInit();
             this.tabPage10.ResumeLayout(false);
+            this.pnl_contenido_reportes.ResumeLayout(false);
             this.tapcontrol.ResumeLayout(false);
             this.metroTabPage9.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -7936,6 +8034,9 @@
             this.materialCard28.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_final)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).EndInit();
+            this.pnl_reportes_cabecera.ResumeLayout(false);
+            this.card_selector_reportes.ResumeLayout(false);
+            this.card_selector_reportes.PerformLayout();
             this.tabPage19.ResumeLayout(false);
             this.panel15.ResumeLayout(false);
             this.materialCard33.ResumeLayout(false);
@@ -8198,6 +8299,12 @@
         private MaterialSkin.Controls.MaterialTextBox txt_destino;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox1;
         private Telerik.WinControls.UI.RadPictureBox radPictureBox2;
+        private System.Windows.Forms.Panel pnl_reportes_cabecera;
+        private MaterialSkin.Controls.MaterialCard card_selector_reportes;
+        private System.Windows.Forms.Label lbl_selector_reportes;
+        private MaterialSkin.Controls.MaterialComboBox cb_seleccionar_reporte;
+        private System.Windows.Forms.Label lbl_ayuda_reportes;
+        private System.Windows.Forms.Panel pnl_contenido_reportes;
         private MetroFramework.Controls.MetroTabControl tapcontrol;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;
