@@ -171,5 +171,88 @@ ORDER BY nombre, id, semana;";
             resultado.Columns["Promedio período (%)"].SetOrdinal(resultado.Columns["Total (%)"].Ordinal + 1);
             return resultado;
         }
+
+        /// <summary>
+        /// Muestra porcentajes SIN ponderar de cada área por persona y semana,
+        /// usando los mismos Ficha, ID_user / ID_Jefe, año, semanas,
+        /// kg y topes que el resumen. Los valores nulos indican ausencia
+        /// de registros de esa área (NO se sustituyen por cero).
+        /// </summary>
+        public DataTable ConsultarDesglose(string nivel, int anio, IEnumerable<int> semanas)
+        {
+            if (nivel != "Supervisor" && nivel != "Jefe de Turno")
+                throw new ArgumentException("Nivel no válido.", nameof(nivel));
+            if (anio < 2000 || anio > 2200)
+                throw new ArgumentOutOfRangeException(nameof(anio));
+            if (semanas == null)
+                throw new ArgumentNullException(nameof(semanas));
+            int[] seleccionadas = semanas.Distinct().OrderBy(s => s).ToArray();
+            if (seleccionadas.Length == 0 || seleccionadas.Any(s => s < 1 || s > 53))
+                throw new ArgumentException("Selecciona una o más semanas válidas.", nameof(semanas));
+            string columnaPersona = nivel == "Supervisor" ? @"f.""ID_user""" : @"f.""ID_Jefe""";
+            string sql = $@"WITH usuarios AS (
+    SELECT ""ID_User"", ""Usuario"", ""No_Empleado""
+    FROM public.""Usuarios""
+    WHERE ""Nivel"" = @nivel AND ""Activo"" = TRUE
+),
+semanas AS (
+    SELECT unnest(@semanas) AS semana
+),
+por_area AS (
+    SELECT
+        u.""ID_User"" AS id_persona,
+        EXTRACT(WEEK FROM DATE_TRUNC('week', f.""Fecha"") + INTERVAL '6 days')::integer AS semana,
+        f.""Area"" AS area,
+        COUNT(*)::integer AS fichas,
+        SUM(COALESCE(f.""Kg_meta"", 0)) AS meta,
+        SUM(CASE WHEN f.""Area"" = 'Despegue'
+                 THEN COALESCE(f.""Kg_prod_seco"", 0)
+                 ELSE COALESCE(f.""Kg_prod_term"", 0) END) AS producido,
+        SUM(COALESCE(f.""Kg_fuera_espec"", 0)) AS fuera_espec
+    FROM public.""Ficha"" f
+    INNER JOIN usuarios u ON {columnaPersona} = u.""ID_User""
+    WHERE EXTRACT(YEAR FROM f.""Fecha"")::integer = @anio
+      AND EXTRACT(WEEK FROM DATE_TRUNC('week', f.""Fecha"") + INTERVAL '6 days')::integer = ANY(@semanas)
+      AND f.""Area"" IN ('Despegue', 'Evaporado', 'Grind', 'Inspeccion',
+                           'Polvos', 'Empacado', 'Revolturas', 'Máquinas')
+    GROUP BY u.""ID_User"", semana, f.""Area""
+),
+cumplimiento_area AS (
+    SELECT id_persona, semana, area, fichas,
+           CASE WHEN meta > 0 THEN
+               LEAST(ROUND(((producido - fuera_espec) / meta) * 100, 2), 100)
+           ELSE 0 END AS cumplimiento
+    FROM por_area
+)
+SELECT u.""ID_User"" AS ""ID"", @anio AS ""Año"", s.semana AS ""Semana"",
+       u.""Usuario"" AS ""Nombre"", u.""No_Empleado"" AS ""No. empleado"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Despegue') AS ""Despegue (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Evaporado') AS ""Evaporado (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Grind') AS ""Grind (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Inspeccion') AS ""Inspección (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Empacado') AS ""Empacado (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Polvos') AS ""Polvos (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Revolturas') AS ""Revolturas (%)"",
+       MAX(c.cumplimiento) FILTER (WHERE c.area = 'Máquinas') AS ""Máquinas (%)"",
+       ROUND(AVG(c.cumplimiento) FILTER (WHERE c.area <> 'Despegue'), 2) AS ""Promedio demás áreas (%)""
+FROM usuarios u
+CROSS JOIN semanas s
+LEFT JOIN cumplimiento_area c ON c.id_persona = u.""ID_User"" AND c.semana = s.semana
+GROUP BY u.""ID_User"", u.""Usuario"", u.""No_Empleado"", s.semana
+ORDER BY u.""Usuario"", u.""ID_User"", s.semana;
+";
+            var resultado = new DataTable();
+            using (var cn = new NpgsqlConnection(_connectionString))
+            using (var cmd = new NpgsqlCommand(sql, cn))
+            {
+                cmd.CommandTimeout = 120;
+                cmd.Parameters.Add("anio", NpgsqlDbType.Integer).Value = anio;
+                cmd.Parameters.Add("nivel", NpgsqlDbType.Varchar).Value = nivel;
+                cmd.Parameters.Add("semanas", NpgsqlDbType.Array | NpgsqlDbType.Integer).Value = seleccionadas;
+                using (var adaptador = new NpgsqlDataAdapter(cmd))
+                    adaptador.Fill(resultado);
+            }
+            return resultado;
+        }
     }
 }

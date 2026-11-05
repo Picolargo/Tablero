@@ -15,6 +15,12 @@ namespace Tablero
     {
         private DataTable _datosCumplimientoSupervisor;
         private DataTable _datosCumplimientoJefe;
+        private DataTable _desgloseCumplimientoSupervisor;
+        private DataTable _desgloseCumplimientoJefe;
+        private int? _anioConsultadoSupervisor;
+        private int? _anioConsultadoJefe;
+        private List<int> _semanasConsultadasSupervisor = new List<int>();
+        private List<int> _semanasConsultadasJefe = new List<int>();
         private bool _inicializandoCumplimientoPersonal;
 
         private bool TienePermisoCumplimientoPersonal()
@@ -57,6 +63,11 @@ namespace Tablero
                 PrepararSemanasCumplimiento(clbCumplJefeSemanas);
                 PrepararGridCumplimiento(dgvCumplSupervisor);
                 PrepararGridCumplimiento(dgvCumplJefe);
+                PrepararGridCumplimiento(dgvCumplSupDesglose);
+                PrepararGridCumplimiento(dgvCumplJefeDesglose);
+                // El usuario ve el valor original de cada área, no ponderado.
+                dgvCumplSupDesglose.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(39, 99, 166);
+                dgvCumplJefeDesglose.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(39, 99, 166);
 
                 lblCumplSupEstado.Text = "Selecciona las semanas y pulsa Consultar.";
                 lblCumplJefeEstado.Text = "Selecciona las semanas y pulsa Consultar.";
@@ -160,14 +171,22 @@ namespace Tablero
             if (esJefe)
             {
                 _datosCumplimientoJefe = null;
+                _desgloseCumplimientoJefe = null;
+                _anioConsultadoJefe = null;
+                _semanasConsultadasJefe.Clear();
                 dgvCumplJefe.DataSource = null;
+                dgvCumplJefeDesglose.DataSource = null;
                 btnCumplJefeExcel.Enabled = false;
                 lblCumplJefeEstado.Text = "Filtros modificados. Pulsa Consultar para actualizar.";
             }
             else
             {
                 _datosCumplimientoSupervisor = null;
+                _desgloseCumplimientoSupervisor = null;
+                _anioConsultadoSupervisor = null;
+                _semanasConsultadasSupervisor.Clear();
                 dgvCumplSupervisor.DataSource = null;
+                dgvCumplSupDesglose.DataSource = null;
                 btnCumplSupExcel.Enabled = false;
                 lblCumplSupEstado.Text = "Filtros modificados. Pulsa Consultar para actualizar.";
             }
@@ -191,13 +210,14 @@ namespace Tablero
             }
 
             ComboBox combo = esJefe ? cbCumplJefeAnio : cbCumplSupAnio;
-            CheckedListBox semanasControl = esJefe ? clbCumplJefeSemanas : clbCumplSupSemanas;
-            DataGridView grid = esJefe ? dgvCumplJefe : dgvCumplSupervisor;
+            CheckedListBox lista = esJefe ? clbCumplJefeSemanas : clbCumplSupSemanas;
+            DataGridView gridResumen = esJefe ? dgvCumplJefe : dgvCumplSupervisor;
+            DataGridView gridDetalle = esJefe ? dgvCumplJefeDesglose : dgvCumplSupDesglose;
             Label estado = esJefe ? lblCumplJefeEstado : lblCumplSupEstado;
             Button botonExcel = esJefe ? btnCumplJefeExcel : btnCumplSupExcel;
             string nivel = esJefe ? "Jefe de Turno" : "Supervisor";
 
-            if (combo.SelectedItem == null || semanasControl.CheckedItems.Count == 0)
+            if (combo.SelectedItem == null || lista.CheckedItems.Count == 0)
             {
                 MetroFramework.MetroMessageBox.Show(this, "Selecciona un año y al menos una semana.",
                     "Faltan filtros", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -208,39 +228,76 @@ namespace Tablero
             {
                 Cursor = Cursors.WaitCursor;
                 botonExcel.Enabled = false;
-                grid.DataSource = null;
+                gridResumen.DataSource = null;
+                gridDetalle.DataSource = null;
+                if (esJefe)
+                {
+                    _datosCumplimientoJefe = null;
+                    _desgloseCumplimientoJefe = null;
+                }
+                else
+                {
+                    _datosCumplimientoSupervisor = null;
+                    _desgloseCumplimientoSupervisor = null;
+                }
+
                 int anio = Convert.ToInt32(combo.SelectedItem);
-                List<int> semanas = SemanasMarcadas(semanasControl);
+                List<int> semanas = SemanasMarcadas(lista);
                 var servicio = new Reporte_Cumplimiento_Personal(connectionString);
-                DataTable datos = servicio.Consultar(nivel, anio, semanas);
+
+                // Consultar los dos juegos de datos con filtros idénticos.
+                DataTable resumen = servicio.Consultar(nivel, anio, semanas);
+                DataTable desglose = servicio.ConsultarDesglose(nivel, anio, semanas);
+
+                // Protección contra versiones de consultas inconsistentes.
+                if (resumen.Rows.Count != desglose.Rows.Count)
+                    throw new InvalidOperationException("El resumen y el desglose devolvieron diferente cantidad de filas. Reintenta la consulta.");
 
                 if (esJefe)
-                    _datosCumplimientoJefe = datos;
+                {
+                    _datosCumplimientoJefe = resumen;
+                    _desgloseCumplimientoJefe = desglose;
+                    _anioConsultadoJefe = anio;
+                    _semanasConsultadasJefe = semanas.ToList();
+                }
                 else
-                    _datosCumplimientoSupervisor = datos;
+                {
+                    _datosCumplimientoSupervisor = resumen;
+                    _desgloseCumplimientoSupervisor = desglose;
+                    _anioConsultadoSupervisor = anio;
+                    _semanasConsultadasSupervisor = semanas.ToList();
+                }
 
-                grid.DataSource = datos;
-                if (grid.Columns.Contains("ID")) grid.Columns["ID"].Visible = false;
-                foreach (string nombre in new[] { "Despegue (%)", "Demás áreas (%)", "Total (%)", "Promedio período (%)" })
-                    if (grid.Columns.Contains(nombre))
-                        grid.Columns[nombre].DefaultCellStyle.Format = "N2";
-                if (grid.Columns.Contains("Nombre"))
-                    grid.Columns["Nombre"].MinimumWidth = 185;
+                gridResumen.DataSource = resumen;
+                gridDetalle.DataSource = desglose;
+                PrepararColumnasCumplimiento(gridResumen);
+                PrepararColumnasCumplimiento(gridDetalle);
 
-                int conDatos = datos.AsEnumerable().Count(r => Convert.ToInt32(r["Fichas"]) > 0);
+                int filasConDatos = resumen.AsEnumerable()
+                    .Count(r => r.Table.Columns.Contains("Fichas") && r["Fichas"] != DBNull.Value && Convert.ToInt32(r["Fichas"]) > 0);
                 estado.Text = string.Format(CultureInfo.CurrentCulture,
-                    "{0} filas · {1} con registros · {2} semana(s) · Año {3}. Sin registros se deja el porcentaje en blanco.",
-                    datos.Rows.Count, conDatos, semanas.Count, anio);
-                botonExcel.Enabled = datos.Rows.Count > 0;
+                    "{0} persona-semana · {1} con registros · {2} semana(s) · Año {3}. El desglose muestra porcentajes sin ponderar.",
+                    resumen.Rows.Count, filasConDatos, semanas.Count, anio);
+                botonExcel.Enabled = resumen.Rows.Count > 0;
 
-                if (datos.Rows.Count == 0)
-                    MetroFramework.MetroMessageBox.Show(this, "No hay usuarios activos de nivel " + nivel + ".",
+                if (resumen.Rows.Count == 0)
+                    MetroFramework.MetroMessageBox.Show(this, "No hay usuarios activos del nivel " + nivel + ".",
                         "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                if (esJefe) _datosCumplimientoJefe = null;
-                else _datosCumplimientoSupervisor = null;
+                if (esJefe)
+                {
+                    _datosCumplimientoJefe = null;
+                    _desgloseCumplimientoJefe = null;
+                }
+                else
+                {
+                    _datosCumplimientoSupervisor = null;
+                    _desgloseCumplimientoSupervisor = null;
+                }
+                gridResumen.DataSource = null;
+                gridDetalle.DataSource = null;
                 estado.Text = "Error al consultar.";
                 MetroFramework.MetroMessageBox.Show(this, "Error al consultar cumplimiento: " + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -251,94 +308,113 @@ namespace Tablero
             }
         }
 
+        private static void PrepararColumnasCumplimiento(DataGridView grid)
+        {
+            if (grid.Columns.Contains("ID"))
+                grid.Columns["ID"].Visible = false;
+            foreach (DataGridViewColumn columna in grid.Columns)
+            {
+                if (columna.Name.EndsWith("(%)", StringComparison.Ordinal))
+                {
+                    // Los valores se almacenan como 0..100; el signo % es literal.
+                    columna.DefaultCellStyle.Format = "0.00'%'";
+                    columna.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+                else if (columna.Name == "Nombre")
+                    columna.MinimumWidth = 165;
+            }
+            if (grid.Columns.Contains("Promedio demás áreas (%)"))
+                grid.Columns["Promedio demás áreas (%)"].DefaultCellStyle.BackColor = Color.FromArgb(226, 236, 247);
+        }
+
+
         private void ExportarCumplimientoPersonal(bool esJefe)
         {
-            if (!TienePermisoCumplimientoPersonal())
-                return;
-            DataTable datos = esJefe ? _datosCumplimientoJefe : _datosCumplimientoSupervisor;
-            if (datos == null || datos.Rows.Count == 0)
+            if (!TienePermisoCumplimientoPersonal()) return;
+            DataTable resumen = esJefe ? _datosCumplimientoJefe : _datosCumplimientoSupervisor;
+            DataTable desglose = esJefe ? _desgloseCumplimientoJefe : _desgloseCumplimientoSupervisor;
+            int? anio = esJefe ? _anioConsultadoJefe : _anioConsultadoSupervisor;
+            List<int> semanas = esJefe ? _semanasConsultadasJefe : _semanasConsultadasSupervisor;
+            if (resumen == null || desglose == null || !anio.HasValue || resumen.Rows.Count == 0)
             {
-                MetroFramework.MetroMessageBox.Show(this, "Primero genera el reporte con el botón Consultar.",
+                MetroFramework.MetroMessageBox.Show(this, "Primero genera ambos reportes con Consultar.",
                     "Exportar Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             string titulo = esJefe ? "Cumplimiento por Jefe de Turno" : "Cumplimiento por Supervisor";
-            string nombreSugerido = (esJefe ? "Cumplimiento_Jefe_de_Turno_" : "Cumplimiento_Supervisor_") + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".xlsx";
+            string nombre = (esJefe ? "Cumplimiento_Jefe_de_Turno_" : "Cumplimiento_Supervisor_")
+                            + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".xlsx";
             using (var dialogo = new SaveFileDialog())
             {
                 dialogo.Title = "Guardar " + titulo;
-                dialogo.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
+                dialogo.Filter = "Libro de Excel (*.xlsx)|*.xlsx";
                 dialogo.DefaultExt = "xlsx";
                 dialogo.AddExtension = true;
-                dialogo.FileName = nombreSugerido;
-                if (dialogo.ShowDialog(this) != DialogResult.OK)
-                    return;
+                dialogo.FileName = nombre;
+                if (dialogo.ShowDialog(this) != DialogResult.OK) return;
 
                 try
                 {
-                    // Ya se utiliza ClosedXML en el proyecto. No requiere enviar correo ni EPPlus.
                     using (var libro = new XLWorkbook())
                     {
                         var hoja = libro.Worksheets.Add("Cumplimiento");
-                        string[] columnas = datos.Columns.Cast<DataColumn>()
-                            .Where(c => c.ColumnName != "ID")
-                            .Select(c => c.ColumnName).ToArray();
-                        int cantidadColumnas = columnas.Length;
+                        hoja.Style.Font.FontName = "Calibri";
+                        hoja.Style.Font.FontSize = 10;
+                        hoja.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                        int cols = Math.Max(resumen.Columns.Count - (resumen.Columns.Contains("ID") ? 1 : 0),
+                                            desglose.Columns.Count - (desglose.Columns.Contains("ID") ? 1 : 0));
+                        hoja.Range(1, 1, 2, cols).Merge();
+                        var franja = hoja.Range(1, 1, 2, cols);
+                        franja.Style.Fill.BackgroundColor = XLColor.FromHtml("#283B4D");
+                        franja.Style.Font.FontColor = XLColor.White;
+                        franja.Style.Font.FontSize = 17;
+                        franja.Style.Font.Bold = true;
+                        franja.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                         hoja.Cell(1, 1).Value = titulo.ToUpperInvariant();
-                        hoja.Range(1, 1, 1, cantidadColumnas).Merge();
-                        hoja.Range(1, 1, 1, cantidadColumnas).Style.Fill.BackgroundColor = XLColor.FromHtml("#34495E");
-                        hoja.Range(1, 1, 1, cantidadColumnas).Style.Font.FontColor = XLColor.White;
-                        hoja.Range(1, 1, 1, cantidadColumnas).Style.Font.Bold = true;
-                        hoja.Range(1, 1, 1, cantidadColumnas).Style.Font.FontSize = 15;
-                        hoja.Row(1).Height = 30;
-                        hoja.Cell(2, 1).Value = "Generado: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                        hoja.Cell(3, 1).Value = "Despegue: 50 % / demás áreas: 50 % si hay Despegue; sin Despegue: 100 % demás áreas.";
-                        hoja.Range(3, 1, 3, cantidadColumnas).Merge();
+                        hoja.Row(1).Height = 23;
+                        hoja.Row(2).Height = 17;
 
-                        for (int col = 0; col < columnas.Length; col++)
-                        {
-                            hoja.Cell(5, col + 1).Value = columnas[col];
-                            hoja.Cell(5, col + 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#EB7823");
-                            hoja.Cell(5, col + 1).Style.Font.FontColor = XLColor.White;
-                            hoja.Cell(5, col + 1).Style.Font.Bold = true;
-                        }
+                        hoja.Cell(3, 1).Value = "AÑO: " + anio.Value + "   |   SEMANAS: " + string.Join(", ", semanas.Select(x => x.ToString("00")));
+                        hoja.Range(3, 1, 3, cols).Merge();
+                        hoja.Range(3, 1, 3, cols).Style.Font.Bold = true;
+                        hoja.Range(3, 1, 3, cols).Style.Font.FontColor = XLColor.FromHtml("#283B4D");
+                        hoja.Row(3).Height = 24;
+                        hoja.Cell(4, 1).Value = "Generado: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm") +
+                            "  |  Despegue 50 % + demás áreas 50 % si hay Despegue; sin Despegue, demás áreas 100 %.";
+                        hoja.Range(4, 1, 4, cols).Merge();
+                        hoja.Range(4, 1, 4, cols).Style.Font.FontColor = XLColor.FromHtml("#64748B");
 
-                        for (int fila = 0; fila < datos.Rows.Count; fila++)
-                        {
-                            DataRow origen = datos.Rows[fila];
-                            for (int col = 0; col < columnas.Length; col++)
-                            {
-                                object valor = origen[columnas[col]];
-                                var celda = hoja.Cell(fila + 6, col + 1);
-                                if (valor == DBNull.Value || valor == null)
-                                    continue;
-                                if (columnas[col].EndsWith("(%)", StringComparison.Ordinal))
-                                {
-                                    celda.Value = Convert.ToDecimal(valor) / 100m;
-                                    celda.Style.NumberFormat.Format = "0.00%";
-                                }
-                                else if (valor is int)
-                                    celda.Value = (int)valor;
-                                else if (valor is long)
-                                    celda.Value = (long)valor;
-                                else if (valor is decimal)
-                                    celda.Value = (decimal)valor;
-                                else
-                                    celda.Value = Convert.ToString(valor);
-                            }
-                            if (fila % 2 == 1)
-                                hoja.Range(fila + 6, 1, fila + 6, cantidadColumnas)
-                                    .Style.Fill.BackgroundColor = XLColor.FromHtml("#F3F7FA");
-                        }
+                        int siguiente = EscribirTablaCumplimientoExcel(hoja, resumen, 6,
+                            "01  |  RESUMEN PONDERADO", "#EB7823", cols);
+                        siguiente += 3;
+                        EscribirTablaCumplimientoExcel(hoja, desglose, siguiente,
+                            "02  |  DESGLOSE POR ÁREA (PORCENTAJES SIN PONDERAR)", "#2763A6", cols, true);
 
-                        hoja.SheetView.FreezeRows(5);
-                        hoja.Range(5, 1, 5 + datos.Rows.Count, cantidadColumnas).SetAutoFilter();
-                        hoja.Columns().AdjustToContents();
+                        // No usar AutoFiltro: son dos tablas en una misma hoja de trabajo.
+                        hoja.Column(1).Width = 11;
+                        hoja.Column(2).Width = 12;
+                        hoja.Columns(3, cols).AdjustToContents();
+                        foreach (var columna in hoja.Columns(1, cols))
+                            if (columna.Width > 25) columna.Width = 25;
+
+                        // Dar espacio a los encabezados coloreados del desglose.
+                        string[] columnasDetalle = desglose.Columns.Cast<DataColumn>()
+                            .Where(c => c.ColumnName != "ID" && c.ColumnName != "Estado")
+                            .Select(c => c.ColumnName).ToArray();
+                        int indiceDespegue = Array.IndexOf(columnasDetalle, "Despegue (%)") + 1;
+                        int indicePromedio = Array.IndexOf(columnasDetalle, "Promedio demás áreas (%)") + 1;
+                        if (indiceDespegue > 0 && hoja.Column(indiceDespegue).Width < 19)
+                            hoja.Column(indiceDespegue).Width = 19;
+                        if (indicePromedio > 0 && hoja.Column(indicePromedio).Width < 25)
+                            hoja.Column(indicePromedio).Width = 25;
+                        hoja.SheetView.FreezeRows(4);
+                        hoja.PageSetup.PageOrientation = XLPageOrientation.Landscape;
+                        hoja.PageSetup.FitToPages(1, 0);
                         libro.SaveAs(dialogo.FileName);
                     }
-
-                    MetroFramework.MetroMessageBox.Show(this, "Archivo guardado:\n" + dialogo.FileName,
+                    MetroFramework.MetroMessageBox.Show(this, "Las dos tablas se guardaron en una sola hoja:\n" + dialogo.FileName,
                         "Excel generado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -348,6 +424,211 @@ namespace Tablero
                 }
             }
         }
+
+        // En esDesglose=true se identifican visualmente los TRES bloques:
+        // NARANJA: Despegue original (si existe, tiene peso 50 % en el resumen).
+        // AZUL:    las siete áreas que forman el promedio, solo entre las que tienen datos.
+        // VERDE:   Promedio demás áreas (no se incluye Despegue).
+        // La separación es SOLO visual: no modifica fórmulas, datos ni ponderaciones.
+        private static int EscribirTablaCumplimientoExcel(
+            IXLWorksheet hoja, DataTable datos, int filaInicio, string titulo,
+            string colorHeader, int anchoTitulo, bool esDesglose = false)
+        {
+            string[] columnas = datos.Columns.Cast<DataColumn>()
+                .Where(c => c.ColumnName != "ID" && c.ColumnName != "Estado")
+                .Select(c => c.ColumnName).ToArray();
+            int n = columnas.Length;
+
+            int colDespegue = Array.IndexOf(columnas, "Despegue (%)") + 1;
+            int colPromedio = Array.IndexOf(columnas, "Promedio demás áreas (%)") + 1;
+            string[] otrasAreas = {
+                "Evaporado (%)", "Grind (%)", "Inspección (%)", "Empacado (%)",
+                "Polvos (%)", "Revolturas (%)", "Máquinas (%)"
+            };
+            var indicesOtrasAreas = otrasAreas
+                .Select(a => Array.IndexOf(columnas, a) + 1)
+                .Where(i => i > 0).ToArray();
+
+            // Se aplica agrupación cuando están las columnas esperadas de la consulta.
+            bool gruposCompletos = esDesglose && colDespegue > 1 && colPromedio > 0 &&
+                                   indicesOtrasAreas.Length == otrasAreas.Length &&
+                                   indicesOtrasAreas.Max() - indicesOtrasAreas.Min() == otrasAreas.Length - 1 &&
+                                   indicesOtrasAreas.Min() == colDespegue + 1 &&
+                                   colPromedio == indicesOtrasAreas.Max() + 1;
+
+            var banda = hoja.Range(filaInicio, 1, filaInicio, anchoTitulo);
+            banda.Merge();
+            banda.Style.Fill.BackgroundColor = XLColor.FromHtml("#34495E");
+            banda.Style.Font.FontColor = XLColor.White;
+            banda.Style.Font.Bold = true;
+            banda.Style.Font.FontSize = 12;
+            hoja.Cell(filaInicio, 1).Value = titulo;
+            hoja.Row(filaInicio).Height = 27;
+
+            // Solo el desglose lleva leyenda y franja de grupos encima de los encabezados.
+            // Así queda claro que las 7 columnas azules alimentan el promedio verde.
+            if (esDesglose)
+            {
+                int filaLeyenda = filaInicio + 1;
+                var leyenda = hoja.Range(filaLeyenda, 1, filaLeyenda, anchoTitulo);
+                leyenda.Merge();
+                hoja.Cell(filaLeyenda, 1).Value =
+                    "NARANJA: Despegue (valor original; pesa 50 % si existe)  |  " +
+                    "AZUL: demás áreas (se promedian solo las que tienen registros)  |  " +
+                    "VERDE: promedio de esas áreas (pesa 50 % con Despegue o 100 % sin él).";
+                leyenda.Style.Fill.BackgroundColor = XLColor.FromHtml("#F0F4F8");
+                leyenda.Style.Font.FontColor = XLColor.FromHtml("#334155");
+                leyenda.Style.Font.FontSize = 9;
+                leyenda.Style.Alignment.WrapText = true;
+                leyenda.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                hoja.Row(filaLeyenda).Height = 31;
+
+                int filaGrupos = filaInicio + 2;
+                if (gruposCompletos)
+                {
+                    PintarBandaGrupoExcel(hoja, filaGrupos, 1, colDespegue - 1,
+                        "IDENTIFICACIÓN", "#E2E8F0", "#334155");
+                    PintarBandaGrupoExcel(hoja, filaGrupos, colDespegue, colDespegue,
+                        "DESPEGUE\nPESO 50 %", "#F8C88A", "#743D09");
+                    PintarBandaGrupoExcel(hoja, filaGrupos,
+                        indicesOtrasAreas.Min(), indicesOtrasAreas.Max(),
+                        "7 ÁREAS: BASE DEL PROMEDIO (SOLO LAS QUE TIENEN REGISTROS)",
+                        "#D4E7FB", "#174478");
+                    PintarBandaGrupoExcel(hoja, filaGrupos, colPromedio, colPromedio,
+                        "PROMEDIO\nDEMÁS ÁREAS", "#BFEBDD", "#075B50");
+                }
+                hoja.Row(filaGrupos).Height = 38;
+            }
+
+            int filaEncabezado = filaInicio + (esDesglose ? 3 : 1);
+            for (int c = 0; c < n; c++)
+            {
+                string columna = columnas[c];
+                int numCol = c + 1;
+                var celda = hoja.Cell(filaEncabezado, numCol);
+                celda.Value = columna;
+                celda.Style.Fill.BackgroundColor = XLColor.FromHtml(colorHeader);
+                celda.Style.Font.FontColor = XLColor.White;
+                celda.Style.Font.Bold = true;
+                celda.Style.Alignment.WrapText = true;
+                celda.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                celda.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                celda.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                if (gruposCompletos)
+                {
+                    if (numCol == colDespegue)
+                        celda.Style.Fill.BackgroundColor = XLColor.FromHtml("#CB761C");
+                    else if (indicesOtrasAreas.Contains(numCol))
+                        celda.Style.Fill.BackgroundColor = XLColor.FromHtml("#2763A6");
+                    else if (numCol == colPromedio)
+                        celda.Style.Fill.BackgroundColor = XLColor.FromHtml("#087C70");
+                }
+            }
+            hoja.Row(filaEncabezado).Height = esDesglose ? 40 : 32;
+
+            int primeraFila = filaEncabezado + 1;
+            for (int f = 0; f < datos.Rows.Count; f++)
+            {
+                DataRow origen = datos.Rows[f];
+                int fila = primeraFila + f;
+                bool alternada = f % 2 == 1;
+
+                for (int c = 0; c < n; c++)
+                {
+                    string columna = columnas[c];
+                    int numCol = c + 1;
+                    object valor = origen[columna];
+                    var celda = hoja.Cell(fila, numCol);
+
+                    // PRIORIDAD DE COLORES: incluso en filas alternas y celdas vacías.
+                    // Un área sin registros permanece en blanco, pero conserva el color de grupo.
+                    if (gruposCompletos)
+                    {
+                        if (numCol == colDespegue)
+                            celda.Style.Fill.BackgroundColor = XLColor.FromHtml(
+                                alternada ? "#FBE3C5" : "#FFF1E0");
+                        else if (indicesOtrasAreas.Contains(numCol))
+                            celda.Style.Fill.BackgroundColor = XLColor.FromHtml(
+                                alternada ? "#E7F0FD" : "#F4F8FE");
+                        else if (numCol == colPromedio)
+                        {
+                            celda.Style.Fill.BackgroundColor = XLColor.FromHtml(
+                                alternada ? "#CFF0E4" : "#E4F8F0");
+                            celda.Style.Font.Bold = true;
+                            celda.Style.Font.FontColor = XLColor.FromHtml("#075B50");
+                        }
+                        else if (alternada)
+                            celda.Style.Fill.BackgroundColor = XLColor.FromHtml("#F3F7FA");
+                    }
+                    else if (alternada && columna != "Total (%)" && columna != "Promedio período (%)")
+                    {
+                        celda.Style.Fill.BackgroundColor = XLColor.FromHtml("#F3F7FA");
+                    }
+
+                    if (valor != null && valor != DBNull.Value)
+                    {
+                        if (columna.EndsWith("(%)", StringComparison.Ordinal))
+                        {
+                            decimal porcentaje = Convert.ToDecimal(valor);
+                            celda.Value = porcentaje / 100m;
+                            celda.Style.NumberFormat.Format = "0.00%";
+                            celda.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            if (columna == "Total (%)" || columna == "Promedio período (%)")
+                            {
+                                celda.Style.Fill.BackgroundColor = XLColor.FromHtml(
+                                    porcentaje >= 90m ? "#D5F0DC" : porcentaje >= 80m ? "#FFF4C8" : "#FFE0E0");
+                                celda.Style.Font.Bold = true;
+                            }
+                        }
+                        else if (valor is int) celda.Value = (int)valor;
+                        else if (valor is long) celda.Value = (long)valor;
+                        else if (valor is decimal) celda.Value = (decimal)valor;
+                        else celda.Value = Convert.ToString(valor);
+                    }
+
+                    if (gruposCompletos && (numCol == colDespegue || numCol == colPromedio))
+                    {
+                        // Separadores visibles entre Despegue, las 7 áreas y su resultado.
+                        celda.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
+                        celda.Style.Border.LeftBorderColor = XLColor.FromHtml(
+                            numCol == colDespegue ? "#CB761C" : "#087C70");
+                    }
+                }
+                hoja.Row(fila).Height = 21;
+            }
+
+            if (datos.Rows.Count == 0)
+            {
+                hoja.Cell(primeraFila, 1).Value = "Sin registros para los filtros seleccionados.";
+                hoja.Range(primeraFila, 1, primeraFila, Math.Max(1, n)).Merge();
+                return primeraFila + 1;
+            }
+
+            var tabla = hoja.Range(filaEncabezado, 1, primeraFila + datos.Rows.Count - 1, n);
+            tabla.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            tabla.Style.Border.OutsideBorderColor = XLColor.FromHtml("#D6E0EA");
+            return primeraFila + datos.Rows.Count;
+        }
+
+        private static void PintarBandaGrupoExcel(IXLWorksheet hoja, int fila,
+            int columnaInicial, int columnaFinal, string texto, string colorFondo, string colorTexto)
+        {
+            var rango = hoja.Range(fila, columnaInicial, fila, columnaFinal);
+            if (columnaInicial < columnaFinal)
+                rango.Merge();
+            hoja.Cell(fila, columnaInicial).Value = texto.Replace("\n", Environment.NewLine);
+            rango.Style.Fill.BackgroundColor = XLColor.FromHtml(colorFondo);
+            rango.Style.Font.FontColor = XLColor.FromHtml(colorTexto);
+            rango.Style.Font.Bold = true;
+            rango.Style.Font.FontSize = 9;
+            rango.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rango.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            rango.Style.Alignment.WrapText = true;
+            rango.Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+            rango.Style.Border.BottomBorderColor = XLColor.FromHtml("#FFFFFF");
+        }
+
 
         private void btnCumplSupConsultar_Click(object sender, EventArgs e) => EjecutarCumplimientoPersonal(false);
         private void btnCumplJefeConsultar_Click(object sender, EventArgs e) => EjecutarCumplimientoPersonal(true);

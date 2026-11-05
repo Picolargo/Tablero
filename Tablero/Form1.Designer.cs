@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_principal));
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn7 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn8 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn9 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition11 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition12 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition13 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition14 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition15 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn4 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn6 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition6 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition7 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition8 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition9 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -244,7 +244,11 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.tabPageCumplSup = new MetroFramework.Controls.MetroTabPage();
             this.panelCumplSupBody = new System.Windows.Forms.Panel();
+            this.tlpCumplSupTablas = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCumplSupResumen = new System.Windows.Forms.Label();
             this.dgvCumplSupervisor = new System.Windows.Forms.DataGridView();
+            this.lblCumplSupDesglose = new System.Windows.Forms.Label();
+            this.dgvCumplSupDesglose = new System.Windows.Forms.DataGridView();
             this.panelCumplSupTop = new System.Windows.Forms.Panel();
             this.panelCumplSupCabecera = new System.Windows.Forms.Panel();
             this.lblCumplSupTitulo = new System.Windows.Forms.Label();
@@ -260,7 +264,11 @@
             this.btnCumplSupLimpiar = new System.Windows.Forms.Button();
             this.tabPageCumplJefe = new MetroFramework.Controls.MetroTabPage();
             this.panelCumplJefeBody = new System.Windows.Forms.Panel();
+            this.tlpCumplJefeTablas = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCumplJefeResumen = new System.Windows.Forms.Label();
             this.dgvCumplJefe = new System.Windows.Forms.DataGridView();
+            this.lblCumplJefeDesglose = new System.Windows.Forms.Label();
+            this.dgvCumplJefeDesglose = new System.Windows.Forms.DataGridView();
             this.panelCumplJefeTop = new System.Windows.Forms.Panel();
             this.panelCumplJefeCabecera = new System.Windows.Forms.Panel();
             this.lblCumplJefeTitulo = new System.Windows.Forms.Label();
@@ -580,12 +588,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).BeginInit();
             this.tabPageCumplSup.SuspendLayout();
             this.panelCumplSupBody.SuspendLayout();
+            this.tlpCumplSupTablas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupervisor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupDesglose)).BeginInit();
             this.panelCumplSupTop.SuspendLayout();
             this.panelCumplSupCabecera.SuspendLayout();
             this.tabPageCumplJefe.SuspendLayout();
             this.panelCumplJefeBody.SuspendLayout();
+            this.tlpCumplJefeTablas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefe)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefeDesglose)).BeginInit();
             this.panelCumplJefeTop.SuspendLayout();
             this.panelCumplJefeCabecera.SuspendLayout();
             this.pnl_reportes_cabecera.SuspendLayout();
@@ -1520,20 +1532,20 @@
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowAddNewRow = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowCellContextMenu = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.AllowColumnChooser = false;
-            gridViewTextBoxColumn7.HeaderText = "column1";
-            gridViewTextBoxColumn7.IsVisible = false;
-            gridViewTextBoxColumn7.Name = "column1";
-            gridViewTextBoxColumn8.HeaderText = "column2";
-            gridViewTextBoxColumn8.Name = "column2";
-            gridViewTextBoxColumn9.HeaderText = "column3";
-            gridViewTextBoxColumn9.Name = "column3";
+            gridViewTextBoxColumn4.HeaderText = "column1";
+            gridViewTextBoxColumn4.IsVisible = false;
+            gridViewTextBoxColumn4.Name = "column1";
+            gridViewTextBoxColumn5.HeaderText = "column2";
+            gridViewTextBoxColumn5.Name = "column2";
+            gridViewTextBoxColumn6.HeaderText = "column3";
+            gridViewTextBoxColumn6.Name = "column3";
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn7,
-            gridViewTextBoxColumn8,
-            gridViewTextBoxColumn9});
+            gridViewTextBoxColumn4,
+            gridViewTextBoxColumn5,
+            gridViewTextBoxColumn6});
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.EnableGrouping = false;
             this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition11;
+            this.radMultiColumnComboBox1.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition6;
             this.radMultiColumnComboBox1.EditorControl.Name = "NestedRadGridView";
             this.radMultiColumnComboBox1.EditorControl.ReadOnly = true;
             this.radMultiColumnComboBox1.EditorControl.ShowGroupPanel = false;
@@ -2347,11 +2359,6 @@
             "FTT Deshidratado",
             "FTT Demás Áreas",
             "Mermas/ Supervisor",
-            "Cumpl(Despegue)",
-            "Cumpl(Otras áreas)",
-            "Cumplimiento/Supervisor",
-            "Cumplimiento/Supervisor/Mensual",
-            "Cumplimiento/Jefe de Turno",
             "Cumplimiento General",
             "Tiempo Efectivo(Deshidratado)",
             "Tiempo Efectivo Producción"});
@@ -2548,7 +2555,7 @@
             this.DTP_Consolidado_2.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_2.Location = new System.Drawing.Point(365, 52);
-            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_2.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_2.Name = "DTP_Consolidado_2";
             this.DTP_Consolidado_2.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_2.TabIndex = 38;
@@ -2561,7 +2568,7 @@
             this.DTP_Consolidado_1.FontWeight = MetroFramework.MetroDateTimeWeight.Light;
             this.DTP_Consolidado_1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DTP_Consolidado_1.Location = new System.Drawing.Point(365, 12);
-            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(4, 35);
+            this.DTP_Consolidado_1.MinimumSize = new System.Drawing.Size(0, 35);
             this.DTP_Consolidado_1.Name = "DTP_Consolidado_1";
             this.DTP_Consolidado_1.Size = new System.Drawing.Size(122, 35);
             this.DTP_Consolidado_1.TabIndex = 37;
@@ -2812,7 +2819,7 @@
             this.rgv_reporte_consolidado.MasterTemplate.AllowAddNewRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_consolidado.MasterTemplate.AllowEditRow = false;
-            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition12;
+            this.rgv_reporte_consolidado.MasterTemplate.ViewDefinition = tableViewDefinition7;
             this.rgv_reporte_consolidado.Name = "rgv_reporte_consolidado";
             this.rgv_reporte_consolidado.Size = new System.Drawing.Size(1644, 751);
             this.rgv_reporte_consolidado.TabIndex = 0;
@@ -2826,7 +2833,7 @@
             this.tabPage16.Controls.Add(this.panel4);
             this.tabPage16.Location = new System.Drawing.Point(4, 38);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1678, 825);
+            this.tabPage16.Size = new System.Drawing.Size(1678, 828);
             this.tabPage16.TabIndex = 2;
             this.tabPage16.Text = "Reporte Concentrado en Deshidratado";
             // 
@@ -2839,7 +2846,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1678, 825);
+            this.panel4.Size = new System.Drawing.Size(1678, 828);
             this.panel4.TabIndex = 5;
             // 
             // materialCard12
@@ -3093,7 +3100,7 @@
             this.tabPage17.Controls.Add(this.panel5);
             this.tabPage17.Location = new System.Drawing.Point(4, 38);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1678, 825);
+            this.tabPage17.Size = new System.Drawing.Size(1678, 828);
             this.tabPage17.TabIndex = 3;
             this.tabPage17.Text = "Reporte Concentrado en Otras Áreas";
             // 
@@ -3106,7 +3113,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1678, 825);
+            this.panel5.Size = new System.Drawing.Size(1678, 828);
             this.panel5.TabIndex = 6;
             // 
             // materialCard13
@@ -3363,7 +3370,7 @@
             this.metroTabPage10.HorizontalScrollbarSize = 0;
             this.metroTabPage10.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage10.Name = "metroTabPage10";
-            this.metroTabPage10.Size = new System.Drawing.Size(1678, 825);
+            this.metroTabPage10.Size = new System.Drawing.Size(1678, 828);
             this.metroTabPage10.TabIndex = 1;
             this.metroTabPage10.Text = "%Mermas por Área";
             this.metroTabPage10.VerticalScrollbarBarColor = false;
@@ -3378,7 +3385,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1678, 825);
+            this.panel1.Size = new System.Drawing.Size(1678, 828);
             this.panel1.TabIndex = 4;
             // 
             // materialCard8
@@ -3527,7 +3534,7 @@
             this.tabPage22.Controls.Add(this.panel6);
             this.tabPage22.Location = new System.Drawing.Point(4, 38);
             this.tabPage22.Name = "tabPage22";
-            this.tabPage22.Size = new System.Drawing.Size(1678, 825);
+            this.tabPage22.Size = new System.Drawing.Size(1678, 828);
             this.tabPage22.TabIndex = 4;
             this.tabPage22.Text = "Kg Mermas por Supervisor";
             // 
@@ -3539,7 +3546,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1678, 825);
+            this.panel6.Size = new System.Drawing.Size(1678, 828);
             this.panel6.TabIndex = 5;
             // 
             // materialCard16
@@ -3688,7 +3695,7 @@
             this.tabPage33.Controls.Add(this.panel8);
             this.tabPage33.Location = new System.Drawing.Point(4, 38);
             this.tabPage33.Name = "tabPage33";
-            this.tabPage33.Size = new System.Drawing.Size(1678, 825);
+            this.tabPage33.Size = new System.Drawing.Size(1678, 828);
             this.tabPage33.TabIndex = 5;
             this.tabPage33.Text = "Tiempos Muertos";
             // 
@@ -3701,7 +3708,7 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1678, 825);
+            this.panel8.Size = new System.Drawing.Size(1678, 828);
             this.panel8.TabIndex = 8;
             // 
             // materialCard20
@@ -3996,7 +4003,7 @@
             this.rgv_reporte_Tiempos.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_Tiempos.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition13;
+            this.rgv_reporte_Tiempos.MasterTemplate.ViewDefinition = tableViewDefinition8;
             this.rgv_reporte_Tiempos.Name = "rgv_reporte_Tiempos";
             this.rgv_reporte_Tiempos.Size = new System.Drawing.Size(1636, 751);
             this.rgv_reporte_Tiempos.TabIndex = 1;
@@ -4007,7 +4014,7 @@
             this.tabPage18.Controls.Add(this.materialCard29);
             this.tabPage18.Location = new System.Drawing.Point(4, 38);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(1678, 825);
+            this.tabPage18.Size = new System.Drawing.Size(1678, 828);
             this.tabPage18.TabIndex = 6;
             this.tabPage18.Text = "Cumplimiento";
             // 
@@ -4026,7 +4033,7 @@
             this.materialCard29.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard29.Name = "materialCard29";
             this.materialCard29.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard29.Size = new System.Drawing.Size(1678, 825);
+            this.materialCard29.Size = new System.Drawing.Size(1678, 828);
             this.materialCard29.TabIndex = 40;
             // 
             // panel13
@@ -4035,7 +4042,7 @@
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel13.Location = new System.Drawing.Point(1028, 14);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(636, 797);
+            this.panel13.Size = new System.Drawing.Size(636, 800);
             this.panel13.TabIndex = 41;
             // 
             // panel14
@@ -4064,7 +4071,7 @@
             this.panel12.Location = new System.Drawing.Point(14, 14);
             this.panel12.Name = "panel12";
             this.panel12.Padding = new System.Windows.Forms.Padding(5);
-            this.panel12.Size = new System.Drawing.Size(478, 797);
+            this.panel12.Size = new System.Drawing.Size(478, 800);
             this.panel12.TabIndex = 40;
             // 
             // materialCard28
@@ -4260,7 +4267,7 @@
             this.tabPageCumplSup.HorizontalScrollbarSize = 10;
             this.tabPageCumplSup.Location = new System.Drawing.Point(4, 38);
             this.tabPageCumplSup.Name = "tabPageCumplSup";
-            this.tabPageCumplSup.Size = new System.Drawing.Size(1678, 825);
+            this.tabPageCumplSup.Size = new System.Drawing.Size(1678, 828);
             this.tabPageCumplSup.TabIndex = 7;
             this.tabPageCumplSup.Text = "Cumplimiento por Supervisor";
             this.tabPageCumplSup.UseCustomBackColor = true;
@@ -4271,13 +4278,48 @@
             // panelCumplSupBody
             // 
             this.panelCumplSupBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
-            this.panelCumplSupBody.Controls.Add(this.dgvCumplSupervisor);
+            this.panelCumplSupBody.Controls.Add(this.tlpCumplSupTablas);
             this.panelCumplSupBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCumplSupBody.Location = new System.Drawing.Point(0, 207);
             this.panelCumplSupBody.Name = "panelCumplSupBody";
             this.panelCumplSupBody.Padding = new System.Windows.Forms.Padding(14, 6, 14, 14);
-            this.panelCumplSupBody.Size = new System.Drawing.Size(1678, 618);
+            this.panelCumplSupBody.Size = new System.Drawing.Size(1678, 621);
             this.panelCumplSupBody.TabIndex = 1;
+            // 
+            // tlpCumplSupTablas
+            // 
+            this.tlpCumplSupTablas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.tlpCumplSupTablas.ColumnCount = 1;
+            this.tlpCumplSupTablas.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCumplSupTablas.Controls.Add(this.lblCumplSupResumen, 0, 0);
+            this.tlpCumplSupTablas.Controls.Add(this.dgvCumplSupervisor, 0, 1);
+            this.tlpCumplSupTablas.Controls.Add(this.lblCumplSupDesglose, 0, 2);
+            this.tlpCumplSupTablas.Controls.Add(this.dgvCumplSupDesglose, 0, 3);
+            this.tlpCumplSupTablas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpCumplSupTablas.Location = new System.Drawing.Point(14, 6);
+            this.tlpCumplSupTablas.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpCumplSupTablas.Name = "tlpCumplSupTablas";
+            this.tlpCumplSupTablas.RowCount = 4;
+            this.tlpCumplSupTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpCumplSupTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42F));
+            this.tlpCumplSupTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpCumplSupTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58F));
+            this.tlpCumplSupTablas.Size = new System.Drawing.Size(1650, 601);
+            this.tlpCumplSupTablas.TabIndex = 0;
+            // 
+            // lblCumplSupResumen
+            // 
+            this.lblCumplSupResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(59)))), ((int)(((byte)(77)))));
+            this.lblCumplSupResumen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCumplSupResumen.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblCumplSupResumen.ForeColor = System.Drawing.Color.White;
+            this.lblCumplSupResumen.Location = new System.Drawing.Point(0, 0);
+            this.lblCumplSupResumen.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCumplSupResumen.Name = "lblCumplSupResumen";
+            this.lblCumplSupResumen.Padding = new System.Windows.Forms.Padding(12, 7, 0, 0);
+            this.lblCumplSupResumen.Size = new System.Drawing.Size(1650, 35);
+            this.lblCumplSupResumen.TabIndex = 0;
+            this.lblCumplSupResumen.Text = "01  |  RESUMEN PONDERADO";
             // 
             // dgvCumplSupervisor
             // 
@@ -4285,11 +4327,39 @@
             this.dgvCumplSupervisor.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvCumplSupervisor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCumplSupervisor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvCumplSupervisor.Location = new System.Drawing.Point(14, 6);
+            this.dgvCumplSupervisor.Location = new System.Drawing.Point(0, 35);
+            this.dgvCumplSupervisor.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.dgvCumplSupervisor.Name = "dgvCumplSupervisor";
             this.dgvCumplSupervisor.ReadOnly = true;
-            this.dgvCumplSupervisor.Size = new System.Drawing.Size(1650, 598);
+            this.dgvCumplSupervisor.Size = new System.Drawing.Size(1650, 219);
             this.dgvCumplSupervisor.TabIndex = 0;
+            // 
+            // lblCumplSupDesglose
+            // 
+            this.lblCumplSupDesglose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(99)))), ((int)(((byte)(166)))));
+            this.lblCumplSupDesglose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCumplSupDesglose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblCumplSupDesglose.ForeColor = System.Drawing.Color.White;
+            this.lblCumplSupDesglose.Location = new System.Drawing.Point(0, 262);
+            this.lblCumplSupDesglose.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.lblCumplSupDesglose.Name = "lblCumplSupDesglose";
+            this.lblCumplSupDesglose.Padding = new System.Windows.Forms.Padding(12, 5, 0, 0);
+            this.lblCumplSupDesglose.Size = new System.Drawing.Size(1650, 31);
+            this.lblCumplSupDesglose.TabIndex = 2;
+            this.lblCumplSupDesglose.Text = "02  |  DESGLOSE POR ÁREA · POR PERSONA Y SEMANA";
+            // 
+            // dgvCumplSupDesglose
+            // 
+            this.dgvCumplSupDesglose.BackgroundColor = System.Drawing.Color.White;
+            this.dgvCumplSupDesglose.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCumplSupDesglose.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCumplSupDesglose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCumplSupDesglose.Location = new System.Drawing.Point(0, 293);
+            this.dgvCumplSupDesglose.Margin = new System.Windows.Forms.Padding(0);
+            this.dgvCumplSupDesglose.Name = "dgvCumplSupDesglose";
+            this.dgvCumplSupDesglose.ReadOnly = true;
+            this.dgvCumplSupDesglose.Size = new System.Drawing.Size(1650, 308);
+            this.dgvCumplSupDesglose.TabIndex = 3;
             // 
             // panelCumplSupTop
             // 
@@ -4473,7 +4543,7 @@
             this.tabPageCumplJefe.HorizontalScrollbarSize = 10;
             this.tabPageCumplJefe.Location = new System.Drawing.Point(4, 38);
             this.tabPageCumplJefe.Name = "tabPageCumplJefe";
-            this.tabPageCumplJefe.Size = new System.Drawing.Size(1678, 825);
+            this.tabPageCumplJefe.Size = new System.Drawing.Size(1678, 828);
             this.tabPageCumplJefe.TabIndex = 8;
             this.tabPageCumplJefe.Text = "Cumplimiento por Jefe de Turno";
             this.tabPageCumplJefe.UseCustomBackColor = true;
@@ -4484,13 +4554,48 @@
             // panelCumplJefeBody
             // 
             this.panelCumplJefeBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
-            this.panelCumplJefeBody.Controls.Add(this.dgvCumplJefe);
+            this.panelCumplJefeBody.Controls.Add(this.tlpCumplJefeTablas);
             this.panelCumplJefeBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCumplJefeBody.Location = new System.Drawing.Point(0, 207);
             this.panelCumplJefeBody.Name = "panelCumplJefeBody";
             this.panelCumplJefeBody.Padding = new System.Windows.Forms.Padding(14, 6, 14, 14);
-            this.panelCumplJefeBody.Size = new System.Drawing.Size(1678, 618);
+            this.panelCumplJefeBody.Size = new System.Drawing.Size(1678, 621);
             this.panelCumplJefeBody.TabIndex = 1;
+            // 
+            // tlpCumplJefeTablas
+            // 
+            this.tlpCumplJefeTablas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.tlpCumplJefeTablas.ColumnCount = 1;
+            this.tlpCumplJefeTablas.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCumplJefeTablas.Controls.Add(this.lblCumplJefeResumen, 0, 0);
+            this.tlpCumplJefeTablas.Controls.Add(this.dgvCumplJefe, 0, 1);
+            this.tlpCumplJefeTablas.Controls.Add(this.lblCumplJefeDesglose, 0, 2);
+            this.tlpCumplJefeTablas.Controls.Add(this.dgvCumplJefeDesglose, 0, 3);
+            this.tlpCumplJefeTablas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpCumplJefeTablas.Location = new System.Drawing.Point(14, 6);
+            this.tlpCumplJefeTablas.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpCumplJefeTablas.Name = "tlpCumplJefeTablas";
+            this.tlpCumplJefeTablas.RowCount = 4;
+            this.tlpCumplJefeTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpCumplJefeTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42F));
+            this.tlpCumplJefeTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpCumplJefeTablas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58F));
+            this.tlpCumplJefeTablas.Size = new System.Drawing.Size(1650, 601);
+            this.tlpCumplJefeTablas.TabIndex = 0;
+            // 
+            // lblCumplJefeResumen
+            // 
+            this.lblCumplJefeResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(59)))), ((int)(((byte)(77)))));
+            this.lblCumplJefeResumen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCumplJefeResumen.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblCumplJefeResumen.ForeColor = System.Drawing.Color.White;
+            this.lblCumplJefeResumen.Location = new System.Drawing.Point(0, 0);
+            this.lblCumplJefeResumen.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCumplJefeResumen.Name = "lblCumplJefeResumen";
+            this.lblCumplJefeResumen.Padding = new System.Windows.Forms.Padding(12, 7, 0, 0);
+            this.lblCumplJefeResumen.Size = new System.Drawing.Size(1650, 35);
+            this.lblCumplJefeResumen.TabIndex = 0;
+            this.lblCumplJefeResumen.Text = "01  |  RESUMEN PONDERADO";
             // 
             // dgvCumplJefe
             // 
@@ -4498,11 +4603,39 @@
             this.dgvCumplJefe.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvCumplJefe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCumplJefe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvCumplJefe.Location = new System.Drawing.Point(14, 6);
+            this.dgvCumplJefe.Location = new System.Drawing.Point(0, 35);
+            this.dgvCumplJefe.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.dgvCumplJefe.Name = "dgvCumplJefe";
             this.dgvCumplJefe.ReadOnly = true;
-            this.dgvCumplJefe.Size = new System.Drawing.Size(1650, 598);
+            this.dgvCumplJefe.Size = new System.Drawing.Size(1650, 219);
             this.dgvCumplJefe.TabIndex = 0;
+            // 
+            // lblCumplJefeDesglose
+            // 
+            this.lblCumplJefeDesglose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(99)))), ((int)(((byte)(166)))));
+            this.lblCumplJefeDesglose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCumplJefeDesglose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblCumplJefeDesglose.ForeColor = System.Drawing.Color.White;
+            this.lblCumplJefeDesglose.Location = new System.Drawing.Point(0, 262);
+            this.lblCumplJefeDesglose.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.lblCumplJefeDesglose.Name = "lblCumplJefeDesglose";
+            this.lblCumplJefeDesglose.Padding = new System.Windows.Forms.Padding(12, 5, 0, 0);
+            this.lblCumplJefeDesglose.Size = new System.Drawing.Size(1650, 31);
+            this.lblCumplJefeDesglose.TabIndex = 2;
+            this.lblCumplJefeDesglose.Text = "02  |  DESGLOSE POR ÁREA · POR PERSONA Y SEMANA";
+            // 
+            // dgvCumplJefeDesglose
+            // 
+            this.dgvCumplJefeDesglose.BackgroundColor = System.Drawing.Color.White;
+            this.dgvCumplJefeDesglose.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCumplJefeDesglose.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCumplJefeDesglose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCumplJefeDesglose.Location = new System.Drawing.Point(0, 293);
+            this.dgvCumplJefeDesglose.Margin = new System.Windows.Forms.Padding(0);
+            this.dgvCumplJefeDesglose.Name = "dgvCumplJefeDesglose";
+            this.dgvCumplJefeDesglose.ReadOnly = true;
+            this.dgvCumplJefeDesglose.Size = new System.Drawing.Size(1650, 308);
+            this.dgvCumplJefeDesglose.TabIndex = 3;
             // 
             // panelCumplJefeTop
             // 
@@ -4724,7 +4857,7 @@
             this.cb_seleccionar_reporte.BackColor = System.Drawing.Color.White;
             this.cb_seleccionar_reporte.Depth = 0;
             this.cb_seleccionar_reporte.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cb_seleccionar_reporte.DropDownHeight = 346;
+            this.cb_seleccionar_reporte.DropDownHeight = 174;
             this.cb_seleccionar_reporte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_seleccionar_reporte.DropDownWidth = 585;
             this.cb_seleccionar_reporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
@@ -4734,6 +4867,7 @@
             this.cb_seleccionar_reporte.IntegralHeight = false;
             this.cb_seleccionar_reporte.ItemHeight = 43;
             this.cb_seleccionar_reporte.Location = new System.Drawing.Point(24, 32);
+            this.cb_seleccionar_reporte.MaxDropDownItems = 4;
             this.cb_seleccionar_reporte.MouseState = MaterialSkin.MouseState.OUT;
             this.cb_seleccionar_reporte.Name = "cb_seleccionar_reporte";
             this.cb_seleccionar_reporte.Size = new System.Drawing.Size(585, 49);
@@ -5117,7 +5251,7 @@
             this.rgv_reporte_costo.MasterTemplate.AllowDeleteRow = false;
             this.rgv_reporte_costo.MasterTemplate.AllowEditRow = false;
             this.rgv_reporte_costo.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition14;
+            this.rgv_reporte_costo.MasterTemplate.ViewDefinition = tableViewDefinition9;
             this.rgv_reporte_costo.Name = "rgv_reporte_costo";
             this.rgv_reporte_costo.Size = new System.Drawing.Size(1658, 668);
             this.rgv_reporte_costo.TabIndex = 0;
@@ -8341,7 +8475,7 @@
             this.radGridView1.MasterTemplate.AllowAddNewRow = false;
             this.radGridView1.MasterTemplate.AllowDeleteRow = false;
             this.radGridView1.MasterTemplate.AllowEditRow = false;
-            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition15;
+            this.radGridView1.MasterTemplate.ViewDefinition = tableViewDefinition10;
             this.radGridView1.Name = "radGridView1";
             this.radGridView1.Size = new System.Drawing.Size(1650, 751);
             this.radGridView1.TabIndex = 0;
@@ -8506,13 +8640,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_sem_inicial)).EndInit();
             this.tabPageCumplSup.ResumeLayout(false);
             this.panelCumplSupBody.ResumeLayout(false);
+            this.tlpCumplSupTablas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupervisor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplSupDesglose)).EndInit();
             this.panelCumplSupTop.ResumeLayout(false);
             this.panelCumplSupCabecera.ResumeLayout(false);
             this.panelCumplSupCabecera.PerformLayout();
             this.tabPageCumplJefe.ResumeLayout(false);
             this.panelCumplJefeBody.ResumeLayout(false);
+            this.tlpCumplJefeTablas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefe)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCumplJefeDesglose)).EndInit();
             this.panelCumplJefeTop.ResumeLayout(false);
             this.panelCumplJefeCabecera.ResumeLayout(false);
             this.panelCumplJefeCabecera.PerformLayout();
@@ -8803,6 +8941,10 @@
         private System.Windows.Forms.Button btnCumplSupTodas;
         private System.Windows.Forms.Button btnCumplSupLimpiar;
         private System.Windows.Forms.DataGridView dgvCumplSupervisor;
+        private System.Windows.Forms.TableLayoutPanel tlpCumplSupTablas;
+        private System.Windows.Forms.Label lblCumplSupResumen;
+        private System.Windows.Forms.Label lblCumplSupDesglose;
+        private System.Windows.Forms.DataGridView dgvCumplSupDesglose;
         private MetroFramework.Controls.MetroTabPage tabPageCumplJefe;
         private System.Windows.Forms.Panel panelCumplJefeTop;
         private System.Windows.Forms.Panel panelCumplJefeCabecera;
@@ -8819,6 +8961,10 @@
         private System.Windows.Forms.Button btnCumplJefeTodas;
         private System.Windows.Forms.Button btnCumplJefeLimpiar;
         private System.Windows.Forms.DataGridView dgvCumplJefe;
+        private System.Windows.Forms.TableLayoutPanel tlpCumplJefeTablas;
+        private System.Windows.Forms.Label lblCumplJefeResumen;
+        private System.Windows.Forms.Label lblCumplJefeDesglose;
+        private System.Windows.Forms.DataGridView dgvCumplJefeDesglose;
         private MetroFramework.Controls.MetroTabControl tapcontrol;
         private MetroFramework.Controls.MetroTabPage metroTabPage9;
         private MetroFramework.Controls.MetroTabPage metroTabPage10;
