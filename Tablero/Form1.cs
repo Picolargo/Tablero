@@ -92,8 +92,8 @@ namespace Tablero
         private List<int> _imagenesCargadasIds = new List<int>();            // IDs de imágenes existentes
         private List<int> _imagenesAEliminar = new List<int>();              // 🔥 IDs de imágenes a eliminar (marcadas para borrar)     
         private const int MAX_IMAGENES = 10;
-        private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
-        //private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
+        //private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
+        private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
         // Variables para ampliación de imagen
         private Form _formImagenAmpliada = null;
         private bool _imagenAmpliadaVisible = false;
@@ -1383,6 +1383,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_8.EmbeddedLabelText = "Merma Lavado de Bandas";
                 Txt_9.EmbeddedLabelText = "Personal Operativo";
                 Txt_10.EmbeddedLabelText = "Cascara y Carrete";
+                Txt_11.EmbeddedLabelText = "Cajones Netos";
 
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
@@ -1404,7 +1405,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
-                Txt_11.Visible = false;
+                Txt_11.Visible = true;
                 radMultiColumnComboBox1.Visible = false;
 
                 //Inabilitar controles
@@ -2062,6 +2063,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void reiniciarCampos()
         {
+            listBoxImagenes.Items.Clear();
+            pictureBoxPreview.Image = null;
             cb_Area.Enabled = true;
             cb_Turno.SelectedIndex = -1;
             cb_Turno.Focus();
@@ -5289,6 +5292,17 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         }
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
+            int cajonesNetos = 0;
+            if (cb_Area.SelectedIndex == 0 &&
+                (!int.TryParse(Txt_11.Text.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out cajonesNetos)))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Cajones Netos es obligatorio.",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Txt_11.Focus();
+                return;
+            }
+
             // 🔍 Validar tiempos muertos ANTES de cualquier otra operación
             if (!ValidarTiemposMuertos())
             {
@@ -5377,6 +5391,18 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
 
 
+                        string promedioCajones = hr_pro > 0
+                            ? (Math.Truncate((cajonesNetos / hr_pro) * 100m) / 100m).ToString("F2")
+                            : "No calculable (horas programadas en cero)";
+                        var valoresResumen = new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("Cantidad de cajones del Turno", cajonesNetos.ToString()),
+                            new KeyValuePair<string, string>("Horas Programadas", hr_pro.ToString()),
+                            new KeyValuePair<string, string>("Cajones promedio por Hora", promedioCajones),
+                            new KeyValuePair<string, string>("Meta cajones por hora", meta.ToString())
+                        };
+                        string tablaResumen = GenerarTablaResumen(valoresResumen);
+
                         // Conversión DIRECTA a TimeSpan desde los MaskedTextBox
                         TimeSpan hrInicio = TimeSpan.Parse(Mask_txt_hr1.Text);
                         TimeSpan hrFin = TimeSpan.Parse(Mask_txt_hr2.Text);
@@ -5387,7 +5413,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             idUsuarioActual = id_supervisor_global;
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones);
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones, cajonesNetos);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -5423,9 +5449,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. La siguiente tabla muestra los detalles registrados durante el turno:
+                                         <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
+                                    {tablaResumen} 
                                     <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
+
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -5492,7 +5523,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             // Insertar en tabla Ficha y obtener el ID_Ficha generado
                             int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
                                 kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones);
+                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones, cajonesNetos);
 
                             if (idFicha > 0)
                             {
@@ -5553,8 +5584,14 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                     <p>
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
-                                        <strong>{op}</strong>. La siguiente tabla muestra los detalles registrados durante el turno:
+                                         <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
                                     </p>
+                                    {tablaResumen} 
+                                    <br>
+                                    <p>
+                                        Y la siguiente tabla muestra los detalles registrados durante el turno:
+                                    </p>
+
                                     {tablaGenerada}
                                     <br>
                                     <p>
@@ -7414,7 +7451,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null)
         {
             DatabaseHelper dbHelper2 = new DatabaseHelper(connectionString);
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -7430,7 +7467,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     " \"Kg_enter_proceso\" = @Kg_enter_proceso, \"kg_frescos_enter_se\" = @kg_frescos_enter_se, \"Merma_canica\" = @Merma_canica, \"Merma_podrido\" = @Merma_podrido," +
                     " \"Merma_tina\" = @Merma_tina, \"Merma_piso\" = @Merma_piso, \"Merma_canaletas\" = @Merma_canaletas, \"Merma_lavado_bandas\" = @Merma_lavado_bandas," +
                     " \"Cascara_carrete\" = @Cascara_carrete, \"Hr_inicio\" = @Hr_inicio, \"Hr_fin\" = @Hr_fin, \"Hr_programadas\" = @Hr_programadas, \"Personal_Operativo\" = @Personal_Operativo," +
-                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"MetaHr\" = @MetaHr, \"ID_Jefe\" = @Jefe, \"Observaciones\" = @Observaciones WHERE \"ID_Ficha\" = @ID_Ficha;";
+                    " \"Hr_efectivas\" = @Hr_efectivas, \"Kg_meta\" = @Kg_meta, \"MetaHr\" = @MetaHr, \"ID_Jefe\" = @Jefe, \"Observaciones\" = @Observaciones, \"Cajones_netos\" = @Cajones_netos WHERE \"ID_Ficha\" = @ID_Ficha;";
 
                 parameters = new NpgsqlParameter[]
                 {
@@ -7456,6 +7493,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
                     new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe},
+                    new NpgsqlParameter("@Cajones_netos", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesNetos ?? DBNull.Value },
                     new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
@@ -7725,7 +7763,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null)
         {
             string query = String.Empty;
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -7736,12 +7774,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     ""Kg_enter_proceso"", ""kg_frescos_enter_se"", ""Merma_canica"",
                     ""Merma_podrido"", ""Merma_tina"", ""Merma_piso"", ""Merma_canaletas"",
                     ""Merma_lavado_bandas"", ""Cascara_carrete"", ""Hr_inicio"", ""Hr_fin"", 
-                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""MetaHr"", ""ID_Jefe"", ""Observaciones""
+                    ""Hr_programadas"", ""Personal_Operativo"", ""Hr_efectivas"", ""Kg_meta"", ""Area"", ""MetaHr"", ""ID_Jefe"", ""Observaciones"", ""Cajones_netos""
                 ) VALUES (
                     @id_user, @fecha, @turno, @lote, @op,
                     @kg_enter_proceso, @kg_frescos_enter_se, @merma_canica,
                     @merma_podrido, @merma_tina, @merma_piso, @merma_canaletas,
-                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @MetaHr, @Jefe, @Observaciones
+                    @merma_lavado_bandas, @cascara_carrete, @hr_inicio, @hr_fin, @hr_prog, @Personal_Op, @Hr_efec, @Kg_meta, @Area, @MetaHr, @Jefe, @Observaciones, @Cajones_netos
                 ) RETURNING ""ID_Ficha"";";
 
                 parameters = new NpgsqlParameter[]
@@ -7769,6 +7807,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@Area", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = area_f ?? (object)DBNull.Value },
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe },
+                    new NpgsqlParameter("@Cajones_netos", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesNetos ?? DBNull.Value },
                     new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
                 };
             }
@@ -9317,6 +9356,12 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
 
         private void Txt_11_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (cb_Area.SelectedIndex == 0)
+            {
+                e.Handled = !char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9');
+                return;
+            }
+
             // Permitir control de borrado (Backspace)
             if (e.KeyChar == (char)Keys.Back)
             {
@@ -9670,7 +9715,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         // Consulta para buscar donde OP = valor_buscado
                         string query2 = "SELECT \"OP\", \"Turno\", \"Fecha\", \"MetaHr\", \"Hr_inicio\", \"Hr_fin\", \"Lote\", \"Kg_enter_proceso\", \"Merma_canica\", " +
                         "\"Merma_podrido\", \"Merma_tina\", \"Merma_piso\", \"Merma_canaletas\", \"Merma_lavado_bandas\", \"Personal_Operativo\", \"Cascara_carrete\", " +
-                        " \"ID_Jefe\", \"ID_user\", \"Observaciones\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
+                        " \"ID_Jefe\", \"ID_user\", \"Observaciones\", \"Cajones_netos\" FROM public.\"Ficha\" WHERE \"ID_Ficha\" = @valorBuscado;";
 
                         // Crear parámetro
                         NpgsqlParameter[] parameters2 = new NpgsqlParameter[]
@@ -9700,6 +9745,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         string ID_Jefe = string.Empty;
                         string ID_user = string.Empty;
                         string Observaciones = string.Empty;
+                        string cajonesNetos = string.Empty;
 
                         // Verificar si se encontraron resultados
                         if (dt2 != null && dt2.Rows.Count > 0)
@@ -9723,6 +9769,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             ID_Jefe = System.Convert.ToString(dt2.Rows[0]["ID_Jefe"]);
                             ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
                             Observaciones = dt2.Rows[0]["Observaciones"].ToString();
+                            cajonesNetos = dt2.Rows[0]["Cajones_netos"].ToString();
                         }
                         ////seccion para cargar supervisor
                         //buscar usuario
@@ -9774,6 +9821,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Txt_8.Text = Merma_lavado_bandas;
                         Txt_9.Text = Personal_Operativo;
                         Txt_10.Text = Cascara_carrete;
+                        Txt_11.Text = cajonesNetos;
                         mlTxt_observaciones.Text = Observaciones;
                         // Deshabilitar controles no editables
                         cb_Area.Enabled = false;
@@ -11977,6 +12025,7 @@ SELECT
     jefe.""Usuario"" AS ""Jefe de Turno"",
     f.""Lote"",
     f.""OP"",
+    f.""Cajones_netos"" AS ""Cajones Netos"",
     f.""Kg_enter_proceso"" AS ""Kg Entrada(Proceso)"",
     f.""kg_frescos_enter_se"" AS ""Kg Frescos Entrada a Secador"",
     f.""Merma_canica"" AS ""Canica(Kg)"",
@@ -14834,7 +14883,7 @@ ORDER BY
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
             //cartesianChart1.DataTooltip = null;
         }
-        
+
         private void GraficarKgFresco(List<string> semanasSeleccionadas)
         {
             try
@@ -15743,7 +15792,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             cartesianChart1.AnimationsSpeed = TimeSpan.FromMilliseconds(800);
             // cartesianChart1.DataTooltip = null;
         }
-        
+
         // Método para configurar título con Labels externos (opcional)
         private void ConfigurarTitulosGrafico(string titulo, string subtitulo)
         {
@@ -18936,3 +18985,4 @@ ORDER BY ""OP"" ASC;";
         }
     }
 }
+
