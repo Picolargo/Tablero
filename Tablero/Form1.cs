@@ -92,8 +92,8 @@ namespace Tablero
         private List<int> _imagenesCargadasIds = new List<int>();            // IDs de imágenes existentes
         private List<int> _imagenesAEliminar = new List<int>();              // 🔥 IDs de imágenes a eliminar (marcadas para borrar)     
         private const int MAX_IMAGENES = 10;
-        //private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
-        private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
+        private string RUTA_SERVIDOR = @"\\" + Tablero.Properties.Settings.Default.Servidor + @"\Img_Tablero";// esta es para obtener el nombre del servidor para no dejarlo fijo en el codigo
+        //private string RUTA_SERVIDOR = @"C:\Img_Tablero";// activar solo para test
         // Variables para ampliación de imagen
         private Form _formImagenAmpliada = null;
         private bool _imagenAmpliadaVisible = false;
@@ -15942,6 +15942,50 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 <td style='border: 1px solid #ccc; padding: 8px;'>{item.Key}</td>
                 <td style='border: 1px solid #ccc; padding: 8px;'>{item.Value}</td>
             </tr>";
+            }
+            if (cb_Area.SelectedIndex == 0)
+            {
+                decimal promedioCajones = 0m;
+                decimal metaCajones = 0m;
+                bool promedioValido = false;
+                bool metaValida = false;
+
+                foreach (var item in valores)
+                {
+                    if (item.Key == "Cajones promedio por Hora")
+                        promedioValido = decimal.TryParse(item.Value, out promedioCajones);
+
+                    if (item.Key == "Meta cajones por hora")
+                        metaValida = decimal.TryParse(item.Value, out metaCajones);
+                }
+
+                string colorFila;
+                string textoPorcentaje;
+
+                if (promedioValido && metaValida && metaCajones > 0m)
+                {
+                    decimal porcentaje = (promedioCajones / metaCajones) * 100m;
+
+                    if (porcentaje >= 90m)
+                        colorFila = "#00913F"; // Verde
+                    else if (porcentaje >= 80m)
+                        colorFila = "#E5BE01"; // Amarillo
+                    else
+                        colorFila = "#A52019"; // Rojo
+
+                    textoPorcentaje = porcentaje.ToString("F2") + "%";
+                }
+                else
+                {
+                    colorFila = "#e9ecef"; // Gris: no se puede calcular
+                    textoPorcentaje = "No calculable";
+                }
+
+                tabla += $@"
+        <tr style='background-color: {colorFila};'>
+            <td style='border: 1px solid #ccc; padding: 8px;'>% Cumplimiento</td>
+            <td style='border: 1px solid #ccc; padding: 8px;'>{textoPorcentaje}</td>
+        </tr>";
             }
             if (cb_Area.SelectedIndex == 1)
             {
