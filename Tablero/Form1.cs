@@ -76,7 +76,7 @@ namespace Tablero
         private int PuertoSMTP = 0;
         private string DestinatariosEmail = string.Empty;
         private bool SSLCheck = false;
-        // Fin de variables para el envío de correos
+        // Fin de v ariables para el envío de correos
         List<ValueTuple<string, string, string>> valores_mecanico =
         new List<(string, string, string)>();
         List<ValueTuple<string, string, string>> valores_operativos =
@@ -1108,7 +1108,7 @@ namespace Tablero
                             ""Destino"",
                             ""Clasificacion"" as ""Clasificación""
                           FROM public.""Detalles_OP""
-                          ORDER BY ""Orden_Produccion"" ASC;";  // ← orden ascendente
+                          ORDER BY ""Orden_Produccion"" ASC;"; 
 
             // Cargar los datos de la tabla Usuarios en el DataGridView
             dbHelper.LoadDataIntoDataGridView(querySimple, dgv_detalles_op, null);
@@ -1383,7 +1383,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_8.EmbeddedLabelText = "Merma Lavado de Bandas";
                 Txt_9.EmbeddedLabelText = "Personal Operativo";
                 Txt_10.EmbeddedLabelText = "Cascara y Carrete";
-                Txt_11.EmbeddedLabelText = "Cajones Netos";
+                Txt_11.EmbeddedLabelText = "Cajones";
 
                 Txt_Read_1.EmbeddedLabelText = "Horas Progamadas";
                 Txt_Read_2.EmbeddedLabelText = "Meta Programada";
@@ -1406,6 +1406,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_Read_8.Visible = false;
                 Txt_Read_9.Visible = false;
                 Txt_11.Visible = true;
+                Txt_12.Visible = true;
                 radMultiColumnComboBox1.Visible = false;
 
                 //Inabilitar controles
@@ -1421,6 +1422,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Enabled = false;
                 Txt_10.Enabled = false;
                 Txt_11.Enabled = false;
+                Txt_12.Enabled = false;
                 Mask_txt_hr1.Enabled = false;
                 Mask_txt_hr2.Enabled = false;
                 txt_Tiempo_comida.Enabled = false;
@@ -1494,6 +1496,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
                 Txt_Read_6.Visible = false;
 
                 Txt_2.Enabled = false;
@@ -1581,6 +1584,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
 
                 Txt_Read_6.Visible = false;
                 Txt_Read_7.Visible = false;
@@ -1649,6 +1653,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1717,6 +1722,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1784,6 +1790,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
                 radMultiColumnComboBox1.Visible = false;
 
                 //inabilitar controles
@@ -1855,6 +1862,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -1925,6 +1933,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
 
                 //inabilitar controles
                 cb_Turno.Enabled = false;
@@ -2003,6 +2012,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 Txt_9.Visible = false;
                 Txt_10.Visible = false;
                 Txt_11.Visible = false;
+                Txt_12.Visible = false;
                 Txt_Read_6.Visible = false;
                 Txt_Read_7.Visible = false;
                 Txt_Read_8.Visible = false;
@@ -2086,6 +2096,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
             Txt_9.Text = string.Empty;
             Txt_10.Text = string.Empty;
             Txt_11.Text = string.Empty;
+            Txt_12.Text = string.Empty;
             Txt_meta.Text = string.Empty;
             Txt_Read_1.Text = string.Empty;
             Txt_Read_2.Text = string.Empty;
@@ -5176,6 +5187,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     Txt_9.Enabled = true;
                     Txt_10.Enabled = true;
                     Txt_11.Enabled = true;
+                    Txt_12.Enabled = true;
                 }
                 if (cb_Area.SelectedIndex == 1)
                 {
@@ -5293,6 +5305,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         private void btn_save_ficha_Click(object sender, EventArgs e)
         {
             int cajonesNetos = 0;
+            int cajonesCanica = 0;
             if (cb_Area.SelectedIndex == 0 &&
                 (!int.TryParse(Txt_11.Text.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out cajonesNetos)))
             {
@@ -5300,6 +5313,15 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     "Cajones Netos es obligatorio.",
                     "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Txt_11.Focus();
+                return;
+            }
+            if (cb_Area.SelectedIndex == 0 &&
+                (!int.TryParse(Txt_12.Text.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out cajonesCanica)))
+            {
+                MetroFramework.MetroMessageBox.Show(this,
+                    "Cajones Canica es obligatorio.",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Txt_12.Focus();
                 return;
             }
 
@@ -5390,13 +5412,16 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         string area = cb_Area.Text;
                         decimal meta = System.Convert.ToDecimal(Txt_meta.Text);
 
-
+                        int totalCajonesNetos = cajonesNetos - cajonesCanica;
                         string promedioCajones = hr_pro > 0
-                            ? (Math.Truncate((cajonesNetos / hr_pro) * 100m) / 100m).ToString("F2")
+                            ? (Math.Truncate((totalCajonesNetos / hr_pro) * 100m) / 100m).ToString("F2")
                             : "No calculable (horas programadas en cero)";
+                        
                         var valoresResumen = new List<KeyValuePair<string, string>>
                         {
-                            new KeyValuePair<string, string>("Cantidad de cajones del Turno", cajonesNetos.ToString()),
+                            new KeyValuePair<string, string>("Cantidad de cajones del turno", cajonesNetos.ToString()),
+                            new KeyValuePair<string, string>("Cantidad de cajones Canica", cajonesCanica.ToString()),
+                            new KeyValuePair<string, string>("Cantidad de cajones Neto", totalCajonesNetos.ToString()),
                             new KeyValuePair<string, string>("Horas Programadas", hr_pro.ToString()),
                             new KeyValuePair<string, string>("Cajones promedio por Hora", promedioCajones),
                             new KeyValuePair<string, string>("Meta cajones por hora", meta.ToString())
@@ -5413,7 +5438,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             idUsuarioActual = id_supervisor_global;
                             updateFicha(dbHelper, idUsuarioActual, fecha, turno, null, op,
                             kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones, cajonesNetos);
+                            mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, null, meta, 0, idUserSeleccionado, observaciones, totalCajonesNetos, cajonesCanica);
                             //enviar correo
                             //Crear lista de valores
                             List<KeyValuePair<string, string>> valores = new List<KeyValuePair<string, string>>()
@@ -5450,6 +5475,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
                                          <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    <p>
+                                        <strong>Nota:</strong> El % de cumplimiento de Túnel/Sumergidor es informativo. 
+                                        Para la evaluación se considera el % de cumplimiento de <strong>Despegue</strong>.
                                     </p>
                                     {tablaResumen} 
                                     <br>
@@ -5523,7 +5552,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             // Insertar en tabla Ficha y obtener el ID_Ficha generado
                             int idFicha = InsertarFichaYRetornarID(dbHelper, idUsuarioActual, fecha, turno, lote, op,
                                 kgEnterProceso, kgFrescosEnterSe, mermaCanica, mermaPodrido, mermaTina, mermaPiso,
-                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones, cajonesNetos);
+                                mermaCanaletas, mermaLavadoBandas, cascaraCarrete, hrInicio, hrFin, personal_Op, hr_pro, hr_efec, meta_kg, area, meta, 0, idUserSeleccionado, observaciones, totalCajonesNetos, cajonesCanica);
 
                             if (idFicha > 0)
                             {
@@ -5585,6 +5614,10 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                                         Durante el turno, se registró información en el área 
                                         <strong>{cb_Area.Text}</strong>, correspondiente al 
                                          <strong>{op}</strong>. La siguiente tabla muestra el resumen del turno:
+                                    </p>
+                                    <p>
+                                        <strong>Nota:</strong> El % de cumplimiento de Túnel/Sumergidor es informativo. 
+                                        Para la evaluación se considera el % de cumplimiento de <strong>Despegue</strong>.
                                     </p>
                                     {tablaResumen} 
                                     <br>
@@ -7451,7 +7484,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null, int? cajonesCanica = null)
         {
             DatabaseHelper dbHelper2 = new DatabaseHelper(connectionString);
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -7494,6 +7527,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@ID_Ficha", NpgsqlTypes.NpgsqlDbType.Integer){Value = idFicha},
                     new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe},
                     new NpgsqlParameter("@Cajones_netos", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesNetos ?? DBNull.Value },
+                    new NpgsqlParameter("@Cajones_canica", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesCanica ?? DBNull.Value },
                     new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
                 };
                 result = dbHelper2.ExecuteNonQuery(queryInsertUpdate, parameters);
@@ -7763,7 +7797,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
         decimal var5, decimal var6, decimal var7, decimal var8,
         decimal var9, decimal var10, decimal var11,
         TimeSpan hrInicio, TimeSpan hrFin, int personal_O, decimal hr_programadas, decimal hr_efectivas,
-        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null)
+        decimal meta_kg, string area_f, decimal metaHr, decimal var12, int jefe, string observaciones, int? cajonesNetos = null, int? cajonesCanica = null)
         {
             string query = String.Empty;
             NpgsqlParameter[] parameters = new NpgsqlParameter[] { };
@@ -7808,6 +7842,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                     new NpgsqlParameter("@MetaHr", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = metaHr },
                     new NpgsqlParameter("@Jefe", NpgsqlTypes.NpgsqlDbType.Integer) { Value = jefe },
                     new NpgsqlParameter("@Cajones_netos", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesNetos ?? DBNull.Value },
+                    new NpgsqlParameter("@Cajones_canica", NpgsqlTypes.NpgsqlDbType.Integer) { Value = (object)cajonesCanica ?? DBNull.Value },
                     new NpgsqlParameter("@Observaciones", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = observaciones ?? (object)DBNull.Value }
                 };
             }
@@ -9746,6 +9781,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         string ID_user = string.Empty;
                         string Observaciones = string.Empty;
                         string cajonesNetos = string.Empty;
+                        string cajonesCanica = string.Empty;
 
                         // Verificar si se encontraron resultados
                         if (dt2 != null && dt2.Rows.Count > 0)
@@ -9770,6 +9806,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                             ID_user = System.Convert.ToString(dt2.Rows[0]["ID_user"]);
                             Observaciones = dt2.Rows[0]["Observaciones"].ToString();
                             cajonesNetos = dt2.Rows[0]["Cajones_netos"].ToString();
+                            cajonesCanica = dt2.Rows[0]["Cajones_canica"].ToString();
                         }
                         ////seccion para cargar supervisor
                         //buscar usuario
@@ -9822,6 +9859,7 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                         Txt_9.Text = Personal_Operativo;
                         Txt_10.Text = Cascara_carrete;
                         Txt_11.Text = cajonesNetos;
+                        Txt_12.Text = cajonesCanica;
                         mlTxt_observaciones.Text = Observaciones;
                         // Deshabilitar controles no editables
                         cb_Area.Enabled = false;
@@ -15965,15 +16003,8 @@ ORDER BY año, numero_semana, ""Nombre_Usuario"";";
                 if (promedioValido && metaValida && metaCajones > 0m)
                 {
                     decimal porcentaje = (promedioCajones / metaCajones) * 100m;
-
-                    if (porcentaje >= 90m)
-                        colorFila = "#00913F"; // Verde
-                    else if (porcentaje >= 80m)
-                        colorFila = "#E5BE01"; // Amarillo
-                    else
-                        colorFila = "#A52019"; // Rojo
-
                     textoPorcentaje = porcentaje.ToString("F2") + "%";
+                    colorFila = "#e9ecef"; // Gris: no se puede calcular
                 }
                 else
                 {
@@ -19026,6 +19057,37 @@ ORDER BY ""OP"" ASC;";
         {
             // Cerrar la imagen ampliada si está abierta
             CerrarImagenAmpliada();
+        }
+
+        private void Txt_12_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (cb_Area.SelectedIndex == 0)
+            {
+                e.Handled = !char.IsControl(e.KeyChar) && (e.KeyChar < '0' || e.KeyChar > '9');
+                return;
+            }
+
+            // Permitir control de borrado (Backspace)
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                return;
+            }
+
+            // Permitir solo un punto decimal
+            if (e.KeyChar == '.')
+            {
+                if ((sender as System.Windows.Forms.TextBox).Text.Contains("."))
+                {
+                    e.Handled = true; // Ya hay un punto → se bloquea
+                }
+                return;
+            }
+
+            // Permitir solo números
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear todo lo que no sea número
+            }
         }
     }
 }

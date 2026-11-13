@@ -92,6 +92,7 @@
             this.Txt_Read_2 = new Telerik.WinControls.UI.RadTextBox();
             this.Txt_Read_1 = new Telerik.WinControls.UI.RadTextBox();
             this.Card_only_read = new MaterialSkin.Controls.MaterialCard();
+            this.Txt_12 = new Telerik.WinControls.UI.RadTextBox();
             this.mlTxt_observaciones = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             this.radMultiColumnComboBox1 = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.Txt_11 = new Telerik.WinControls.UI.RadTextBox();
@@ -510,6 +511,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_1)).BeginInit();
             this.Card_only_read.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Txt_12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl.MasterTemplate)).BeginInit();
@@ -1465,6 +1467,7 @@
             // Card_only_read
             // 
             this.Card_only_read.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Card_only_read.Controls.Add(this.Txt_12);
             this.Card_only_read.Controls.Add(this.mlTxt_observaciones);
             this.Card_only_read.Controls.Add(this.radMultiColumnComboBox1);
             this.Card_only_read.Controls.Add(this.Txt_11);
@@ -1490,6 +1493,19 @@
             this.Card_only_read.Size = new System.Drawing.Size(718, 377);
             this.Card_only_read.TabIndex = 4;
             // 
+            // Txt_12
+            // 
+            this.Txt_12.BackColor = System.Drawing.Color.White;
+            this.Txt_12.EmbeddedLabelText = "Cajones de Canica";
+            this.Txt_12.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Txt_12.ForeColor = System.Drawing.Color.Black;
+            this.Txt_12.Location = new System.Drawing.Point(460, 138);
+            this.Txt_12.Name = "Txt_12";
+            this.Txt_12.ShowEmbeddedLabel = true;
+            this.Txt_12.Size = new System.Drawing.Size(170, 43);
+            this.Txt_12.TabIndex = 26;
+            this.Txt_12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_12_KeyPress);
+            // 
             // mlTxt_observaciones
             // 
             this.mlTxt_observaciones.AnimateReadOnly = false;
@@ -1500,7 +1516,7 @@
             this.mlTxt_observaciones.Enabled = false;
             this.mlTxt_observaciones.HideSelection = true;
             this.mlTxt_observaciones.Hint = "Observaciones(Opcional)";
-            this.mlTxt_observaciones.Location = new System.Drawing.Point(460, 138);
+            this.mlTxt_observaciones.Location = new System.Drawing.Point(460, 196);
             this.mlTxt_observaciones.MaxLength = 32767;
             this.mlTxt_observaciones.MouseState = MaterialSkin.MouseState.OUT;
             this.mlTxt_observaciones.Name = "mlTxt_observaciones";
@@ -1511,8 +1527,8 @@
             this.mlTxt_observaciones.SelectionLength = 0;
             this.mlTxt_observaciones.SelectionStart = 0;
             this.mlTxt_observaciones.ShortcutsEnabled = true;
-            this.mlTxt_observaciones.Size = new System.Drawing.Size(241, 217);
-            this.mlTxt_observaciones.TabIndex = 29;
+            this.mlTxt_observaciones.Size = new System.Drawing.Size(241, 159);
+            this.mlTxt_observaciones.TabIndex = 27;
             this.mlTxt_observaciones.TabStop = false;
             this.mlTxt_observaciones.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.mlTxt_observaciones.UseSystemPasswordChar = false;
@@ -8547,6 +8563,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Txt_Read_1)).EndInit();
             this.Card_only_read.ResumeLayout(false);
             this.Card_only_read.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Txt_12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1.EditorControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMultiColumnComboBox1)).EndInit();
@@ -9202,6 +9219,7 @@
         private MaterialSkin.Controls.MaterialLabel lblNombreImagen;
         private MaterialSkin.Controls.MaterialLabel lblTamañoImagen;
         private MaterialSkin.Controls.MaterialComboBox cb_Tipo_Tiempos;
+        private Telerik.WinControls.UI.RadTextBox Txt_12;
     }
 }
 
