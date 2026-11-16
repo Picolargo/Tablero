@@ -25,7 +25,7 @@ namespace Tablero
 
         private bool TienePermisoCumplimientoPersonal()
         {
-            return (nivel_user == "Administrador" || nivel_user == "Super Administrador")
+            return (nivel_user == "Administrador" || nivel_user == "Super Administrador" || nivel_user == "Supervisor" || nivel_user == "Jefe de Turno")
                 && materialTabControl1.TabPages.Contains(tabPage10);
         }
 
